@@ -1,9 +1,10 @@
 import React from 'react'
+import MainSection from "@/components/Homepage/MainSection/MainSection.jsx"
 
 const Home = () => {
   return (
-    <div className='text-center'>
-      Hello, Welcome to SUZAN!!
+    <div className="bg-[#FFFFFF]">
+      <MainSection/>
     </div>
   )
 }
