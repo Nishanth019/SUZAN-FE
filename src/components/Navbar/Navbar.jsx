@@ -62,7 +62,7 @@ const Navbar = () => {
                             )}
                         </button>
                         <Image
-                            className="h-12 lg:h-14 w-full"
+                            className="w-[120px] h-auto "
                             src={logo}
                             alt="SUZAN"
                         />
@@ -70,7 +70,7 @@ const Navbar = () => {
                     <div className="max-md:hidden flex flex-1 items-center justify-center md:items-center md:justify-start">
                         <div className="flex items-center">
                             <Image
-                                className="h-12 md:h-14 w-full"
+                                className="w-[120px] h-auto "
                                 src={logo}
                                 alt="SUZAN"
                             />
