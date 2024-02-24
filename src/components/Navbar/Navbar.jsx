@@ -141,16 +141,22 @@ const Navbar = () => {
                     ) : (
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0 ">
                             <div className="flex gap-4">
+                            <Link href="/signin">
+
                                 <button
                                     className="md:text-[14px] text-xs rounded-full px-4 md:px-6 capitalize py-1 md:py-2 bg-transparent border-2 border-[#36518F] text-[#36518F] font-medium hover:bg-[#36518F] hover:text-white transition-all duration-75"
-                                >
+                                    >
                                     Sign In
                                 </button>
+                            </Link>
+                            <Link href="/signup">
+
                                 <button
                                     className="hidden lg:block md:text-[14px] text-xs rounded-full px-6 capitalize py-2 bg-[#FF8B4A] hover:bg-[#FF8000] border-2  text-white font-medium transition-all duration-75"
-                                >
+                                    >
                                     Sign Up
                                 </button>
+                            </Link>
                             </div>
                         </div>
                     )}
