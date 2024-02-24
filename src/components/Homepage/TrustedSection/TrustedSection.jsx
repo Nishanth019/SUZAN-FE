@@ -17,8 +17,8 @@ const TrustedSection = () => {
             </div>
             <div className='px-12 md:w-[85%] lg:w-[80%] py-8 relative'>
                 <div className='bg-[#E8FFF9]  hidden md:flex w-full   py-6  md:flex-row flex-col gap-12 md:gap-16 items-center justify-center rounded-md'>
-                    {images.map(imgUrl => (
-                        <div>
+                    {images.map((imgUrl, ind )=> (
+                        <div key={ind}>
                             <img src={imgUrl}  alt="" className='w-20 lg:w-24'/>
                         </div>
                     ))}
