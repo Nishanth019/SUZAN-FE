@@ -18,9 +18,9 @@ export const TrustedSlider = ({data}) => {
         <div className="w-56">
             <Slider {...settings}>
               {
-                data.map(ele => (
+                data.map((ele, ind )=> (
                     <div className="justify-center px-2 items-center flex ">
-                        <img src={ele} alt="" className="max-w-[100px]" />
+                        <img src={ele} key={ind} alt="" className="max-w-[100px]" />
                     </div>
                 ))
               }
