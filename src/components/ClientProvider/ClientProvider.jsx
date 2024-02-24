@@ -20,7 +20,7 @@ const ClientProvider = ({ children }) => {
         <Navbar />
       )}
       {children}
-      <Toaster />
+      {/* <Toaster /> */}
       {pathname &&
       (pathname.includes("signin") ||
         pathname.includes("signup") ||
