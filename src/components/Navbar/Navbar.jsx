@@ -23,11 +23,13 @@ const Navbar = () => {
     const pathname = usePathname();
     const [openMenu, setOpenMenu] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
-    const [user, setUser] = useState({
-        name: "Nishanth",
-        picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
-        role: "student",
-    });
+    // const [user, setUser] = useState({
+    //     name: "Nishanth",
+    //     picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
+    //     role: "student",
+    // });
+    
+    const [user, setUser] = useState(null);
 
     const handleMenuToggle = () => {
         setOpenMenu(!openMenu);
@@ -142,12 +144,12 @@ const Navbar = () => {
                                 <button
                                     className="md:text-[14px] text-xs rounded-full px-4 md:px-6 capitalize py-1 md:py-2 bg-transparent border-2 border-[#36518F] text-[#36518F] font-medium hover:bg-[#36518F] hover:text-white transition-all duration-75"
                                 >
-                                    login
+                                    Sign In
                                 </button>
                                 <button
                                     className="hidden lg:block md:text-[14px] text-xs rounded-full px-6 capitalize py-2 bg-[#FF8B4A] hover:bg-[#FF8000] border-2  text-white font-medium transition-all duration-75"
                                 >
-                                    Register
+                                    Sign Up
                                 </button>
                             </div>
                         </div>
