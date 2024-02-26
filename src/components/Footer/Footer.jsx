@@ -20,7 +20,7 @@ const SITEMAP = [
     },
     {
         title: "Contact Us",
-        links: ["+91 9177620708", "suzanorg@gmail.com"],
+        links: ["+91 9177620708", "suzanorganisation@gmail.com"],
     },
 ];
 
@@ -80,7 +80,7 @@ const Footer = () => {
                         variant="small"
                         className="mb-4 text-center font-normal text-black md:mb-0"
                     >
-                        &copy; {currentYear} <a href="https://material-tailwind.com/">Suzan Organisation</a>. All
+                        &copy; {currentYear} <p>Suzan Organisation</p>. All
                         Rights Reserved.
                     </Typography>
                     <div className="flex gap-4 text-black sm:justify-center">

@@ -5,7 +5,7 @@ import { Button } from "@material-tailwind/react";
 
 const Services = () => {
   return (
-    <div className="w-full py-12 lg:py-16">
+    <div className="w-full py-6 sm:py-12 lg:py-16">
         <div>
             <p className='text-center text-[30px] md:text-[36px] lg:text-[42px] xl:text-[50px] font-bold pb-5 md:pb-10'>Our Services</p>
         </div>

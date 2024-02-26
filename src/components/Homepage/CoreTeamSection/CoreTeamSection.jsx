@@ -73,7 +73,7 @@ const CoreTeamSection = () => {
 
 	return (
 		<div className="pb-6 overflow-hidden" >
-			<div className='flex justify-center pt-[6rem]'>
+			<div className='flex justify-center pt-[1rem] md:pt-[3rem]'>
 		
 				<div className='flex justify-center flex-col gap-6'>
 					<h2 className='text-[#3F4B52] font-[600] leading-[32px] text-[32px] text-center'> Our  Core <span className='border-b-4 border-[#6CFEF5]'>Team</span></h2>

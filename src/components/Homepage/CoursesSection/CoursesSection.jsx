@@ -9,7 +9,7 @@ const CoursesSection = ({ user }) => {
 
   return (
     <div
-      className="flex flex-col pb-10 w-full gap-5 items-center justify-center overflow-hidden"
+      className="flex flex-col pb-10 md:pt-10 w-full gap-5 items-center justify-center overflow-hidden"
     >
       <div className=" text-center  flex flex-col justify-center items-center text-[30px] md:text-[36px] lg:text-[42px] xl:text-[50px] font-bold max-lg:hidden ">
         <span>Go Through The Courses</span>
