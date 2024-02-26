@@ -1,4 +1,3 @@
-
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientProvider from "@/components/ClientProvider/ClientProvider";
