@@ -63,19 +63,23 @@ const Navbar = () => {
                                 <MdOutlineMenu size={25} />
                             )}
                         </button>
+                        <Link href="/">
                         <Image
                             className="w-[120px] h-auto "
                             src={logo}
                             alt="SUZAN"
                         />
+                        </Link>
                     </div>
                     <div className="max-md:hidden flex flex-1 items-center justify-center md:items-center md:justify-start">
                         <div className="flex items-center">
+                             <Link href="/">
                             <Image
                                 className="w-[120px] h-auto "
                                 src={logo}
                                 alt="SUZAN"
                             />
+                            </Link>
                         </div>
                         <div className="ml-2 lg:ml-6 ">
                             <div className="flex space-x-1 lg:space-x-4">
