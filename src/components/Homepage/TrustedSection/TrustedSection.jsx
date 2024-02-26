@@ -11,8 +11,8 @@ const TrustedSection = () => {
         "https://edzer.s3.amazonaws.com/edzer-assets/companies/nmims-university-logo.png",
     ]
     return (
-        <div className='flex flex-col  w-full gap-3 py-5 lg:py-16 items-center justify-center overflow-hidden'>
-            <div className='text-center px-4 md:px-0 text-[16px]  md:text-[20px] lg:text-[26px] xl:text-[28px] font-bold'>
+        <div className='flex flex-col  w-full gap-3 pt-10 py-2 lg:pt-16 lg:pb-2 items-center justify-center overflow-hidden'>
+            <div className='text-center px-4 md:px-0  md:text-[20px] lg:text-[26px] xl:text-[28px] font-bold'>
             Used by <span className='primary-text-color'>5000+ </span> students of various Institutes Worldwide
             </div>
             <div className='px-12 md:w-[85%] lg:w-[80%] py-8 relative'>
