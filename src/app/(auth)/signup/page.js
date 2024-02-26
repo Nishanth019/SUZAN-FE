@@ -13,7 +13,7 @@ const SignUp = () => {
       </h1>
       <div className="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-[150px] mt-6">
         <div className="highlight-on-hover">
-          <Link href="/student-registration">
+          <Link href="/signup/student">
             <div className="cursor-pointer flex flex-col items-center transition-transform duration-300 transform hover:scale-105 p-2 shadow-md">
               <Image
                 src={studentImage}
@@ -29,7 +29,7 @@ const SignUp = () => {
           </Link>
         </div>
         <div className="highlight-on-hover">
-          <Link href="/admin-registration">
+          <Link href="/signup/admin">
             <div className="cursor-pointer flex flex-col items-center transition-transform duration-300 transform hover:scale-105 p-2 shadow-md">
               <Image
                 src={adminImage}

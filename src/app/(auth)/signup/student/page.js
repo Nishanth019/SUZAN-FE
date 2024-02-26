@@ -2,7 +2,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { Button } from "@material-tailwind/react";
-import { ChevronDownIcon, ChevronUpIcon, } from '@heroicons/react/20/solid'
+import { FaChevronDown, FaChevronUp  } from "react-icons/fa";
 import Link from 'next/link';
 
 const StudentSignUp = () => {
@@ -73,14 +73,14 @@ const StudentSignUp = () => {
                 required
               />
               <label
-                htmlFor="password"
+                htmlFor="confirmpassword"
                 className="mb-2 text-sm text-start text-grey-900"
               >
                 Confirm Password*
               </label>
               <input
-                id="password"
-                type="password"
+                id="confirmpassword"
+                type="confirmpassword"
                 placeholder="Re-Enter the password"
                 className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
                 required
@@ -153,10 +153,10 @@ const StudentSignUp = () => {
 
                     {/* Arrow icon */}
                     <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                      {isDropdownOpen ? (
-                        <ChevronUpIcon className="h-4 w-4 text-gray-600" />
+                      {!isDropdownOpen ? (
+                        <FaChevronDown  className="h-4 w-4 text-gray-600" />
                       ) : (
-                        <ChevronDownIcon className="h-4 w-4 text-gray-600" />
+                        <FaChevronUp className="h-4 w-4 text-gray-600" />
                       )}
                     </div>
                   </div>
