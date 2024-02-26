@@ -7,6 +7,7 @@ import  Toaster  from "react-hot-toast";
 
 const ClientProvider = ({ children }) => {
   const pathname = usePathname();
+  console.log(pathname);
   return (
     <>
       {pathname &&
