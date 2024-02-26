@@ -11,10 +11,10 @@ const SignUp = () => {
       <h1 className="mb-2 text-[32px] md:text-[40px] lg:text-[48px] xl:text-[48px] font-extrabold text-dark-grey-900 text-center">
         Sign Up
       </h1>
-      <div className="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-[150px] mt-6">
-        <div className="highlight-on-hover">
+      <div className="flex flex-col md:flex-row items-center justify-center space-y-10 md:space-y-0 md:space-x-[150px] mt-6">
+        <div className="highlight-on-hover ">
           <Link href="/student-registration">
-            <div className="cursor-pointer flex flex-col items-center transition-transform duration-300 transform hover:scale-105 p-2 shadow-md">
+            <div className="cursor-pointer flex flex-col items-center transition-transform duration-300 transform hover:scale-105 p-2 shadow-md rounded-xl">
               <Image
                 src={studentImage}
                 alt="Student"
@@ -30,7 +30,7 @@ const SignUp = () => {
         </div>
         <div className="highlight-on-hover">
           <Link href="/admin-registration">
-            <div className="cursor-pointer flex flex-col items-center transition-transform duration-300 transform hover:scale-105 p-2 shadow-md">
+            <div className="cursor-pointer flex flex-col items-center transition-transform duration-300 transform hover:scale-105 p-2 shadow-md rounded-xl">
               <Image
                 src={adminImage}
                 alt="Admin"

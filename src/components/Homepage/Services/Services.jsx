@@ -53,7 +53,7 @@ const ServiceItem = ({ icon, title, description, link, buttonText }) => {
             {icon}
           </picture>
           <div className="p-4 text-center">
-            <h3 className="text-[22px] md:text-[32px] font-bold pb-2">
+            <h3 className="text-[22px] lg:text-[32px] font-bold pb-2">
               {title}
             </h3>
             <p className="text-[12px] md:text-[16px] px-5">{description}</p>
