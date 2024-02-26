@@ -16,9 +16,9 @@ const MainSection = () => {
                     <div className="flex flex-col justify-center items-start space-y-8 md:space-y-10 lg:space-y-16 xl:space-y-20">
                         <div className="relative">
                             <span><IoMdSchool className='text-3xl md:text-4xl lg:text-4xl xl:text-5xl  text-[#36518F] leading-tight text-start ' /></span>
-                            <h1 className='text-[32px]  md:text-[40px] lg:text-[48px] xl:text-[48px] 2xl:text-[60px] leading-tight text-start font-bold text-[#89A1EF]'>Make Your <span className='secondary-text-color'>College</span></h1>
-                            <h1 className='text-[32px]  md:text-[40px] lg:text-[48px] xl:text-[48px] 2xl:text-[60px] leading-tight text-start font-bold primary-text-color'>Journey Easier</h1>
-                            <h1 className='text-[32px]  md:text-[40px] lg:text-[48px] xl:text-[48px] 2xl:text-[60px] leading-tight text-start font-bold secondary-text-color'> With  <span><span className='text-[#89A1EF]' >SU</span><span className='secondary-text-color' >ZAN</span></span> </h1>
+                            <h1 className='text-[32px]  md:text-[40px] lg:text-[54px] 2xl:text-[60px] leading-tight text-start font-bold text-[#89A1EF]'>Make Your <span className='secondary-text-color'>College</span></h1>
+                            <h1 className='text-[32px]  md:text-[40px] lg:text-[54px] 2xl:text-[60px] leading-tight text-start font-bold primary-text-color'>Journey Easier</h1>
+                            <h1 className='text-[32px]  md:text-[40px] lg:text-[54px] 2xl:text-[60px] leading-tight text-start font-bold secondary-text-color'> With  <span><span className='text-[#89A1EF]' >SU</span><span className='secondary-text-color' >ZAN</span></span> </h1>
 
                     {/*Rounded Shape*/}
                     <div className='absolute top-0 right-[30px] md:right-[70px] flex justify-center items-center w-full overflow-hidden max-md:hidden'>
