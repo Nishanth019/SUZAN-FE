@@ -10,8 +10,8 @@ const Services = () => {
             <p className='text-center text-[30px] md:text-[36px] lg:text-[42px] xl:text-[50px] font-bold pb-5 md:pb-10'>Our Services</p>
         </div>
       <div className="container mx-auto">
-        <div className="flex flex-row flex-wrap  justify-center">
-          <ServiceItem
+        <div className="flex flex-row flex-wrap  justify-center ">
+          <ServiceItem 
             icon={<BsBook className="mx-auto w-8 h-8 md:w-12 md:h-12" />}
             title="Courses"
             description="Access to knowledge. Enroll in a variety of courses to expand your skills."
@@ -47,7 +47,7 @@ const Services = () => {
 
 const ServiceItem = ({ icon, title, description, link, buttonText }) => {
     return (
-      <div className="max-w-[300px]  mx-10 my-3 md:my-5 md:m-5 border border-solid rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300">
+      <div className="max-w-[300px]  mx-10 my-3 md:my-5 md:m-5 border border-solid rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300  bg-blue-200">
         <div className="relative h-[240px] md:h-[300px] rounded shadow-lg flex flex-col items-center justify-between">
           <picture className="block pt-5">
             {icon}

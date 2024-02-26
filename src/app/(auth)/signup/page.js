@@ -7,7 +7,7 @@ import adminImage from "../../../assets/Signup/admin.jpg";
 
 const SignUp = () => {
   return (
-    <div className="flex flex-col items-center justify-center mt-10">
+    <div className="flex flex-col items-center justify-center mt-10 ">
       <h1 className="mb-2 text-[32px] md:text-[40px] lg:text-[48px] xl:text-[48px] font-extrabold text-dark-grey-900 text-center">
         Sign Up
       </h1>
