@@ -23,13 +23,13 @@ const Navbar = () => {
     const pathname = usePathname();
     const [openMenu, setOpenMenu] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
-    // const [user, setUser] = useState({
-    //     name: "Nishanth",
-    //     picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
-    //     role: "student",
-    // });
+    const [user, setUser] = useState({
+        name: "Nishanth",
+        picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
+        role: "student",
+    });
     
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
 
     const handleMenuToggle = () => {
         setOpenMenu(!openMenu);
@@ -75,7 +75,7 @@ const Navbar = () => {
                         <div className="flex items-center">
                              <Link href="/">
                             <Image
-                                className="w-[120px] h-auto "
+                                className="w-[130px] h-auto "
                                 src={logo}
                                 alt="SUZAN"
                             />
@@ -88,7 +88,7 @@ const Navbar = () => {
                                         className={`${pathname === item.href
                                             ? 'text-[#00A5E0]'
                                             : 'text-[#4F4F4F] hover:text-black'
-                                            } whitespace-nowrap  rounded-md px-3 py-2 text-[14px] lg:text-[16px]  font-medium`}
+                                            } whitespace-nowrap  rounded-md px-3 py-2 text-[14px] lg:text-[16px]  xl:text-[18px] font-medium`}
                                     >
                                         {item.name}
                                     </Link>
