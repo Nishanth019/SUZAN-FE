@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Footer  from "../Footer/Footer";
 import   Navbar  from "../Navbar/Navbar";
+import   NavbarTemp  from "../Navbar/NavbarTemp";
 import  Toaster  from "react-hot-toast";
 
 const ClientProvider = ({ children }) => {
@@ -16,11 +17,11 @@ const ClientProvider = ({ children }) => {
         pathname.includes("admin") ||
         pathname.includes("student") ||
         pathname.includes("forgot-password") ||
-        pathname.includes("reset-password")) ? null : (
+        pathname.includes("reset-password")) ? <NavbarTemp/> : (
         <Navbar />
       )}
       {children}
-      <Toaster />
+      {/* <Toaster /> */}
       {pathname &&
       (pathname.includes("signin") ||
         pathname.includes("signup") ||
