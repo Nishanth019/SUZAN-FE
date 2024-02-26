@@ -17,16 +17,20 @@ const StudentSignUp = () => {
     setIsDropdownOpen((prev) => !prev);
   };
   return (
-    <div className="container flex flex-col mx-auto bg-white rounded-lg py-5">
+    <div className="container flex flex-col mx-auto rounded-lg py-5 max-sm:mt-5 max-sm:py-10 lg:mb-1">
       <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
-        <div className="flex items-center justify-center w-full lg:p-12 ">
-          <div className="flex items-center lg:m-0">
-            <form className="flex flex-col w-full h-full pb-6 text-center bg-white rounded-3xl border border-gray-300 p-4 md:p-12 ">
-              <h3 className="mb-3  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] font-extrabold text-dark-grey-900">
-                Sign Up
-              </h3>
+        <div className="flex items-center justify-center w-full  ">
+          <div className="flex items-center ">
+
+            <form className="flex shadow-lg flex-col w-full h-full pb-6 text-center bg-white rounded-3xl border border-gray-300 p-4 md:px-12 md:py-4">
+              <div>
+                <h3 className="mb-3  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] font-extrabold text-dark-grey-900">
+                  Student Sign-Up
+                </h3>
+              </div>
+
               <p className="mb-4 text-grey-700">
-                Enter your email and password
+                Enter your details
               </p>
 
               <label
@@ -102,7 +106,8 @@ const StudentSignUp = () => {
               >
                 Image*
               </label>
-              <Button variant="gradient" className="flex items-center gap-3 mb-5">
+              <Button variant="gradient" className="flex items-center border border-gray-300 gap-3 mb-5">
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   strokeWidth={2}
@@ -116,13 +121,14 @@ const StudentSignUp = () => {
                   />
                 </svg>
                 <div className='text-black'>
-                  Upload Files
+                  Upload Image as PDF
                 </div>
+
               </Button>
 
 
               {/* //college dropdown */}
-              <div className=" mb-5 text-left">
+              <div className=" mb-5 text-left ">
                 <label
                   htmlFor="collegeoption"
                   className="mb-5 py-3 text-sm text-start text-grey-900"
@@ -131,15 +137,15 @@ const StudentSignUp = () => {
                 </label>
                 <div
                   onClick={toggleDropdown}
-                  className="flex mt-3 items-center cursor-pointer"
+                  className="flex mt-3 items-center cursor-pointer "
                 >
-                  <div className="relative">
+                  <div className="relative w-full">
                     <select
                       value={selectedOption}
                       onChange={handleOptionChange}
-                      className="appearance-none bg-white border border-gray-300 rounded px-4 py-2 leading-tight focus:outline-none focus:border-blue-500"
+                      className="appearance-none bg-white w-full border border-gray-300 rounded px-4 py-2 leading-tight focus:outline-none focus:border-blue-500"
                     >
-                      <option value="">Other</option>
+                      <option value="">Select An Option</option>
                       <option value="iiitjabalpur">IIIT Jabalpur</option>
                       <option value="jabalpurengineeringcollege">Jabalpur Engineering College</option>
                       <option value="ranidurgavathiinstitute">Rani Durgavathi Institute</option>
@@ -160,10 +166,10 @@ const StudentSignUp = () => {
 
               </div>
 
-              <button className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-black transition duration-300 md:w-96 rounded-2xl hover:bg-blue-300 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500 border border-gray-300 p-10">
+              <Button className="w-full px-3 py-5 mt-10 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 hover:bg-blue-500 hover:text-white focus:ring-4 focus:ring-purple-blue-100 bg-blue-400 border border-gray-300 md:px-12  ">
                 Sign Up
-              </button>
-              <p className="text-sm leading-relaxed text-grey-900">
+              </Button>
+              <p className="text-sm leading-relaxed mb-4 text-grey-900">
                 Already registered?{" "}
                 <Link
                   href="/signin"

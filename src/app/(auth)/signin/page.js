@@ -1,14 +1,16 @@
+'use client'
 import React from "react";
 import Link from "next/link";
+import  { Button }  from "@material-tailwind/react";
 import Image from "next/image";
 
 const SignIn = () => {
   return (
-    <div className="container flex flex-col mx-auto bg-white rounded-lg py-4 max-sm:mt-5 max-sm:py-10 lg:mb-1">
+    <div className="container flex flex-col mx-auto bg-white rounded-lg py-5 max-sm:mt-5 max-sm:py-10 lg:mb-1">
       <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
         <div className="flex items-center justify-center w-full  ">
           <div className="flex flex-col items-center  ">
-            <form className="flex flex-col w-full h-full pb-6 text-center bg-white rounded-3xl border border-gray-300 p-4 md:p-12 ">
+            <form className="flex flex-col shadow-lg w-full h-full pb-6 text-center bg-white rounded-3xl border border-gray-300 p-4 md:p-12 ">
               <h3 className="mb-3  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] font-extrabold text-dark-grey-900">
                 Sign In
               </h3>
@@ -50,13 +52,14 @@ const SignIn = () => {
                   Forget password?
                 </Link>
               </div>
-              <button className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-black transition duration-300 md:w-96 rounded-2xl hover:bg-blue-300 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500 border border-gray-300 p-10">
+              <Button className="w-full px-3 py-5 mt-10 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 hover:bg-blue-500 hover:text-white focus:ring-4 focus:ring-purple-blue-100 bg-blue-400 border border-gray-300 md:px-12  ">
                 Sign In
-              </button>
+              </Button>
+
               <p className="text-sm leading-relaxed text-grey-900">
                 Not registered yet?{" "}
                 <Link
-                  href=""
+                  href="signup"
                   className="font-bold  text-blue-600 hover:text-blue-900"
                 >
                   Create an Account
