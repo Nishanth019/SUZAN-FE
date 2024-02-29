@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from 'next/image';
 import man from "../../../assets/Homepage/CourseSectionManImage.png";
 import arrow from "../../../assets/Homepage/CoursesArrow.png"
+
 const CoursesSection = ({ user }) => {
   const navigate = useRouter();
 

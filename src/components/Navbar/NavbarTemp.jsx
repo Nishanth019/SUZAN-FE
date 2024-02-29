@@ -3,10 +3,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import logo from "../../assets/Navbar/logo.png"
-import { IoIosNotificationsOutline } from "react-icons/io";
-import { MdOutlineMenu } from "react-icons/md";
-import { AiOutlineClose } from "react-icons/ai";
-import { IoIosArrowDown } from "react-icons/io";
 
 
 const NavbarTemp = () => {
