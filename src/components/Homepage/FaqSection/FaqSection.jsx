@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import Image from 'next/image';
 import bulb from "../../../assets/Homepage/bulb.png";
-import star from "../../../assets/Homepage/star.png";
+import star from "../../../assets/Homepage/Star.png";
 const FaqSection = () => {
   const [openIndex, setOpenIndex] = useState(null);
   
