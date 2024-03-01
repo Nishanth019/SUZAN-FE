@@ -12,7 +12,7 @@ const FaqSection = () => {
       id: 1,
       question: 'Is there support available if I have questions during my subscription?',
       answer: [
-        'Absolutely. During your subscription, you will have the opportunity to engage with our experts in various Q&A sessions, where you can freely ask any questions you may have.Additionally, members have access to our dedicated WhatsApp support for prompt resolution of any queries.',
+        'Absolutely. During your subscription, you will have the opportunity to engage with our experts in various Q&amp;A sessions, where you can freely ask any questions you may have.Additionally, members have access to our dedicated WhatsApp support for prompt resolution of any queries.',
       ],
     },
     {
