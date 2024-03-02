@@ -38,7 +38,7 @@ const NavbarTemp = () => {
                             {isSignInPage && (
                                 <Link href="/signup">
                                     <button
-                                        className="hidden lg:block md:text-[14px] text-xs rounded-full px-6 capitalize py-2 bg-[#FF8B4A] hover:bg-[#FF8000] border-2 text-white font-medium transition-all duration-75"
+                                        className="hidden lg:block md:text-[16px] text-xs rounded-full px-6 capitalize py-2 md:py-3 bg-[#FF8B4A] hover:bg-[#FF8000] border-2 text-white font-medium transition-all duration-75"
                                         >
                                         Sign Up
                                     </button>
@@ -47,7 +47,7 @@ const NavbarTemp = () => {
                             {isSignUpPage && (
                                 <Link href="/signin">
                                     <button
-                                        className="hidden lg:block md:text-[14px] text-xs rounded-full px-6 capitalize py-2 bg-[#FF8B4A] hover:bg-[#FF8000] border-2 text-white font-medium transition-all duration-75"
+                                        className="hidden lg:block md:text-[16px] text-xs rounded-full px-6 capitalize py-2 md:py-3 bg-[#FF8B4A] hover:bg-[#FF8000] border-2 text-white font-medium transition-all duration-75"
                                         >
                                         Sign In
                                     </button>

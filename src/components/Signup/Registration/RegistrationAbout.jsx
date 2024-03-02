@@ -87,13 +87,13 @@ const RegistrationAbout = ({
 
           <div
             onClick={toggleDropdown}
-            className="w-full border px-6 py-3  rounded-full mt-2 text-lg "
+            className="w-full border px-4 py-3 sm:px-6 sm:py-3  rounded-full mt-2 text-lg "
           >
             <div className="relative w-full">
               <select
                 value={details?.values?.collegeName}
                 onChange={handleOptionChange}
-                className="appearance-none bg-white w-full  rounded px-4 py-2 leading-tight focus:outline-none focus:border-blue-500"
+                className="appearance-none  w-full  rounded px-4  leading-tight focus:outline-none focus:border-blue-500 max-sm:text-sm"
               >
                 <option value="iiitjabalpur">IIIT Jabalpur</option>
                 <option value="jabalpurengineeringcollege">Jabalpur Engineering College</option>
@@ -102,7 +102,7 @@ const RegistrationAbout = ({
               </select>
 
               {/* Arrow icon */}
-              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none px-1">
                 {!isDropdownOpen ? (
                   <FaChevronDown  className="h-4 w-4 text-gray-600" />
                 ) : (
@@ -125,7 +125,7 @@ const RegistrationAbout = ({
                 name="collegeName"
                 value={details?.values?.collegeName}
                 onChange={handleChange}
-                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+                className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg "
               />
             </div>
             <div className="w-full md:flex-1">
@@ -137,7 +137,7 @@ const RegistrationAbout = ({
                 value={details?.values?.setStreetName}
                 onChange={handleChange}
 
-                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+                className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
               />
             </div>
         </div>
@@ -152,7 +152,7 @@ const RegistrationAbout = ({
                 name="city"
                 value={details?.values?.city}
                 onChange={handleChange}
-                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+                className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
               />
             </div>
             <div className="w-full md:flex-1">
@@ -163,7 +163,7 @@ const RegistrationAbout = ({
                 name="state"
                 value={details?.values?.state}
                 onChange={handleChange}
-                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+                className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
               />
             </div>
          </div>
@@ -176,7 +176,7 @@ const RegistrationAbout = ({
                 name="country"
                 value={details?.values?.country}
                 onChange={handleChange}
-                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+                className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
               />
               </div>
             <div className="w-full md:flex-1">
@@ -187,7 +187,7 @@ const RegistrationAbout = ({
                 name="pincode"
                 value={details?.values?.pincode}
                 onChange={handleChange}
-                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+                className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
               />
             </div>
             
@@ -245,7 +245,7 @@ const RegistrationAbout = ({
                 name="program"
                 value={details?.values?.program}
                 onChange={handleChange}
-                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+                className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
               />
               </div>
             <div className="w-full md:flex-1">
@@ -256,7 +256,7 @@ const RegistrationAbout = ({
                 name="branch"
                 value={details?.values?.branch}
                 onChange={handleChange}
-                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+                className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
               />
             </div>
             
@@ -270,7 +270,7 @@ const RegistrationAbout = ({
                 placeholder="Enter Your college Roll Number"
                 value={details?.values?.rollNo}
                 onChange={handleChange}
-                className={`w-full border px-6 py-3 ${formikForm?.touched?.location && formikForm?.errors?.location ? "border-red-500":""} rounded-full mt-2 text-lg`}
+                className={`w-full border  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm ${formikForm?.touched?.location && formikForm?.errors?.location ? "border-red-500":""} rounded-full mt-2 text-lg`}
             />
             <p className="text-xs text-red-500 m-1">{formikForm?.touched?.location && formikForm?.errors?.location}</p>
             </div>
@@ -282,7 +282,7 @@ const RegistrationAbout = ({
                 placeholder="Enter Your Batch"
                 value={details?.values?.batch}
                 onChange={handleChange}
-                className={`w-full border px-6 py-3 ${formikForm?.touched?.location && formikForm?.errors?.location ? "border-red-500":""} rounded-full mt-2 text-lg`}
+                className={`w-full border  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm ${formikForm?.touched?.location && formikForm?.errors?.location ? "border-red-500":""} rounded-full mt-2 text-lg`}
             />
             <p className="text-xs text-red-500 m-1">{formikForm?.touched?.location && formikForm?.errors?.location}</p>
             </div>
@@ -290,7 +290,7 @@ const RegistrationAbout = ({
          <div className="w-full md:flex-1">
           <h1 className="text-neutral-500">Upload College ID card</h1>
           <div className="flex flex-row items-center gap-x-3">
-            <Upload onAddFileLink={addFileLink} type="Image" ratio={1} />
+            <Upload  onAddFileLink={addFileLink} type="Image" ratio={1} />
             <a className="text-[#B8B8B8]" href={fileLink} target="_blank">
               {fileLink
                 ? fileLink.split("/").pop().substring(0, 40) + "..."

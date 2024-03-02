@@ -44,7 +44,7 @@ export function Upload({ onAddFileLink,type }) {
             <DialogTrigger asChild>
                 <div className=" rounded-md text-white">
                     <div className="flex flex-row items-center">
-                        <button className="px-6 py-3 bg-[#36518F] rounded-full mt-2 text-white font-medium" onClick={() => setModalOpen(true)}>
+                        <button className="px-4 py-1 sm:px-6 sm:py-3 bg-[#36518F] rounded-full mt-2 text-white font-medium " onClick={() => setModalOpen(true)}>
                             Upload
                         </button>
                     </div>

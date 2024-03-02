@@ -132,12 +132,12 @@ const AdminRegistration = () => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-2 md:gap-4 px-4 md:px-16 lg:px-28 py-16 bg-gradient-to-t from-blue-300 via-pink-200 to-blue-100">
-      <h1 className="text-2xl font-semibold text-center ">
+    <div className="w-full flex flex-col justify-center items-center gap-2 md:gap-4 px-4 md:px-16 lg:px-28 py-5 sm:py-8 ">
+      <h1 className="text-2xl font-semibold text-center   text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] ">
         Greetings From <span className="primary-text-color">SUZAN</span>
       </h1>
-      <h4 className="font-medium text-center">You are just few clicks away from making your college life easier!</h4>
-      <div className="rounded-xl drop-shadow md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full">
+      <h4 className="font-medium text-center sm:text-lg">You are just few clicks away from making your college life easier!</h4>
+      <div className="rounded-xl drop-shadow border md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full">
         {stage === 1 ? (
           <RegistrationBasic
             formikForm={basicForm}
@@ -167,14 +167,14 @@ const AdminRegistration = () => {
           <>
             <button
               onClick={handleStageClick}
-              className="px-6 py-2 text-lg text-paleBlue rounded-full mt-6 border-paleBlue border-2 font-medium capitalize flex items-center justify-center gap-2"
+              className="px-4 py-2 sm:px-6 sm:py-3  text-lg text-paleBlue rounded-full mt-6 border-paleBlue border-2 font-medium capitalize flex items-center justify-center gap-2 hover:bg-[#36518F] hover:text-white"
             >
               <BsArrowLeft size={20} />
               previous
             </button>
             <button
               onClick={aboutForm.handleSubmit}
-              className="px-6 py-2 text-lg bg-[#36518F] rounded-full text-white mt-6 font-medium"
+              className="px-6 py-2 sm:px-6 sm:py-3  text-lg bg-[#36518F] rounded-full text-white mt-6 font-medium"
             >
               Submit
             </button>
