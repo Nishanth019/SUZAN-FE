@@ -8,7 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/Ui/dialog";
 import FileUpload from "./FileUpload";
 import {Button} from "../../Ui/button"
 import { Label } from "../../Ui/label";
