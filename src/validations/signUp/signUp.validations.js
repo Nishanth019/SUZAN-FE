@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const basicOnBoardingValidation = yup.object({
+export const SignupValidation = yup.object({
   name: yup
     .string("")
     .required("Name is required")
@@ -20,14 +20,3 @@ export const basicOnBoardingValidation = yup.object({
   gender: yup.string("").required("Gender is required").trim(),
   category: yup.string("").required("Category is required").trim(),
 });
-
-export const aboutOnBoardingValidation = yup.object({
-  about: yup.string("").required("About is required").trim(),
-  companyName: yup.string("").required("Company Name is required").trim(),
-  companyLogo: yup.string("").required("Company Logo is required").trim(),
-  documents: yup
-    .array("")
-    .required("Documents is required")
-    .min(1, "Atleast one document is required"),
-});
-

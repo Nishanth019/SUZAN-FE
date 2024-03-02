@@ -1,210 +1,324 @@
-'use client'
-import React from 'react'
-import { useState } from 'react';
-import { Button } from "@material-tailwind/react";
-import { FaChevronDown, FaChevronUp  } from "react-icons/fa";
-import Link from 'next/link';
+"use client";
+import React from "react";
+import { useState, useEffect } from "react";
+import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
+import { useFormik } from "formik";
+import {Button} from "@material-tailwind/react"
+// import TokenHelper from "../../helpers/Token.helper";
+import { useRouter } from "next/navigation";
+// import authService from "@/services/auth.service";
 
-const AdminSignUp = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
-  const [selectedOther, setSelectedOther] = useState(false);
-  //button styling change
-  const handleOptionChange = (e) => {
-    setSelectedOption(e.target.value);
-    if (e.target.value === 'other') {
-      setSelectedOther(true);
-    }
-    else {
-      setSelectedOther(false);
-    }
+const AdminSignup = () => {
+  const [show, setShow] = useState(false);
+  const [formPrefillData, setFormPrefillData] = useState();
+  const [tab, setTab] = useState(0);
+  const [phoneEnabled, setPhoneEnabled] = useState();
+  const [timer, setTimer] = useState(30);
+  const [showOtpField, setShowOtpField] = useState(true);
+  const [showOtpLoginField, setShowOtpLoginField] = useState(false);
+  const [isOtpVerified, setOtpVerified] = React.useState(false);
+  const [canResend, setCanResend] = useState(false);
+  const [error, setErrors] = useState();
+  function handleClick() {
+    setShow(!show);
+  }
+  const navigate = useRouter()
+
+  const handleOtpForSignUp =  (values) => {////TODO:remove this line and comment out next line
+  // const handleOtpForSignUp = async (values) => {
+    // const response = await authService.sendOtpForSignUpEmployer(values);
+
+    // if (response.status === 201) {
+      console.log(values)
+      setShowOtpField(true);
+      setShowOtpLoginField(true);
+      setCanResend(false);
+      setTimer(30);
+    // }
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prev) => !prev);
+
+  useEffect(() => {
+    if (showOtpField && showOtpLoginField) {
+      setTab(1);
+    }
+  }, [showOtpField, showOtpLoginField]);
+
+  const loginForm = useFormik({
+    initialValues: {
+      name: formPrefillData ? formPrefillData.name : "",
+      email: formPrefillData ? formPrefillData.email : "",
+      password: formPrefillData ? formPrefillData.password : "",
+      otp: formPrefillData ? formPrefillData.otp : "",
+    },
+
+     onSubmit : (values) => {
+    // onSubmit: async (values) => {
+      if (!values.email) return setErrors("Email Required!");
+      if (!values.password || !Boolean(values.password?.trim())) return setErrors("Password Required!");
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(values.email) ) {
+        return setErrors("Invalid Email");
+      }
+      if (values.password.length < 8) {
+        return setErrors("Password must be at least 8 characters");
+      }
+
+      if (tab === 0) {
+        if (!values.name) {
+          return setErrors("Full Name Required!");
+        }
+        // signup
+        // try {
+          const payload = {
+            name: values.name,
+            password: values.password,
+            role: "admin"
+          };
+          // console.log(payload);
+          payload.email = values.email;
+          handleOtpForSignUp(payload);//TODO:remove this line and comment out next line
+          // await handleOtpForSignUp(payload);
+        // } catch (ex) {
+          // setErrors(ex.response.data.message);
+        // }
+      }
+
+      if (tab === 1) {
+        console.log("I AM WORKING");
+        if (showOtpLoginField) {
+          // try {
+            if (!isOtpVerified) {
+              const payload = {
+                otp: values.otp,
+              };
+              payload.email = values.email;
+              // const data = await authService.verifyOtpForSignUp(payload);
+              console.log("working")
+              // if (data) {
+                // TokenHelper.create(data.data.result.accessToken);
+                // if (!data?.data?.error) {
+                  setOtpVerified(true);
+                  if (typeof window !== undefined) {
+                    window.location.href = "/signup/admin/registration"
+                  }
+                // } else {
+                  // navigate.push('/signup/admin');
+                // }
+              }
+            }
+          // } catch (error) {
+          //   setErrors(error.response.data.message);
+          // }
+        // }
+      }
+    },
+
+  });
+
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer(timer - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    } else {
+      setCanResend(true);
+    }
+  }, [timer]);
+
+  const resendOtp = async (e) => {
+    const stringVerify = new RegExp(/[A-Za-z]/);
+
+    const isString = stringVerify.exec(e.target.value);
+    const payload = {};
+    // if (isString) {
+      payload.email = loginForm.values.email;
+    // } else {
+    //   payload.phone = loginForm.values.email;
+    // }
+    // const response = await authService.sendOtp(payload);
+
+    // if (response) {
+      setShowOtpField(true);
+      setShowOtpLoginField(true);
+      setCanResend(false);
+      setTimer(30); // Reset the timer
+    // }
   };
+
   return (
-    <div className=" flex flex-col bg-gradient-to-t from-blue-300 via-pink-200 to-blue-100 p-10 px-5 ">
-      <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
-        <div className="flex items-center justify-center w-full  ">
-          <div className="flex items-center ">
-            <form className="flex flex-col shadow-lg w-full h-full pb-6 text-center bg-white rounded-3xl border border-gray-300 p-4 md:px-12 md:py-4 ">
-              <h3 className="mb-3  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] font-extrabold text-dark-grey-900">
-                Admin Sign Up
-              </h3>
-              <p className="mb-4 text-grey-700">
-                Enter your details
-              </p>
-
-              <label
-                htmlFor="name"
-                className="mb-2 text-sm text-start text-grey-900"
-              >
-                Name*
-              </label>
-              <input
-                id="name"
-                type="name"
-                placeholder="Enter your name"
-                className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
-                required
-              />
-              <label
-                htmlFor="email"
-                className="mb-2 text-sm text-start text-grey-900 "
-              >
-                Email*
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="mail@gmail.com"
-                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
-                required
-              />
-              <label
-                htmlFor="password"
-                className="mb-2 text-sm text-start text-grey-900"
-              >
-                Password*
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Enter a password"
-                className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
-                required
-              />
-              <label
-                htmlFor="confirmpassword"
-                className="mb-2 text-sm text-start text-grey-900"
-              >
-                Confirm Password*
-              </label>
-              <input
-                id="confirmpassword"
-                type="confirmpassword"
-                placeholder="Re-Enter the password"
-                className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
-                required
-              />
-
-              <label
-                htmlFor="rollnumber"
-                className="mb-2 text-sm text-start text-grey-900"
-              >
-                Roll Number*
-              </label>
-              <input
-                id="rollnumber"
-                type="rollnumber"
-                placeholder="Enter the roll number"
-                className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
-                required
-              />
-
-              <label
-                htmlFor="image"
-                className="mb-2 text-sm text-start text-grey-900"
-              >
-                Image*
-              </label>
-              <Button variant="gradient" className="flex items-center border border-gray-300 gap-3 mb-5">
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="h-5 w-5 "
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+    <div className="h-[670px] flex flex-col bg-gradient-to-t from-blue-300 via-pink-200 to-blue-100 px-5" >
+      <main>
+        {tab === 0 ? (
+          <div className="flex lg:flex-row flex-col-reverse lg:gap-0 gap-4 items-center  px-4 md:px-16 md:py-6 lg:mx-[439px] ">
+            {/* register component */}
+            <div className="flex flex-1 w-full flex-col bg-white rounded-2xl shadow justify-center items-center py-12">
+              <div className="font-semibold text-2xl tracking-wide justify-center mb-7">Admin Signup</div>
+              <div className="flex flex-col justify-center gap-7 w-[80%]">
+                {/* Email section*/}
+                <div className="space-y-3 w-full gap-y-10">
+                  <p className="text-[#676767]">Email ID</p>
+                  <input
+                    type="text"
+                    name="email"
+                    value={loginForm.values.email}
+                    onChange={(e) => {
+                      loginForm.handleChange(e);
+                    }}
+                    error={
+                      loginForm.touched.email && Boolean(loginForm.errors.email)
+                    }
+                    placeholder="Enter Email ID"
+                    className="rounded-full border border-[#E0E0E0] w-full p-3"
                   />
-                </svg>
-                <div className='text-black'>
-                  Upload Image as PDF
                 </div>
-
-              </Button>
-
-
-              {/* //college dropdown */}
-              <div className=" mb-5 text-left ">
-                <label
-                  htmlFor="collegeoption"
-                  className="mb-5 py-3 text-sm text-start text-grey-900"
-                >
-                  College*
-                </label>
-                <div
-                  onClick={toggleDropdown}
-                  className="flex mt-3 items-center cursor-pointer "
-                >
-                  <div className="relative w-full">
-                    <select
-                      value={selectedOption}
-                      onChange={handleOptionChange}
-                      className="appearance-none bg-white w-full border border-gray-300 rounded px-4 py-2 leading-tight focus:outline-none focus:border-blue-500"
-                    >
-                      <option value="iiitjabalpur">IIIT Jabalpur</option>
-                      <option value="jabalpurengineeringcollege">Jabalpur Engineering College</option>
-                      <option value="ranidurgavathiinstitute">Rani Durgavathi Institute</option>
-                      <option value="other">Other</option>
-                    </select>
-
-                    {/* Arrow icon */}
-                    <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    {!isDropdownOpen ? (
-                        <FaChevronDown  className="h-4 w-4 text-gray-600" />
-                      ) : (
-                        <FaChevronUp className="h-4 w-4 text-gray-600" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {selectedOther ? (
-                  <div className='mt-6 '>
-                    <label
-                      htmlFor="newcollagename"
-                      className="mb-3 mt-3 text-sm text-start text-grey-900"
-                    >
-                      College Name*
-                    </label>
+                {/* Password Section */}
+                <div className="space-y-3 w-full">
+                  <p className="text-[#676767]">Password</p>
+                  <div className="flex flex-row items-center relative w-full">
                     <input
-                      id="newcollagename"
-                      type="newcollagename"
-                      placeholder="Enter Your College Name"
-                      className="flex items-center w-full px-5 py-4 mt-2 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
-                      required
-                    />
+                     type={`${show ? "password" : "text"}`}
+                    name="password"
+                    value={loginForm.values.password}
+                    onChange={loginForm.handleChange}
+                    error={
+                      loginForm.touched.password && Boolean(loginForm.errors.password)
+                    }
+                    placeholder="Must be min 8 charecters"
+                    className="rounded-full border border-[#E0E0E0] p-3 w-full"
+                  />
+                    <p
+                      className="absolute right-3 pr-3 hover:cursor-pointer text-[#0048B4]"
+                      onClick={handleClick}
+                    >
+                      {show ? "Show" : "Hide"}
+                    </p>
                   </div>
-                ) : (
-                  <div></div>
-                )
-                }
+                </div>
+                {/* Full name */}
+                <div className="space-y-3 w-full">
+                  <p className="text-[#676767]">Your Name</p>
+                  <input
+                    type="name"
+                    name="name"
+                    value={loginForm.values.name}
+                    onChange={loginForm.handleChange}
+                    error={
+                      loginForm.touched.name && Boolean(loginForm.errors.name)
+                    }
+                    placeholder="Enter Your Name"
+                    className="rounded-full border border-[#E0E0E0] w-full p-3"
+                  />
+                </div>
 
+                {/* Forgot password */}
+                {/* Register Button */}
+                <p className="text-red-500 text-sm  text-center">{error}</p>
+                <div className="">
+                
+                  <button className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-4 w-full rounded-full" onClick={(e) => {
+                    setErrors();
+                    loginForm.handleSubmit();
+                  }}>
+                    Continue
+                  </button>
+
+                </div>
               </div>
 
-              <Button className="w-full px-3 py-5 mt-10 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 hover:bg-blue-500 hover:text-white focus:ring-4 focus:ring-purple-blue-100 bg-blue-400 border border-gray-300 md:px-12  ">
-                Sign Up
-              </Button>
-              <p className="text-sm leading-relaxed mb-4 text-grey-900">
+              {/* already on edzer */}
+              <p className="text-sm leading-relaxed mt-4 text-grey-900">
                 Already registered?{" "}
                 <Link
                   href="/signin"
                   className="font-bold  text-blue-600 hover:text-blue-900"
                 >
-                  Sign In
+                  Login
                 </Link>
               </p>
-            </form>
+            </div>
           </div>
-        </div>
-      </div >
-    </div >
+        ) : (
+          <div className="flex lg:flex-row flex-col-reverse lg:gap-0 gap-4 items-center  px-4 md:px-16 md:py-6 lg:mx-[439px] " >
+            
+            {/* register component */}
+            <div className="flex flex-1 w-full flex-col bg-white rounded-2xl shadow justify-center items-center py-12">
+              <div className="font-semibold text-2xl tracking-wide justify-center mb-7">Admin Signup</div>
+              <div className="flex flex-col justify-center gap-7 w-[80%]">
+                {/* Email section*/}
+                <div className="space-y-3 w-full">
+                  <p className="text-[#676767]">Enter OTP</p>
+                  <div className="flex flex-row items-center relative w-full">
+                    <input
+                    type={`${show ? "password" : "text"}`}
+                    value={loginForm.values.otp}
+                    onChange={loginForm.handleChange}
+                    name="otp"
+                    // value={loginForm.values.password}
+                    // onChange={loginForm.handleChange}
+                    // error={
+                      //     loginForm.touched.password && Boolean(loginForm.errors.password)
+                      // }
+                      placeholder = "Enter OTP"
+                    className="rounded-full border border-[#E0E0E0] p-3 w-full"
+                  />
+                    <p
+                      className="absolute right-3 pr-3 hover:cursor-pointer text-[#0048B4]"
+                      onClick={handleClick}
+                    >
+                      {show ? "Show" : "Hide"}
+                    </p>
+                  </div>
+                  <div className="w-full text-right">
+                    {canResend ? (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          resendOtp(e);
+                        }}
+                        className="text-xs text-blue-600  text-right"
+                      >
+                        Resend OTP
+                      </button>
+                    ) : (
+                      <p className="text-xs leading-tight text-[#4F4F4F]">
+                        {timer} s
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className=" flex gap-4 flex-col">
+                  <p className="text-red-500 text-sm  text-center">{error}</p>
+                  <button className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-4 w-full rounded-full" onClick={(e) => {
+                    setErrors();
+                    loginForm.handleSubmit();
+                  }}>
+                    Sign Up
+                  </button>
+
+                </div>
+              </div>
+
+              {/* already on edzer */}
+              <p className="text-sm mt-8 leading-relaxed text-grey-900">
+                Already registered ?{" "}
+                <Link
+                  href="/signin"
+                  className="font-bold  text-blue-600 hover:text-blue-900"
+                >
+                  Login
+                </Link>
+              </p>
+            </div>
+          </div>
+        )}
+
+      </main>
+    </div>
   )
 }
 
-export default AdminSignUp
+export default AdminSignup

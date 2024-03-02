@@ -7,7 +7,7 @@ import logo from "../../assets/Navbar/logo.png"
 
 const NavbarTemp = () => {
     const pathname = usePathname();
-     const isSignInPage = pathname.includes('signin');
+    const isSignInPage = pathname.includes('signin');
     const isSignUpPage = pathname.includes('signup');
     return (
         <nav className="bg-white drop-shadow relative z-50">
