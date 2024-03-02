@@ -3,7 +3,12 @@
 import React, {useState} from 'react'
 import MainSection from "@/components/Homepage/MainSection/MainSection.jsx"
 import TrustedSection from '@/components/Homepage/TrustedSection/TrustedSection'
-import Services from '@/components/Services/Services'
+import CoreTeamSection from '@/components/Homepage/CoreTeamSection/CoreTeamSection'
+import Services from '@/components/Homepage/Services/Services'
+import CoursesSection from '@/components/Homepage/CoursesSection/CoursesSection'
+import NearbyPlaces from '@/components/Homepage/NearbyPlaces/NearbyPlaces'
+import FaqSection from '@/components/Homepage/FaqSection/FaqSection'
+import ContactSection from '@/components/Homepage/ContactSection/ContactSection'
 
 const Home = () => {
   const [user,setUser] = useState(null);
@@ -12,6 +17,11 @@ const Home = () => {
       <MainSection/>
       <Services/>
       <TrustedSection/>
+      <CoursesSection/>
+      <NearbyPlaces/>
+      <CoreTeamSection/>
+      <FaqSection/>
+      <ContactSection/>
     </div>
   )
 }

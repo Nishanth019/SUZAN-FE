@@ -23,13 +23,13 @@ const Navbar = () => {
     const pathname = usePathname();
     const [openMenu, setOpenMenu] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
-    // const [user, setUser] = useState({
-    //     name: "Nishanth",
-    //     picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
-    //     role: "student",
-    // });
+    const [user, setUser] = useState({
+        name: "Nishanth",
+        picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
+        role: "student",
+    });
     
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
 
     const handleMenuToggle = () => {
         setOpenMenu(!openMenu);
@@ -63,19 +63,23 @@ const Navbar = () => {
                                 <MdOutlineMenu size={25} />
                             )}
                         </button>
+                        <Link href="/">
                         <Image
                             className="w-[120px] h-auto "
                             src={logo}
                             alt="SUZAN"
                         />
+                        </Link>
                     </div>
                     <div className="max-md:hidden flex flex-1 items-center justify-center md:items-center md:justify-start">
                         <div className="flex items-center">
+                             <Link href="/">
                             <Image
-                                className="w-[120px] h-auto "
+                                className="w-[130px] h-auto "
                                 src={logo}
                                 alt="SUZAN"
                             />
+                            </Link>
                         </div>
                         <div className="ml-2 lg:ml-6 ">
                             <div className="flex space-x-1 lg:space-x-4">
@@ -84,7 +88,7 @@ const Navbar = () => {
                                         className={`${pathname === item.href
                                             ? 'text-[#00A5E0]'
                                             : 'text-[#4F4F4F] hover:text-black'
-                                            } whitespace-nowrap  rounded-md px-3 py-2 text-[14px] lg:text-[16px]  font-medium`}
+                                            } whitespace-nowrap  rounded-md px-3 py-2 text-[14px] lg:text-[16px]  xl:text-[18px] font-medium`}
                                     >
                                         {item.name}
                                     </Link>

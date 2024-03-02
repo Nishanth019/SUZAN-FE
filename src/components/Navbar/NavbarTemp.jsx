@@ -3,10 +3,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import logo from "../../assets/Navbar/logo.png"
-import { IoIosNotificationsOutline } from "react-icons/io";
-import { MdOutlineMenu } from "react-icons/md";
-import { AiOutlineClose } from "react-icons/ai";
-import { IoIosArrowDown } from "react-icons/io";
 
 
 const NavbarTemp = () => {
@@ -18,19 +14,23 @@ const NavbarTemp = () => {
             <div className="mx-auto max-w-7xl px-2 md:px-6 lg:px-8 relative">
                 <div className="relative flex h-20 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex space-x-4 items-center md:hidden">
+                        <Link href="/">
                         <Image
-                            className="w-[120px] h-auto"
+                            className="w-[120px] h-auto "
                             src={logo}
                             alt="SUZAN"
                         />
+                        </Link>
                     </div>
                     <div className="max-md:hidden flex flex-1 items-center justify-center md:items-center md:justify-start">
                         <div className="flex items-center">
+                            <Link href="/">
                             <Image
                                 className="w-[120px] h-auto"
                                 src={logo}
                                 alt="SUZAN"
-                            />
+                                />
+                            </Link>
                         </div>
                     </div>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0 ">
