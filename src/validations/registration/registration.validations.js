@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const basicOnBoardingValidation = yup.object({
+ const  basicRegistrationValidations = yup.object({
   name: yup
     .string("")
     .required("Name is required")
@@ -16,12 +16,12 @@ export const basicOnBoardingValidation = yup.object({
     .required("Phone is required")
     .matches("^[0-9]{10}$", "Please provide a valid mobile number"),
   // phone : yup.string("").required("Phone is required").trim(),
-  location: yup.string("").required("Location is required").trim(),
+  // location: yup.string("").required("Location is required").trim(),
   gender: yup.string("").required("Gender is required").trim(),
-  category: yup.string("").required("Category is required").trim(),
+  // category: yup.string("").required("Category is required").trim(),
 });
 
-export const aboutOnBoardingValidation = yup.object({
+ const aboutRegistrationValidation = yup.object({
   about: yup.string("").required("About is required").trim(),
   companyName: yup.string("").required("Company Name is required").trim(),
   companyLogo: yup.string("").required("Company Logo is required").trim(),
@@ -31,3 +31,4 @@ export const aboutOnBoardingValidation = yup.object({
     .min(1, "Atleast one document is required"),
 });
 
+export default basicRegistrationValidations;aboutRegistrationValidation;

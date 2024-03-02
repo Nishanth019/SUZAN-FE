@@ -1,7 +1,10 @@
 "use client";
 import { useEffect } from "react";
-// import OnboardingAbout from "@/components/Details/OnboardingAbout";
-// import OnboardingBasic from "@/components/Details/OnboardingBasic";
+import  basicRegistrationValidations from "@/validations/registration/registration.validations";
+import  aboutRegistrationValidation  from "@/validations/registration/registration.validations";
+
+import RegistrationAbout from "./RegistrationAbout";
+import RegistrationBasic from "./RegistrationBasic";
 // import employerService from "@/services/employer.service";
 import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
@@ -10,42 +13,27 @@ import { useRouter } from "next/navigation";
 // import authService from "@/services/auth.service";
 // import userService from "@/services/user.service";
 import { useFormik } from "formik";
-import {
-  aboutOnBoardingValidation,
-  basicOnBoardingValidation,
-} from "@/validations/onboarding/onboarding.validations";
+
 const AdminRegistration = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [stage, setStage] = useState(1);
-  const [social, setSocial] = useState([
-    {
-      platform: "LinkedIn",
-      profileUrl: "",
-    },
-    {
-      platform: "Facebook",
-      profileUrl: "",
-    },
-    {
-      platform: "Instagram",
-      profileUrl: "",
-    },
-    {
-      platform: "Twitter",
-      profileUrl: "",
-    },
-  ]);
+
   const [details, setDetails] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
-    gender: "",
-    category: "",
-    about: "",
-    companyName: "",
-    companyLogo: "",
+      name: "",
+      email: "",
+      phone: "",
+      gender: "",
+       collegeName:"",
+      streetName:"",
+      city:"",
+      state:"",
+      pincode:"",
+      country:"India",
+        rollNo:"",
+      program:"",
+      branch:"",
+      batch:"",
     documents: [],
   });
   const basicForm = useFormik({
@@ -53,11 +41,10 @@ const AdminRegistration = () => {
       name: "",
       email: "",
       phone: "",
-      location: "",
       gender: "",
-      category: "",
+
     },
-    // validationSchema: basicOnBoardingValidation,
+    validationSchema: basicRegistrationValidations,
     onSubmit: async () => {
       setStage((stage) => (stage === 1 ? 2 : 1));
       console.log(0,stage);
@@ -65,17 +52,26 @@ const AdminRegistration = () => {
   });
   const aboutForm = useFormik({
     initialValues: {
-      about: "",
-      companyName: "",
-      companyLogo: "",
+    //   about: "",
+    //   companyName: "",
+    //   companyLogo: "",
       documents: [],
+       collegeName:"",
+      streetName:"",
+      city:"",
+      state:"",
+      pincode:"",
+      country:"India",
+        rollNo:"",
+      program:"",
+      branch:"",
+      batch:"",
     },
-    validationSchema: aboutOnBoardingValidation,
+    validationSchema: aboutRegistrationValidation,
     onSubmit: async (values) => {
       try {
-        const combinedData = { ...values, socialProfiles: [...social] };
-        console.log(combinedData);
-        const { data } = await userService.updateCurrentUser(combinedData);
+       
+        const { data } = await userService.updateCurrentUser(values);
         if (data.error === false) {
           console.log("Onboarding completed");
           router.push("/");
@@ -136,28 +132,28 @@ const AdminRegistration = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center items-center gap-2 md:gap-4 px-4 md:px-16 lg:px-28 py-16">
+    <div className="w-full flex flex-col justify-center items-center gap-2 md:gap-4 px-4 md:px-16 lg:px-28 py-16 bg-gradient-to-t from-blue-300 via-pink-200 to-blue-100">
       <h1 className="text-2xl font-semibold text-center ">
-        Welcome Aboard to <span className="text-[#129172]">EDZER</span>
+        Greetings From <span className="primary-text-color">SUZAN</span>
       </h1>
-      <h4 className="font-medium text-center">Let's Begin!</h4>
-      {/* <div className="rounded-xl drop-shadow md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full">
+      <h4 className="font-medium text-center">You are just few clicks away from making your college life easier!</h4>
+      <div className="rounded-xl drop-shadow md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full">
         {stage === 1 ? (
-          <OnboardingBasic
+          <RegistrationBasic
             formikForm={basicForm}
             details={details}
             setDetails={setDetails}
           />
         ) : (
-          <OnboardingAbout
+          <RegistrationAbout
             setDetails={setDetails}
             formikForm={aboutForm}
             details={details}
-            social={social}
-            setSocial={setSocial}
+         
+           
           />
         )}
-      </div> */}
+      </div>
       <div className="w-full flex items-center justify-center gap-4">
         {stage === 1 ? (
           <button
