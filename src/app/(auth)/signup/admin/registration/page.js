@@ -1,9 +1,9 @@
 import React from 'react'
-
-const page = () => {
+import AdminRegistration from '@/components/Signup/Registration/AdminRegistration'
+const Registration = () => {
   return (
-    <div>page</div>
+    <AdminRegistration/>
   )
 }
 
-export default page
+export default Registration
