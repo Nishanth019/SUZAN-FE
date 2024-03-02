@@ -1,35 +1,18 @@
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { useState } from "react";
-import { Upload } from "./UploadModal/upload";
+import { FaChevronDown, FaChevronUp  } from "react-icons/fa";
+import { Upload } from "@/components/Utils/UploadModal/Upload";
 const RegistrationAbout = ({
   details,
   setDetails,
-  social,
-  setSocial,
+
   formikForm,
 }) => {
   const [fileLink, setFileLink] = useState(
     formikForm?.values.companyLogo || ""
   );
   const [documentLinks, setDocumentLinks] = useState([]);
-  const [socialProfiles, setSocialProfiles] = useState([
-    {
-      platform: "LinkedIn",
-      profileUrl: "",
-    },
-    {
-      platform: "Facebook",
-      profileUrl: "",
-    },
-    {
-      platform: "Instagram",
-      profileUrl: "",
-    },
-    {
-      platform: "Twitter",
-      profileUrl: "",
-    },
-  ]);
+
 
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });
@@ -63,48 +46,255 @@ const RegistrationAbout = ({
       documents: [...formikForm?.values?.documents, link],
     });
   };
-  const updateSocialProfile = (platform, profileUrl) => {
-    const updatedProfiles = social?.map((profile) => {
-      if (profile.platform === platform) {
-        return { ...profile, profileUrl };
-      }
-      return profile;
-    });
+//   const updateSocialProfile = (platform, profileUrl) => {
+//     const updatedProfiles = social?.map((profile) => {
+//       if (profile.platform === platform) {
+//         return { ...profile, profileUrl };
+//       }
+//       return profile;
+//     });
 
-    setSocial(updatedProfiles);
+//     setSocial(updatedProfiles);
+//   };
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOther, setSelectedOther] = useState(false);
+  
+
+  //button styling change
+  const handleOptionChange = (e) => {
+    setDetails({ ...details, [e.target.name]: e.target.value });
+    setSelectedOption(e.target.value);
+    if (e.target.value === 'other') {
+      setSelectedOther(true);
+    }
+    else {
+      setSelectedOther(false);
+    }
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+
   return (
-    <div className="flex flex-col items-center justify-center gap-4 w-full">
-      <div className="flex items-center gap-10 md:flex-row flex-col w-full md:mt-4">
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Company Name</h1>
-          <input
-            type="text"
-            placeholder="e.g. Edzer"
-            name="companyName"
-            value={formikForm?.values?.companyName}
-            onChange={formikForm?.handleChange}
-            className={`border w-full px-6 py-3 ${
-              formikForm?.touched?.companyName &&
-              formikForm?.errors?.companyName
-                ? "border-red-500"
-                : ""
-            } rounded-full mt-2 focus:outline-none focus:border-blue-500`}
-          />
-          <p className="text-xs text-red-500 m-1">
-            {formikForm?.touched?.companyName &&
-              formikForm?.errors?.companyName}
-          </p>
+    <div className="flex flex-col items-center justify-center gap-4 ">
+      <div className="flex  flex-col items-center gap-4 w-full mt-4">
+        <div className="w-full md:w-full md:flex-1">
+          <h1 className="text-neutral-500">Select College</h1>
+
+          <div
+            onClick={toggleDropdown}
+            className="w-full border px-6 py-3  rounded-full mt-2 text-lg "
+          >
+            <div className="relative w-full">
+              <select
+                value={details?.values?.collegeName}
+                onChange={handleOptionChange}
+                className="appearance-none bg-white w-full  rounded px-4 py-2 leading-tight focus:outline-none focus:border-blue-500"
+              >
+                <option value="iiitjabalpur">IIIT Jabalpur</option>
+                <option value="jabalpurengineeringcollege">Jabalpur Engineering College</option>
+                <option value="ranidurgavathiinstitute">Rani Durgavathi Institute</option>
+                <option value="other">Other</option>
+              </select>
+
+              {/* Arrow icon */}
+              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                {!isDropdownOpen ? (
+                  <FaChevronDown  className="h-4 w-4 text-gray-600" />
+                ) : (
+                  <FaChevronUp className="h-4 w-4 text-gray-600" />
+                )}
+              </div>
+            </div>
+          </div>
+          <p className="text-xs text-red-500 m-1">{formikForm?.touched?.name && formikForm?.errors?.name}</p>
         </div>
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Upload Logo</h1>
+        {selectedOther && (
+        <>
+        <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+            
+            <div className="w-full md:flex-1">
+              <h1 className="text-neutral-500">College Name</h1>
+              <input
+                type="text"
+                placeholder="Enter your collage Name"
+                name="collegeName"
+                value={details?.values?.collegeName}
+                onChange={handleChange}
+                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+              />
+            </div>
+            <div className="w-full md:flex-1">
+              <h1 className="text-neutral-500">Street Name</h1>
+              <input
+                type="text"
+                placeholder="Enter your Street Name"
+                name="streetName"
+                value={details?.values?.setStreetName}
+                onChange={handleChange}
+
+                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+              />
+            </div>
+        </div>
+        <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+            
+
+            <div className="w-full md:flex-1">
+              <h1 className="text-neutral-500">City</h1>
+              <input
+                type="text"
+                placeholder="Enter your City"
+                name="city"
+                value={details?.values?.city}
+                onChange={handleChange}
+                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+              />
+            </div>
+            <div className="w-full md:flex-1">
+              <h1 className="text-neutral-500">State</h1>
+              <input
+                type="text"
+                placeholder="Enter your State"
+                name="state"
+                value={details?.values?.state}
+                onChange={handleChange}
+                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+              />
+            </div>
+         </div>
+          <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+            <div className="w-full md:flex-1">
+              <h1 className="text-neutral-500">Country</h1>
+              <input
+                type="text"
+                placeholder="Enter your Country"
+                name="country"
+                value={details?.values?.country}
+                onChange={handleChange}
+                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+              />
+              </div>
+            <div className="w-full md:flex-1">
+              <h1 className="text-neutral-500">Pincode</h1>
+              <input
+                type="text"
+                placeholder="Enter your Pincode"
+                name="pincode"
+                value={details?.values?.pincode}
+                onChange={handleChange}
+                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+              />
+            </div>
+            
+          </div>
+        </>
+      )}
+       
+      </div>
+
+ 
+
+      {/* <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+        {socialProfiles?.slice(0, 2)?.map((profile, index) => (
+          <div key={index} className="w-full md:flex-1">
+            <h1 className="text-neutral-500">
+              {profile.platform} Profile link (Optional)
+            </h1>
+            <input
+              type="text"
+              placeholder={`Paste ${profile.platform} link`}
+              name={profile.platform.toLowerCase()}
+              onChange={(e) =>
+                updateSocialProfile(profile.platform, e.target.value)
+              }
+              className="border w-full px-6 py-3 rounded-full mt-2 focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        ))}
+      </div> */}
+
+      {/* <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+        {socialProfiles?.slice(2, 4)?.map((profile, index) => (
+          <div key={index} className="w-full md:flex-1">
+            <h1 className="text-neutral-500">
+              {profile.platform} Profile link (Optional)
+            </h1>
+            <input
+              type="text"
+              placeholder={`Paste ${profile.platform} link`}
+              name={profile.platform.toLowerCase()}
+              onChange={(e) =>
+                updateSocialProfile(profile.platform, e.target.value)
+              }
+              className="border w-full px-6 py-3 rounded-full mt-2 focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        ))}
+      </div> */}
+        <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+            <div className="w-full md:flex-1">
+              <h1 className="text-neutral-500">Program</h1>
+              <input
+                type="text"
+                placeholder="Enter your Program"
+                name="program"
+                value={details?.values?.program}
+                onChange={handleChange}
+                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+              />
+              </div>
+            <div className="w-full md:flex-1">
+              <h1 className="text-neutral-500">Branch/Discipline</h1>
+              <input
+                type="text"
+                placeholder="Enter your Branch"
+                name="branch"
+                value={details?.values?.branch}
+                onChange={handleChange}
+                className="border w-full px-6 py-3 rounded-full mt-2 text-lg"
+              />
+            </div>
+            
+          </div>
+        <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+            <div className="w-full md:flex-1">
+            <h1 className="text-neutral-500">Roll No</h1>
+            <input
+                type="text"
+                name="rollNo"
+                placeholder="Enter Your college Roll Number"
+                value={details?.values?.rollNo}
+                onChange={handleChange}
+                className={`w-full border px-6 py-3 ${formikForm?.touched?.location && formikForm?.errors?.location ? "border-red-500":""} rounded-full mt-2 text-lg`}
+            />
+            <p className="text-xs text-red-500 m-1">{formikForm?.touched?.location && formikForm?.errors?.location}</p>
+            </div>
+            <div className="w-full md:flex-1">
+            <h1 className="text-neutral-500">Batch</h1>
+            <input
+                type="text"
+                name="batch"
+                placeholder="Enter Your Batch"
+                value={details?.values?.batch}
+                onChange={handleChange}
+                className={`w-full border px-6 py-3 ${formikForm?.touched?.location && formikForm?.errors?.location ? "border-red-500":""} rounded-full mt-2 text-lg`}
+            />
+            <p className="text-xs text-red-500 m-1">{formikForm?.touched?.location && formikForm?.errors?.location}</p>
+            </div>
+        </div>
+         <div className="w-full md:flex-1">
+          <h1 className="text-neutral-500">Upload College ID card</h1>
           <div className="flex flex-row items-center gap-x-3">
             <Upload onAddFileLink={addFileLink} type="Image" ratio={1} />
             <a className="text-[#B8B8B8]" href={fileLink} target="_blank">
               {fileLink
                 ? fileLink.split("/").pop().substring(0, 40) + "..."
-                : "company_logo.png"}
+                : "id_card.png"}
             </a>
             {fileLink && (
               <span className="text-red-400">
@@ -133,114 +323,6 @@ const RegistrationAbout = ({
               </div>
             )}
         </div>
-      </div>
-      <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
-        <div className="w-full md:w-full md:flex-1">
-          <h1 className="text-neutral-500">About Company (Employer)</h1>
-          <textarea
-            rows={6}
-            type="text"
-            name="about"
-            value={formikForm.values.about}
-            onChange={formikForm.handleChange}
-            placeholder="e.g. Edzer is an edtech platform committed to transforming the way students and job seekers learn and prepare for their career goals. We offer a diverse range of expert-curated courses across multiple disciplines, enriched with immersive content and practical insights. "
-            className={`focus:outline-none ${
-              formikForm?.touched?.about && formikForm?.errors?.about
-                ? "border-red-500"
-                : ""
-            } focus:border-blue-500 w-full border px-6 pt-3 pb-6 rounded-[24px] mt-2 text-lg resize-none placeholder:font-light placeholder:text-base`}
-          />
-          <p className="text-xs text-red-500 m-1">
-            {formikForm?.touched?.about && formikForm?.errors?.about}
-          </p>
-        </div>
-      </div>
-      <div className="mt-4 w-full">
-        <h1 className="text-neutral-600 font-medium">
-          Upload Document (Attach atleast one of these)
-        </h1>
-        <ol type="1" className="list-num px-6 mt-2">
-          <li className="text-neutral-600 font-medium py-1">
-            COI of the company
-          </li>
-          <li className="text-neutral-600 font-medium py-1">GSTIN</li>
-          <li className="text-neutral-600 font-medium py-1">
-            Registration Certificate as a Proprietor/LLP/Partnership
-          </li>
-        </ol>
-        <div className="flex flex-row max-sm:flex-col w-fit items-center gap-x-3">
-          <Upload onAddFileLink={addDocumentLink} />
-          <div className="flex flex-col gap-y-3">
-            {documentLinks?.map((item,index) => (
-              <div key={index} className="flex gap-2">
-                <a className="text-[#24AD5D]" href={item} target="_blank">
-                {item?.split("/").pop().substring(0, 40) + "..."}
-              </a>
-               
-                <span className="text-red-400">
-                  <MdOutlineDeleteForever
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const docs = [...documentLinks];
-                      const docs2 = formikForm?.values?.documents
-                      docs.splice(index,1);
-                      docs2.splice(index,1);
-                      formikForm?.setValues({
-                        ...formikForm?.values,
-                        documents: docs2,
-                      });
-                      setDocumentLinks(docs);
-                    }}
-                  />
-                </span>
-          
-              </div>
-            ))}
-
-          </div>
-        </div>
-        <p className="text-xs text-red-500 m-1">
-          {formikForm?.touched?.documents && formikForm?.errors?.documents}
-        </p>
-        <input type="text" className="hidden" id="uploaddocs" />
-      </div>
-      <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
-        {socialProfiles?.slice(0, 2)?.map((profile, index) => (
-          <div key={index} className="w-full md:flex-1">
-            <h1 className="text-neutral-500">
-              {profile.platform} Profile link (Optional)
-            </h1>
-            <input
-              type="text"
-              placeholder={`Paste ${profile.platform} link`}
-              name={profile.platform.toLowerCase()}
-              onChange={(e) =>
-                updateSocialProfile(profile.platform, e.target.value)
-              }
-              className="border w-full px-6 py-3 rounded-full mt-2 focus:outline-none focus:border-blue-500"
-            />
-          </div>
-        ))}
-      </div>
-
-      <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
-        {socialProfiles?.slice(2, 4)?.map((profile, index) => (
-          <div key={index} className="w-full md:flex-1">
-            <h1 className="text-neutral-500">
-              {profile.platform} Profile link (Optional)
-            </h1>
-            <input
-              type="text"
-              placeholder={`Paste ${profile.platform} link`}
-              name={profile.platform.toLowerCase()}
-              onChange={(e) =>
-                updateSocialProfile(profile.platform, e.target.value)
-              }
-              className="border w-full px-6 py-3 rounded-full mt-2 focus:outline-none focus:border-blue-500"
-            />
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

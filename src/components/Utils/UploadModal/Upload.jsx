@@ -9,10 +9,10 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import FileUpload from "@/components/FileUpload";
+import FileUpload from "./FileUpload";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import fileUploadService from "@/services/fileUpload.service";
+// import fileUploadService from "@/services/fileUpload.service";
 export function Upload({ onAddFileLink,type }) {
     const [fileUploadResponse, setFileUploadResponse] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
