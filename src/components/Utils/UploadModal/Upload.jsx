@@ -10,8 +10,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import FileUpload from "./FileUpload";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import {Button} from "../../Ui/button"
+import { Label } from "../../Ui/label";
 // import fileUploadService from "@/services/fileUpload.service";
 export function Upload({ onAddFileLink,type }) {
     const [fileUploadResponse, setFileUploadResponse] = useState(null);
