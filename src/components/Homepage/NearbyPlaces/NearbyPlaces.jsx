@@ -121,7 +121,7 @@ const NearbyPlaces = () => {
             navigate.push("/courses");
           }}
         >
-          View all Courses
+          View all Places
         </button>
       </div>
     </div>

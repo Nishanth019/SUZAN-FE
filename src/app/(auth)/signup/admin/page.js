@@ -149,13 +149,13 @@ const AdminSignup = () => {
   };
 
   return (
-    <div className="h-[670px] flex flex-col bg-gradient-to-t from-blue-300 via-pink-200 to-blue-100 px-5" >
+    <div className="h-full w-full flex flex-col px-3 " >
       <main>
         {tab === 0 ? (
-          <div className="flex lg:flex-row flex-col-reverse lg:gap-0 gap-4 items-center  px-4 md:px-16 md:py-6 lg:mx-[439px] ">
+          <div className="w-full  flex items-center justify-center  py-12 sm:py-3">
             {/* register component */}
-            <div className="flex flex-1 w-full flex-col bg-white rounded-2xl shadow justify-center items-center py-12">
-              <div className="font-semibold text-2xl tracking-wide justify-center mb-7">Admin Signup</div>
+            <div className=" flex  flex-col bg-white rounded-2xl shadow justify-center items-center py-12 w-full sm:w-[500px]">
+              <div className="font-bold  tracking-wide justify-center mb-7  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] ">Admin Signup</div>
               <div className="flex flex-col justify-center gap-7 w-[80%]">
                 {/* Email section*/}
                 <div className="space-y-3 w-full gap-y-10">
@@ -171,7 +171,7 @@ const AdminSignup = () => {
                       loginForm.touched.email && Boolean(loginForm.errors.email)
                     }
                     placeholder="Enter Email ID"
-                    className="rounded-full border border-[#E0E0E0] w-full p-3"
+                    className="rounded-full border border-[#E0E0E0] w-full p-3 max-sm:text-sm"
                   />
                 </div>
                 {/* Password Section */}
@@ -186,11 +186,11 @@ const AdminSignup = () => {
                     error={
                       loginForm.touched.password && Boolean(loginForm.errors.password)
                     }
-                    placeholder="Must be min 8 charecters"
-                    className="rounded-full border border-[#E0E0E0] p-3 w-full"
+                    placeholder="Must be min 8 characters"
+                    className="rounded-full border border-[#E0E0E0] p-3 w-full  max-sm:text-sm"
                   />
                     <p
-                      className="absolute right-3 pr-3 hover:cursor-pointer text-[#0048B4]"
+                      className="absolute right-3 pr-3 hover:cursor-pointer text-[#0048B4]  max-sm:text-sm"
                       onClick={handleClick}
                     >
                       {show ? "Show" : "Hide"}
@@ -209,7 +209,7 @@ const AdminSignup = () => {
                       loginForm.touched.name && Boolean(loginForm.errors.name)
                     }
                     placeholder="Enter Your Name"
-                    className="rounded-full border border-[#E0E0E0] w-full p-3"
+                    className="rounded-full border border-[#E0E0E0] w-full p-3  max-sm:text-sm"
                   />
                 </div>
 
@@ -218,7 +218,7 @@ const AdminSignup = () => {
                 <p className="text-red-500 text-sm  text-center">{error}</p>
                 <div className="">
                 
-                  <button className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-4 w-full rounded-full" onClick={(e) => {
+                  <button className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-2  sm:p-4 w-full rounded-full" onClick={(e) => {
                     setErrors();
                     loginForm.handleSubmit();
                   }}>
@@ -241,11 +241,11 @@ const AdminSignup = () => {
             </div>
           </div>
         ) : (
-          <div className="flex lg:flex-row flex-col-reverse lg:gap-0 gap-4 items-center  px-4 md:px-16 md:py-6 lg:mx-[439px] " >
+          <div className="w-full  flex items-center justify-center  py-12 sm:py-10" >
             
             {/* register component */}
-            <div className="flex flex-1 w-full flex-col bg-white rounded-2xl shadow justify-center items-center py-12">
-              <div className="font-semibold text-2xl tracking-wide justify-center mb-7">Admin Signup</div>
+            <div className="flex  flex-col bg-white rounded-2xl shadow justify-center items-center py-12 w-full sm:w-[500px]">
+              <div className="font-bold  tracking-wide justify-center mb-7  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px]">Admin Signup</div>
               <div className="flex flex-col justify-center gap-7 w-[80%]">
                 {/* Email section*/}
                 <div className="space-y-3 w-full">
@@ -262,7 +262,7 @@ const AdminSignup = () => {
                       //     loginForm.touched.password && Boolean(loginForm.errors.password)
                       // }
                       placeholder = "Enter OTP"
-                    className="rounded-full border border-[#E0E0E0] p-3 w-full"
+                    className="rounded-full border border-[#E0E0E0] p-3 w-full  max-sm:text-sm"
                   />
                     <p
                       className="absolute right-3 pr-3 hover:cursor-pointer text-[#0048B4]"
@@ -292,7 +292,7 @@ const AdminSignup = () => {
 
                 <div className=" flex gap-4 flex-col">
                   <p className="text-red-500 text-sm  text-center">{error}</p>
-                  <button className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-4 w-full rounded-full" onClick={(e) => {
+                  <button className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-2 sm:p-4 w-full rounded-full" onClick={(e) => {
                     setErrors();
                     loginForm.handleSubmit();
                   }}>

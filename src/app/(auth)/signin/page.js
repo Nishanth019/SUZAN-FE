@@ -6,11 +6,11 @@ import Image from "next/image";
 
 const SignIn = () => {
   return (
-    <div className=" flex flex-col bg-gradient-to-t from-blue-300 via-pink-200 to-blue-100 p-10 px-5 ">
-      <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
+    <div className="">
+      <div className="border flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
         <div className="flex items-center justify-center w-full  ">
-          <div className="flex flex-col items-center  ">
-            <form className="flex flex-col shadow-lg w-full h-full pb-6 text-center bg-white rounded-3xl border border-gray-300 p-4 md:p-12 ">
+          <div className="flex flex-col items-center w-full sm:w-[500px] p-3 py-12 sm:py-3">
+            <form className="flex flex-col shadow-lg w-full h-full pb-6 text-center bg-white rounded-3xl  p-4 md:p-12 ">
               <h3 className="mb-3  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] font-extrabold text-dark-grey-900">
                 Sign In
               </h3>
