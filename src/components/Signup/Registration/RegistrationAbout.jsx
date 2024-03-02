@@ -178,7 +178,7 @@ const RegistrationAbout = ({
               </a>
                
                 <span className="text-red-400">
-                  <DeleteForeverOutlined
+                  <MdOutlineDeleteForever
                     onClick={(e) => {
                       e.preventDefault();
                       const docs = [...documentLinks];
