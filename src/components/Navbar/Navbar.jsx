@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -28,8 +26,8 @@ const Navbar = () => {
         picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
         role: "student",
     });
-    
-    // const [user, setUser] = useState(null);
+
+    const profileRef = useRef(null);
 
     const handleMenuToggle = () => {
         setOpenMenu(!openMenu);
@@ -46,6 +44,19 @@ const Navbar = () => {
         setOpenMenu(false);
         setOpenProfile(false);
     };
+
+    const handleClickOutside = (e) => {
+        if (profileRef.current && !profileRef.current.contains(e.target)) {
+            setOpenProfile(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     return (
         <nav className="bg-white  drop-shadow relative z-50">
@@ -64,21 +75,21 @@ const Navbar = () => {
                             )}
                         </button>
                         <Link href="/">
-                        <Image
-                            className="w-[120px] h-auto "
-                            src={logo}
-                            alt="SUZAN"
-                        />
+                            <Image
+                                className="w-[120px] h-auto "
+                                src={logo}
+                                alt="SUZAN"
+                            />
                         </Link>
                     </div>
                     <div className="max-md:hidden flex flex-1 items-center justify-center md:items-center md:justify-start">
                         <div className="flex items-center">
-                             <Link href="/">
-                            <Image
-                                className="w-[130px] h-auto "
-                                src={logo}
-                                alt="SUZAN"
-                            />
+                            <Link href="/">
+                                <Image
+                                    className="w-[130px] h-auto "
+                                    src={logo}
+                                    alt="SUZAN"
+                                />
                             </Link>
                         </div>
                         <div className="ml-2 lg:ml-6 ">
@@ -104,7 +115,7 @@ const Navbar = () => {
                             >
                                 <IoIosNotificationsOutline className="h-5 w-5 lg:h-7 lg:w-7" />
                             </button>
-                            <div className="ml-3 lg:ml-6 relative">
+                            <div className="ml-3 lg:ml-6 relative" ref={profileRef}>
                                 <div onClick={handleProfileDropdown} className="w-full h-full  flex space-x-3 cursor-pointer">
                                     <div className="rounded-full overflow-hidden">
                                         {user?.picture ? (
@@ -130,7 +141,7 @@ const Navbar = () => {
 
                                 {openProfile && (
                                     <div className="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-md bg-white  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden z-[50]">
-                                        <p  className="block md:hidden px-4 py-2 text-md text-white bg-[#36518F] text-semibold ">{user?.name}
+                                        <p className="block md:hidden px-4 py-2 text-md text-white bg-[#36518F] text-semibold ">{user?.name}
                                         </p>
                                         <Link href="#" className="block px-4 py-2 text-md text-gray-700 hover:text-black hover:text-semibold hover:bg-black/5">Your Profile
                                         </Link>
@@ -145,22 +156,22 @@ const Navbar = () => {
                     ) : (
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0 ">
                             <div className="flex gap-4">
-                            <Link href="/signin">
+                                <Link href="/signin">
 
-                                <button
-                                    className="md:text-[14px] text-xs rounded-full px-4 md:px-6 capitalize py-1 md:py-2 bg-transparent border-2 border-[#36518F] text-[#36518F] font-medium hover:bg-[#36518F] hover:text-white transition-all duration-75"
+                                    <button
+                                        className="md:text-[14px] text-xs rounded-full px-4 md:px-6 capitalize py-1 md:py-2 bg-transparent border-2 border-[#36518F] text-[#36518F] font-medium hover:bg-[#36518F] hover:text-white transition-all duration-75"
                                     >
-                                    Sign In
-                                </button>
-                            </Link>
-                            <Link href="/signup">
+                                        Sign In
+                                    </button>
+                                </Link>
+                                <Link href="/signup">
 
-                                <button
-                                    className="hidden lg:block md:text-[14px] text-xs rounded-full px-6 capitalize py-2 bg-[#FF8B4A] hover:bg-[#FF8000] border-2  text-white font-medium transition-all duration-75"
+                                    <button
+                                        className="hidden lg:block md:text-[14px] text-xs rounded-full px-6 capitalize py-2 bg-[#FF8B4A] hover:bg-[#FF8000] border-2  text-white font-medium transition-all duration-75"
                                     >
-                                    Sign Up
-                                </button>
-                            </Link>
+                                        Sign Up
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     )}
