@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const SignIn = () => {
   return (
-    <div className="container flex flex-col mx-auto bg-white rounded-lg py-5 max-sm:mt-5 max-sm:py-10 lg:mb-1">
+    <div className=" flex flex-col bg-gradient-to-t from-blue-300 via-pink-200 to-blue-100 p-10 px-5 ">
       <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
         <div className="flex items-center justify-center w-full  ">
           <div className="flex flex-col items-center  ">
