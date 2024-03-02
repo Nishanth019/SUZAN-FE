@@ -1,4 +1,4 @@
-import { DeleteForeverOutlined } from "@mui/icons-material";
+import { MdOutlineDeleteForever } from "react-icons/md";
 import { useState } from "react";
 import { Upload } from "./UploadModal/upload";
 const RegistrationAbout = ({
@@ -108,7 +108,7 @@ const RegistrationAbout = ({
             </a>
             {fileLink && (
               <span className="text-red-400">
-                <DeleteForeverOutlined
+                <MdOutlineDeleteForever
                   onClick={(e) => {
                     e.preventDefault();
                     setFileLink("");
@@ -172,7 +172,7 @@ const RegistrationAbout = ({
           <Upload onAddFileLink={addDocumentLink} />
           <div className="flex flex-col gap-y-3">
             {documentLinks?.map((item,index) => (
-              <div className="flex gap-2">
+              <div key={index} className="flex gap-2">
                 <a className="text-[#24AD5D]" href={item} target="_blank">
                 {item?.split("/").pop().substring(0, 40) + "..."}
               </a>
