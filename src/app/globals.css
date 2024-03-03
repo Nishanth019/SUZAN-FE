@@ -16,15 +16,22 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.primary-text-color {
+  color: #00A5E0;
 }
+
+.primary-bg-color {
+  background: #00A5E0;
+}
+
+.secondary-text-color {
+  color: #EF9CDA;
+}
+
+.secondary-bg-color {
+  background: #C2E3DB;
+}
+
 
 @layer utilities {
   .text-balance {
