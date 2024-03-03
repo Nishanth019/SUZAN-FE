@@ -17,7 +17,7 @@ const RegistrationBasic = ({ details, setDetails, user,formikForm }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 md:py-10">
+    <div className="flex  flex-col items-center justify-center gap-4 md:py-10">
       <div className="flex  md:flex-row flex-col items-center gap-4 w-full mt-4">
          <div className="w-full flex flex-col md:flex-1">
           <h1 className="text-neutral-500">Full name</h1>
