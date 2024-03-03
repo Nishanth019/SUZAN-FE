@@ -154,7 +154,7 @@ const AdminSignup = () => {
         {tab === 0 ? (
           <div className="w-full  flex items-center justify-center  py-12 sm:py-3">
             {/* register component */}
-            <div className=" flex  flex-col bg-white rounded-2xl shadow justify-center items-center py-12 w-full sm:w-[500px]">
+            <div className=" flex border flex-col bg-white rounded-2xl shadow justify-center items-center py-12 w-full sm:w-[500px]">
               <div className="font-bold  tracking-wide justify-center mb-7  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] ">Admin Signup</div>
               <div className="flex flex-col justify-center gap-7 w-[80%]">
                 {/* Email section*/}
@@ -244,7 +244,7 @@ const AdminSignup = () => {
           <div className="w-full  flex items-center justify-center  py-12 sm:py-10" >
             
             {/* register component */}
-            <div className="flex  flex-col bg-white rounded-2xl shadow justify-center items-center py-12 w-full sm:w-[500px]">
+            <div className="flex border flex-col bg-white rounded-2xl shadow justify-center items-center py-12 w-full sm:w-[500px]">
               <div className="font-bold  tracking-wide justify-center mb-7  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px]">Admin Signup</div>
               <div className="flex flex-col justify-center gap-7 w-[80%]">
                 {/* Email section*/}
