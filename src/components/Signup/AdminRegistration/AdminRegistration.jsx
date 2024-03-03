@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import  basicRegistrationValidations from "@/validations/registration/registration.validations";
 import  aboutRegistrationValidation  from "@/validations/registration/registration.validations";
-
 import RegistrationAbout from "./RegistrationAbout";
 import RegistrationBasic from "./RegistrationBasic";
 // import employerService from "@/services/employer.service";
