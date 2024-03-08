@@ -33,7 +33,7 @@ const StudentSignup = () => {
     // if (response.status === 201) {
     console.log(values);
     setShowOtpField(true);
-    setShowOtpLoginField(true);
+    // setShowOtpLoginField(true);
     setCanResend(false);
     setTimer(30);
     // }
