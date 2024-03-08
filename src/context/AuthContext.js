@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         isAuth,
         setIsAuth, 
         user,
-        setuser,
+        setUser,
        }}
      >
       {children}
