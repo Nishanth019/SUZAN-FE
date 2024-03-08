@@ -31,7 +31,7 @@ const AdminSignup = () => {
     // if (response.status === 201) {
     console.log(values);
     setShowOtpField(true);
-    setShowOtpLoginField(true);
+    // setShowOtpLoginField(true);
     setCanResend(false);
     setTimer(30);
     // }
@@ -164,7 +164,7 @@ const AdminSignup = () => {
 
     // if (response) {
     setShowOtpField(true);
-    setShowOtpLoginField(true);
+    // setShowOtpLoginField(true);
     setCanResend(false);
     setTimer(30); // Reset the timer
     // }
