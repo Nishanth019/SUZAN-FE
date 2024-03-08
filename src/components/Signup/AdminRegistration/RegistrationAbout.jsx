@@ -268,40 +268,7 @@ const RegistrationAbout = ({
           </p>
         </div>
       </div>
-      <div className="w-full md:flex-1">
-        <h1 className="text-neutral-500">Upload College ID card</h1>
-        <div className="flex flex-row items-center gap-x-3">
-          <Upload onAddFileLink={addFileLink} type="Image" ratio={1} />
-          <a className="text-[#B8B8B8]" href={fileLink} target="_blank">
-            {fileLink
-              ? fileLink.split("/").pop().substring(0, 40) + "..."
-              : "id_card.png"}
-          </a>
-          {fileLink && (
-            <span className="text-red-400">
-              <MdOutlineDeleteForever
-                onClick={(e) => {
-                  e.preventDefault();
-                  setFileLink("");
-                }}
-              />
-            </span>
-          )}
-        </div>
-        <p className="text-xs text-red-500 m-1">
-          {formikForm?.touched?.companyLogo && formikForm?.errors?.companyLogo}
-        </p>
 
-        {!fileLink &&
-          !(
-            formikForm?.touched?.companyLogo && formikForm?.errors?.companyLogo
-          ) && (
-            <div className="text-xs my-1 text-slate-400">
-              Only Images which have 1:1 resolution ratio (i.e., 400x400 px) are
-              accepted
-            </div>
-          )}
-      </div>
       <div className="flex  justify-start items-center text-center gap-4">
         <input
           type="checkbox"

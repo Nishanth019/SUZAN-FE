@@ -83,21 +83,20 @@ const RegistrationAbout = ({
   return (
     <div className="flex flex-col items-center justify-center gap-4 ">
       <div className="flex  flex-col items-center gap-4 w-full mt-4">
-              <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">College Name</h1>
-          <input
-            type="text"
-          
-            name="collegeName"
-            value={details?.values?.collegeName}
-            onChange={handleChange}
-            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
-          />
+        <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+          <div className="w-full md:flex-1">
+            <h1 className="text-neutral-500">College Name</h1>
+            <input
+              type="text"
+              name="collegeName"
+              value={details?.values?.collegeName}
+              onChange={handleChange}
+              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+            />
+          </div>
         </div>
-      </div>
 
-      {/* <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+        {/* <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
         {socialProfiles?.slice(0, 2)?.map((profile, index) => (
           <div key={index} className="w-full md:flex-1">
             <h1 className="text-neutral-500">
@@ -116,7 +115,7 @@ const RegistrationAbout = ({
         ))}
       </div> */}
 
-      {/* <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+        {/* <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
         {socialProfiles?.slice(2, 4)?.map((profile, index) => (
           <div key={index} className="w-full md:flex-1">
             <h1 className="text-neutral-500">
@@ -134,121 +133,88 @@ const RegistrationAbout = ({
           </div>
         ))}
       </div> */}
-      <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Program</h1>
-          <input
-            type="text"
-            placeholder="Enter your Program"
-            name="program"
-            value={details?.values?.program}
-            onChange={handleChange}
-            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
-          />
+        <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+          <div className="w-full md:flex-1">
+            <h1 className="text-neutral-500">Program</h1>
+            <input
+              type="text"
+              placeholder="Enter your Program"
+              name="program"
+              value={details?.values?.program}
+              onChange={handleChange}
+              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+            />
+          </div>
+          <div className="w-full md:flex-1">
+            <h1 className="text-neutral-500">Branch/Discipline</h1>
+            <input
+              type="text"
+              placeholder="Enter your Branch"
+              name="branch"
+              value={details?.values?.branch}
+              onChange={handleChange}
+              className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+            />
+          </div>
         </div>
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Branch/Discipline</h1>
-          <input
-            type="text"
-            placeholder="Enter your Branch"
-            name="branch"
-            value={details?.values?.branch}
-            onChange={handleChange}
-            className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
-          />
+        <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+          <div className="w-full md:flex-1">
+            <h1 className="text-neutral-500">Roll No</h1>
+            <input
+              type="text"
+              name="rollNo"
+              placeholder="Enter Your college Roll Number"
+              value={details?.values?.rollNo}
+              onChange={handleChange}
+              className={`w-full border  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm ${
+                formikForm?.touched?.location && formikForm?.errors?.location
+                  ? "border-red-500"
+                  : ""
+              } rounded-full mt-2 text-lg`}
+            />
+            <p className="text-xs text-red-500 m-1">
+              {formikForm?.touched?.location && formikForm?.errors?.location}
+            </p>
+          </div>
+          <div className="w-full md:flex-1">
+            <h1 className="text-neutral-500">Batch</h1>
+            <input
+              type="text"
+              name="batch"
+              placeholder="Enter Your Batch"
+              value={details?.values?.batch}
+              onChange={handleChange}
+              className={`w-full border  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm ${
+                formikForm?.touched?.location && formikForm?.errors?.location
+                  ? "border-red-500"
+                  : ""
+              } rounded-full mt-2 text-lg`}
+            />
+            <p className="text-xs text-red-500 m-1">
+              {formikForm?.touched?.location && formikForm?.errors?.location}
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Roll No</h1>
-          <input
-            type="text"
-            name="rollNo"
-            placeholder="Enter Your college Roll Number"
-            value={details?.values?.rollNo}
-            onChange={handleChange}
-            className={`w-full border  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm ${
-              formikForm?.touched?.location && formikForm?.errors?.location
-                ? "border-red-500"
-                : ""
-            } rounded-full mt-2 text-lg`}
-          />
-          <p className="text-xs text-red-500 m-1">
-            {formikForm?.touched?.location && formikForm?.errors?.location}
-          </p>
-        </div>
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Batch</h1>
-          <input
-            type="text"
-            name="batch"
-            placeholder="Enter Your Batch"
-            value={details?.values?.batch}
-            onChange={handleChange}
-            className={`w-full border  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm ${
-              formikForm?.touched?.location && formikForm?.errors?.location
-                ? "border-red-500"
-                : ""
-            } rounded-full mt-2 text-lg`}
-          />
-          <p className="text-xs text-red-500 m-1">
-            {formikForm?.touched?.location && formikForm?.errors?.location}
-          </p>
-        </div>
-      </div>
-      <div className="w-full md:flex-1">
-        <h1 className="text-neutral-500">Upload College ID card</h1>
-        <div className="flex flex-row items-center gap-x-3">
-          <Upload onAddFileLink={addFileLink} type="Image" ratio={1} />
-          <a className="text-[#B8B8B8]" href={fileLink} target="_blank">
-            {fileLink
-              ? fileLink.split("/").pop().substring(0, 40) + "..."
-              : "id_card.png"}
-          </a>
-          {fileLink && (
-            <span className="text-red-400">
-              <MdOutlineDeleteForever
-                onClick={(e) => {
-                  e.preventDefault();
-                  setFileLink("");
-                }}
-              />
-            </span>
-          )}
-        </div>
-        <p className="text-xs text-red-500 m-1">
-          {formikForm?.touched?.companyLogo && formikForm?.errors?.companyLogo}
-        </p>
 
-        {!fileLink &&
-          !(
-            formikForm?.touched?.companyLogo && formikForm?.errors?.companyLogo
-          ) && (
-            <div className="text-xs my-1 text-slate-400">
-              Only Images which have 1:1 resolution ratio (i.e., 400x400 px) are
-              accepted
-            </div>
-          )}
+        <div className="flex  justify-start items-center text-center gap-4">
+          <input
+            type="checkbox"
+            id="terms-condition"
+            name="termsAndConditions"
+            onChange={handleCheckboxChange}
+            className="w-[18px] h-[18px] mt-6 mb-6"
+          />
+          <p className=" text-[14px]">
+            I agree to{" "}
+            <Link
+              href="/terms"
+              className="text-bold text-green-600 cursor-pointer"
+            >
+              Terms & Conditions
+            </Link>{" "}
+          </p>
+        </div>
       </div>
-      <div className="flex  justify-start items-center text-center gap-4">
-        <input
-          type="checkbox"
-          id="terms-condition"
-          name="termsAndConditions"
-          onChange={handleCheckboxChange}
-          className="w-[18px] h-[18px] mt-6 mb-6"
-        />
-        <p className=" text-[14px]">
-          I agree to{" "}
-          <Link
-            href="/terms"
-            className="text-bold text-green-600 cursor-pointer"
-          >
-            Terms & Conditions
-          </Link>{" "}
-        </p>
-      </div>
-    </div>
     </div>
   );
 };

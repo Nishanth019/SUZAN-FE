@@ -1,61 +1,85 @@
-import httpservice from "../config/httpservice,";
-const { BACKEND_URL }=process.env;
+import axios from "axios";
+
+const { BACKEND_URL } = process.env;
+
+// Creating a global instance of Axios with default configuration
+const axiosInstance = axios.create({
+  withCredentials: true,
+});
 
 class AuthService {
   constructor() {
     // this.userServiceUrl=BACKEND_URL;
-    this.userServiceUrl="http://localhost:8000";
+    this.userServiceUrl = "http://localhost:8000";
   }
-  login=async (data) => {
-    return httpservice.post(this.userServiceUrl+"/api/users/login", {
-      ...data
-    });
 
-  };
-  loginViaOtp=async (data) => {
-    return httpservice.post(this.userServiceUrl+"/api/users/login/otp", {
-      ...data
-    });
-
-  };
-  sendOtp = async (data) => {
-    return httpservice.post(this.userServiceUrl+"/api/users/otp/send", {
-      ...data
-    });
+  signIn(data) {
+    return axiosInstance.post(`${this.userServiceUrl}/api/users/signin`, data);
   }
-  verifyOtp = async (data) => {
-    return httpservice.post(this.userServiceUrl+"/api/users/verify/otp", {
-      ...data
-    });
-  }
-  sendOtpForSignUp=async (data) => {
-    return httpservice.post(this.userServiceUrl+"/api/users/signUp", {
-      ...data
-    });
 
-  };
-  verifyOtpForSignUp=async (data) => {
-    return httpservice.post(
-      this.userServiceUrl+"/api/users/verify/otp",
-      { ...data }
+  signUpAdmin(data) {
+    return axiosInstance.post(
+      `${this.userServiceUrl}/api/users/admin/signup`,
+      data
     );
-  };
-  createPassword=async (email, password, token) => {
-    // console.log({token})
-    try {
-      return await httpservice.put(
-        this.userServiceUrl+`/api/users/update/password`,
-        { password },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } catch (ex) {
-      console.log({ ex });
-    }
-  };
+  }
+
+  verifyOtpForAdmin(data) {
+    return axiosInstance.post(
+      `${this.userServiceUrl}/api/users/admin/verifyOtp`,
+      data
+    );
+  }
+
+  completeAdminSignup(data) {
+    return axiosInstance.post(
+      `${this.userServiceUrl}/api/users/admin/completeSignup`,
+      data
+    );
+  }
+
+  signUpStudent(data) {
+    return axiosInstance.post(
+      `${this.userServiceUrl}/api/users/student/signup`,
+      data
+    );
+  }
+
+  verifyOtpForStudent(data) {
+    return axiosInstance.post(
+      `${this.userServiceUrl}/api/users/student/verifyOtp`,
+      data
+    );
+  }
+
+  completeStudentSignup(data) {
+    return axiosInstance.post(
+      `${this.userServiceUrl}/api/users/student/completeSignup`,
+      data
+    );
+  }
+
+  forgetPassword(data) {
+    return axiosInstance.post(
+      `${this.userServiceUrl}/api/users/forgetpassword`,
+      data
+    );
+  }
+
+  changePassword(data) {
+    return axiosInstance.post(
+      `${this.userServiceUrl}/api/users/changepassword`,
+      data
+    );
+  }
+
+  getCurrentUser() {
+    return axiosInstance.get(`${this.userServiceUrl}/api/users/currentuser`);
+  }
+
+  logout() {
+    return axiosInstance.post(`${this.userServiceUrl}/api/users/logout`, null);
+  }
 }
 
 export default new AuthService();
