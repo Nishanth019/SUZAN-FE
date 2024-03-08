@@ -4,46 +4,38 @@ import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useFormik } from "formik";
-import {Button} from "@material-tailwind/react"
+import { Button } from "@material-tailwind/react";
 // import TokenHelper from "../../helpers/Token.helper";
 import { useRouter } from "next/navigation";
-// import authService from "@/services/auth.service";
+import authService from "@/services/auth.service";
+import { ToastContainer, toast } from "react-toastify";
 
 const AdminSignup = () => {
   const [show, setShow] = useState(false);
   const [formPrefillData, setFormPrefillData] = useState();
   const [tab, setTab] = useState(0);
-  const [phoneEnabled, setPhoneEnabled] = useState();
   const [timer, setTimer] = useState(30);
   const [showOtpField, setShowOtpField] = useState(true);
-  const [showOtpLoginField, setShowOtpLoginField] = useState(false);
-  const [isOtpVerified, setOtpVerified] = React.useState(false);
   const [canResend, setCanResend] = useState(false);
   const [error, setErrors] = useState();
   function handleClick() {
     setShow(!show);
   }
-  const navigate = useRouter()
+  const navigate = useRouter();
 
-  const handleOtpForSignUp =  (values) => {////TODO:remove this line and comment out next line
-  // const handleOtpForSignUp = async (values) => {
+  const handleOtpForSignUp = (values) => {
+    ////TODO:remove this line and comment out next line
+    // const handleOtpForSignUp = async (values) => {
     // const response = await authService.sendOtpForSignUpEmployer(values);
 
     // if (response.status === 201) {
-      console.log(values)
-      setShowOtpField(true);
-      setShowOtpLoginField(true);
-      setCanResend(false);
-      setTimer(30);
+    console.log(values);
+    setShowOtpField(true);
+    setShowOtpLoginField(true);
+    setCanResend(false);
+    setTimer(30);
     // }
   };
-
-
-  useEffect(() => {
-    if (showOtpField && showOtpLoginField) {
-      setTab(1);
-    }
-  }, [showOtpField, showOtpLoginField]);
 
   const loginForm = useFormik({
     initialValues: {
@@ -53,12 +45,13 @@ const AdminSignup = () => {
       otp: formPrefillData ? formPrefillData.otp : "",
     },
 
-     onSubmit : (values) => {
-    // onSubmit: async (values) => {
+    onSubmit: async (values) => {
+      // onSubmit: async (values) => {
       if (!values.email) return setErrors("Email Required!");
-      if (!values.password || !Boolean(values.password?.trim())) return setErrors("Password Required!");
+      if (!values.password || !Boolean(values.password?.trim()))
+        return setErrors("Password Required!");
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(values.email) ) {
+      if (!emailRegex.test(values.email)) {
         return setErrors("Invalid Email");
       }
       if (values.password.length < 8) {
@@ -70,51 +63,80 @@ const AdminSignup = () => {
           return setErrors("Full Name Required!");
         }
         // signup
-        // try {
+        try {
           const payload = {
             name: values.name,
+            email: values.email,
             password: values.password,
-            role: "admin"
+            role: "admin",
           };
-          // console.log(payload);
-          payload.email = values.email;
-          handleOtpForSignUp(payload);//TODO:remove this line and comment out next line
-          // await handleOtpForSignUp(payload);
-        // } catch (ex) {
-          // setErrors(ex.response.data.message);
-        // }
+          console.log(0, payload);
+          const data = await authService.signUpAdmin(payload);
+          console.log(data.data.message);
+
+          if ((data.data.message = "OTP is already Verified")) {
+            navigate.push("/signup/admin/registration");
+          } else {
+            toast.success(data.data.message, {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              // transition: Bounce,
+            });
+            setTab(1);
+          }
+          setErrors("");
+        } catch (error) {
+          setErrors("");
+          console.log(1, error.response?.data.message);
+          toast.error(error.response?.data.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            // transition: Bounce,
+          });
+        }
       }
 
       if (tab === 1) {
         console.log("I AM WORKING");
-        if (showOtpLoginField) {
-          // try {
-            if (!isOtpVerified) {
-              const payload = {
-                otp: values.otp,
-              };
-              payload.email = values.email;
-              // const data = await authService.verifyOtpForSignUp(payload);
-              console.log("working")
-              // if (data) {
-                // TokenHelper.create(data.data.result.accessToken);
-                // if (!data?.data?.error) {
-                  setOtpVerified(true);
-                  if (typeof window !== undefined) {
-                    window.location.href = "/signup/admin/registration"
-                  }
-                // } else {
-                  // navigate.push('/signup/admin');
-                // }
-              }
-            }
-          // } catch (error) {
-          //   setErrors(error.response.data.message);
-          // }
-        // }
-      }
-    },
+        try {
+          const payload = {
+            otp: values.otp,
+          };
+          payload.email = values.email;
+          const data = await authService.verifyOtpForAdmin(payload);
+          console.log(2, data);
 
+          navigate.push("/signup/admin/registration");
+        } catch (error) {
+          setErrors("");
+          console.log(1, error.response?.data.message);
+          toast.error(error.response?.data.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            // transition: Bounce,
+          });
+        }
+      }
+      // }
+    },
   });
 
   useEffect(() => {
@@ -134,28 +156,30 @@ const AdminSignup = () => {
     const isString = stringVerify.exec(e.target.value);
     const payload = {};
     // if (isString) {
-      payload.email = loginForm.values.email;
+    payload.email = loginForm.values.email;
     // } else {
     //   payload.phone = loginForm.values.email;
     // }
     // const response = await authService.sendOtp(payload);
 
     // if (response) {
-      setShowOtpField(true);
-      setShowOtpLoginField(true);
-      setCanResend(false);
-      setTimer(30); // Reset the timer
+    setShowOtpField(true);
+    setShowOtpLoginField(true);
+    setCanResend(false);
+    setTimer(30); // Reset the timer
     // }
   };
 
   return (
-    <div className="h-full w-full flex flex-col px-3 " >
+    <div className="h-full w-full flex flex-col px-3 ">
       <main>
         {tab === 0 ? (
           <div className="w-full  flex items-center justify-center  py-12 sm:py-3">
             {/* register component */}
             <div className=" flex border flex-col bg-white rounded-2xl shadow justify-center items-center py-12 w-full sm:w-[500px]">
-              <div className="font-bold  tracking-wide justify-center mb-7  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] ">Admin Signup</div>
+              <div className="font-bold  tracking-wide justify-center mb-7  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] ">
+                Admin Signup
+              </div>
               <div className="flex flex-col justify-center gap-7 w-[80%]">
                 {/* Email section*/}
                 <div className="space-y-3 w-full gap-y-10">
@@ -179,16 +203,17 @@ const AdminSignup = () => {
                   <p className="text-[#676767]">Password</p>
                   <div className="flex flex-row items-center relative w-full">
                     <input
-                     type={`${show ? "password" : "text"}`}
-                    name="password"
-                    value={loginForm.values.password}
-                    onChange={loginForm.handleChange}
-                    error={
-                      loginForm.touched.password && Boolean(loginForm.errors.password)
-                    }
-                    placeholder="Must be min 8 characters"
-                    className="rounded-full border border-[#E0E0E0] p-3 w-full  max-sm:text-sm"
-                  />
+                      type={`${show ? "password" : "text"}`}
+                      name="password"
+                      value={loginForm.values.password}
+                      onChange={loginForm.handleChange}
+                      error={
+                        loginForm.touched.password &&
+                        Boolean(loginForm.errors.password)
+                      }
+                      placeholder="Must be min 8 characters"
+                      className="rounded-full border border-[#E0E0E0] p-3 w-full  max-sm:text-sm"
+                    />
                     <p
                       className="absolute right-3 pr-3 hover:cursor-pointer text-[#0048B4]  max-sm:text-sm"
                       onClick={handleClick}
@@ -217,14 +242,15 @@ const AdminSignup = () => {
                 {/* Register Button */}
                 <p className="text-red-500 text-sm  text-center">{error}</p>
                 <div className="">
-                
-                  <button className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-2  sm:p-4 w-full rounded-full" onClick={(e) => {
-                    setErrors();
-                    loginForm.handleSubmit();
-                  }}>
+                  <button
+                    className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-2  sm:p-4 w-full rounded-full"
+                    onClick={(e) => {
+                      setErrors();
+                      loginForm.handleSubmit();
+                    }}
+                  >
                     Continue
                   </button>
-
                 </div>
               </div>
 
@@ -241,29 +267,30 @@ const AdminSignup = () => {
             </div>
           </div>
         ) : (
-          <div className="w-full  flex items-center justify-center  py-12 sm:py-10" >
-            
+          <div className="w-full  flex items-center justify-center  py-12 sm:py-10">
             {/* register component */}
             <div className="flex border flex-col bg-white rounded-2xl shadow justify-center items-center py-12 w-full sm:w-[500px]">
-              <div className="font-bold  tracking-wide justify-center mb-7  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px]">Admin Signup</div>
+              <div className="font-bold  tracking-wide justify-center mb-7  text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px]">
+                Admin Signup
+              </div>
               <div className="flex flex-col justify-center gap-7 w-[80%]">
                 {/* Email section*/}
                 <div className="space-y-3 w-full">
                   <p className="text-[#676767]">Enter OTP</p>
                   <div className="flex flex-row items-center relative w-full">
                     <input
-                    type={`${show ? "password" : "text"}`}
-                    value={loginForm.values.otp}
-                    onChange={loginForm.handleChange}
-                    name="otp"
-                    // value={loginForm.values.password}
-                    // onChange={loginForm.handleChange}
-                    // error={
+                      type={`${show ? "password" : "text"}`}
+                      value={loginForm.values.otp}
+                      onChange={loginForm.handleChange}
+                      name="otp"
+                      // value={loginForm.values.password}
+                      // onChange={loginForm.handleChange}
+                      // error={
                       //     loginForm.touched.password && Boolean(loginForm.errors.password)
                       // }
-                      placeholder = "Enter OTP"
-                    className="rounded-full border border-[#E0E0E0] p-3 w-full  max-sm:text-sm"
-                  />
+                      placeholder="Enter OTP"
+                      className="rounded-full border border-[#E0E0E0] p-3 w-full  max-sm:text-sm"
+                    />
                     <p
                       className="absolute right-3 pr-3 hover:cursor-pointer text-[#0048B4]"
                       onClick={handleClick}
@@ -292,13 +319,15 @@ const AdminSignup = () => {
 
                 <div className=" flex gap-4 flex-col">
                   <p className="text-red-500 text-sm  text-center">{error}</p>
-                  <button className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-2 sm:p-4 w-full rounded-full" onClick={(e) => {
-                    setErrors();
-                    loginForm.handleSubmit();
-                  }}>
+                  <button
+                    className="text-center bg-blue-400 text-white hover:bg-blue-500 hover:text-white font-semibold p-2 sm:p-4 w-full rounded-full"
+                    onClick={(e) => {
+                      setErrors();
+                      loginForm.handleSubmit();
+                    }}
+                  >
                     Sign Up
                   </button>
-
                 </div>
               </div>
 
@@ -315,10 +344,9 @@ const AdminSignup = () => {
             </div>
           </div>
         )}
-
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default AdminSignup
+export default AdminSignup;
