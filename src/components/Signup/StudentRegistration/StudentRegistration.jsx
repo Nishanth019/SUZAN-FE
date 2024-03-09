@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
-import  basicRegistrationValidations from "@/validations/registration/registration.validations";
-import  aboutRegistrationValidation  from "@/validations/registration/registration.validations";
+import basicRegistrationValidations from "@/validations/registration/registration.validations";
+import aboutRegistrationValidation from "@/validations/registration/registration.validations";
 
 import RegistrationAbout from "./RegistrationAbout";
 import RegistrationBasic from "./RegistrationBasic";
@@ -14,63 +14,64 @@ import { useRouter } from "next/navigation";
 // import userService from "@/services/user.service";
 import { useFormik } from "formik";
 
-const AdminRegistration = () => {
+const StudentRegistration = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [stage, setStage] = useState(1);
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false); // State to track checkbox status
+
+  const handleCheckboxChange = (isChecked) => {
+    setIsCheckboxChecked(isChecked);
+  };
 
   const [details, setDetails] = useState({
-      name: "",
-      email: "",
-      phone: "",
-      gender: "",
-       collegeName:"",
-      streetName:"",
-      city:"",
-      state:"",
-      pincode:"",
-      country:"India",
-        rollNo:"",
-      program:"",
-      branch:"",
-      batch:"",
+    name: "",
+    email: "",
+    phone: "",
+    gender: "",
+    collegeName: "",
+    rollNo: "",
+    program: "",
+    branch: "",
+    batch: "",
     documents: [],
   });
+
   const basicForm = useFormik({
     initialValues: {
       name: "",
       email: "",
       phone: "",
       gender: "",
-
     },
     validationSchema: basicRegistrationValidations,
-    onSubmit: async () => {
+    onSubmit: async (value) => {
+      setDetails({
+      ...details,
+      ...value
+    });
+      console.log(123,details,value)
       setStage((stage) => (stage === 1 ? 2 : 1));
-      console.log(0,stage);
+      console.log(0, stage);
     },
   });
   const aboutForm = useFormik({
     initialValues: {
-    //   about: "",
-    //   companyName: "",
-    //   companyLogo: "",
+      //   about: "",
+      //   companyName: "",
+      //   companyLogo: "",
       documents: [],
-       collegeName:"",
-      streetName:"",
-      city:"",
-      state:"",
-      pincode:"",
-      country:"India",
-        rollNo:"",
-      program:"",
-      branch:"",
-      batch:"",
+      collegeName: "",
+      rollNo: "",
+      program: "",
+      branch: "",
+      batch: "",
+ 
     },
     validationSchema: aboutRegistrationValidation,
     onSubmit: async (values) => {
       try {
-       
+        console.log(345,details,values)
         const { data } = await userService.updateCurrentUser(values);
         if (data.error === false) {
           console.log("Onboarding completed");
@@ -136,7 +137,9 @@ const AdminRegistration = () => {
       <h1 className="text-2xl font-semibold text-center   text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] ">
         Greetings From <span className="primary-text-color">SUZAN</span>
       </h1>
-      <h4 className="font-medium text-center sm:text-lg">You are just few clicks away from making your college life easier!</h4>
+      <h4 className="font-medium text-center sm:text-lg">
+        You are just few clicks away from making your college life easier!
+      </h4>
       <div className="rounded-xl drop-shadow border md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full">
         {stage === 1 ? (
           <RegistrationBasic
@@ -149,8 +152,7 @@ const AdminRegistration = () => {
             setDetails={setDetails}
             formikForm={aboutForm}
             details={details}
-         
-           
+            onCheckboxChange={handleCheckboxChange}
           />
         )}
       </div>
@@ -158,7 +160,6 @@ const AdminRegistration = () => {
         {stage === 1 ? (
           <button
             onClick={basicForm.handleSubmit}
-            
             className="px-6 py-2 text-lg rounded-full text-white mt-6 font-medium bg-[#36518F]"
           >
             Next
@@ -173,8 +174,14 @@ const AdminRegistration = () => {
               previous
             </button>
             <button
+              disabled={!isCheckboxChecked}
               onClick={aboutForm.handleSubmit}
-              className="px-6 py-2 sm:px-6 sm:py-3  text-lg bg-[#36518F] rounded-full text-white mt-6 font-medium"
+
+              className={`px-6 py-2 sm:px-6 sm:py-3 text-lg rounded-full text-white mt-6 font-medium ${
+                !isCheckboxChecked
+                  ? "bg-gray-400"
+                  : "bg-[#36518F] hover:bg-blue-700"
+              }`}
             >
               Submit
             </button>
@@ -185,4 +192,4 @@ const AdminRegistration = () => {
   );
 };
 
-export default AdminRegistration;
+export default StudentRegistration;

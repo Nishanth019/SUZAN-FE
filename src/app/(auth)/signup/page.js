@@ -6,6 +6,7 @@ import studentImage from "../../../assets/Signup/student.png";
 import adminImage from "../../../assets/Signup/admin.png";
 
 const SignUp = () => {
+  
   return (
     <div className="h-screen flex flex-col p-10 px-5 ">
       <div className=" flex flex-col mb-5  p-10 px-5 ">

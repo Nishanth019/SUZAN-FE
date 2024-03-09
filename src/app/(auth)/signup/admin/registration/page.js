@@ -1,9 +1,7 @@
-import React from 'react'
-import AdminRegistration from '@/components/Signup/Registration/AdminRegistration'
+import React from "react";
+import AdminRegistration from "@/components/Signup/AdminRegistration/AdminRegistration";
 const Registration = () => {
-  return (
-    <AdminRegistration/>
-  )
-}
+  return <AdminRegistration />;
+};
 
-export default Registration
+export default Registration;
