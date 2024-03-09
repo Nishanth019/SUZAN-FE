@@ -5,13 +5,21 @@ import Link from "next/link";
 import { Button } from "@material-tailwind/react";
 import Image from "next/image";
 import authService from "@/services/auth.service";
+
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { ToastContainer, toast } from "react-toastify";
 
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -91,15 +99,31 @@ const SignIn = () => {
               >
                 Password*
               </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={handlePasswordChange}
-                placeholder="Enter a password"
-                className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
-                required
-              />
+
+              <div>
+                <div class="mb-4 flex">
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={handlePasswordChange}
+                    placeholder="Enter a password"
+                    className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
+                    required
+                  />
+                  <span class="flex justify-around items-center" onClick={handleTogglePassword}>
+
+                    {!showPassword ? (
+                      <FaEyeSlash class="absolute mr-12 mb-5"  />
+                    ) : (
+                      <FaEye class="absolute mr-12 mb-5 "  />
+                    )}
+                  </span>
+                </div>
+              </div>
+
+             
+
               <div className="flex flex-row justify-end mb-8">
                 <Link
                   href=""
