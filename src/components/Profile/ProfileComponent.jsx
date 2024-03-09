@@ -21,7 +21,7 @@ import { IoIosArrowDown } from "react-icons/io";
 
 const admindummydata = {
     id: "1",
-    picture:"https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
+    picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
     name: "satwik",
     email: "karthi@brihat.com",
     phone: "9876543210",
@@ -85,6 +85,7 @@ function ProfileComponent() {
     const [loggedUser, setLoggedUser] = useState(null);
 
     const [isEdit, setIsEdit] = useState(true);
+    const [isEditCollegeDetails, setIsEditCollegeDetails] = useState(true);
 
     const form = useFormik({
         initialValues: {
@@ -172,7 +173,7 @@ function ProfileComponent() {
         validationSchema: adminValidationSchema,
 
         onSubmit: async (values) => {
-            setIsEdit(true);
+            setIsEditCollegeDetails(true);
             console.log("now");
             console.log(values);
             if (loggedUser?.role === "admin") {
@@ -224,7 +225,7 @@ function ProfileComponent() {
 
     const addFileLink = (link) => {
         setFileLink(link);
-        
+
         form?.setValues({
             ...form?.values,
             companyLogo: link,
@@ -352,22 +353,42 @@ function ProfileComponent() {
 
     return (
         <div className="bg-[#F4F7FC] h-full flex-col flex justify-center items-center gap-7 p-6 w-full px-4 md:px-16 lg:px-28 py-16">
-            <div className="flex justify-end w-full">
-                {isEdit ? (
-                    <button
-                        onClick={() => setIsEdit(false)}
-                        className="text-center border border-[#36518F] text-[#36518F] p-3 font-bold rounded-full w-32"
-                    >
-                        Edit
-                    </button>
-                ) : (
-                    <button
-                        onClick={form.handleSubmit}
-                        className="text-center border text-white bg-blue-400 hover:bg-blue-500 p-3 font-bold rounded-full w-32"
-                    >
-                        Save
-                    </button>
-                )}
+            <div className="flex  justify-end w-full">
+                <div className="px-6 ">
+                    {isEdit ? (
+                        <button
+                            onClick={() => setIsEdit(false)}
+                            className="text-center border border-[#36518F] text-[#36518F] p-3 font-bold rounded-full w-32"
+                        >
+                            Edit User
+                        </button>
+                    ) : (
+                        <button
+                            onClick={form.handleSubmit}
+                            className="text-center border px-5 text-white bg-blue-400 hover:bg-blue-500 p-3 font-bold rounded-full w-32"
+                        >
+                            Save User Details
+                        </button>
+                    )}
+                </div>
+
+                <div>
+                    {isEditCollegeDetails && form.values.role === "admin" ? (
+                        <button
+                            onClick={() => setIsEditCollegeDetails(false)}
+                            className="text-center border border-[#36518F] text-[#36518F] p-3 font-bold rounded-full w-42 h-12"
+                        >
+                            Edit collegedetails
+                        </button>
+                    ) : (
+                        <button
+                            onClick={formcollege.handleSubmit}
+                            className="text-center border text-white bg-blue-400 hover:bg-blue-500 p-3 font-bold rounded-full w-42 h-12"
+                        >
+                            Save College Details
+                        </button>
+                    )}
+                </div>
 
             </div>
             <div className="w-full max-sm:w-screen bg-white rounded-2xl lg:px-16 md:px-10 px-4 py-12 flex flex-col gap-y-7 max-sm:h-full drop-shadow">
@@ -557,7 +578,7 @@ function ProfileComponent() {
                                 handleChange={formcollege.handleChangeCollegeDetails}
                                 value={formcollege.values.streetname}
                                 label="Street Name"
-                                disabled={isEdit}
+                                disabled={isEditCollegeDetails}
                             />
 
                             <Input
@@ -567,7 +588,7 @@ function ProfileComponent() {
                                 handleChange={formcollege.handleChangeCollegeDetails}
                                 value={formcollege.values.city}
                                 label="City"
-                                disabled={isEdit}
+                                disabled={isEditCollegeDetails}
                             />
                         </div>
                         <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
@@ -579,7 +600,7 @@ function ProfileComponent() {
                                 handleChange={formcollege.handleChangeCollegeDetails}
                                 value={formcollege.values.state}
                                 label="State "
-                                disabled={isEdit}
+                                disabled={isEditCollegeDetails}
                             />
 
                             <Input
@@ -589,7 +610,7 @@ function ProfileComponent() {
                                 handleChange={formcollege.handleChangeCollegeDetails}
                                 value={formcollege.values.pincode}
                                 label="Pincode"
-                                disabled={isEdit}
+                                disabled={isEditCollegeDetails}
                             />
                         </div>
                         <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
