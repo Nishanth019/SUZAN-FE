@@ -2,16 +2,12 @@
 import { useEffect } from "react";
 import basicRegistrationValidations from "@/validations/registration/registration.validations";
 import aboutRegistrationValidation from "@/validations/registration/registration.validations";
-
 import RegistrationAbout from "./RegistrationAbout";
 import RegistrationBasic from "./RegistrationBasic";
 // import employerService from "@/services/employer.service";
 import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { useRouter } from "next/navigation";
-// import TokenHelper from "@/helpers/Token.helper";
-// import authService from "@/services/auth.service";
-// import userService from "@/services/user.service";
 import { useFormik } from "formik";
 
 const StudentRegistration = () => {

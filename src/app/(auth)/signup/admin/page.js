@@ -72,11 +72,12 @@ const AdminSignup = () => {
           };
           console.log(0, payload);
           const data = await authService.signUpAdmin(payload);
-          console.log(data.data.message);
+          console.log(3, data.data.message);
 
-          if ((data.data.message = "OTP is already Verified")) {
-            navigate.push("/signup/admin/registration");
+          if (data.data.message === "OTP is already Verified") {
+            navigate.push(`/signup/admin/registration/${data.data.id}`);
           } else {
+            console.log(222);
             toast.success(data.data.message, {
               position: "top-center",
               autoClose: 5000,
@@ -116,9 +117,8 @@ const AdminSignup = () => {
           };
           payload.email = values.email;
           const data = await authService.verifyOtpForAdmin(payload);
-          console.log(2, data);
-
-          navigate.push("/signup/admin/registration");
+          console.log(22, data);
+          navigate.push(`/signup/admin/registration/${data.data.id}`);
         } catch (error) {
           setErrors("");
           console.log(1, error.response?.data.message);

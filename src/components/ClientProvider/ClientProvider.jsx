@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ClientProvider = ({ children }) => {
   const pathname = usePathname();
+  console.log(2, pathname);
   return (
     <>
       {pathname &&
