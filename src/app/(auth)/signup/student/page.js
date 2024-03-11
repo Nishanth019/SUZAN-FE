@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import authService from "@/services/auth.service";
 import collegeService from "@/services/college.service";
 import { ToastContainer, toast } from "react-toastify";
+import { useGlobalContext } from "@/context/AuthContext";
 
 const StudentSignup = () => {
   const [show, setShow] = useState(false);
@@ -21,6 +22,14 @@ const StudentSignup = () => {
     setShow(!show);
   }
   const navigate = useRouter();
+
+    const router = useRouter();
+
+    const { isAuth } = useGlobalContext();
+
+    if (isAuth) {
+      router.push("/");
+    }
 
   const handleOtpForSignUp = (values) => {
     ////TODO:remove this line and comment out next line

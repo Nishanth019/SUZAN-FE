@@ -1,10 +1,20 @@
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Link from "next/link";
+import { useGlobalContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 const genders = ["male", "female", "others"];
 
 const RegistrationBasic = ({ details, setDetails }) => {
+    const router = useRouter();
   const [errors, setErrors] = useState({});
+  
+  const { isAuth } = useGlobalContext();
+
+  if (isAuth) {
+    router.push("/");
+  }
+
 
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });

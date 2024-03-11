@@ -1,11 +1,17 @@
-import { useState } from "react";
-import { MdOutlineDeleteForever } from "react-icons/md";
-import { Upload } from "@/components/Utils/UploadModal/Upload";
+
 import Link from "next/link";
+import { useGlobalContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
-  const [fileLink, setFileLink] = useState(details.companyLogo || "");
-  const [documentLinks, setDocumentLinks] = useState([]);
+    const router = useRouter();
+    
+  const { isAuth } = useGlobalContext();
+
+  if (isAuth) {
+    router.push("/");
+  }
+
 
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });
@@ -47,8 +53,8 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
             <input
               type="text"
               placeholder="Enter your College Street Name"
-              name="streetName"
-              value={details.streetName}
+              name="street_name"
+              value={details.street_name}
               onChange={handleChange}
               className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
             />
@@ -133,9 +139,9 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
           <h1 className="text-neutral-500">Roll No</h1>
           <input
             type="text"
-            name="rollNo"
+            name="roll_no"
             placeholder="Enter Your college Roll Number"
-            value={details.rollNo}
+            value={details.roll_no}
             onChange={handleChange}
             className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
           />

@@ -9,11 +9,19 @@ import aboutRegistrationValidation from "@/validations/registration/registration
 import RegistrationAbout from "./RegistrationAbout";
 import RegistrationBasic from "./RegistrationBasic";
 import authService from "@/services/auth.service";
+import { useGlobalContext } from "@/context/AuthContext";
 
 const AdminRegistration = () => {
   const router = useRouter();
   const pathname = usePathname();
   const email_id = pathname.split("/").pop();
+  
+  const { isAuth} = useGlobalContext();
+
+  if (isAuth) {
+    router.push("/");
+  }
+
 
   const [user, setUser] = useState(null);
   const [stage, setStage] = useState(1);
@@ -24,12 +32,12 @@ const AdminRegistration = () => {
     phone: "",
     gender: "",
     college_name: "",
-    streetName: "",
+    street_name: "",
     city: "",
     state: "",
     pincode: "",
     country: "India",
-    rollNo: "",
+    roll_no: "",
     program: "",
     branch: "",
     batch: "",
@@ -55,6 +63,7 @@ const AdminRegistration = () => {
     };
     getUser();
   }, []);
+  
   // useEffect(() => {
   //   console.log("Details updated:", details);
   // }, [details]);
@@ -90,11 +99,8 @@ const AdminRegistration = () => {
       <h4 className="font-medium text-center sm:text-lg">
         You are just few clicks away from making your college life easier!
       </h4>
-      <form
-        onSubmit={handleSubmit}
-        className="rounded-xl drop-shadow border md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full"
-      >
-        {/* Registration form */}
+      <div className="rounded-xl drop-shadow border md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full">
+        {/* Registration div */}
         <div>
           {stage === 1 ? (
             <RegistrationBasic details={details} setDetails={setDetails} />
@@ -128,6 +134,7 @@ const AdminRegistration = () => {
               <button
                 disabled={!isCheckboxChecked}
                 type="submit"
+                onClick={handleSubmit}
                 className={`px-6 py-2 sm:px-6 sm:py-3 text-lg rounded-full text-white mt-6 font-medium ${
                   !isCheckboxChecked
                     ? "bg-gray-400"
@@ -139,7 +146,7 @@ const AdminRegistration = () => {
             </>
           )}
         </div>
-      </form>
+      </div>
     </div>
   );
 };

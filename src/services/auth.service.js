@@ -75,7 +75,7 @@ class AuthService {
 
 
 
-  logout() {
+  signout() {
     return axiosInstance.post(`${this.userServiceUrl}/api/auth/logout`, null);
   }
 }

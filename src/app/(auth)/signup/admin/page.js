@@ -9,6 +9,7 @@ import { Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import authService from "@/services/auth.service";
 import { ToastContainer, toast } from "react-toastify";
+import { useGlobalContext } from "@/context/AuthContext";
 
 const AdminSignup = () => {
   const [show, setShow] = useState(false);
@@ -22,6 +23,15 @@ const AdminSignup = () => {
     setShow(!show);
   }
   const navigate = useRouter();
+
+  const router = useRouter();
+
+    const { isAuth } = useGlobalContext();
+
+    if (isAuth) {
+      router.push("/");
+    }
+
 
   const handleOtpForSignUp = (values) => {
     ////TODO:remove this line and comment out next line

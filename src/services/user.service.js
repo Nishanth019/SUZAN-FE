@@ -19,18 +19,22 @@ class UserService {
   }
 
   getUserById(userId) {
-    return axiosInstance.get(`${this.userServiceUrl}/api/users/${userId}`);
+    return axiosInstance.get(
+      `${this.userServiceUrl}/api/users/getuser/${userId}`
+    );
   }
 
   // Function to delete user by ID
   deleteUserById(userId) {
-    return axiosInstance.delete(`${this.userServiceUrl}/api/users/${userId}`);
+    return axiosInstance.delete(
+      `${this.userServiceUrl}/api/users/deleteuser/${userId}`
+    );
   }
 
   // Function to update user by ID
   updateUserById(userId, userData) {
     return axiosInstance.put(
-      `${this.userServiceUrl}/api/users/${userId}`,
+      `${this.userServiceUrl}/api/users/updateuser/${userId}`,
       userData
     );
   }

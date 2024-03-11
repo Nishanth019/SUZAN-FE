@@ -6,12 +6,21 @@ import { Button } from "@material-tailwind/react";
 import Image from "next/image";
 import authService from "@/services/auth.service";
 import { ToastContainer, toast } from "react-toastify";
-
+import { useGlobalContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const router = useRouter();
+
+  const { isAuth, user, setIsAuth, setUser } = useGlobalContext();
+  
+  if(isAuth){
+    router.push('/')
+  }
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -29,10 +38,15 @@ const SignIn = () => {
         return;
       }
       // Validation passed, you can proceed with form submission
-      const data = await authService.signIn({ email, password });
+      const { data } = await authService.signIn({ email, password });
 
       console.log(1, data);
 
+      // Set authentication state to true and set user information after successful login
+      setIsAuth(true);
+      setUser(data.user);
+      console.log(isAuth, user);
+      router.push("/");
       console.log("Email:", email);
       console.log("Password:", password);
       setError("");
