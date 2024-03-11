@@ -194,7 +194,7 @@ const StudentSignup = () => {
     // }
   };
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+g
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
