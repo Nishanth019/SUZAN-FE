@@ -56,7 +56,7 @@ const Footer = () => {
                                     {links.map((link, key) => (
                                         <Typography key={key} as="li" color="black" className="font-normal">
                                             <a
-                                                href={/${link.toLowerCase().replace(/\s+/g, '-')}}
+                                                href={`/${link.toLowerCase().replace(/\s+/g, '-')}`}
                                                 className="inline-block py-1 pr-2 transition-transform hover:scale-105"
                                             >
                                                 {link}
