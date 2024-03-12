@@ -21,12 +21,12 @@ const Navbar = () => {
     const pathname = usePathname();
     const [openMenu, setOpenMenu] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
-    // const [user, setUser] = useState({
-    //     name: "Nishanth",
-    //     picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
-    //     role: "student",
-    // });
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({
+        name: "Nishanth",
+        // picture: "https://images.herzindagi.info/image/2020/Feb/sunny-leone-shares-beauty-secrets-m.jpg",
+        role: "student",
+    });
+    // const [user, setUser] = useState(null);
 
     const profileRef = useRef(null);
 
