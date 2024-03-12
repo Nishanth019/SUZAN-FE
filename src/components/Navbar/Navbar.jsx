@@ -10,6 +10,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useGlobalContext } from "@/context/AuthContext";
 import authService from "@/services/auth.service";
 import Profile from "@/app/profile/page";
+import { useRouter } from "next/navigation";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -20,6 +21,7 @@ const navigation = [
 ];
 
 const Navbar = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);

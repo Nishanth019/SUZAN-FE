@@ -9,74 +9,73 @@ const axiosInstance = axios.create({
 
 class AuthService {
   constructor() {
-    // this.userServiceUrl=BACKEND_URL;
-    this.userServiceUrl = "http://localhost:8000";
+    // this.url=BACKEND_URL;
+    // this.url = "http://localhost:8000";
+    this.url = "https://suzan-be.vercel.app";
   }
 
   signIn(data) {
-    return axiosInstance.post(`${this.userServiceUrl}/api/auth/signin`, data);
+    return axiosInstance.post(`${this.url}/api/auth/signin`, data);
   }
 
   signUpAdmin(data) {
     return axiosInstance.post(
-      `${this.userServiceUrl}/api/auth/admin/signup`,
+      `${this.url}/api/auth/admin/signup`,
       data
     );
   }
 
   verifyOtpForAdmin(data) {
     return axiosInstance.post(
-      `${this.userServiceUrl}/api/auth/admin/verifyOtp`,
+      `${this.url}/api/auth/admin/verifyOtp`,
       data
     );
   }
 
   completeAdminSignup(data) {
     return axiosInstance.post(
-      `${this.userServiceUrl}/api/auth/admin/completeSignup`,
+      `${this.url}/api/auth/admin/completeSignup`,
       data
     );
   }
 
   signUpStudent(data) {
     return axiosInstance.post(
-      `${this.userServiceUrl}/api/auth/student/signup`,
+      `${this.url}/api/auth/student/signup`,
       data
     );
   }
 
   verifyOtpForStudent(data) {
     return axiosInstance.post(
-      `${this.userServiceUrl}/api/auth/student/verifyOtp`,
+      `${this.url}/api/auth/student/verifyOtp`,
       data
     );
   }
 
   completeStudentSignup(data) {
     return axiosInstance.post(
-      `${this.userServiceUrl}/api/auth/student/completeSignup`,
+      `${this.url}/api/auth/student/completeSignup`,
       data
     );
   }
 
   forgetPassword(data) {
     return axiosInstance.post(
-      `${this.userServiceUrl}/api/auth/forgetpassword`,
+      `${this.url}/api/auth/forgetpassword`,
       data
     );
   }
 
   changePassword(data) {
     return axiosInstance.post(
-      `${this.userServiceUrl}/api/auth/changepassword`,
+      `${this.url}/api/auth/changepassword`,
       data
     );
   }
 
-
-
   signout() {
-    return axiosInstance.post(`${this.userServiceUrl}/api/auth/logout`, null);
+    return axiosInstance.post(`${this.url}/api/auth/signout`);
   }
 }
 
