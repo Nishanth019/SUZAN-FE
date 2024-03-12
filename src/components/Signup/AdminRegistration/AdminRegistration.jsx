@@ -1,145 +1,98 @@
 "use client";
-import { useEffect } from "react";
-import  basicRegistrationValidations from "@/validations/registration/registration.validations";
-import  aboutRegistrationValidation  from "@/validations/registration/registration.validations";
-import RegistrationAbout from "./RegistrationAbout";
-import RegistrationBasic from "./RegistrationBasic";
-// import employerService from "@/services/employer.service";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { useRouter } from "next/navigation";
-// import TokenHelper from "@/helpers/Token.helper";
-// import authService from "@/services/auth.service";
-// import userService from "@/services/user.service";
-import { useFormik } from "formik";
+import { usePathname } from "next/navigation";
+import userService from "@/services/user.service";
+import basicRegistrationValidations from "@/validations/registration/registration.validations";
+import aboutRegistrationValidation from "@/validations/registration/registration.validations";
+import RegistrationAbout from "./RegistrationAbout";
+import RegistrationBasic from "./RegistrationBasic";
+import authService from "@/services/auth.service";
+import { useGlobalContext } from "@/context/AuthContext";
 
 const AdminRegistration = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const email_id = pathname.split("/").pop();
+  
+  const { isAuth} = useGlobalContext();
+
+  if (isAuth) {
+    router.push("/");
+  }
+
+
   const [user, setUser] = useState(null);
   const [stage, setStage] = useState(1);
-   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false); // State to track checkbox status
-
-   const handleCheckboxChange = (isChecked) => {
-     setIsCheckboxChecked(isChecked);
-   };
-
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [details, setDetails] = useState({
-      name: "",
-      email: "",
-      phone: "",
-      gender: "",
-       collegeName:"",
-      streetName:"",
-      city:"",
-      state:"",
-      pincode:"",
-      country:"India",
-        rollNo:"",
-      program:"",
-      branch:"",
-      batch:"",
-       emailDomain:"",
-    documents: [],
+    name: "",
+    email: "",
+    phone: "",
+    gender: "",
+    college_name: "",
+    street_name: "",
+    city: "",
+    state: "",
+    pincode: "",
+    country: "India",
+    roll_no: "",
+    program: "",
+    branch: "",
+    batch: "",
+    email_domain: "",
   });
-  const basicForm = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      phone: "",
-      gender: "",
 
-    },
-    validationSchema: basicRegistrationValidations,
-    onSubmit: async () => {
-      setStage((stage) => (stage === 1 ? 2 : 1));
-      console.log(0,stage);
-    },
-  });
-  const aboutForm = useFormik({
-    initialValues: {
-    //   about: "",
-    //   companyName: "",
-    //   companyLogo: "",
-      documents: [],
-       collegeName:"",
-      streetName:"",
-      city:"",
-      state:"",
-      pincode:"",
-      country:"India",
-        rollNo:"",
-      program:"",
-      branch:"",
-      batch:"",
-      emailDomain:"",
-    
-    },
-    validationSchema: aboutRegistrationValidation,
-    onSubmit: async (values) => {
+  useEffect(() => {
+    const getUser = async () => {
       try {
-       
-        const { data } = await userService.updateCurrentUser(values);
-        if (data.error === false) {
-          console.log("Onboarding completed");
-          router.push("/");
-        }
-        console.log(data.message);
-      } catch (error) {
-        console.error("Error in onboarding:", error);
-      }
-    },
-  });
-  // console.log(details);
+        const { data } = await userService.getUserById(email_id);
+        if (data && data.user) {
+          const { name, email } = data.user;
 
-  // console.log(social);
+          setDetails((prevDetails) => ({
+            ...prevDetails,
+            name,
+            email,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    getUser();
+  }, []);
+  
+  // useEffect(() => {
+  //   console.log("Details updated:", details);
+  // }, [details]);
+
+  const handleCheckboxChange = (isChecked) => {
+    setIsCheckboxChecked(isChecked);
+  };
+
   const handleStageClick = () => {
     setStage((stage) => (stage === 1 ? 2 : 1));
   };
 
-  //   const getUser = TokenHelper.get();
-  //   useEffect(() => {
-  //     const apiData = async () => {
-  //       const data = await userService.getCurrentUser();
-  //       if (data.data.result !== null) {
-  //         // console.log(user);
-  //         basicForm.setValues({
-  //           ...basicForm.values,
-  //           name: data?.data?.result?.name || "",
-  //           email: data?.data?.result?.email || "",
-  //           phone: data?.data?.result?.phone || "",
-  //         });
-  //         setUser(data?.data?.result);
-  //       }
-  //     };
-  //     apiData();
-  //   }, [getUser]);
-
-  useEffect(() => {
-    setDetails({
-      ...details,
-      name: user?.name,
-      email: user?.email,
-      phone: user?.phone,
-    });
-  }, [user]);
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const combinedData = { ...details, socialProfiles: [...social] };
-      console.log(combinedData);
-      const { data } = await userService.updateCurrentUser(combinedData);
-      if (data.error === false) {
-        console.log("Onboarding completed");
-        router.push("/");
-      }
-      console.log(data.message);
+      // Call the completeSignUp API
+      const data={...details}
+      const response = await authService.completeAdminSignup(data); // Replace `data` with the required payload for the API
+      // Handle response
+      console.log("Admin is registered ", response);
     } catch (error) {
-      console.error("Error in onboarding:", error);
+      // Handle error
+      console.error("Error completing sign-up:", error);
     }
   };
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-2 md:gap-4 px-4 md:px-16 lg:px-28 py-5 sm:py-8 ">
+      {/* Content goes here */}
       <h1 className="text-2xl font-semibold text-center   text-[30px]  md:text-[40px] lg:text-[48px] xl:text-[48px] ">
         Greetings From <span className="primary-text-color">SUZAN</span>
       </h1>
@@ -147,51 +100,52 @@ const AdminRegistration = () => {
         You are just few clicks away from making your college life easier!
       </h4>
       <div className="rounded-xl drop-shadow border md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full">
-        {stage === 1 ? (
-          <RegistrationBasic
-            formikForm={basicForm}
-            details={details}
-            setDetails={setDetails}
-          />
-        ) : (
-          <RegistrationAbout
-            setDetails={setDetails}
-            formikForm={aboutForm}
-            details={details}
-            onCheckboxChange={handleCheckboxChange}
-          />
-        )}
-      </div>
-      <div className="w-full flex items-center justify-center gap-4">
-        {stage === 1 ? (
-          <button
-            onClick={basicForm.handleSubmit}
-            className="px-6 py-2 text-lg rounded-full text-white mt-6 font-medium bg-[#36518F]"
-          >
-            Next
-          </button>
-        ) : (
-          <>
+        {/* Registration div */}
+        <div>
+          {stage === 1 ? (
+            <RegistrationBasic details={details} setDetails={setDetails} />
+          ) : (
+            <RegistrationAbout
+              setDetails={setDetails}
+              details={details}
+              onCheckboxChange={handleCheckboxChange}
+            />
+          )}
+        </div>
+        {/* Navigation buttons */}
+        <div className="w-full flex items-center justify-center gap-4">
+          {stage === 1 ? (
             <button
               onClick={handleStageClick}
-              className="px-4 py-2 sm:px-6 sm:py-3  text-lg text-paleBlue rounded-full mt-6 border-paleBlue border-2 font-medium capitalize flex items-center justify-center gap-2 hover:bg-[#36518F] hover:text-white"
+              type="submit"
+              className="px-6 py-2 text-lg rounded-full text-white mt-6 font-medium bg-[#36518F]"
             >
-              <BsArrowLeft size={20} />
-              previous
+              Next
             </button>
-            <button
-              disabled={!isCheckboxChecked}
-              onClick={aboutForm.handleSubmit}
-              className={`px-6 py-2 sm:px-6 sm:py-3 text-lg rounded-full text-white mt-6 font-medium ${
-                !isCheckboxChecked
-                  ? "bg-gray-400"
-                  : "bg-[#36518F] hover:bg-blue-700"
-              }`}
-            >
-              Submit
-            </button>
-          </>
-        )}
+          ) : (
+            <>
+              <button
+                onClick={handleStageClick}
+                className="px-4 py-2 sm:px-6 sm:py-3  text-lg text-paleBlue rounded-full mt-6 border-paleBlue border-2 font-medium capitalize flex items-center justify-center gap-2 hover:bg-[#36518F] hover:text-white"
+              >
+                <BsArrowLeft size={20} />
+                previous
+              </button>
+              <button
+                disabled={!isCheckboxChecked}
+                type="submit"
+                onClick={handleSubmit}
+                className={`px-6 py-2 sm:px-6 sm:py-3 text-lg rounded-full text-white mt-6 font-medium ${
+                  !isCheckboxChecked
+                    ? "bg-gray-400"
+                    : "bg-[#36518F] hover:bg-blue-700"
+                }`}
+              >
+                Submit
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

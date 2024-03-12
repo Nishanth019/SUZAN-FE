@@ -1,29 +1,35 @@
 "use client";
-import React from "react";
-import { useState, useEffect } from "react";
-import { FcGoogle } from "react-icons/fc";
+import React, { useState, useEffect } from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Link from "next/link";
 import { useFormik } from "formik";
-import { Button } from "@material-tailwind/react";
-// import TokenHelper from "../../helpers/Token.helper";
 import { useRouter } from "next/navigation";
-// import authService from "@/services/auth.service";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import authService from "@/services/auth.service";
+import collegeService from "@/services/college.service";
+import { ToastContainer, toast } from "react-toastify";
+import { useGlobalContext } from "@/context/AuthContext";
+
 const StudentSignup = () => {
   const [show, setShow] = useState(false);
   const [formPrefillData, setFormPrefillData] = useState();
   const [tab, setTab] = useState(0);
-  const [phoneEnabled, setPhoneEnabled] = useState();
   const [timer, setTimer] = useState(30);
   const [showOtpField, setShowOtpField] = useState(true);
-  const [showOtpLoginField, setShowOtpLoginField] = useState(false);
-  const [isOtpVerified, setOtpVerified] = React.useState(false);
   const [canResend, setCanResend] = useState(false);
   const [error, setErrors] = useState();
+  const [colleges, setColleges] = useState([]);
   function handleClick() {
     setShow(!show);
   }
   const navigate = useRouter();
+
+    const router = useRouter();
+
+    const { isAuth } = useGlobalContext();
+
+    if (isAuth) {
+      router.push("/");
+    }
 
   const handleOtpForSignUp = (values) => {
     ////TODO:remove this line and comment out next line
@@ -38,85 +44,134 @@ const StudentSignup = () => {
     setTimer(30);
     // }
   };
+  const fetchColleges = async () => {
+    try {
+      const response = await collegeService.getAllColleges();
+      // Check if the request was successful
+      // console.log(1,response);
+      if (response.data.success) {
+        // Extract colleges array from the response
+        const colleges = response.data.colleges;
 
-  useEffect(() => {
-    if (showOtpField && showOtpLoginField) {
-      setTab(1);
+        // Now you can set the colleges state or use it as needed
+        setColleges(colleges);
+        console.log(2, colleges);
+        console.log(3, colleges.college_name);
+      } else {
+        // Handle the case where the request was not successful
+        console.error("Error fetching colleges:", response.data.error);
+      }
+    } catch (error) {
+      // Handle any errors that occur during the fetch
+      console.error("Error fetching colleges:", error);
     }
-  }, [showOtpField, showOtpLoginField]);
-
+  };
+  useEffect(() => {
+    fetchColleges();
+  }, []);
+  const initialValues = {
+    college_name: "", // Initialize college_name to an empty string
+    name: "",
+    email: "",
+    password: "",
+    otp: "",
+  };
   const loginForm = useFormik({
-    initialValues: {
-      name: formPrefillData ? formPrefillData.name : "",
-      email: formPrefillData ? formPrefillData.email : "",
-      password: formPrefillData ? formPrefillData.password : "",
-      otp: formPrefillData ? formPrefillData.otp : "",
-    },
-
-    onSubmit: (values) => {
-      // onSubmit: async (values) => {
-      if (!values.email) return setErrors("Email Required!");
-      if (!values.password || !Boolean(values.password?.trim()))
-        return setErrors("Password Required!");
+    initialValues,
+    onSubmit: async (values) => {
+      console.log(1, values);
+      if (!values.email) {
+        setErrors("Email Required!");
+        return;
+      }
+      if (!values.college_name) {
+        setErrors("College Name Required!");
+        return;
+      }
+      if (!values.password || !Boolean(values.password?.trim())) {
+        setErrors("Password Required!");
+        return;
+      }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(values.email)) {
-        return setErrors("Invalid Email");
+        setErrors("Invalid Email");
+        return;
       }
       if (values.password.length < 8) {
-        return setErrors("Password must be at least 8 characters");
+        setErrors("Password must be at least 8 characters");
+        return;
       }
 
       if (tab === 0) {
         if (!values.name) {
-          return setErrors("Full Name Required!");
+          setErrors("Full Name Required!");
+          return;
         }
-        // signup
-        // try {
-        const payload = {
-          name: values.name,
-          password: values.password,
-          role: "admin",
-        };
-        // console.log(payload);
-        payload.email = values.email;
-        handleOtpForSignUp(payload); //TODO:remove this line and comment out next line
-        // await handleOtpForSignUp(payload);
-        // } catch (ex) {
-        // setErrors(ex.response.data.message);
-        // }
+        try {
+          const payload = {
+            name: values.name,
+            college_name: values.college_name,
+            email: values.email,
+            password: values.password,
+            role: "student",
+          };
+          const data = await authService.signUpStudent(payload);
+          console.log(12, data);
+          if (data.data.message === "OTP is already Verified") {
+            navigate.push(`/signup/student/registration/${data.data.id}`);
+          } else {
+            toast.success(data.data.message, {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            setTab(1);
+          }
+          setErrors("");
+        } catch (error) {
+          setErrors("");
+          toast.error(error.response?.data.message || "An error occurred", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
       }
 
       if (tab === 1) {
-        console.log("I AM WORKING");
-        if (showOtpLoginField) {
-          // try {
-          if (!isOtpVerified) {
-            const payload = {
-              otp: values.otp,
-            };
-            payload.email = values.email;
-            // const data = await authService.verifyOtpForSignUp(payload);
-            console.log("working");
-            // if (data) {
-            // TokenHelper.create(data.data.result.accessToken);
-            // if (!data?.data?.error) {
-            setOtpVerified(true);
-            if (typeof window !== undefined) {
-              window.location.href = "/signup/student/registration";
-            }
-            // } else {
-            // navigate.push('/signup/admin');
-            // }
-          }
+        try {
+          const payload = {
+            otp: values.otp,
+          };
+          payload.email = values.email;
+          const data = await authService.verifyOtpForAdmin(payload);
+          navigate.push(`/signup/student/registration/${data.data.id}`);
+        } catch (error) {
+          setErrors("");
+          toast.error(error.response?.data.message || "An error occurred", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         }
-        // } catch (error) {
-        //   setErrors(error.response.data.message);
-        // }
-        // }
       }
     },
   });
-
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -142,7 +197,7 @@ const StudentSignup = () => {
 
     // if (response) {
     setShowOtpField(true);
-    setShowOtpLoginField(true);
+    // setShowOtpLoginField(true);
     setCanResend(false);
     setTimer(30); // Reset the timer
     // }
@@ -167,26 +222,24 @@ const StudentSignup = () => {
                 {/* College Name Section */}
                 <div className="w-full md:w-full md:flex-1">
                   <h1 className="text-neutral-500">Select College</h1>
-
-                  <div
-                    onClick={toggleDropdown}
-                    className="w-full border px-4 py-3 sm:px-6 sm:py-3  rounded-full mt-2 text-lg "
-                  >
+                  <div className="w-full border px-4 py-3 sm:px-6 sm:py-3  rounded-full mt-2 text-lg">
                     <div className="relative w-full">
                       <select
-                        // value={details?.values?.collegeName}
-                        // onChange={handleOptionChange}
-                        className="appearance-none  w-full  rounded px-4  leading-tight focus:outline-none focus:border-blue-500 max-sm:text-sm"
+                        name="college_name"
+                        value={loginForm.values.college_name}
+                        onChange={loginForm.handleChange}
+                        className="appearance-none w-full rounded px-4 leading-tight focus:outline-none focus:border-blue-500 max-sm:text-sm"
                       >
-                        <option value="iiitjabalpur">IIIT Jabalpur</option>
-                        <option value="jabalpurengineeringcollege">
-                          Jabalpur Engineering College
-                        </option>
-                        <option value="ranidurgavathiinstitute">
-                          Rani Durgavathi Institute
-                        </option>
+                        {/* Populate select options */}
+                        {colleges.map((college) => (
+                          <option
+                            key={college._id}
+                            value={college.college_name}
+                          >
+                            {college.college_name}
+                          </option>
+                        ))}
                       </select>
-
                       {/* Arrow icon */}
                       <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none px-1">
                         {!isDropdownOpen ? (

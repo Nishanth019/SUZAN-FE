@@ -4,8 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 import studentImage from "../../../assets/Signup/student.png";
 import adminImage from "../../../assets/Signup/admin.png";
+import { useGlobalContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
+
+    const router = useRouter();
+
+    const { isAuth} = useGlobalContext();
+
+      if (isAuth) {
+        router.push("/");
+      }
   
   return (
     <div className="h-screen flex flex-col p-10 px-5 ">
