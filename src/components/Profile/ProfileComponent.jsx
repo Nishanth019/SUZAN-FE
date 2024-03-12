@@ -51,11 +51,12 @@ const collegedummydata = {
 function ProfileComponent() {
   const router = useRouter();
 
-  const { isAuth } = useGlobalContext();
-  
-  if(!isAuth){
-    router.push('/')
-  }
+  useEffect(() => {
+    if(window !== undefined){
+      router.push('/profile')
+    }
+}, []);
+
   const [currentUser, setCurrentUser] = useState(null);
   const [collegeDetails, setCollegeDetails] = useState(null);
 
