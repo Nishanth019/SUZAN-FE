@@ -9,6 +9,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { useGlobalContext } from "@/context/AuthContext";
 import authService from "@/services/auth.service";
+import Profile from "@/app/profile/page";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -159,7 +160,7 @@ const Navbar = () => {
                       {user?.name}
                     </p>
                     <Link
-                      href="#"
+                      href='/profile'
                       className="block px-4 py-2 text-md text-gray-700 hover:text-black hover:text-semibold hover:bg-black/5"
                     >
                       Your Profile
