@@ -60,6 +60,7 @@ const SignIn = () => {
     } catch (error) {
       // Validation failed
       setError("");
+      console.log(12,error)
       console.log(1, error.response.data.message);
       toast.error(error.response.data.message, {
         position: "top-center",
@@ -124,7 +125,7 @@ const SignIn = () => {
                     className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border border-gray-300 p-10"
                     required
                   />
-                  <span class="flex justify-around items-center" onClick={handleTogglePassword}>
+                  <span class="flex justify-around items-center cursor-pointer" onClick={handleTogglePassword}>
 
                     {!showPassword ? (
                       <FaEyeSlash class="absolute mr-12 mb-5"  />

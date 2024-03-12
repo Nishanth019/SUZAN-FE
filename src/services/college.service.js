@@ -9,26 +9,27 @@ const axiosInstance = axios.create({
 
 class collegeService {
   constructor() {
-    // this.collegeServiceUrl=BACKEND_URL;
-    this.collegeServiceUrl = "http://localhost:8000";
+    // this.url=BACKEND_URL;
+    // this.url = "http://localhost:8000";
+    this.url = "https://suzan-be.vercel.app";
   }
 
   getCollegeById(collegeId) {
     return axiosInstance.get(
-      `${this.collegeServiceUrl}/api/colleges/${collegeId}`
+      `${this.url}/api/colleges/${collegeId}`
     );
   }
   getAllColleges() {
-    return axiosInstance.get(`${this.collegeServiceUrl}/api/colleges/`);
+    return axiosInstance.get(`${this.url}/api/colleges/`);
   }
   deleteCollegeById(collegeId) {
     return axiosInstance.delete(
-      `${this.collegeServiceUrl}/api/colleges/${collegeId}`
+      `${this.url}/api/colleges/${collegeId}`
     );
   }
   updateCollegeById(collegeId) {
     return axiosInstance.put(
-      `${this.collegeServiceUrl}/api/colleges/${collegeId}`
+      `${this.url}/api/colleges/${collegeId}`
     );
   }
 }

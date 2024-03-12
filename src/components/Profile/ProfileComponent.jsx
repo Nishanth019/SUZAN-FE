@@ -3,14 +3,12 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Input from "../Generals/Input";
 import { useFormik } from "formik";
-import {
-  adminValidationSchema,
-  studentValidationSchema,
-} from "@/validations/profile/profile.validations";
-
+import {adminValidationSchema, studentValidationSchema } from "@/validations/Profile/profile.validations";
+import { useGlobalContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import { Upload } from "../Utils/UploadModal/Upload";
 import UserService from "@/services/user.service";
-// import { useGlobalContext } from "@/context/AuthContext";
+import collegeService from "@/services/college.service";
 
 const admindummydata = {
   id: "1",
@@ -51,58 +49,16 @@ const collegedummydata = {
 };
 
 function ProfileComponent() {
-  //   const { isAuth, currentUser, setIsAuth, setCurrentUser } = useGlobalContext();
-  //   console.log(1111, currentUser);
-
-  const [currentUser, setCurrentUser] = useState({
-    id: "",
-    picture: "",
-    name: "",
-    email: "",
-    phone: "",
-    gender: "",
-    roll_no: "",
-    program: "",
-    branch: "",
-    batch: "",
-    role: "",
-  });
-  console.log(24, currentUser.id);
-  const [collegeDetails, setCollegeDetails] = useState({
-    id: "",
-    collegename: "",
-    streetname: "",
-    city: "",
-    state: "",
-    pincode: "",
-    country: "",
-    emaildomain: "",
-  });
+  const router = useRouter();
 
   useEffect(() => {
-    const getCurrentUser = async () => {
-      const data = await UserService.getCurrentUser();
-         console.log(90, currentUser);
-      const currentUser = data.currentUser.currentUser;
-      if (currentUser) {
-        setCurrentUser({
-          id: currentUser.id,
-          picture: currentUser.picture,
-          name: currentUser.name,
-          email: currentUser.email,
-          phone: currentUser.phone,
-          gender: currentUser.gender,
-          roll_no: currentUser.roll_no,
-          program: currentUser.program,
-          branch: currentUser.branch,
-          batch: currentUser.batch,
-          role: currentUser.role,
-        });
-      }
-    };
-    getCurrentUser();
-  }, []);
-  const [loggedUser, setLoggedUser] = useState(null);
+    if(window !== undefined){
+      router.push('/profile')
+    }
+}, []);
+
+  const [currentUser, setCurrentUser] = useState(null);
+  const [collegeDetails, setCollegeDetails] = useState(null);
 
   const [isEdit, setIsEdit] = useState(true);
   const [isEditCollegeDetails, setIsEditCollegeDetails] = useState(true);
@@ -123,7 +79,7 @@ function ProfileComponent() {
     },
 
     validationSchema:
-      loggedUser?.role === "admin"
+      currentUser?.role === "admin"
         ? adminValidationSchema
         : studentValidationSchema,
 
@@ -131,7 +87,7 @@ function ProfileComponent() {
       setIsEdit(true);
       console.log("now");
       console.log(values);
-      if (loggedUser?.role === "admin") {
+      if (currentUser?.role === "admin") {
         console.log("currentUser sent to admin backend");
         admindummydata.name = values.name;
         admindummydata.email = values.email;
@@ -175,36 +131,19 @@ function ProfileComponent() {
       setIsEditCollegeDetails(true);
       console.log("now");
       console.log(values);
-      if (loggedUser?.role === "admin") {
-        console.log("currentUser sent to admin backend");
-        collegedummydata.collegename = values.name;
-        collegedummydata.streetname = values.streetname;
-        collegedummydata.city = values.city;
-        collegedummydata.state = values.state;
-        collegedummydata.pincode = values.pincode;
-        collegedummydata.country = values.country;
-        collegedummydata.emaildomain = values.emaildomain;
-
-        // await employerService.updateCurrentUser({
-        //   name: values.name,
-        //   email: values.email,
-        //   phone: values.phone,
-        //   collegename: values.collegename,
-        //   gender: values.gender,
-        //   category: values.category,
-        //   about: values.about,
-        //   socialProfiles: values.socialProfiles,
-        // });
-      }
+      // if (currentUser?.role === "admin") {
+      //   console.log("currentUser sent to admin backend");
+      //   collegedummydata.collegename = values.name;
+      //   collegedummydata.streetname = values.streetname;
+      //   collegedummydata.city = values.city;
+      //   collegedummydata.state = values.state;
+      //   collegedummydata.pincode = values.pincode;
+      //   collegedummydata.country = values.country;
+      //   collegedummydata.emaildomain = values.emaildomain;
+      // }
     },
   });
 
-  const handleChange = (e) => {
-    console.log("handlechange");
-    const name = e.target.name;
-    const value = e.target.value;
-    setCurrentUser({ ...currentUser, [name]: value });
-  };
 
   const handleChangeGender = (e) => {
     const name = "gender";
@@ -212,11 +151,6 @@ function ProfileComponent() {
     setCurrentUser({ ...currentUser, [name]: value });
   };
 
-  const handleChangeCollegeDetails = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setCurrentUser({ ...currentUser, [name]: value });
-  };
 
   const [fileLink, setFileLink] = useState(form?.values.companyLogo || "");
 
@@ -231,70 +165,75 @@ function ProfileComponent() {
   //comment the below code and use the code below this for backend
 
   useEffect(() => {
+    console.log(24)
     const apiData = async () => {
-      const currentUser = currentUser;
-      const collegedata = collegedummydata;
-      setLoggedUser(currentUser?.role);
-
-      if (currentUser.role === "student") {
-        form.setValues({
-          ...form.values,
-          id: currentUser.id,
-          picture: currentUser.picture,
-          name: currentUser.name,
-          email: currentUser.email,
-          phone: currentUser.phone,
-          gender: currentUser.gender,
-          roll_no: currentUser.roll_no,
-          program: currentUser.program,
-          branch: currentUser.branch,
-          batch: currentUser.batch,
-          role: currentUser.role,
-        });
-        formcollege.setValues({
-          ...formcollege.values,
-          id: collegedata.id,
-          collegename: collegedata.collegename,
-        });
-      } else if (currentUser.role === "admin") {
-        AdminData();
-      }
+      console.log(234)
+        const currUser = await UserService.getCurrentUser();
+        console.log(90,currUser)
+        if(currUser){
+          console.log(2)
+         setCurrentUser(currUser.data.user);
+          const clg_id = currUser.data.user.college;
+          console.log(3,clg_id)
+          const clg_data = await collegeService.getCollegeById(clg_id);
+          console.log(91,clg_data)
+          setCollegeDetails(clg_data.data.college)
+        }
     };
     apiData();
   }, []);
 
-  const AdminData = async () => {
-    const currentUser = admindummydata;
-    const collegedata = collegedummydata;
-    console.log(123, currentUser);
-    if (currentUser && collegedata) {
+  useEffect(()=>{
+    console.log(1234,currentUser,collegeDetails);
+    if (currentUser?.role === "student") {
+      console.log(12345)
       form.setValues({
         ...form.values,
-        id: currentUser.id,
-        picture: currentUser.picture,
-        name: currentUser.name,
-        email: currentUser.email,
-        phone: currentUser.phone,
-        gender: currentUser.gender,
-        roll_no: currentUser.roll_no,
-        program: currentUser.program,
-        branch: currentUser.branch,
-        batch: currentUser.batch,
-        role: currentUser.role,
+        id: currentUser?._id,
+        picture: currentUser?.picture,
+        name: currentUser?.name,
+        email: currentUser?.email,
+        phone: currentUser?.phone,
+        gender: currentUser?.gender,
+        roll_no: currentUser?.roll_no,
+        program: currentUser?.program,
+        branch: currentUser?.branch,
+        batch: currentUser?.batch,
+        role: currentUser?.role,
       });
       formcollege.setValues({
         ...formcollege.values,
-        id: collegedata.id,
-        collegename: collegedata.collegename,
-        streetname: collegedata.streetname,
-        city: collegedata.city,
-        state: collegedata.state,
-        pincode: collegedata.pincode,
-        country: collegedata.country,
-        emaildomain: collegedata.emaildomain,
+        id: collegeDetails?._id,
+        collegename: collegeDetails?.college_name,
+      });
+    } else if (currentUser?.role === "admin") {
+      form.setValues({
+        ...form.values,
+        id: currentUser?._id,
+        picture: currentUser?.picture,
+        name: currentUser?.name,
+        email: currentUser?.email,
+        phone: currentUser?.phone,
+        gender: currentUser?.gender,
+        roll_no: currentUser?.roll_no,
+        program: currentUser?.program,
+        branch: currentUser?.branch,
+        batch: currentUser?.batch,
+        role: currentUser?.role,
+      });
+      formcollege.setValues({
+        ...formcollege.values,
+        id: collegeDetails?._id,
+        collegename: collegeDetails?.college_name,
+        streetname: collegeDetails?.street_name,
+        city: collegeDetails?.city,
+        state: collegeDetails?.state,
+        pincode: collegeDetails?.pincode,
+        country: collegeDetails?.country,
+        emaildomain: collegeDetails?.email_domain,
       });
     }
-  };
+  },[currentUser,collegeDetails])
 
   return (
     <div className="bg-[#F4F7FC] h-full flex-col flex justify-center items-center gap-7 p-6 w-full px-4 md:px-16 lg:px-28 py-16">
@@ -346,7 +285,7 @@ function ProfileComponent() {
                   alt={form?.values?.name}
                 />
                 <div>
-                  <Upload onAddFileLink={addFileLink} />
+                  {/* <Upload onAddFileLink={addFileLink} /> */}
                 </div>
               </div>
             ) : (
@@ -357,7 +296,7 @@ function ProfileComponent() {
                     <div className="flex items-center">
                       <div>{form?.values?.name[0]}</div>
                       <div>
-                        <Upload onAddFileLink={addFileLink} />
+                        {/* <Upload onAddFileLink={addFileLink} /> */}
                       </div>
                     </div>
                   ) : (
@@ -486,7 +425,7 @@ function ProfileComponent() {
               <label>Gender:</label>
               <select
                 className="border-2 border-gray-300 w-full py-2 px-4 rounded-lg"
-                value={currentUser.gender}
+                value={currentUser?.gender}
                 onChange={(e) => {
                   handleChangeGender(e);
                 }}
@@ -505,7 +444,7 @@ function ProfileComponent() {
           )}
         </div>
 
-        {loggedUser === "admin" && (
+        {currentUser === "admin" && (
           <div>
             <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
               {/* streetname and city */}

@@ -10,31 +10,33 @@ const axiosInstance = axios.create({
 class UserService {
   constructor() {
     // You can use the BACKEND_URL from environment variables if available
-    // this.userServiceUrl = BACKEND_URL || "http://localhost:8000";
-    this.userServiceUrl = "http://localhost:8000";
+    // this.url = BACKEND_URL;
+    // this.url = "http://localhost:8000";
+    this.url = "https://suzan-be.vercel.app";
   }
 
+
   getCurrentUser() {
-    return axiosInstance.get(`${this.userServiceUrl}/api/users/currentuser`);
+    return axiosInstance.get(`${this.url}/api/users/currentuser`);
   }
 
   getUserById(userId) {
     return axiosInstance.get(
-      `${this.userServiceUrl}/api/users/getuser/${userId}`
+      `${this.url}/api/users/getuser/${userId}`
     );
   }
 
   // Function to delete user by ID
   deleteUserById(userId) {
     return axiosInstance.delete(
-      `${this.userServiceUrl}/api/users/deleteuser/${userId}`
+      `${this.url}/api/users/deleteuser/${userId}`
     );
   }
 
   // Function to update user by ID
   updateUserById(userId, userData) {
     return axiosInstance.put(
-      `${this.userServiceUrl}/api/users/updateuser/${userId}`,
+      `${this.url}/api/users/updateuser/${userId}`,
       userData
     );
   }
