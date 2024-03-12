@@ -38,8 +38,6 @@ const Navbar = () => {
         console.error("Error occurred while signing out:", error);
         // Handle sign-out error, if any
       }
-    };
-
   
 
   const handleMenuToggle = () => {

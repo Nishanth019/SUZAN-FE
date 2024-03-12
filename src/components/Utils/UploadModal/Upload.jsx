@@ -10,10 +10,12 @@ import {
     DialogTrigger,
 } from "@/components/Ui/dialog";
 import FileUpload from "./FileUpload";
-import {Button} from "../../Ui/button"
+import { Button } from "../../Ui/button"
 import { Label } from "../../Ui/label";
+
+import { FaPencilAlt } from 'react-icons/fa';
 // import fileUploadService from "@/services/fileUpload.service";
-export function Upload({ onAddFileLink,type }) {
+export function Upload({ onAddFileLink, type }) {
     const [fileUploadResponse, setFileUploadResponse] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
@@ -44,9 +46,10 @@ export function Upload({ onAddFileLink,type }) {
             <DialogTrigger asChild>
                 <div className=" rounded-md text-white">
                     <div className="flex flex-row items-center">
-                        <button className="px-4 py-1 sm:px-6 sm:py-3 bg-[#36518F] rounded-full mt-2 text-white font-medium " onClick={() => setModalOpen(true)}>
-                            Upload
-                        </button>
+
+                        <div onClick={() => setModalOpen(true)}>
+                            <FaPencilAlt size={32} color="#333" />
+                        </div>
                     </div>
                 </div>
             </DialogTrigger>
@@ -55,7 +58,7 @@ export function Upload({ onAddFileLink,type }) {
                     <div className="grid">
                         <div className="">
                             <Label htmlFor="videoLink" className="text-left text-lg">
-                                Upload
+
                             </Label>
                             <div className="mt-6">
                                 <FileUpload type={type} onFileUpload={handleFileLinkChange} />
