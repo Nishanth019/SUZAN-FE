@@ -46,9 +46,9 @@ const StudentSignup = () => {
   };
   const fetchColleges = async () => {
     try {
-      const response = await collegeService.getAllColleges();
+      const response = await collegeService.getAllVerifiedColleges();
       // Check if the request was successful
-      // console.log(1,response);
+      console.log(1,response);
       if (response.data.success) {
         // Extract colleges array from the response
         const colleges = response.data.colleges;

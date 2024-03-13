@@ -10,6 +10,7 @@ import RegistrationAbout from "./RegistrationAbout";
 import RegistrationBasic from "./RegistrationBasic";
 import authService from "@/services/auth.service";
 import { useGlobalContext } from "@/context/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
 
 const AdminRegistration = () => {
   const router = useRouter();
@@ -83,10 +84,34 @@ const AdminRegistration = () => {
       const data={...details}
       const response = await authService.completeAdminSignup(data); // Replace `data` with the required payload for the API
       // Handle response
+      console.log(0,response,response.data.message);
+      await toast.success(response?.data?.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        // transition: Bounce,
+      })
+      router.push('/')
       console.log("Admin is registered ", response);
     } catch (error) {
       // Handle error
-      console.error("Error completing sign-up:", error);
+      toast.error(error?.response?.data?.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        // transition: Bounce,
+      })
+      console.error("Error completing sign-up:", error?.response?.data?.message);
     }
   };
 
