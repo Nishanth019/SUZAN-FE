@@ -15,10 +15,25 @@ class UserService {
     // this.url = "https://suzan-be.vercel.app";
   }
 
-
   getCurrentUser() {
     return axiosInstance.get(`${this.url}/api/users/currentuser`);
   }
+
+    // Function to update user 
+    updateUser( userData) {
+      return axiosInstance.put(
+        `${this.url}/api/users/updateuser`,
+        userData
+      );
+    }
+
+  // Function to delete user
+  deleteUser() {
+    return axiosInstance.delete(
+      `${this.url}/api/users/deleteuser`
+    );
+  }
+    
 
   getUserById(userId) {
     return axiosInstance.get(
