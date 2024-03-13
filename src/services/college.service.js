@@ -31,9 +31,9 @@ class collegeService {
       `${this.url}/api/colleges/${collegeId}`
     );
   }
-  updateCollegeById(collegeId) {
+  updateCollegeById(collegeId,collegeDetails) {
     return axiosInstance.put(
-      `${this.url}/api/colleges/${collegeId}`
+      `${this.url}/api/colleges/${collegeId}`,collegeDetails
     );
   }
 }
