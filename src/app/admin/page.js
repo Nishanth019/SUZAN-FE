@@ -1,5 +1,5 @@
-import Dashboard from "@/components/admin/Dashboard/Dashboard";
-import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
+import Dashboard from "@/components/Admin/Dashboard/Dashboard";
+import DefaultLayout from "@/components/Admin/Layouts/DefaultLayout";
 
 export default function AdminDashboard() {
   return (

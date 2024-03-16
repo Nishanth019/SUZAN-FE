@@ -1,5 +1,5 @@
 import React from 'react'
-import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
+import DefaultLayout from "@/components/Admin/Layouts/DefaultLayout";
 import AdminNearbyPlaceSection from '@/components/Admin/NearbyPlaces/AdminNearbyPlaceSection';
 
 
