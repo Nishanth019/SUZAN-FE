@@ -12,26 +12,27 @@ const ClientProvider = ({ children }) => {
   console.log(2, pathname);
   return (
     <>
-      {pathname &&
-      (pathname.includes("signin") ||
-        pathname.includes("signup") ||
-        pathname.includes("admin") ||
-        pathname.includes("student") ||
-        pathname.includes("forgot-password") ||
-        pathname.includes("reset-password")) ? (
-        <NavbarTemp />
-      ) : (
-        <Navbar />
-      )}
+      {pathname && !pathname.includes("admin") ? (
+        (pathname.includes("signin") ||
+          pathname.includes("signup") ||
+          pathname.includes("student") ||
+          pathname.includes("forgot-password") ||
+          pathname.includes("reset-password")) ? (
+          <NavbarTemp />
+        ) : (
+          <Navbar />
+        )
+      ) : null}
+
       {children}
       <ToastContainer />
       {pathname &&
-      (pathname.includes("signin") ||
-        pathname.includes("signup") ||
-        pathname.includes("admin") ||
-        pathname.includes("student") ||
-        pathname.includes("forgot-password") ||
-        pathname.includes("reset-password")) ? null : (
+        (pathname.includes("signin") ||
+          pathname.includes("signup") ||
+          pathname.includes("admin") ||
+          pathname.includes("student") ||
+          pathname.includes("forgot-password") ||
+          pathname.includes("reset-password")) ? null : (
         <Footer />
       )}
     </>
