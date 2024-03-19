@@ -1,6 +1,7 @@
 "use client";
 import Dropdown from "@/components/TailwindComponents/Dropdown";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaEye } from "react-icons/fa";
+import { MdEdit, MdDelete } from "react-icons/md";
 import React, { useState } from "react";
 import CoursesTable from "./CoursesTable";
 import Box from "@mui/material/Box";
@@ -8,6 +9,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Dropdown2 from "@/components/TailwindComponents/FormDropdown";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const style = {
   position: "absolute",
@@ -39,183 +41,441 @@ const AdminCourseNavbarCourseComponent = () => {
   const [formselectedProgram, setFormSelectedProgram] = useState("");
   const [formSelectedFieldOfStudy, setFormSelectedFieldOfStudy] = useState("");
   const [formSelectedSemesters, setFormSelectedSemesters] = useState("");
-  const [courseName, setCourseName] = useState("");
-  const [courseCode, setCourseCode] = useState("");
+  const [courseDetails, setCourseDetails] = useState({
+    course_name: "",
+    course_code: "",
+    course_type: "",
+    credits: 0,
+    college_name: "",
+    instructor_name: "",
+    instructor_photo: "",
+    syllabus: "",
+    resources: [""],
+    notes: [""],
+    pyq: [""],
+  });
 
   // Dummy courses data
   const courses = [
-    // Array of course objects with properties like course code, course name, credits, professor name, view button, edit button
+    // Array of course objects with properties like course code, course name, credits, professor name, view Button,  edit Button
     // Example:
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 1,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 2,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 3,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 4,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 5,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 6,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 7,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS104",
       name: "Introduction to Computer Science",
       credits: 8,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS103",
       name: "Introduction to Computer Science",
       credits: 9,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS102",
       name: "Introduction to Computer Science",
       credits: 10,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 11,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 12,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 13,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 14,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 15,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS101",
       name: "Introduction to Computer Science",
       credits: 16,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS104",
       name: "Introduction to Computer Science",
       credits: 17,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS103",
       name: "Introduction to Computer Science",
       credits: 18,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
     {
       code: "CS102",
       name: "Introduction to Computer Science",
       credits: 19,
       professor: "Dr. John Doe",
-      // Add your view and edit button functionality here
-      viewButton: <button onClick={() => handleView(course)}>View</button>,
-      editButton: <button onClick={() => handleEdit(course)}>Edit</button>,
+      // Add your view and edit Button  functionality here
+      viewButton: (
+        <Button onClick={() => handleView(course)}>
+          <FaEye size={20} />
+        </Button>
+      ),
+      editButton: (
+        <Button onClick={() => handleEdit(course)}>
+          <MdEdit size={20} />
+        </Button>
+      ),
+      deleteButton: (
+        <Button onClick={() => handleDelete(course)}>
+          <MdDelete size={20} />
+        </Button>
+      ),
     },
   ];
 
@@ -229,6 +489,25 @@ const AdminCourseNavbarCourseComponent = () => {
     setModalOpen(false);
   };
 
+  const handleInputChange = (field, index, value) => {
+    const newDetails = { ...courseDetails };
+    newDetails[field][index] = value;
+    setCourseDetails(newDetails);
+  };
+
+  const handleAddField = (field) => {
+    setCourseDetails((prevState) => ({
+      ...prevState,
+      [field]: [...prevState[field], ""],
+    }));
+  };
+
+  const handleDeleteField = (field, index) => {
+    setCourseDetails((prevState) => ({
+      ...prevState,
+      [field]: prevState[field].filter((_, i) => i !== index),
+    }));
+  };
   return (
     <div>
       {/* dropdowns */}
@@ -314,7 +593,7 @@ const AdminCourseNavbarCourseComponent = () => {
             className="flex  flex-col w-full h-full py-6 text-center bg-white "
           >
             <h3 className="pb-5  text-[25px]  md:text-[35px]  font-extrabold text-dark-grey-900">
-              Add Semester Details
+              Add Course Details
             </h3>
             <div className="py-2 md:pt-3 flex flex-col">
               <label
@@ -354,7 +633,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 options={semesters}
                 onSelect={setFormSelectedSemesters}
               />
-
             </div>
 
             {/* Inputs */}
@@ -367,85 +645,260 @@ const AdminCourseNavbarCourseComponent = () => {
             <input
               id="coursename"
               type="text"
-              value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
+              value={courseDetails.course_name}
+              onChange={(e) => setCourseDetails(e.target.value)}
               placeholder="Data Structures and Algorithms"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
             />
 
-<label
+            <label
               htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
             >
-              Course Name*
+              Course Code*
             </label>
             <input
               id="coursecode"
               type="text"
-              value={courseCode}
-              onChange={(e) => setCourseCode(e.target.value)}
+              value={courseDetails.course_code}
+              onChange={(e) => setCourseDetails(e.target.value)}
               placeholder="CS3010"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
             />
 
-          <label
+            <label
               htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
             >
-              Course Name*
+              Course Type*
             </label>
             <input
-              id="coursename"
+              id="coursetype"
               type="text"
-              value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
+              value={courseDetails.course_type}
+              onChange={(e) => setCourseDetails(e.target.value)}
+              placeholder="Compulsory "
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              required
+            />
+
+            <label
+              htmlFor="fieldofstudyName"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Credits*
+            </label>
+            <input
+              id="credits"
+              type="number"
+              value={courseDetails.credits}
+              onChange={(e) => setCourseDetails(e.target.value)}
               placeholder="Data Structures and Algorithms"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
             />
 
-<label
+            <label
               htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
             >
-              Course Name*
+              Instructor Name*
             </label>
             <input
-              id="coursename"
+              id="instructorname"
               type="text"
-              value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
+              value={courseDetails.instructor_name}
+              onChange={(e) => setCourseDetails(e.target.value)}
+              placeholder="Sraban Mohanty"
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              required
+            />
+
+            <label
+              htmlFor="fieldofstudyName"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Upload Instructor Photo*
+            </label>
+            <input
+              id="instructorphoto"
+              type="upload"
+              value={courseDetails.instructor_photo}
+              onChange={(e) => setCourseDetails(e.target.value)}
               placeholder="Data Structures and Algorithms"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
             />
 
-<label
+            <label
               htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
             >
-              Course Name*
+              Upload Syllabus*
             </label>
             <input
-              id="coursename"
+              id="syllabus"
               type="text"
-              value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
+              value={courseDetails.syllabus}
+              onChange={(e) => setCourseDetails(e.target.value)}
               placeholder="Data Structures and Algorithms"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
             />
 
-            <div className="pb-2">
+            <label
+              htmlFor="resources"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Upload Resources*
+            </label>
+            {courseDetails.resources.map((resource, index) => (
+              <div key={index} className="flex mb-3">
+                <input
+                  type="text"
+                  value={resource}
+                  onChange={(e) =>
+                    handleInputChange("resources", index, e.target.value)
+                  }
+                  placeholder="Resource Name"
+                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                  required
+                />
+                {index > 0 && (
+                  <>
+                    <Button
+                      style={{ textTransform: "none" }}
+                      className="max-md:hidden "
+                      onClick={() => handleDeleteField("resources", index)}
+                      variant="outlined"
+                      size="small"
+                      startIcon={<DeleteIcon />}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      className="md:hidden"
+                      onClick={() => handleDeleteField("resources", index)}
+                      variant="outlined"
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </>
+                )}
+              </div>
+            ))}
+            <Button
+              onClick={() => handleAddField("resources")}
+              cariant="outlined"
+            >
+              + Add More Resources
+            </Button>
+
+            <label
+              htmlFor="notes"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Upload Notes*
+            </label>
+            {courseDetails.notes.map((note, index) => (
+              <div key={index} className="flex mb-3">
+                <input
+                  type="text"
+                  value={note}
+                  onChange={(e) =>
+                    handleInputChange("notes", index, e.target.value)
+                  }
+                  placeholder="Note Name"
+                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                  required
+                />
+                {index > 0 && (
+                  <>
+                    <Button
+                      style={{ textTransform: "none" }}
+                      className="max-md:hidden "
+                      onClick={() => handleDeleteField("notes", index)}
+                      variant="outlined"
+                      size="small"
+                      startIcon={<DeleteIcon />}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      className="md:hidden"
+                      onClick={() => handleDeleteField("notes", index)}
+                      variant="outlined"
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </>
+                )}
+              </div>
+            ))}
+            <Button onClick={() => handleAddField("notes")} cariant="outlined">
+              + Add More Notes
+            </Button>
+
+            <label
+              htmlFor="pyq"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Upload PYQ*
+            </label>
+            {courseDetails.pyq.map((pyq, index) => (
+              <div key={index} className="flex mb-3">
+                <input
+                  type="text"
+                  value={pyq}
+                  onChange={(e) =>
+                    handleInputChange("pyq", index, e.target.value)
+                  }
+                  placeholder="PYQ Name"
+                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                  required
+                />
+                {index > 0 && (
+                  <>
+                    <Button
+                      style={{ textTransform: "none" }}
+                      className="max-md:hidden "
+                      onClick={() => handleDeleteField("pyq", index)}
+                      variant="outlined"
+                      size="small"
+                      startIcon={<DeleteIcon />}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      className="md:hidden"
+                      onClick={() => handleDeleteField("pyq", index)}
+                      variant="outlined"
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </>
+                )}
+              </div>
+            ))}
+            <Button onClick={() => handleAddField("pyq")} cariant="outlined">
+              + Add More PYQs
+            </Button>
+
+            <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button variant="contained">Add Semesters</Button>
+              <Button variant="outlined">Add Course</Button>
             </div>
           </div>
         </Box>
