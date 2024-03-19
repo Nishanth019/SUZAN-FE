@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import UserService from "@/services/user.service";
 import collegeService from "@/services/college.service";
 import { ToastContainer, toast } from "react-toastify";
+import Link from "next/link";
 
 function ProfileComponent() {
   const router = useRouter();
@@ -154,7 +155,7 @@ function ProfileComponent() {
           {isEdit ? (
             <button
               onClick={() => setIsEdit(false)}
-              className="text-center border border-[#36518F] text-[#36518F] p-3 font-bold rounded-full w-32"
+              className="text-center border border-[#36518F] text-[#36518F] p-3 font-bold rounded-full w-full md:w-42 h-12 md:h-auto text-sm sm:text-base whitespace-nowrap"
             >
               Edit User
             </button>
@@ -164,7 +165,10 @@ function ProfileComponent() {
                 setIsEdit(true);
                 updateUser();
               }}
-              className="text-center border px-5 text-white bg-blue-400 hover:bg-blue-500 p-3 font-bold rounded-full w-32"
+              className="text-center border border-[#36518F] 
+              text-white bg-blue-400 hover:bg-blue-500 text-[#36518F] 
+              p-1 md:p-3 font-bold rounded-full w-full md:w-42 h-12 md:h-auto 
+              text-sm sm:text-base whitespace-nowrap"
             >
               Save User Details
             </button>
@@ -175,17 +179,21 @@ function ProfileComponent() {
           {isEditCollegeDetails && userData.role === "admin" ? (
             <button
               onClick={() => setIsEditCollegeDetails(false)}
-              className="text-center border border-[#36518F] text-[#36518F] p-3 font-bold rounded-full w-42 h-12"
+              className="text-center border border-[#36518F] text-[#36518F] p-1 md:p-3 font-bold rounded-full w-full md:w-42 h-12 md:h-auto text-sm sm:text-base whitespace-nowrap"
             >
               Edit College Details
             </button>
+
           ) : (
             <button
               onClick={() => {
                 setIsEditCollegeDetails(true);
                 updateCollege();
               }}
-              className="text-center border text-white bg-blue-400 hover:bg-blue-500 p-3 font-bold rounded-full w-42 h-12"
+              className="text-center border border-[#36518F] 
+              text-white bg-blue-400 hover:bg-blue-500 text-[#36518F] p-1 md:p-3 
+              font-bold rounded-full w-full md:w-42 h-12 md:h-auto 
+              text-sm sm:text-base whitespace-nowrap"
             >
               Save College Details
             </button>
@@ -193,7 +201,7 @@ function ProfileComponent() {
         </div>
       </div>
       <div className="w-full max-sm:w-screen bg-white rounded-2xl lg:px-16 md:px-10 px-4 py-12 flex flex-col gap-y-7 max-sm:h-full drop-shadow">
-        <div className="w-full h-full flex space-x-3 cursor-pointer">
+        <div className="w-full h-full flex justify-between space-x-3 cursor-pointer">
           <div className="rounded-full overflow-hidden">
             {userData.picture ? (
               <img
@@ -209,7 +217,23 @@ function ProfileComponent() {
               </div>
             )}
           </div>
-          <button className="max-md:hidden text-[#6F6C99] border-none flex items-center space-x-1"></button>
+          <div className="rounded-full overflow-hidden">
+            {userData.role === 'admin' ?
+              <div
+                className="text-center border px-5 text-white bg-blue-400 hover:bg-blue-500 p-3 font-bold rounded-full w-32"
+              >
+                <Link
+                  href="/admin"
+                >
+                  Admin
+                </Link>
+
+              </div>
+              : <div></div>
+
+            }
+          </div>
+
         </div>
 
         <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
