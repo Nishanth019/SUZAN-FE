@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import nishanth from "../../assets/CoreTeam/nishanth.jpg";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/Ui/button";
 import Link from "next/link";
 const AboutCourse = () => {
   // Define state object to store course details
