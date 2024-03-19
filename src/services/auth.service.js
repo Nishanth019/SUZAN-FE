@@ -10,8 +10,8 @@ const axiosInstance = axios.create({
 class AuthService {
   constructor() {
     // this.url=BACKEND_URL;
-    // this.url = "http://localhost:8000";
-    this.url = "https://suzan-be.vercel.app";
+    this.url = "http://localhost:8000";
+    // this.url = "https://suzan-be.vercel.app";
   }
 
   signIn(data) {
