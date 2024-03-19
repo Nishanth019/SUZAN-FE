@@ -1,7 +1,6 @@
 import React from 'react';
 import { BsBook, BsPeople, BsCalendar, BsMap } from 'react-icons/bs';
 import Link from 'next/link';
-import { Button } from "@material-tailwind/react";
 
 const Services = () => {
   return (
@@ -47,7 +46,7 @@ const Services = () => {
 
 const ServiceItem = ({ icon, title, description, link, buttonText }) => {
     return (
-      <div className="max-w-[300px]  mx-10 my-3 md:my-5 md:m-5 border border-solid rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 ">
+      <div className="max-w-[300px]  mx-10 my-3 md:my-5 md:m-3 border border-solid rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 ">
         <div className="relative h-[240px] md:h-[300px] rounded shadow-lg flex flex-col items-center justify-between">
           <picture className="block pt-5">
             {icon}
@@ -59,9 +58,9 @@ const ServiceItem = ({ icon, title, description, link, buttonText }) => {
             <p className="text-[12px] md:text-[16px] px-5">{description}</p>
           </div>
           <Link href={link}>
-          <Button variant="text" className="border border-solid p-2  mb-5 px-10 bg-[#41E2BA]">
+          <button  className="border border-solid p-2  mb-5 px-10 bg-[#41E2BA] overflow-hidden">
            {buttonText}
-          </Button>
+          </button>
           </Link>
         </div>
       </div>
