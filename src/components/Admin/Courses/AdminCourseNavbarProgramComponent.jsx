@@ -31,7 +31,7 @@ const AdminCourseNavbarProgramComponent = () => {
   const openModal = () => {
     setModalOpen(true);
   };
-  
+
   // Function to handle closing the modal
   const closeModal = () => {
     setModalOpen(false);
@@ -70,34 +70,34 @@ const AdminCourseNavbarProgramComponent = () => {
         </div>
       </div>
       <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
-      <ProgramCard
-  title="Bachelor of Technology"
-  abbreviation="Btech"
-  fieldOfStudyCount={10}
-  semestersCount={8}
-  coursesCount={40}
-/>
-<ProgramCard
-  title="Bachelor of Technology"
-  abbreviation="Btech"
-  fieldOfStudyCount={10}
-  semestersCount={8}
-  coursesCount={40}
-/>
-<ProgramCard
-  title="Bachelor of Technology"
-  abbreviation="Btech"
-  fieldOfStudyCount={10}
-  semestersCount={8}
-  coursesCount={40}
-/>
-<ProgramCard
-  title="Bachelor of Technology"
-  abbreviation="Btech"
-  fieldOfStudyCount={10}
-  semestersCount={8}
-  coursesCount={40}
-/>
+        <ProgramCard
+          title="Bachelor of Technology"
+          abbreviation="Btech"
+          fieldOfStudyCount={10}
+          semestersCount={8}
+          coursesCount={40}
+        />
+        <ProgramCard
+          title="Bachelor of Technology"
+          abbreviation="Btech"
+          fieldOfStudyCount={10}
+          semestersCount={8}
+          coursesCount={40}
+        />
+        <ProgramCard
+          title="Bachelor of Technology"
+          abbreviation="Btech"
+          fieldOfStudyCount={10}
+          semestersCount={8}
+          coursesCount={40}
+        />
+        <ProgramCard
+          title="Bachelor of Technology"
+          abbreviation="Btech"
+          fieldOfStudyCount={10}
+          semestersCount={8}
+          coursesCount={40}
+        />
 
       </div>
 
@@ -125,64 +125,64 @@ const AdminCourseNavbarProgramComponent = () => {
             overflowY: "auto",
           }}
         >
-        <Button
-        variant="outlined"
+          <Button
+            variant="outlined"
             onClick={closeModal}
             sx={{ position: 'absolute', top: 8, right: 8 }}
           >
             X
           </Button>
           <form
-              // onSubmit={handleSubmit}
-              className="flex  flex-col w-full h-full py-6 text-center bg-white "
-            >
-              <h3 className="pb-5  text-[25px]  md:text-[35px]  font-extrabold text-dark-grey-900">
-                Add Program Details
-              </h3>
+            // onSubmit={handleSubmit}
+            className="flex  flex-col w-full h-full py-6 text-center bg-white "
+          >
+            <h3 className="pb-5  text-[25px]  md:text-[35px]  font-extrabold text-dark-grey-900">
+              Add Program Details
+            </h3>
 
-              <label
-                htmlFor="programName"
-                className="mb-2 text-sm text-start text-grey-900 "
-              >
-                Program Name*
-              </label>
-              <input
-                id="programname"
-                type="text"
-                value={programName}
-                onChange={(e)=>setProgramName(e.target.value)}
-                placeholder="Btech"
-                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-                required
-              />
-            
             <label
-                htmlFor="email"
-                className="mb-2 text-sm text-start text-grey-900 "
-              >
-                Program Full Name*
-              </label>
-              <input
-                id="programfullname"
-                type="text"
-                value={programFullName}
-                onChange={(e)=>setProgramFullName(e.target.value)}
-                placeholder="Bachelor of Technology"
-                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-                required
-              />
-            
+              htmlFor="programName"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Program Name*
+            </label>
+            <input
+              id="programname"
+              type="text"
+              value={programName}
+              onChange={(e) => setProgramName(e.target.value)}
+              placeholder="Btech"
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              required
+            />
 
-              <div className="pb-2">
-                {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-                <Button
+            <label
+              htmlFor="email"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Program Full Name*
+            </label>
+            <input
+              id="programfullname"
+              type="text"
+              value={programFullName}
+              onChange={(e) => setProgramFullName(e.target.value)}
+              placeholder="Bachelor of Technology"
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              required
+            />
+
+
+            <div className="pb-2">
+              {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
+              <Button
                 variant="contained"
-                >
-                  Add Program
-                </Button>
-              </div>
-            </form>
+              >
+                Add Program
+              </Button>
+            </div>
+          </form>
         </Box>
       </Modal>
     </div>
@@ -216,8 +216,8 @@ const ProgramCard = ({ title, abbreviation, fieldOfStudyCount, semestersCount, c
           </div>
         </div>
         <div className="border-t p-4 flex justify-end gap-2">
-        <Button  style={{ textTransform: 'none' }} className="text-white bg-blue-800 " size="sm" variant="contained">Edit</Button>
-          <Button  style={{ textTransform: 'none' }} variant="outlined" size="sm" color="error">
+          <Button style={{ textTransform: 'none' }} className="text-white bg-blue-800 " size="sm" variant="contained">Edit</Button>
+          <Button style={{ textTransform: 'none' }} variant="outlined" size="sm" color="error">
             Delete
           </Button>
         </div>
