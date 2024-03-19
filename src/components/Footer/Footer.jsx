@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react';
-import { Typography } from "@material-tailwind/react";
 import logo from "../../assets/Navbar/logo.png"
 import Image from 'next/image';
 
@@ -45,23 +44,21 @@ const Footer = () => {
                     <div className="mx-auto grid w-full grid-cols-1 gap-8 py-5 px-2 md:grid-cols-2 lg:grid-cols-4">
                         {SITEMAP.map(({ title, links }, key) => (
                             <div key={key} className="w-full">
-                                <Typography
-                                    variant="xl"
-                                    color="black"
+                                <p
                                     className="mb-4 font-bold uppercase opacity-100"
                                 >
                                     {title}
-                                </Typography>
+                                </p>
                                 <ul className="space-y-1">
                                     {links.map((link, key) => (
-                                        <Typography key={key} as="li" color="black" className="font-normal">
+                                        <p key={key} as="li" color="black" className="font-normal">
                                             <a
                                                 href={`/${link.toLowerCase().replace(/\s+/g, '-')}`}
                                                 className="inline-block py-1 pr-2 transition-transform hover:scale-105"
                                             >
                                                 {link}
                                             </a>
-                                        </Typography>
+                                        </p>
                                     ))}
                                 </ul>
                             </div>
@@ -78,31 +75,31 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="flex w-full flex-col items-center justify-center border-t border-black py-4 md:flex-row md:justify-between">
-                    <Typography
+                    <p
                         variant="small"
                         className="mb-4 text-center font-normal text-black md:mb-0"
                     >
                         &copy; {currentYear} <p>Suzan Organisation</p>. All
                         Rights Reserved.
-                    </Typography>
+                    </p>
                     <div className="flex gap-4 text-black sm:justify-center">
 
 
-                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 transition-transform hover:scale-105">
+                        <p as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 transition-transform hover:scale-105">
                             <FaFacebook size={20} />
-                        </Typography>
+                        </p>
 
-                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 transition-transform hover:scale-105">
+                        <p as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 transition-transform hover:scale-105">
                             <FaInstagram size={20} />
-                        </Typography>
+                        </p>
 
-                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 transition-transform hover:scale-105">
+                        <p as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 transition-transform hover:scale-105">
                         <FaTwitter size={20} />
-                        </Typography>
+                        </p>
 
-                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 transition-transform hover:scale-105">
+                        <p as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 transition-transform hover:scale-105">
                             <FaGithub size={20} />
-                        </Typography>
+                        </p>
 
                     </div>
                 </div>
@@ -111,4 +108,4 @@ const Footer = () => {
     );
 }
 
-export default Footer;
+export default Footer;
