@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Card } from "@material-tailwind/react";
+// import { Card } from "@material-tailwind/react";
 import { AiOutlineStar } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import maggi from "../../../assets/Homepage/maggi.png";
@@ -101,7 +101,7 @@ export const SimpleSlider = () => {
             <Slider {...settings}>
                 {places.map((ele, index) => (
                     <div key={index} className="flex justify-center h-[320px] items-center cursor-pointer">
-                        <Card onClick={() => router.push(`/course/${ele._id}`)} className="w-[242.75px] h-[289.64px] !shadow-md !shadow-black flex flex-col m-auto">
+                        <div onClick={() => router.push(`/course/${ele._id}`)} className="w-[242.75px] h-[289.64px] !shadow-md !shadow-black flex flex-col m-auto">
                             <div className="h-[149.88px] w-full">
                                 <Image src={maggi} alt="" className="h-[149.88px] w-full" />
                             </div>
@@ -124,7 +124,7 @@ export const SimpleSlider = () => {
                                     </div>
                                 </div>
                             </div>
-                        </Card>
+                        </div>
                     </div>
                 ))}
             </Slider>
