@@ -61,7 +61,7 @@ const SignIn = () => {
       setError("");
       console.log(12,error)
       console.log(1, error?.response?.data?.message);
-      toast.error(error.response.data.message, {
+      toast.error(error?.response?.data?.message, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,

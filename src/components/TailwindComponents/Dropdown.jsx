@@ -24,7 +24,7 @@ const Dropdown = ({ options, onSelect, name , disabled}) => {
         <MenuItem value="" disabled>
           {name}
         </MenuItem>
-        {options.map((option, index) => (
+        {options?.map((option, index) => (
           <MenuItem key={index} value={option}>
             {option}
           </MenuItem>

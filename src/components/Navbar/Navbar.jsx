@@ -67,6 +67,7 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    console.log(user)
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
@@ -166,6 +167,17 @@ const Navbar = () => {
                     >
                       Your Profile
                     </Link>
+                    {
+                      user?.role === "admin" && (
+                        <Link
+                          href='/admin'
+                          className="block px-4 py-2 text-md text-gray-700 hover:text-black hover:text-semibold hover:bg-black/5"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      )
+                    }
+
                     <Link
                       href="#"
                       className="block px-4 py-2 text-md text-gray-700 hover:text-black hover:text-semibold hover:bg-black/5"
