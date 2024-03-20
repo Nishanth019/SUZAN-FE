@@ -19,7 +19,9 @@ export function Tables({ currentCourses, currentPage, totalPages, handlePaginati
               <TableCell><p className="text-black font-semibold">Course Name</p></TableCell>
               <TableCell><p className="text-black font-semibold">Credits</p></TableCell>
               <TableCell><p className="text-black font-semibold">Professor</p></TableCell>
-              <TableCell><p className="text-black font-semibold">Actions</p></TableCell>
+              <TableCell><p className="text-black font-semibold">View</p></TableCell>
+              <TableCell><p className="text-black font-semibold">Edit</p></TableCell>
+              <TableCell><p className="text-black font-semibold">Delete</p></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -29,9 +31,9 @@ export function Tables({ currentCourses, currentPage, totalPages, handlePaginati
                 <TableCell>{course.name}</TableCell>
                 <TableCell>{course.credits}</TableCell>
                 <TableCell>{course.professor}</TableCell>
-                <TableCell>
-                  {course.viewButton} {course.editButton}
-                </TableCell>
+                <TableCell>{course.viewButton} </TableCell>
+                <TableCell>{course.editButton} </TableCell>
+                <TableCell>{course.deleteButton} </TableCell>
               </TableRow>
             ))}
           </TableBody>
