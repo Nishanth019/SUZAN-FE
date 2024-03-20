@@ -16,8 +16,8 @@ const CoursesSection = () => {
         course_type: "Elective",
         course_professor: "L.K.Balyan",
         semester: "7",
-        field_of_study: "CSE",
-        program: "BTECH",
+        fieldsOfStudy: ["CSE", "ECE"],
+        program: ["BTECH","Bdes","Bcom"],
         college: "IIITDMJ",
     }
     const [CourseDetails, setCourseDetails] = useState({
@@ -27,7 +27,7 @@ const CoursesSection = () => {
         course_type: "",
         course_professor: "",
         semester: "",
-        field_of_study: "",
+        fieldsOfStudy: "",
         program: "",
         college: "",
     });
@@ -40,7 +40,7 @@ const CoursesSection = () => {
             course_type: dummyData.course_type,
             course_professor: dummyData.course_professor,
             semester: dummyData.semester,
-            field_of_study: dummyData.field_of_study,
+            fieldsOfStudy: dummyData.fieldsOfStudy,
             program: dummyData.program,
             college: dummyData.college,
         });
