@@ -28,6 +28,11 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   const [fullFos, setFullFos] = useState("");
   const [formselectedProgram, setFormSelectedProgram] = useState("");
 
+  const [fosDetails, setFosDetails] = useState({
+    fieldsOfStudy_name: "",
+    fieldsOfStudy_full_name: "",
+  });
+
   const programs = ["Btech", "Mtech"];
   const fieldsOfStudy = ["CSE", "ECE"];
 
@@ -42,6 +47,22 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   // Function to handle closing the modal
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const fetchCourseDetails = async () => {
+    try {
+      // Make an API request to fetch course details by ID from the backend
+      // const response = await axios.get("/api/courses/:id"); // Replace ":id" with actual course ID
+      // const fetchedCourseDetails = response.data;
+      const fetchedFosDetails = {
+        fieldsOfStudy_name: "testing ",
+        fieldsOfStudy_full_name: "testing 1",
+      };
+      // Set the course details state with the fetched data
+      setFosDetails(fetchedFosDetails);
+    } catch (error) {
+      console.error("Error fetching course details:", error);
+    }
   };
 
   return (
@@ -74,6 +95,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="Btech"
           semestersCount={8}
           coursesCount={40}
+          fetchCourseDetails
+          openModal={openModal}
         />
         <ProgramCard
           title="Electronics and Communication Engineering"
@@ -81,6 +104,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="Btech"
           semestersCount={8}
           coursesCount={40}
+          fetchCourseDetails
         />
         <ProgramCard
           title="Mechanical Engineering"
@@ -88,6 +112,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="Btech"
           semestersCount={8}
           coursesCount={40}
+          fetchCourseDetails
         />
         <ProgramCard
           title="Smart Manufacturing"
@@ -95,6 +120,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="Btech"
           semestersCount={8}
           coursesCount={40}
+          fetchCourseDetails
         />
         <ProgramCard
           title="Design"
@@ -102,6 +128,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="BDES"
           semestersCount={6}
           coursesCount={40}
+          fetchCourseDetails
         />
       </div>
       {/* Modal */}
@@ -165,8 +192,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
             <input
               id="fosname"
               type="text"
-              value={fos}
-              onChange={(e) => setFos(e.target.value)}
+              value={fosDetails.fieldsOfStudy_name}
+              onChange={(e) => setFosDetails(e.target.value)}
               placeholder="CSE"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
@@ -182,8 +209,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
             <input
               id="fullfosname"
               type="text"
-              value={fullFos}
-              onChange={(e) => setFullFos(e.target.value)}
+              value={fosDetails.fieldsOfStudy_name}
+              onChange={(e) => setFosDetails(e.target.value)}
               placeholder="Computer Science Engineering"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
@@ -191,7 +218,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
             <div className="pb-2">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button variant="contained">Add Field Of Study</Button>
+              <Button variant="outlined">Add Field Of Study</Button>
             </div>
           </div>
         </Box>
@@ -208,7 +235,13 @@ const ProgramCard = ({
   programName,
   semestersCount,
   coursesCount,
+  fetchCourseDetails,
+  openModal,
 }) => {
+  const handleEdit = async () => {
+    await fetchCourseDetails(); // Fetch course details when modal opens
+    setModalOpen(true);
+  };
   return (
     <Card className="w-full max-w-xs rounded-2xl border">
       <div className="flex flex-col h-full">
@@ -250,6 +283,7 @@ const ProgramCard = ({
             className="text-white bg-blue-800 "
             size="sm"
             variant="contained"
+            onClick={() => handleEdit()}
           >
             Edit
           </Button>

@@ -2,7 +2,7 @@
 import Dropdown from "@/components/TailwindComponents/Dropdown";
 import { FaSearch, FaEye } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CoursesTable from "./CoursesTable";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -26,6 +26,7 @@ const style = {
 
 const AdminCourseNavbarCourseComponent = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
   const [selectedSemester, setSelectedSemester] = useState("");
@@ -41,6 +42,20 @@ const AdminCourseNavbarCourseComponent = () => {
   const [formselectedProgram, setFormSelectedProgram] = useState("");
   const [formSelectedFieldOfStudy, setFormSelectedFieldOfStudy] = useState("");
   const [formSelectedSemesters, setFormSelectedSemesters] = useState("");
+  //dummy data
+  const [selectedCourse, setSelectedCourse] = useState({
+    course_name: "Data Structures and Algorithms",
+    course_code: "CS3010",
+    course_type: "Compulsory",
+    credits: 4,
+    college_name: "ABC University",
+    instructor_name: "John Doe",
+    instructor_photo: "https://example.com/instructor_photo.jpg",
+    syllabus: "https://example.com/syllabus.pdf",
+    resources: ["Resource 1", "Resource 2", "Resource 3"],
+    notes: ["Note 1", "Note 2", "Note 3"],
+    pyq: ["PYQ 1", "PYQ 2", "PYQ 3"],
+  });
   const [courseDetails, setCourseDetails] = useState({
     course_name: "",
     course_code: "",
@@ -55,7 +70,31 @@ const AdminCourseNavbarCourseComponent = () => {
     pyq: [""],
   });
 
+  // Function to handle viewing course details
+  // const handleView = async (courseID) => {
+  //   try {
+  //     // Make a request to fetch course details using courseID
+  //     const response = await fetch(`backend_url/courses/${courseID}`);
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch course details");
+  //     }
+  //     const data = await response.json();
+  //     setSelectedCourse(data); // Update selected course details state
+  //     openModal(); // Open the modal
+
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   // Dummy courses data
+  const openViewModal = () => {
+    setViewModalOpen(true);
+  };
+
+  // Function to handle closing the modal
+  const closeViewModal = () => {
+    setViewModalOpen(false);
+  };
   const courses = [
     // Array of course objects with properties like course code, course name, credits, professor name, view Button,  edit Button
     // Example:
@@ -66,13 +105,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -88,13 +127,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -110,13 +149,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -132,13 +171,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -154,13 +193,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -176,13 +215,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -198,13 +237,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -220,13 +259,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -242,13 +281,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -264,13 +303,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -286,13 +325,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -308,13 +347,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -330,13 +369,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -352,13 +391,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -374,13 +413,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -396,13 +435,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -418,13 +457,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -440,13 +479,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -462,13 +501,13 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button onClick={() => handleView(course)}>
-          <FaEye size={20} />
+        <Button onClick={openViewModal}>
+          <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),
       editButton: (
-        <Button onClick={() => handleEdit(course)}>
-          <MdEdit size={20} />
+        <Button onClick={() => handleEdit()}>
+          <MdEdit size={20} className="lg:ml-6" />
         </Button>
       ),
       deleteButton: (
@@ -487,6 +526,36 @@ const AdminCourseNavbarCourseComponent = () => {
   // Function to handle closing the modal
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  // Function to fetch course details from backend
+  const fetchCourseDetails = async () => {
+    try {
+      // Make an API request to fetch course details by ID from the backend
+      // const response = await axios.get("/api/courses/:id"); // Replace ":id" with actual course ID
+      // const fetchedCourseDetails = response.data;
+      const fetchedCourseDetails = {
+        course_name: "Testing ",
+        course_code: "CS3010",
+        course_type: "Compulsory",
+        credits: 4,
+        college_name: "ABC University",
+        instructor_name: "John Doe",
+        instructor_photo: "https://example.com/instructor_photo.jpg",
+        syllabus: "https://example.com/syllabus.pdf",
+        resources: ["Resource 1", "Resource 2", "Resource 3"],
+        notes: ["Note 1", "Note 2", "Note 3"],
+        pyq: ["PYQ 1", "PYQ 2", "PYQ 3"],
+      };
+      // Set the course details state with the fetched data
+      setCourseDetails(fetchedCourseDetails);
+    } catch (error) {
+      console.error("Error fetching course details:", error);
+    }
+  };
+  const handleEdit = async () => {
+    await fetchCourseDetails(); // Fetch course details when modal opens
+    setModalOpen(true);
   };
 
   const handleInputChange = (field, index, value) => {
@@ -872,7 +941,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   <>
                     <Button
                       style={{ textTransform: "none" }}
-                      className="max-md:hidden "
+                      className="max-md:hidden"
                       onClick={() => handleDeleteField("pyq", index)}
                       variant="outlined"
                       size="small"
@@ -899,6 +968,233 @@ const AdminCourseNavbarCourseComponent = () => {
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
               <Button variant="outlined">Add Course</Button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+
+      <Modal
+        // style={{ zIndex: 9999 }}
+        open={viewModalOpen}
+        // onClose={closeModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            ...style,
+
+            width: "50%",
+            "@media (max-width: 1024px)": {
+              width: "60%",
+            },
+            "@media (max-width: 768px)": {
+              width: "90%",
+              maxHeight: "95vh",
+            },
+            maxHeight: "95vh",
+            overflowY: "auto",
+          }}
+        >
+          <Button
+            variant="outlined"
+            onClick={closeViewModal}
+            sx={{ position: "absolute", top: 8, right: 8 }}
+          >
+            X
+          </Button>
+          <div className="flex flex-col w-full h-full py-6 text-center bg-white ">
+            <h3 className="pb-5  text-[25px]  md:text-[35px]  font-extrabold text-dark-grey-900">
+              Course Details
+            </h3>
+            <div className="py-2 md:pt-3 flex flex-col">
+              <label
+                htmlFor="programName"
+                className="mb-2 text-sm text-start text-grey-900 "
+              >
+                Program
+              </label>
+              <input
+                type="text"
+                value={selectedCourse.program || ""}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            </div>
+            <div className="pb-2  flex flex-col">
+              <label
+                htmlFor="fieldofstudyName"
+                className="mb-2 text-sm text-start text-grey-900 "
+              >
+                Field Of Study
+              </label>
+              <input
+                type="text"
+                value={selectedCourse.fieldOfStudy || ""}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            </div>
+            <div className="pb-2 md:pb-8 flex flex-col">
+              <label
+                htmlFor="semesterName"
+                className="mb-2 text-sm text-start text-grey-900 "
+              >
+                Semester
+              </label>
+              <input
+                type="text"
+                value={selectedCourse.semester || ""}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            </div>
+
+            {/* Inputs */}
+            <label
+              htmlFor="coursename"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Course Name
+            </label>
+            <input
+              type="text"
+              value={selectedCourse.course_name || ""}
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+            />
+
+            <label
+              htmlFor="coursecode"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Course Code
+            </label>
+            <input
+              type="text"
+              value={selectedCourse.course_code || ""}
+              disabled
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+            />
+
+            <label
+              htmlFor="coursetype"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Course Type
+            </label>
+            <input
+              type="text"
+              value={selectedCourse.course_type || ""}
+              disabled
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+            />
+
+            <label
+              htmlFor="credits"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Credits
+            </label>
+            <input
+              type="number"
+              value={selectedCourse.credits || ""}
+              disabled
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+            />
+
+            <label
+              htmlFor="instructorname"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Instructor Name
+            </label>
+            <input
+              type="text"
+              value={selectedCourse.instructor_name || ""}
+              disabled
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+            />
+
+            <label
+              htmlFor="instructorphoto"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Instructor Photo
+            </label>
+            <input
+              type="text"
+              value={selectedCourse.instructor_photo || ""}
+              disabled
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+            />
+
+            <label
+              htmlFor="syllabus"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Syllabus
+            </label>
+            <input
+              type="text"
+              value={selectedCourse.syllabus || ""}
+              disabled
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+            />
+
+            <label
+              htmlFor="resources"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Resources
+            </label>
+            {selectedCourse.resources.map((resource, index) => (
+              <input
+                key={index}
+                type="text"
+                value={resource}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            ))}
+
+            <label
+              htmlFor="notes"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Notes
+            </label>
+            {selectedCourse.notes.map((note, index) => (
+              <input
+                key={index}
+                type="text"
+                value={note}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            ))}
+
+            <label
+              htmlFor="pyq"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              PYQ
+            </label>
+            {selectedCourse.pyq.map((pyq, index) => (
+              <input
+                key={index}
+                type="text"
+                value={pyq}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            ))}
+
+            <div className="pb-2 pt-4">
+              {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
+              <Button onClick={() => handleEditCourse()} variant="outlined">
+                Edit Course
+              </Button>
             </div>
           </div>
         </Box>
