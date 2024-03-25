@@ -2,7 +2,11 @@
 import React from "react";
 import AboutCourse from "@/components/Courses/AboutCourse";
 const CourseDetails = () => {
-  return <AboutCourse />;
+  return( 
+  <div className="bg-[#ffff]">
+  <AboutCourse />
+  </div>
+  )
 };
 
 export default CourseDetails;
