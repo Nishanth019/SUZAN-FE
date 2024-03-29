@@ -70,7 +70,7 @@ const CoursesSection = () => {
     return (
         <>
             <div className="bg-gray-100">
-                <div className="py-5 mx-2">
+                <div className="py-5 mx-4 sm:mx-2">
                     <div className="md:py-5 md:px-10 md:mx-5 lg:mx-10 xl:mx-[100px] flex justify-center items-center rounded-full md:bg-white flex-wrap gap-2 md:gap-5">
                         {/* Render dropdowns here */}
                         <div className="flex flex-wrap gap-2 sm:gap-5 ">
@@ -96,7 +96,7 @@ const CoursesSection = () => {
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         placeholder="Search Program"
-                                        className="w-full py-2 px-3 border border-gray-300  rounded-md shadow-sm  pl-10"
+                                        className=" bg-transparent w-full py-2 px-3 border border-gray-300  rounded-md shadow-sm  pl-10"
                                     />
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <FaSearch className="text-gray-500" />

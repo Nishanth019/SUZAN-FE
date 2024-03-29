@@ -105,7 +105,7 @@ const AdminCourseNavbarCourseComponent = () => {
       professor: "Dr. John Doe",
       // Add your view and edit Button  functionality here
       viewButton: (
-        <Button>
+        <Button onClick={openViewModal}>
           <FaEye size={20} className="lg:ml-6" />
         </Button>
       ),

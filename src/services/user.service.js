@@ -55,6 +55,21 @@ class UserService {
       userData
     );
   }
+
+    // Function to upload picture
+    uploadPicture(formData) {
+      return axiosInstance.post(
+        `${this.url}/api/users/uploadpicture`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+    }
+
+  
 }
 
 export default new UserService();
