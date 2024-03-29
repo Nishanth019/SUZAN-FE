@@ -89,7 +89,6 @@ const AdminCourseSection = () => {
       <div className="p-2 md:p-5">
         {selectedOption === "Program" && <AdminCourseNavbarProgramComponent />}
         {selectedOption === "Courses" && <AdminCourseNavbarCourseComponent />}
-
         {selectedOption === "Field of Study" && (
           <AdminCourseNavbarFieldOfStudyComponent />
         )}
