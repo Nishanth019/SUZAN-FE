@@ -1,12 +1,13 @@
 "use client";
 import { FaSearch } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 import Card from "@mui/material/Card";
+import CourseService from '@/services/course.service.js';   
 
 const style = {
   position: "absolute",
@@ -27,6 +28,54 @@ const AdminCourseNavbarProgramComponent = () => {
   const [programName, setProgramName] = useState("");
   const [programFullName, setProgramFullName] = useState("");
   const [semestersCount, setSemetersCount] = useState("");
+  const [programs, setPrograms] = useState([]); // State to store programs
+
+  useEffect(() => {
+    // Fetch all programs when the component mounts
+    fetchAllPrograms();
+  }, []);
+
+  // Function to fetch all programs
+  const fetchAllPrograms = async () => {
+    try {
+      const response = await CourseService.getAllPrograms();
+      const programsWithCounts = await Promise.all(response.data.programs.map(async (program) => {
+        // Fetch the count of courses for each program
+        const coursesCount = await fetchCourseCountForProgram(program._id);
+        // Fetch the count of field of study for each program
+        const fieldOfStudyCount = await fetchFieldOfStudyCountForProgram(program._id);
+        // Merge the counts with the program object
+        return { ...program, coursesCount, fieldOfStudyCount };
+      }));
+      setPrograms(programsWithCounts);
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+    }
+  };
+
+  const fetchCourseCountForProgram = async (programId) => {
+    try {
+      console.log(123456)
+      const response = await CourseService.getAllCourses(programId);
+      console.log(123,response)
+      return response.data.courses.length;
+    } catch (error) {
+      console.error("Error fetching course count for program:", error);
+      return 0; // Return 0 if there's an error
+    }
+  };
+  
+  const fetchFieldOfStudyCountForProgram = async (programId) => {
+    try {
+      const response = await CourseService.getAllFieldsOfStudy(programId);
+      console.log(1233,response)
+      return response.data.fieldsOfStudy.length;
+    } catch (error) {
+      console.error("Error fetching field of study count for program:", error);
+      return 0; // Return 0 if there's an error
+    }
+  };
+  
 
   // Function to handle opening the modal
   const openModal = () => {
@@ -39,13 +88,21 @@ const AdminCourseNavbarProgramComponent = () => {
   };
 
   // Function to handle adding a program
-  const handleAddProgram = () => {
-    // Add logic to handle adding the program here
-    console.log("Program Name:", programName);
-    console.log("Program Full Name:", programFullName);
-    console.log("Number of semesters", semestersCount);
-    // Close the modal after adding the program
-    closeModal();
+  const handleAddProgram = async () => {
+    try {
+      // Create program with provided data
+      await CourseService.createProgram({
+        programName,
+        programFullName,
+        semestersCount,
+      });
+      // Refetch all programs after adding
+      fetchAllPrograms();
+      // Close the modal after adding the program
+      closeModal();
+    } catch (error) {
+      console.error("Error adding program:", error);
+    }
   };
 
   return (
@@ -76,34 +133,17 @@ const AdminCourseNavbarProgramComponent = () => {
         </div>
       </div>
       <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
-        <ProgramCard
-          title="Bachelor of Technology"
-          abbreviation="Btech"
-          fieldOfStudyCount={10}
-          semestersCount={8}
-          coursesCount={40}
-        />
-        <ProgramCard
-          title="Bachelor of Technology"
-          abbreviation="Btech"
-          fieldOfStudyCount={10}
-          semestersCount={8}
-          coursesCount={40}
-        />
-        <ProgramCard
-          title="Bachelor of Technology"
-          abbreviation="Btech"
-          fieldOfStudyCount={10}
-          semestersCount={8}
-          coursesCount={40}
-        />
-        <ProgramCard
-          title="Bachelor of Technology"
-          abbreviation="Btech"
-          fieldOfStudyCount={10}
-          semestersCount={8}
-          coursesCount={40}
-        />
+        {/* Rendering programs dynamically */}
+        {programs.map((program, index) => (
+          <ProgramCard
+            key={index}
+            title={program.program_fullname}
+            abbreviation={program.program_name}
+            fieldOfStudyCount={program.fieldOfStudyCount}
+            semestersCount={program.no_of_semester}
+            coursesCount={program.coursesCount}
+          />
+        ))}
       </div>
 
       {/* Modal */}
@@ -137,8 +177,8 @@ const AdminCourseNavbarProgramComponent = () => {
           >
             X
           </Button>
-          <form
-            onSubmit={handleAddProgram}
+          <div
+           
             className="flex  flex-col w-full h-full py-6 text-center bg-white "
           >
             <h3 className="pb-5  text-[25px]  md:text-[35px]  font-extrabold text-dark-grey-900">
@@ -196,9 +236,9 @@ const AdminCourseNavbarProgramComponent = () => {
 
             <div className="pb-2">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button variant="outlined">Add Program</Button>
+              <Button  onClick={handleAddProgram}  variant="outlined">Add Program</Button>
             </div>
-          </form>
+          </div>
         </Box>
       </Modal>
     </div>

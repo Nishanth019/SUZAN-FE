@@ -40,6 +40,20 @@ class CourseService {
   createCourse(data) {
     return axiosInstance.post(`${this.url}/api/course/courses`, data);
   }
+
+  // Get all courses for a program
+  getAllCourses(programId) {
+    return axiosInstance.get(`${this.url}/api/course/courses`, {
+      programId 
+    });
+  }
+
+    // Get all courses
+    getAllSpecificCourses({programId, fieldOfStudy, semester}) {
+      return axiosInstance.get(`${this.url}/api/course/specificcourses`, {
+         programId, fieldOfStudy, semester 
+      });
+    }
 }
 
 export default new CourseService();
