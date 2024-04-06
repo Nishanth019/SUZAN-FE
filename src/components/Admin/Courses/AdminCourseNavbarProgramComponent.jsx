@@ -138,7 +138,7 @@ const AdminCourseNavbarProgramComponent = () => {
             X
           </Button>
           <form
-            // onSubmit={handleSubmit}
+            onSubmit={handleAddProgram}
             className="flex  flex-col w-full h-full py-6 text-center bg-white "
           >
             <h3 className="pb-5  text-[25px]  md:text-[35px]  font-extrabold text-dark-grey-900">
