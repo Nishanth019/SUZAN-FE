@@ -30,10 +30,12 @@ class CourseService {
   }
 
   // Get all fields of study for a program
-  getAllFieldsOfStudy(programId) {
-    return axiosInstance.get(`${this.url}/api/course/fieldOfStudy`, {
-      params: { programId },
-    });
+  getAllFieldsOfStudy(data) {
+    return axiosInstance.get(`${this.url}/api/course/fieldOfStudy/${data}`);
+  }
+
+  getFieldOfStudyById(data) {
+    return axiosInstance.get(`${this.url}/api/course/fieldOfStudyById/${data}`);
   }
 
   // Create a course under a semester
@@ -44,16 +46,18 @@ class CourseService {
   // Get all courses for a program
   getAllCourses(programId) {
     return axiosInstance.get(`${this.url}/api/course/courses`, {
-      programId 
+      programId,
     });
   }
 
-    // Get all courses
-    getAllSpecificCourses({programId, fieldOfStudy, semester}) {
-      return axiosInstance.get(`${this.url}/api/course/specificcourses`, {
-         programId, fieldOfStudy, semester 
-      });
-    }
+  // Get all courses
+  getAllSpecificCourses({ programId, fieldOfStudy, semester }) {
+    return axiosInstance.get(`${this.url}/api/course/specificcourses`, {
+      programId,
+      fieldOfStudy,
+      semester,
+    });
+  }
 }
 
 export default new CourseService();
