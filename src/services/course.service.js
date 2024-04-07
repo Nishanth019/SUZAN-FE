@@ -50,6 +50,10 @@ class CourseService {
     });
   }
 
+  getSemesterById(data) {
+    return axiosInstance.get(`${this.url}/api/course/semesters/${data}`); 
+  }
+
   // Get all courses
   getAllSpecificCourses({ programId, fieldOfStudy, semester }) {
     return axiosInstance.get(`${this.url}/api/course/specificcourses`, {

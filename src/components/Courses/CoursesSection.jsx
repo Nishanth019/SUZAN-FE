@@ -19,9 +19,10 @@ const CoursesSection = () => {
   const [programs, setPrograms] = useState([]);
   const [field, setField] = useState([]);
   const [selectedField, setSelectedField] = useState([]);
+  /*const [semesters, setSemesters] = useState([]);*/
 
   const fieldsOfStudy = ["CSE", "ECE"];
-  const semesters = ["I", "II", "III", "IV"];
+  const semesters = ["1", "2", "3", "4", "5"];
 
   const [CourseDetails, setCourseDetails] = useState({
     course_name: "",
@@ -77,15 +78,32 @@ const CoursesSection = () => {
   }, [selectedProgram]);
 
   useEffect(() => {
-    console.log(selectedField);
-    CourseService.getFieldOfStudyById(selectedField)
-      .then((responce) => {
-        console.log(responce.data.semester);
-        
-      })
-      .catch((error) => {
-        console.error("Error fetching programs:", error);
-      });
+    if (selectedField) {
+      CourseService.getFieldOfStudyById(selectedField)
+        .then((response) => {
+          const fieldOfStudyData = response.data;
+          const semesterPromises = fieldOfStudyData.map((field) =>
+            CourseService.getSemesterById(field._id)
+          );
+
+          Promise.all(semesterPromises)
+            .then((semesterResponses) => {
+              const semestersData = semesterResponses.map(
+                (response) => response.data
+              );
+              console.log(semestersData);
+              setSemesters(semestersData);
+            })
+            .catch((error) => {
+              console.error("Error fetching semesters:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error fetching field of study:", error);
+        });
+
+      console.log(semesters);
+    }
   }, [selectedField]);
 
   // Dummy courses data
