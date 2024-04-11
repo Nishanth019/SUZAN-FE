@@ -25,10 +25,7 @@ const style = {
 const AdminCourseNavbarFieldOfStudyComponent = () => {
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
-
   const [programs, setPrograms] = useState([]); // State to store programs
-
-
 
   //div useStates
   const [fos, setFos] = useState("");

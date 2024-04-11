@@ -19,38 +19,40 @@ const CoursesSection = () => {
   const [programs, setPrograms] = useState([]);
   const [field, setField] = useState([]);
   const [selectedField, setSelectedField] = useState([]);
+  const [courses, setCourses] = useState([]); // State to store courses
+
   /*const [semesters, setSemesters] = useState([]);*/
 
   const fieldsOfStudy = ["CSE", "ECE"];
   const semesters = ["1", "2", "3", "4", "5"];
 
-  const [CourseDetails, setCourseDetails] = useState({
-    course_name: "",
-    course_code: "",
-    credits: "",
-    course_type: "",
-    course_professor: "",
-    semester: "",
-    fieldsOfStudy: "",
-    program: "",
-    college: "",
-  });
+  // const [CourseDetails, setCourseDetails] = useState({
+  //   course_name: "",
+  //   course_code: "",
+  //   credits: "",
+  //   course_type: "",
+  //   course_professor: "",
+  //   semester: "",
+  //   fieldsOfStudy: "",
+  //   program: "",
+  //   college: "",
+  // });
 
-  const dummyData = {
-    course_name: "Advanced Scientific Numerical Methods",
-    course_code: "OE3N35",
-    credits: 3,
-    course_type: "Elective",
-    course_professor: "L.K.Balyan",
-    semester: "7",
-    fieldsOfStudy: ["CSE", "ECE"],
-    program: ["BTECH", "Bdes", "Bcom"],
-    college: "IIITDMJ",
-  };
+  // const dummyData = {
+  //   course_name: "Advanced Scientific Numerical Methods",
+  //   course_code: "OE3N35",
+  //   credits: 3,
+  //   course_type: "Elective",
+  //   course_professor: "L.K.Balyan",
+  //   semester: "7",
+  //   fieldsOfStudy: ["CSE", "ECE"],
+  //   program: ["BTECH", "Bdes", "Bcom"],
+  //   college: "IIITDMJ",
+  // };
 
-  useEffect(() => {
-    setCourseDetails(dummyData);
-  }, []);
+  // useEffect(() => {
+  //   setCourseDetails(dummyData);
+  // }, []);
 
   useEffect(() => {
     CourseService.getAllPrograms()
@@ -62,7 +64,7 @@ const CoursesSection = () => {
         console.error("Error fetching programs:", error);
       });
 
-    setCourseDetails(dummyData);
+    // setCourseDetails(dummyData);
   }, []);
 
   useEffect(() => {
@@ -106,24 +108,51 @@ const CoursesSection = () => {
     }
   }, [selectedField]);
 
-  // Dummy courses data
-  const courses = [
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 1,
-      professor: "Dr. John Doe",
-      type: "Theory",
-    },
-    {
-      code: "CS102",
-      name: "Data Structures and Algorithms",
-      credits: 3,
-      professor: "Dr. Jane Smith",
-      type: "Practical",
-    },
-    // Add more course objects as needed
-  ];
+    // Fetch semesters and courses when field of study is selected
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          console.log(7654321);
+          if (selectedField && selectedSemester) {
+            console.log(123456, selectedProgram, selectedField);
+            const response = await CourseService.getAllSpecificCourses({
+              programId: selectedProgram,
+              fieldOfStudyId: selectedField,
+              semesterId: "661172dc38915bb3e613cc1a"
+            });
+            console.log(1234, response);
+            // setCourses(response.data.courses);
+          }
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        }
+      };
+    
+      fetchData();
+    }, [selectedField, selectedSemester]);
+    
+  
+
+
+
+  // // Dummy courses data
+  // const courses = [
+  //   {
+  //     code: "CS101",
+  //     name: "Introduction to Computer Science",
+  //     credits: 1,
+  //     professor: "Dr. John Doe",
+  //     type: "Theory",
+  //   },
+  //   {
+  //     code: "CS102",
+  //     name: "Data Structures and Algorithms",
+  //     credits: 3,
+  //     professor: "Dr. Jane Smith",
+  //     type: "Practical",
+  //   },
+  //   // Add more course objects as needed
+  // ];
 
   return (
     <>
