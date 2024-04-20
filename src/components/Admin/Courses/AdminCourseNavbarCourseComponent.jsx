@@ -973,6 +973,8 @@ const AdminCourseNavbarCourseComponent = () => {
         </Box>
       </Modal>
 
+
+ {/* modal to view the course  */}
       <Modal
         // style={{ zIndex: 9999 }}
         open={viewModalOpen}
