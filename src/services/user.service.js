@@ -11,8 +11,8 @@ class UserService {
   constructor() {
     // You can use the BACKEND_URL from environment variables if available
     // this.url = BACKEND_URL;
-    this.url = "http://localhost:8000";
-    // this.url = "https://suzan-be.vercel.app";
+    // this.url = "http://localhost:8000";
+    this.url = "https://suzan-be.vercel.app";
   }
 
   getCurrentUser() {
@@ -55,6 +55,21 @@ class UserService {
       userData
     );
   }
+
+    // Function to upload picture
+    uploadPicture(formData) {
+      return axiosInstance.post(
+        `${this.url}/api/users/uploadpicture`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+    }
+
+  
 }
 
 export default new UserService();

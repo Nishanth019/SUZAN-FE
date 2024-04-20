@@ -6,6 +6,7 @@ import UserService from "@/services/user.service";
 import collegeService from "@/services/college.service";
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
+import Image from "next/image";
 
 function ProfileComponent() {
   const router = useRouter();
@@ -20,6 +21,7 @@ function ProfileComponent() {
   const [collegeDetails, setCollegeDetails] = useState(null);
   const [isEdit, setIsEdit] = useState(true);
   const [isEditCollegeDetails, setIsEditCollegeDetails] = useState(true);
+  const [picture, setPicture] = useState(null);
 
   // Define states for form values
   const [userData, setUserData] = useState({
@@ -47,6 +49,32 @@ function ProfileComponent() {
     email_domain: "",
   });
 
+  const handleChangePicture = async (e) => {
+    const file = e.target.files[0];
+    console.log(23,file);
+    try {
+      const formData = new FormData();
+      formData.append("picture", file);
+      // formData.append("userData", JSON.stringify(userData)); // Append other user data
+      console.log(23333,formData);
+      const response = await UserService.uploadPicture(formData);
+      setPicture(response?.data?.user?.picture);
+      toast.success(response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // Handle error message
+    }
+  };
+
   const handleChangeGender = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
@@ -65,7 +93,7 @@ function ProfileComponent() {
       }
     };
     fetchData();
-  }, []);
+  }, [picture]);
 
   useEffect(() => {
     if (currentUser) {
@@ -103,6 +131,7 @@ function ProfileComponent() {
       }
     }
   }, [currentUser, collegeDetails]);
+
 
   const updateUser = async () => {
     try {
@@ -155,7 +184,7 @@ function ProfileComponent() {
           {isEdit ? (
             <button
               onClick={() => setIsEdit(false)}
-              className="text-center border border-[#36518F] text-[#36518F] p-3 font-bold rounded-full w-full md:w-42 h-12 md:h-auto text-sm sm:text-base whitespace-nowrap"
+              className="text-center border border-[#36518F] text-[#36518F] font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
             >
               Edit User
             </button>
@@ -166,9 +195,8 @@ function ProfileComponent() {
                 updateUser();
               }}
               className="text-center border border-[#36518F] 
-              text-white bg-blue-400 hover:bg-blue-500 text-[#36518F] 
-              p-1 md:p-3 font-bold rounded-full w-full md:w-42 h-12 md:h-auto 
-              text-sm sm:text-base whitespace-nowrap"
+               bg-blue-400 hover:bg-blue-500 text-[#36518F] 
+               font-bold rounded-full w-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
             >
               Save User Details
             </button>
@@ -179,9 +207,9 @@ function ProfileComponent() {
           {isEditCollegeDetails && userData.role === "admin" ? (
             <button
               onClick={() => setIsEditCollegeDetails(false)}
-              className="text-center border border-[#36518F] text-[#36518F] p-1 md:p-3 font-bold rounded-full w-full md:w-42 h-12 md:h-auto text-sm sm:text-base whitespace-nowrap"
+              className="text-center border border-[#36518F] text-[#36518F]  font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
             >
-              Edit College Details
+              Edit College 
             </button>
 
           ) : (
@@ -191,36 +219,50 @@ function ProfileComponent() {
                 updateCollege();
               }}
               className="text-center border border-[#36518F] 
-              text-white bg-blue-400 hover:bg-blue-500 text-[#36518F] p-1 md:p-3 
-              font-bold rounded-full w-full md:w-42 h-12 md:h-auto 
-              text-sm sm:text-base whitespace-nowrap"
+               bg-blue-400 hover:bg-blue-500 text-[#36518F] 
+              font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
             >
-              Save College Details
+              Save College 
             </button>
           )}
         </div>
       </div>
       <div className="w-full max-sm:w-screen bg-white rounded-2xl lg:px-16 md:px-10 px-4 py-12 flex flex-col gap-y-7 max-sm:h-full drop-shadow">
-        <div className="w-full h-full flex justify-between space-x-3 cursor-pointer">
-          <div className="rounded-full overflow-hidden">
-            {userData.picture ? (
-              <img
-                className="h-9 w-9 lg:h-10 lg:w-10 object-cover object-center "
-                src={userData.picture}
-                alt={userData.name}
-              />
-            ) : (
-              <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
-                <span className="font-medium text-white text-xl">
-                  {userData.name ? userData.name[0] : "E"}
-                </span>
-              </div>
+        <div className="w-full h-full flex justify-between space-x-3 ">
+          <div>
+            <div className="rounded-full overflow-hidden">
+              {userData.picture ? (
+                <img
+                  
+                  className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
+                  src={userData.picture}
+                  alt={userData.name}
+                />
+              ) : (
+                <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
+                  <span className="font-medium text-white text-xl">
+                    {userData.name ? userData.name[0] : "E"}
+                  </span>
+                </div>
+              )}
+            </div>
+            {isEdit && (
+              <label htmlFor="fileInput" className="text-blue-400 cursor-pointer text-sm">
+                Update Picture
+              </label>
             )}
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={handleChangePicture}
+              className="hidden"
+            />
           </div>
-          <div className="rounded-full overflow-hidden">
+          <div className="">
             {userData.role === 'admin' ?
               <div
-                className="text-center border px-5 text-white bg-blue-400 hover:bg-blue-500 p-3 font-bold rounded-full w-32"
+                className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer"
               >
                 <Link
                   href="/admin"
@@ -230,10 +272,8 @@ function ProfileComponent() {
 
               </div>
               : <div></div>
-
             }
           </div>
-
         </div>
 
         <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">

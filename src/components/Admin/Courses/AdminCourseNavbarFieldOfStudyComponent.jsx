@@ -2,11 +2,13 @@
 import Dropdown1 from "@/components/TailwindComponents/Dropdown";
 import Dropdown2 from "@/components/TailwindComponents/FormDropdown";
 import { FaSearch } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import CourseService from '@/services/course.service.js';
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -19,16 +21,37 @@ const style = {
   borderRadius: "10px",
   p: 4,
 };
+
 const AdminCourseNavbarFieldOfStudyComponent = () => {
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
+  const [programs, setPrograms] = useState([]); // State to store programs
 
   //div useStates
   const [fos, setFos] = useState("");
   const [fullFos, setFullFos] = useState("");
   const [formselectedProgram, setFormSelectedProgram] = useState("");
 
-  const programs = ["Btech", "Mtech"];
+  const [fosDetails, setFosDetails] = useState({
+    fieldsOfStudy_name: "",
+    fieldsOfStudy_full_name: "",
+  });
+
+  useEffect(() => {
+    // Fetch all programs when the component mounts
+    fetchAllPrograms();
+  }, []);
+
+  // Function to fetch all programs
+  const fetchAllPrograms = async () => {
+    try {
+      const response = await CourseService.getAllPrograms();
+      setPrograms(response.data.programs);
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+    }
+  };
+
   const fieldsOfStudy = ["CSE", "ECE"];
 
   // State for modal
@@ -42,6 +65,37 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   // Function to handle closing the modal
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const handleAddFieldOfStudy = async () => {
+    try {
+      // Create field of study with provided data
+      await CourseService.createFieldOfStudy({
+        programName: selectedProgram,
+        fieldName: fosDetails.fieldsOfStudy_name,
+        fieldFullName: fosDetails.fieldsOfStudy_full_name,
+      });
+      // Close the modal after adding the field of study
+      closeModal();
+    } catch (error) {
+      console.error("Error adding field of study:", error);
+    }
+  };
+
+  const fetchCourseDetails = async () => {
+    try {
+      // Make an API request to fetch course details by ID from the backend
+      // const response = await axios.get("/api/courses/:id"); // Replace ":id" with actual course ID
+      // const fetchedCourseDetails = response.data;
+      const fetchedFosDetails = {
+        fieldsOfStudy_name: "testing ",
+        fieldsOfStudy_full_name: "testing 1",
+      };
+      // Set the course details state with the fetched data
+      setFosDetails(fetchedFosDetails);
+    } catch (error) {
+      console.error("Error fetching course details:", error);
+    }
   };
 
   return (
@@ -58,7 +112,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
       <div className="flex flex-wrap gap-2 sm:gap-5 ">
         <Dropdown1
           name="Program"
-          options={programs}
+          options={programs?.map((p)=>p.program_name)}
           onSelect={setSelectedProgram}
         />
         <Dropdown1
@@ -74,6 +128,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="Btech"
           semestersCount={8}
           coursesCount={40}
+          fetchCourseDetails
+          openModal={openModal}
         />
         <ProgramCard
           title="Electronics and Communication Engineering"
@@ -81,6 +137,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="Btech"
           semestersCount={8}
           coursesCount={40}
+          fetchCourseDetails
         />
         <ProgramCard
           title="Mechanical Engineering"
@@ -88,6 +145,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="Btech"
           semestersCount={8}
           coursesCount={40}
+          fetchCourseDetails
         />
         <ProgramCard
           title="Smart Manufacturing"
@@ -95,6 +153,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="Btech"
           semestersCount={8}
           coursesCount={40}
+          fetchCourseDetails
         />
         <ProgramCard
           title="Design"
@@ -102,6 +161,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
           programName="BDES"
           semestersCount={6}
           coursesCount={40}
+          fetchCourseDetails
         />
       </div>
       {/* Modal */}
@@ -165,8 +225,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
             <input
               id="fosname"
               type="text"
-              value={fos}
-              onChange={(e) => setFos(e.target.value)}
+              value={fosDetails.fieldsOfStudy_name}
+              onChange={(e) => setFosDetails(e.target.value)}
               placeholder="CSE"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
@@ -182,8 +242,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
             <input
               id="fullfosname"
               type="text"
-              value={fullFos}
-              onChange={(e) => setFullFos(e.target.value)}
+              value={fosDetails.fieldsOfStudy_name}
+              onChange={(e) => setFosDetails(e.target.value)}
               placeholder="Computer Science Engineering"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
@@ -191,7 +251,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
             <div className="pb-2">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button variant="contained">Add Field Of Study</Button>
+              <Button   onClick={handleAddFieldOfStudy} variant="outlined">Add Field Of Study</Button>
             </div>
           </div>
         </Box>
@@ -208,7 +268,13 @@ const ProgramCard = ({
   programName,
   semestersCount,
   coursesCount,
+  fetchCourseDetails,
+  openModal,
 }) => {
+  const handleEdit = async () => {
+    await fetchCourseDetails(); // Fetch course details when modal opens
+    setModalOpen(true);
+  };
   return (
     <Card className="w-full max-w-xs rounded-2xl border">
       <div className="flex flex-col h-full">
@@ -250,6 +316,7 @@ const ProgramCard = ({
             className="text-white bg-blue-800 "
             size="sm"
             variant="contained"
+            onClick={() => handleEdit()}
           >
             Edit
           </Button>

@@ -4,7 +4,7 @@ import React from 'react'
 const Courses = () => {
   return (
     <div className='text-center'>
-      <CourseSection></CourseSection>
+      <CourseSection/>
     </div>
   )
 }
