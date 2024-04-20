@@ -26,7 +26,6 @@ const CoursesSection = () => {
   const fieldsOfStudy = ["CSE", "ECE"];
   const semesters = ["1", "2", "3", "4", "5"];
 
-<<<<<<< HEAD
   const [CourseDetails, setCourseDetails] = useState([{
     course_name: "",
     course_code: "",
@@ -38,19 +37,6 @@ const CoursesSection = () => {
     program: "",
     college: "",
   }]);
-=======
-  // const [CourseDetails, setCourseDetails] = useState({
-  //   course_name: "",
-  //   course_code: "",
-  //   credits: "",
-  //   course_type: "",
-  //   course_professor: "",
-  //   semester: "",
-  //   fieldsOfStudy: "",
-  //   program: "",
-  //   college: "",
-  // });
->>>>>>> 50462ec5aea3a7eda4347c4fcd7701bebc832dcf
 
   // const dummyData = {
   //   course_name: "Advanced Scientific Numerical Methods",
