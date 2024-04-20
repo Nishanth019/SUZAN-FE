@@ -15,9 +15,7 @@ import { useRouter } from "next/navigation";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Courses", href: "/courses" },
-  { name: "Clubs", href: "/clubs" },
-  { name: "Events", href: "/events" },
-  { name: "Places Nearby", href: "/nearby-places" },
+ 
 ];
 
 const Navbar = () => {

@@ -2,11 +2,13 @@
 import Dropdown1 from "@/components/TailwindComponents/Dropdown";
 import Dropdown2 from "@/components/TailwindComponents/FormDropdown";
 import { FaSearch } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import CourseService from '@/services/course.service.js';
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -19,9 +21,11 @@ const style = {
   borderRadius: "10px",
   p: 4,
 };
+
 const AdminCourseNavbarFieldOfStudyComponent = () => {
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
+  const [programs, setPrograms] = useState([]); // State to store programs
 
   //div useStates
   const [fos, setFos] = useState("");
@@ -33,7 +37,21 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     fieldsOfStudy_full_name: "",
   });
 
-  const programs = ["Btech", "Mtech"];
+  useEffect(() => {
+    // Fetch all programs when the component mounts
+    fetchAllPrograms();
+  }, []);
+
+  // Function to fetch all programs
+  const fetchAllPrograms = async () => {
+    try {
+      const response = await CourseService.getAllPrograms();
+      setPrograms(response.data.programs);
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+    }
+  };
+
   const fieldsOfStudy = ["CSE", "ECE"];
 
   // State for modal
@@ -47,6 +65,21 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   // Function to handle closing the modal
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const handleAddFieldOfStudy = async () => {
+    try {
+      // Create field of study with provided data
+      await CourseService.createFieldOfStudy({
+        programName: selectedProgram,
+        fieldName: fosDetails.fieldsOfStudy_name,
+        fieldFullName: fosDetails.fieldsOfStudy_full_name,
+      });
+      // Close the modal after adding the field of study
+      closeModal();
+    } catch (error) {
+      console.error("Error adding field of study:", error);
+    }
   };
 
   const fetchCourseDetails = async () => {
@@ -79,7 +112,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
       <div className="flex flex-wrap gap-2 sm:gap-5 ">
         <Dropdown1
           name="Program"
-          options={programs}
+          options={programs?.map((p)=>p.program_name)}
           onSelect={setSelectedProgram}
         />
         <Dropdown1
@@ -218,7 +251,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
             <div className="pb-2">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button variant="outlined">Add Field Of Study</Button>
+              <Button   onClick={handleAddFieldOfStudy} variant="outlined">Add Field Of Study</Button>
             </div>
           </div>
         </Box>
