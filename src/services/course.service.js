@@ -55,12 +55,8 @@ class CourseService {
   }
 
   // Get all courses
-  getAllSpecificCourses({ programId, fieldOfStudy, semester }) {
-    return axiosInstance.get(`${this.url}/api/course/specificcourses`, {
-      programId,
-      fieldOfStudy,
-      semester,
-    });
+  getAllSpecificCourses(data) {
+    return axiosInstance.get(`${this.url}/api/course/specificcourses`,data);
   }
 }
 
