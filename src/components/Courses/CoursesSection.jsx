@@ -14,17 +14,17 @@ import CourseService from "@/services/course.service.js";
 const CoursesSection = () => {
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
-  const [selectedSemester, setSelectedSemester] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [programs, setPrograms] = useState([]);
   const [field, setField] = useState([]);
   const [selectedField, setSelectedField] = useState([]);
   /*const [semesters, setSemesters] = useState([]);*/
+  const [selectedSemester, setSelectedSemester] = useState("");
 
   const fieldsOfStudy = ["CSE", "ECE"];
   const semesters = ["1", "2", "3", "4", "5"];
 
-  const [CourseDetails, setCourseDetails] = useState({
+  const [CourseDetails, setCourseDetails] = useState([{
     course_name: "",
     course_code: "",
     credits: "",
@@ -34,7 +34,7 @@ const CoursesSection = () => {
     fieldsOfStudy: "",
     program: "",
     college: "",
-  });
+  }]);
 
   const dummyData = {
     course_name: "Advanced Scientific Numerical Methods",
