@@ -1,23 +1,23 @@
 "use client";
-import { IconBtn } from "../IconBtn"
-import { FaEdit, FaHeart, FaRegHeart, FaReply, FaTrash } from "react-icons/fa"
-import { usePost } from "../../../context/PostContext"
-import { CommentList } from "../CommentList"
-import { useState } from "react"
-import { useAsyncFn } from "../hooks/useAsync"
-import {
-  createComment,
-  deleteComment,
-  toggleCommentLike,
-  updateComment,
-} from "../services/comments"
-import { CommentForm } from "../CommentForm"
-import { useUser } from "../hooks/useUser"
+// import { IconBtn } from "../IconBtn"
+// import { FaEdit, FaHeart, FaRegHeart, FaReply, FaTrash } from "react-icons/fa"
+// import { usePost } from "../../../context/PostContext"
+// import { CommentList } from "../CommentList"
+// import { useState } from "react"
+// import { useAsyncFn } from "../hooks/useAsync"
+// import {
+//   createComment,
+//   deleteComment,
+//   toggleCommentLike,
+//   updateComment,
+// } from "../services/comments"
+// import { CommentForm } from "../CommentForm"
+// import { useUser } from "../hooks/useUser"
 
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
-  dateStyle: "medium",
-  timeStyle: "short",
-})
+// const dateFormatter = new Intl.DateTimeFormat(undefined, {
+//   dateStyle: "medium",
+//   timeStyle: "short",
+// })
 
 export function Comment({
   id,
@@ -27,57 +27,57 @@ export function Comment({
   likeCount,
   likedByMe,
 }) {
-  const [areChildrenHidden, setAreChildrenHidden] = useState(false)
-  const [isReplying, setIsReplying] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
-  const {
-    post,
-    getReplies,
-    createLocalComment,
-    updateLocalComment,
-    deleteLocalComment,
-    toggleLocalCommentLike,
-  } = usePost()
-  const createCommentFn = useAsyncFn(createComment)
-  const updateCommentFn = useAsyncFn(updateComment)
-  const deleteCommentFn = useAsyncFn(deleteComment)
-  const toggleCommentLikeFn = useAsyncFn(toggleCommentLike)
-  const childComments = getReplies(id)
-  const currentUser = useUser()
+  // const [areChildrenHidden, setAreChildrenHidden] = useState(false)
+  // const [isReplying, setIsReplying] = useState(false)
+  // const [isEditing, setIsEditing] = useState(false)
+  // const {
+  //   post,
+  //   getReplies,
+  //   createLocalComment,
+  //   updateLocalComment,
+  //   deleteLocalComment,
+  //   toggleLocalCommentLike,
+  // } = usePost()
+  // const createCommentFn = useAsyncFn(createComment)
+  // const updateCommentFn = useAsyncFn(updateComment)
+  // const deleteCommentFn = useAsyncFn(deleteComment)
+  // const toggleCommentLikeFn = useAsyncFn(toggleCommentLike)
+  // const childComments = getReplies(id)
+  // const currentUser = useUser()
 
-  function onCommentReply(message) {
-    return createCommentFn
-      .execute({ postId: post.id, message, parentId: id })
-      .then(comment => {
-        setIsReplying(false)
-        createLocalComment(comment)
-      })
-  }
+  // function onCommentReply(message) {
+  //   return createCommentFn
+  //     .execute({ postId: post.id, message, parentId: id })
+  //     .then(comment => {
+  //       setIsReplying(false)
+  //       createLocalComment(comment)
+  //     })
+  // }
 
-  function onCommentUpdate(message) {
-    return updateCommentFn
-      .execute({ postId: post.id, message, id })
-      .then(comment => {
-        setIsEditing(false)
-        updateLocalComment(id, comment.message)
-      })
-  }
+  // function onCommentUpdate(message) {
+  //   return updateCommentFn
+  //     .execute({ postId: post.id, message, id })
+  //     .then(comment => {
+  //       setIsEditing(false)
+  //       updateLocalComment(id, comment.message)
+  //     })
+  // }
 
-  function onCommentDelete() {
-    return deleteCommentFn
-      .execute({ postId: post.id, id })
-      .then(comment => deleteLocalComment(comment.id))
-  }
+  // function onCommentDelete() {
+  //   return deleteCommentFn
+  //     .execute({ postId: post.id, id })
+  //     .then(comment => deleteLocalComment(comment.id))
+  // }
 
-  function onToggleCommentLike() {
-    return toggleCommentLikeFn
-      .execute({ id, postId: post.id })
-      .then(({ addLike }) => toggleLocalCommentLike(id, addLike))
-  }
+  // function onToggleCommentLike() {
+  //   return toggleCommentLikeFn
+  //     .execute({ id, postId: post.id })
+  //     .then(({ addLike }) => toggleLocalCommentLike(id, addLike))
+  // }
 
   return (
     <>
-      <div className="comment">
+      {/* <div className="comment">
         <div className="header">
           <span className="name">{user.name}</span>
           <span className="date">
@@ -165,7 +165,7 @@ export function Comment({
             Show Replies
           </button>
         </>
-      )}
+      )} */}
     </>
   )
 }

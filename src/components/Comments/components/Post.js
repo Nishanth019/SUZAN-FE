@@ -1,23 +1,23 @@
 "use client";
-import { usePost } from "../contexts/PostContext"
-import { useAsyncFn } from "../hooks/useAsync"
-import { createComment } from "../services/comments"
-import { CommentForm } from "./CommentForm"
-import { CommentList } from "./CommentList"
+// import { usePost } from "../contexts/PostContext"
+// import { useAsyncFn } from "../hooks/useAsync"
+// import { createComment } from "../services/comments"
+// import { CommentForm } from "./CommentForm"
+// import { CommentList } from "./CommentList"
 
 export function Post() {
-  const { post, rootComments, createLocalComment } = usePost()
-  const { loading, error, execute: createCommentFn } = useAsyncFn(createComment)
+  // const { post, rootComments, createLocalComment } = usePost()
+  // const { loading, error, execute: createCommentFn } = useAsyncFn(createComment)
 
-  function onCommentCreate(message) {
-    return createCommentFn({ postId: post.id, message }).then(
-      createLocalComment
-    )
-  }
+  // function onCommentCreate(message) {
+  //   return createCommentFn({ postId: post.id, message }).then(
+  //     createLocalComment
+  //   )
+  // }
 
   return (
     <>
-      <h1>{post.title}</h1>
+      {/* <h1>{post.title}</h1>
       <article>{post.body}</article>
       <h3 className="comments-title">Comments</h3>
       <section>
@@ -31,7 +31,7 @@ export function Post() {
             <CommentList comments={rootComments} />
           </div>
         )}
-      </section>
+      </section> */}
     </>
   )
 }
