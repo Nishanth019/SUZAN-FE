@@ -27,6 +27,7 @@ const style = {
 const AdminCourseNavbarCourseComponent = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
   const [selectedSemester, setSelectedSemester] = useState("");
@@ -115,7 +116,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -137,7 +138,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -159,7 +160,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -181,7 +182,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -203,7 +204,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -225,7 +226,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -247,7 +248,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -269,7 +270,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -291,7 +292,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -313,7 +314,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -335,7 +336,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -357,7 +358,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -379,7 +380,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -401,7 +402,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -423,7 +424,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -445,7 +446,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -467,7 +468,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -489,7 +490,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -511,7 +512,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Button>
       ),
       deleteButton: (
-        <Button onClick={() => handleDelete(course)}>
+        <Button onClick={() => handleDelete()}>
           <MdDelete size={20} />
         </Button>
       ),
@@ -557,7 +558,33 @@ const AdminCourseNavbarCourseComponent = () => {
     await fetchCourseDetails(); // Fetch course details when modal opens
     setModalOpen(true);
   };
+  const openDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
 
+  // Function to handle closing the delete confirmation modal
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+  const handleDelete = async () => {
+    openDeleteModal();
+    
+  };
+
+  // Function to handle deleting a program
+  const handleDeleteProgram = async () => {
+    try {
+      console.log("deleting", 1);
+      await CourseService.deleteProgram(currentProgram._id);
+      console.log("deleting", 2);
+      // Refetch all programs after deleting
+      fetchAllPrograms();
+      // Close the delete confirmation modal after deleting the program
+      closeDeleteModal();
+    } catch (error) {
+      console.error("Error deleting program:", error);
+    }
+  };
   const handleInputChange = (field, index, value) => {
     const newDetails = { ...courseDetails };
     newDetails[field][index] = value;
@@ -973,8 +1000,7 @@ const AdminCourseNavbarCourseComponent = () => {
         </Box>
       </Modal>
 
-
- {/* modal to view the course  */}
+      {/* modal to view the course  */}
       <Modal
         // style={{ zIndex: 9999 }}
         open={viewModalOpen}
@@ -1198,6 +1224,40 @@ const AdminCourseNavbarCourseComponent = () => {
                 Edit Course
               </Button>
             </div>
+          </div>
+        </Box>
+      </Modal>
+
+      {/* Delete confirmation modal */}
+      <Modal
+        open={deleteModalOpen}
+        onClose={closeDeleteModal}
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
+      >
+        <Box sx={style}>
+          <h3 className="text-lg font-semibold text-center mb-5">
+            Confirm Deletion
+          </h3>
+          <p className="text-center text-sm text-gray-600">
+            Are you sure you want to delete this program?
+          </p>
+          <div className="flex justify-center mt-5 ">
+            <Button
+              onClick={handleDeleteProgram}
+              className="text-white bg-red-500"
+              variant="contained"
+            >
+              Delete
+            </Button>
+            <Button
+              onClick={closeDeleteModal}
+              className="text-black "
+              variant="outlined"
+              style={{ marginLeft: "1rem" }}
+            >
+              Cancel
+            </Button>
           </div>
         </Box>
       </Modal>
