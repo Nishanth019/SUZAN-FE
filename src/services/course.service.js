@@ -19,6 +19,12 @@ class CourseService {
   createProgram(data) {
     return axiosInstance.post(`${this.url}/api/course/programs`, data);
   }
+  updateProgram(data) {
+    return axiosInstance.put(`${this.url}/api/course/programs/updateProgram`, data);
+  }
+  deleteProgram({programId}) {
+    return axiosInstance.delete(`${this.url}/api/course/programs/${programId}`);
+  }
 
   // Update program
   updateProgram(programId, data) {
