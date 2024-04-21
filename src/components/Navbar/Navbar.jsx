@@ -15,6 +15,10 @@ import { useRouter } from "next/navigation";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Courses", href: "/courses" },
+  { name: "Events", href: "/events" },
+  { name: "Clubs", href: "/clubs" },
+  { name: "NearBy Places", href: "/nearbyplaces" },
+  
  
 ];
 

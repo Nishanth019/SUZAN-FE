@@ -25,7 +25,8 @@ const style = {
 const AdminCourseNavbarFieldOfStudyComponent = () => {
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
-  const [programs, setPrograms] = useState([]); // State to store programs
+  const [fieldOfStudy, setFieldOfStudy] = useState([]); // State to store programs
+  const [program, setProgram] = useState([]); // State to store programs
 
   //div useStates
   const [fos, setFos] = useState("");
@@ -39,14 +40,22 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
   useEffect(() => {
     // Fetch all programs when the component mounts
-    fetchAllPrograms();
+    fetchAllFieldOfStudy();
   }, []);
 
-  // Function to fetch all programs
-  const fetchAllPrograms = async () => {
+  // Function to fetch all fieldofstudy
+  const fetchAllFieldOfStudy = async () => {
     try {
-      const response = await CourseService.getAllPrograms();
-      setPrograms(response.data.programs);
+      const response = await CourseService.getAllFieldsOfStudy();
+      setFieldOfStudy(response.data.programs);
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+    }
+  };
+  const fetchAllProgram = async () => {
+    try {
+      const response = await CourseService.getAllProgram();
+      setProgram(response.data.programs);
     } catch (error) {
       console.error("Error fetching programs:", error);
     }
@@ -58,7 +67,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   // Function to handle opening the modal
-  const openModal = () => {
+  const openAddFosModal = () => {
     setModalOpen(true);
   };
 
