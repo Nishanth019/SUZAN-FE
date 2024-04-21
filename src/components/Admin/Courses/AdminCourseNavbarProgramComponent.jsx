@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import Card from "@mui/material/Card";
 import CourseService from "@/services/course.service.js";
+import { ToastContainer, toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -53,12 +54,13 @@ const AdminCourseNavbarProgramComponent = () => {
           return { ...program, coursesCount, fieldOfStudyCount };
         })
       );
+      // console.log(69,programsWithCounts);
       setPrograms(programsWithCounts);
     } catch (error) {
       console.error("Error fetching programs:", error);
     }
   };
-
+// console.log(70,programs)
   const fetchCourseCountForProgram = async (programId) => {
     try {
       console.log(123456);
@@ -94,9 +96,10 @@ const AdminCourseNavbarProgramComponent = () => {
   // Function to handle opening the modal for editing a program
   const openEditProgramModal = (program) => {
     setCurrentProgram(program);
-    setProgramName(program.programName);
-    setProgramFullName(program.programFullName);
-    setSemetersCount(program.semestersCount);
+    setProgramName(program.program_name);
+    // console.log(71,programName,program,program.progamName);
+    setProgramFullName(program.program_fullname);
+    setSemetersCount(program.no_of_semester);
     setModalOpen(true);
   };
 
@@ -107,20 +110,22 @@ const AdminCourseNavbarProgramComponent = () => {
 
   // Function to handle opening the delete confirmation modal
   const openDeleteModal = () => {
+   
     setDeleteModalOpen(true);
   };
 
   // Function to handle closing the delete confirmation modal
   const closeDeleteModal = () => {
+    
     setDeleteModalOpen(false);
   };
 
   // Function to handle deleting a program
   const handleDeleteProgram = async () => {
     try {
-      console.log("deleting",1)
-      await CourseService.deleteProgram(currentProgram._id);
-      console.log("deleting",2)
+      
+      const response = await CourseService.deleteProgram( {programId: currentProgram._id} );
+      // console.log("deleting",2)
       // Refetch all programs after deleting
       fetchAllPrograms();
       // Close the delete confirmation modal after deleting the program
@@ -135,23 +140,26 @@ const AdminCourseNavbarProgramComponent = () => {
     if (currentProgram) {
       // If currentProgram exists, edit the program
       try {
-        await CourseService.updateProgram(currentProgram._id, {
+        const response = await CourseService.updateProgram({
+          programId: currentProgram._id,
           programName,
           programFullName,
           semestersCount,
         });
         // Refetch all programs after editing
-        fetchAllPrograms();
         // Close the modal after editing the program
+        toast.success(response.data.message || "Program is updated")
         closeModal();
+        fetchAllPrograms();
       } catch (error) {
         console.error("Error editing program:", error);
       }
     } else {
       // If currentProgram does not exist, add a new program
       try {
+        // console.log(69,"working")
         // Create program with provided data
-        await CourseService.createProgram({
+        const response=await CourseService.createProgram({
           programName,
           programFullName,
           semestersCount,
@@ -159,6 +167,8 @@ const AdminCourseNavbarProgramComponent = () => {
         // Refetch all programs after adding
         fetchAllPrograms();
         // Close the modal after adding the program
+        // console.log(69,response);
+        toast.success(response.data.message || "Program is created");
         closeModal();
       } catch (error) {
         console.error("Error adding program:", error);
