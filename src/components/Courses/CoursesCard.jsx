@@ -14,8 +14,8 @@ const CoursesCard = ({ course }) => {
             <div className="p-4 grid gap-2">
                 <div className="max-sm:flex-col flex justify-between sm:flex">
                     <div className="flex-col mb-4">
-                        <h3 className="flex max:sm:text-sm text-lg font-semibold">{course.name}</h3>
-                        <div className="flex items-right text-sm text-gray-500">{course.code}</div>
+                        <h3 className="flex max:sm:text-sm text-lg font-semibold">{course.course_name}</h3>
+                        <div className="flex items-right text-sm text-gray-500">{course.course_code}</div>
                     </div>
                     <div className="flex mb-4">
                         <div onClick={handleClick} style={{ cursor: 'pointer' }}>
@@ -32,12 +32,12 @@ const CoursesCard = ({ course }) => {
                     </div>
                     <div className="flex px-3 py-1 items-center rounded-lg bg-gray-200">
                         <div className="w-auto h-auto flex-grow" />
-                        <span className="text-center">{course.type}</span>
+                        <span className="text-center">{course.course_type}</span>
                         <div className="w-auto h-auto flex-grow" />
                     </div>
                     <div className="flex px-3 py-1 items-center rounded-lg bg-gray-200">
                         <div className="w-auto h-auto flex-grow" />
-                        <span className="text-center w-auto">{course.professor}</span>
+                        <span className="text-center w-auto">{course.instructor_name}</span>
                         <div className="w-auto h-auto flex-grow" />
                     </div>
                 </div>
