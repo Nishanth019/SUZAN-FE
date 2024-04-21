@@ -1,4 +1,5 @@
-"use client";
+'use client'
+
 import React, { useEffect, useState } from "react";
 import Input from "../Generals/Input";
 import { useRouter } from "next/navigation";
@@ -12,147 +13,93 @@ import { FaSearch } from "react-icons/fa";
 import CourseService from "@/services/course.service.js";
 
 const CoursesSection = () => {
+  const router = useRouter();
+
+  // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [programs, setPrograms] = useState([]);
-  const [field, setField] = useState([]);
-  const [selectedField, setSelectedField] = useState([]);
-  const [courses, setCourses] = useState([]); // State to store courses
-
-  /*const [semesters, setSemesters] = useState([]);*/
   const [selectedSemester, setSelectedSemester] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const fieldsOfStudy = ["CSE", "ECE"];
-  const semesters = ["1", "2", "3", "4", "5"];
-
-  const [CourseDetails, setCourseDetails] = useState([{
-    course_name: "",
-    course_code: "",
-    credits: "",
-    course_type: "",
-    course_professor: "",
-    semester: "",
-    fieldsOfStudy: "",
-    program: "",
-    college: "",
-  }]);
-
-  // const dummyData = {
-  //   course_name: "Advanced Scientific Numerical Methods",
-  //   course_code: "OE3N35",
-  //   credits: 3,
-  //   course_type: "Elective",
-  //   course_professor: "L.K.Balyan",
-  //   semester: "7",
-  //   fieldsOfStudy: ["CSE", "ECE"],
-  //   program: ["BTECH", "Bdes", "Bcom"],
-  //   college: "IIITDMJ",
-  // };
-
-  // useEffect(() => {
-  //   setCourseDetails(dummyData);
-  // }, []);
+  // Selected object values
+  const [programs, setPrograms] = useState([]);
+  const [fieldOfStudy, setFieldOfStudy] = useState([]);
+  const [semesters, setSemesters] = useState([]);
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    CourseService.getAllPrograms()
-      .then((response) => {
-        console.log(response.data.programs);
+    // Fetch all programs on component mount
+    async function fetchPrograms() {
+      try {
+        const response = await CourseService.getAllPrograms();
         setPrograms(response.data.programs);
-      })
-      .catch((error) => {
+        // setSelectedProgram(response.data.programs[0]?._id);
+      } catch (error) {
         console.error("Error fetching programs:", error);
-      });
-
-    // setCourseDetails(dummyData);
+      }
+    }
+    fetchPrograms();
   }, []);
 
   useEffect(() => {
-    console.log(selectedProgram);
-    CourseService.getAllFieldsOfStudy(selectedProgram)
-      .then((responce) => {
-        console.log(responce.data.fieldsOfStudy);
-        setField(responce.data.fieldsOfStudy);
-      })
-      .catch((error) => {
-        console.error("Error fetching programs:", error);
-      });
+    // Fetch fields of study when program selected
+    async function fetchFieldsOfStudy(programId) {
+      try {
+        const response = await CourseService.getAllFieldsOfStudy(programId);
+        setFieldOfStudy(response.data.fieldsOfStudy);
+        // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
+      } catch (error) {
+        console.error("Error fetching fields of study:", error);
+      }
+    }
+    if (selectedProgram) {
+      fetchFieldsOfStudy(selectedProgram);
+    }
   }, [selectedProgram]);
 
   useEffect(() => {
-    if (selectedField) {
-      CourseService.getFieldOfStudyById(selectedField)
-        .then((response) => {
-          const fieldOfStudyData = response.data;
-          const semesterPromises = fieldOfStudyData.map((field) =>
-            CourseService.getSemesterById(field._id)
-          );
-
-          Promise.all(semesterPromises)
-            .then((semesterResponses) => {
-              const semestersData = semesterResponses.map(
-                (response) => response.data
-              );
-              console.log(semestersData);
-              setSemesters(semestersData);
-            })
-            .catch((error) => {
-              console.error("Error fetching semesters:", error);
-            });
-        })
-        .catch((error) => {
-          console.error("Error fetching field of study:", error);
-        });
-
-      console.log(semesters);
+    // Fetch semesters when field of study selected
+    async function fetchSemesters(fieldOfStudyId) {
+      try {
+        const response = await CourseService.getAllSemester(fieldOfStudyId);
+        console.log(12345,response.data)
+        setSemesters(response.data.semesters);
+        // setSelectedSemester(response.data.semesters[0]?._id);
+      } catch (error) {
+        console.error("Error fetching semesters:", error);
+      }
     }
-  }, [selectedField]);
+    if (selectedFieldOfStudy) {
+      fetchSemesters(selectedFieldOfStudy);
+    }
+  }, [selectedFieldOfStudy]);
 
-    // Fetch semesters and courses when field of study is selected
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          console.log(7654321);
-          if (selectedField && selectedSemester) {
-            console.log(123456, selectedProgram, selectedField);
-            const response = await CourseService.getAllSpecificCourses({
-              programId: selectedProgram,
-              fieldOfStudyId: selectedField,
-              semesterId: "661172dc38915bb3e613cc1a"
-            });
-            console.log(1234, response);
-            // setCourses(response.data.courses);
-          }
-        } catch (error) {
-          console.error("Error fetching courses:", error);
-        }
-      };
-    
-      fetchData();
-    }, [selectedField, selectedSemester]);
-    
-  
+  useEffect(() => {
+    // Fetch courses when program, field of study, or semester selected
+    async function fetchCourses() {
+      try {
+        console.log(1223456)
+        const response = await CourseService.getAllCourses({programId:selectedProgram,fieldOfStudyId:selectedFieldOfStudy,semesterId:selectedSemester});
+        console.log(5,response.data);
+        console.log(1223455)
+        setCourses(response.data.courses);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    }
+    fetchCourses();
+  }, [selectedProgram, selectedFieldOfStudy, selectedSemester]);
 
-
-
-  // // Dummy courses data
-  // const courses = [
-  //   {
-  //     code: "CS101",
-  //     name: "Introduction to Computer Science",
-  //     credits: 1,
-  //     professor: "Dr. John Doe",
-  //     type: "Theory",
-  //   },
-  //   {
-  //     code: "CS102",
-  //     name: "Data Structures and Algorithms",
-  //     credits: 3,
-  //     professor: "Dr. Jane Smith",
-  //     type: "Practical",
-  //   },
-  //   // Add more course objects as needed
-  // ];
+  const handleSearch = async () => {
+    try {
+      console.log("sully")
+      const response = await CourseService.searchCourse(searchQuery);
+      console.log("cheeku",response.data)
+      setCourses(response.data.courses);
+    } catch (error) {
+      console.error("Error searching courses:", error);
+    }
+  };
 
   return (
     <>
@@ -163,44 +110,55 @@ const CoursesSection = () => {
             <div className="flex flex-wrap gap-2 sm:gap-5 ">
               <Dropdown
                 name="Program"
-                options={programs.map((program) => program.program_name)}
+                options={programs?.map((program) => program?.program_name)}
                 onSelect={(selectedProgramName) => {
-                  const selectedProgram = programs.find(
-                    (program) => program.program_name === selectedProgramName
+                  const selectedProgram = programs?.find(
+                    (program) => program?.program_name === selectedProgramName
                   );
                   setSelectedProgram(selectedProgram?._id);
+                  setSelectedSemester("")
+                  setSelectedFieldOfStudy("")
                 }}
               />
               <Dropdown
                 name="Field Of Study"
-                options={field.map((program) => program.field_of_studyname)}
-                onSelect={(selectedFieldOfStudy) => {
-                  const fieldObject = field.find(
-                    (program) =>
-                      program.field_of_studyname === selectedFieldOfStudy
+                options={fieldOfStudy?.map((field) => field?.field_of_studyname)}
+                onSelect={(selectedFieldOfStudyName) => {
+                  const selectedFieldOfStudy = fieldOfStudy?.find(
+                    (field) => field?.field_of_studyname === selectedFieldOfStudyName
                   );
-                  setSelectedField(fieldObject?._id);
+                  setSelectedFieldOfStudy(selectedFieldOfStudy?._id);
+                  setSelectedSemester("")
                 }}
               />
-
               <Dropdown
                 name="Semester"
-                options={semesters}
-                onSelect={setSelectedSemester}
+                options={semesters?.map((semester) => semester?.semester)}
+                onSelect={(selectedSemesterName) => {
+                  const selectedSemester = semesters?.find(
+                    (semester) => semester?.semester === selectedSemesterName
+                  );
+                  setSelectedSemester(selectedSemester?._id);
+                }}
               />
-              <div className="w-full md:w-[250px]">
+              <div className="w-full md:w-[270px]">
+              <form className="max-w-md mx-auto" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+                <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
                 <div className="relative">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search Program"
-                    className=" bg-transparent w-full py-2 px-3 border border-gray-300  rounded-md shadow-sm  pl-10"
-                  />
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaSearch className="text-gray-500" />
-                  </div>
+                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <FaSearch className="w-4 h-4 text-gray-500 " aria-hidden="true" />
+                    </div>
+                    <input
+                      type="search"
+                      id="default-search"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                      placeholder="Search Course"
+                    />
+                    <button type="submit" className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 ">Search</button>
                 </div>
+              </form>
               </div>
             </div>
           </div>

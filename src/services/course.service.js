@@ -10,13 +10,24 @@ const axiosInstance = axios.create({
 class CourseService {
   constructor() {
     // this.url = BACKEND_URL;
-    // this.url = "http://localhost:8000"; // Backend URL
-    this.url = 'https://suzan-be.vercel.app'; // Backend URL if deployed
+    this.url = "http://localhost:8000"; // Backend URL
+    // this.url = 'https://suzan-be.vercel.app'; // Backend URL if deployed
   }
 
+  // Programs
   // Create a program under a college
   createProgram(data) {
     return axiosInstance.post(`${this.url}/api/course/programs`, data);
+  }
+
+  // Update program
+  updateProgram(programId, data) {
+    return axiosInstance.put(`${this.url}/api/course/programs/${programId}`, data);
+  }
+
+  // Delete program
+  deleteProgram(programId) {
+    return axiosInstance.delete(`${this.url}/api/course/programs/${programId}`);
   }
 
   // Get all programs
@@ -24,39 +35,86 @@ class CourseService {
     return axiosInstance.get(`${this.url}/api/course/programs`);
   }
 
-  // Create a field of study under a program
+  // Get program by ID
+  getProgramById(programId) {
+    return axiosInstance.get(`${this.url}/api/course/programs/${programId}`);
+  }
+
+  // Search and get program by name
+  searchProgram(searchTerm) {
+    return axiosInstance.get(`${this.url}/api/course/programs/search?searchTerm=${searchTerm}`);
+  }
+
+  // Field of Study
+  // Create field of study under a program
   createFieldOfStudy(data) {
     return axiosInstance.post(`${this.url}/api/course/fieldOfStudy`, data);
   }
 
-  // Get all fields of study for a program
-  getAllFieldsOfStudy(data) {
-    return axiosInstance.get(`${this.url}/api/course/fieldOfStudy/${data}`);
+  // Update field of study
+  updateFieldOfStudy(fieldOfStudyId, data) {
+    return axiosInstance.put(`${this.url}/api/course/fieldOfStudy/${fieldOfStudyId}`, data);
   }
 
-  getFieldOfStudyById(data) {
-    return axiosInstance.get(`${this.url}/api/course/fieldOfStudyById/${data}`);
+  // Delete field of study
+  deleteFieldOfStudy(fieldOfStudyId) {
+    return axiosInstance.delete(`${this.url}/api/course/fieldOfStudy/${fieldOfStudyId}`);
   }
 
-  // Create a course under a semester
+  // Get all fields of study
+  getAllFieldsOfStudy(programId) {
+    return axiosInstance.get(`${this.url}/api/course/fieldOfStudy/${programId}`);
+  }
+
+  // Get field of study by ID
+  getFieldOfStudyById(fieldOfStudyId) {
+    return axiosInstance.get(`${this.url}/api/course/fieldOfStudyById/${fieldOfStudyId}`);
+  }
+
+  //Semester
+  // Get all semesters by fieldOfStudy
+  getAllSemester(fieldOfStudyId){
+    return axiosInstance.get(`${this.url}/api/course/semester/${fieldOfStudyId}`);
+  }
+
+  // Course
+  // Create course under a semester
   createCourse(data) {
     return axiosInstance.post(`${this.url}/api/course/courses`, data);
   }
 
-  // Get all courses for a program
-  getAllCourses(programId) {
-    return axiosInstance.get(`${this.url}/api/course/courses`, {
-      programId,
-    });
+  // Update course
+  updateCourse(courseId, data) {
+    return axiosInstance.put(`${this.url}/api/course/courses/${courseId}`, data);
   }
 
-  getSemesterById(data) {
-    return axiosInstance.get(`${this.url}/api/course/semesters/${data}`); 
+  // Delete course
+  deleteCourse(courseId) {
+    return axiosInstance.delete(`${this.url}/api/course/courses/${courseId}`);
   }
 
   // Get all courses
-  getAllSpecificCourses(data) {
-    return axiosInstance.get(`${this.url}/api/course/specificcourses`,data);
+  getAllCourses({ programId, fieldOfStudyId, semesterId }) {
+    return axiosInstance.post(`${this.url}/api/course/getcourses`, {
+      programId,
+      fieldOfStudyId,
+      semesterId
+    });
+  }
+
+  // Get course by ID
+  getCourseById(courseId) {
+    return axiosInstance.get(`${this.url}/api/course/courses/${courseId}`);
+  }
+  
+  // Search and get Courses by name
+  searchCourse(searchTerm) {
+    return axiosInstance.post(`${this.url}/api/course/courses/search?searchTerm=${searchTerm}`);
+  }
+
+  // Upload file
+  uploadFile(data) {
+    return axiosInstance.post(`${this.url}/api/course/uploadfile`, data);
   }
 }
 
