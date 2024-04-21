@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import Card from "@mui/material/Card";
 import CourseService from "@/services/course.service.js";
+import { ToastContainer, toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -53,6 +54,7 @@ const AdminCourseNavbarProgramComponent = () => {
           return { ...program, coursesCount, fieldOfStudyCount };
         })
       );
+      console.log(69,programsWithCounts);
       setPrograms(programsWithCounts);
     } catch (error) {
       console.error("Error fetching programs:", error);
@@ -143,6 +145,7 @@ const AdminCourseNavbarProgramComponent = () => {
         // Refetch all programs after editing
         fetchAllPrograms();
         // Close the modal after editing the program
+        toast.success("Program is updated")
         closeModal();
       } catch (error) {
         console.error("Error editing program:", error);
@@ -150,8 +153,9 @@ const AdminCourseNavbarProgramComponent = () => {
     } else {
       // If currentProgram does not exist, add a new program
       try {
+        // console.log(69,"working")
         // Create program with provided data
-        await CourseService.createProgram({
+        const response=await CourseService.createProgram({
           programName,
           programFullName,
           semestersCount,
@@ -159,6 +163,8 @@ const AdminCourseNavbarProgramComponent = () => {
         // Refetch all programs after adding
         fetchAllPrograms();
         // Close the modal after adding the program
+        // console.log(69,response);
+        toast.success(response.data.message || "Program is created");
         closeModal();
       } catch (error) {
         console.error("Error adding program:", error);

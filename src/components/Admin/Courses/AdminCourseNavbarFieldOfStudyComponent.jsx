@@ -25,13 +25,14 @@ const style = {
 const AdminCourseNavbarFieldOfStudyComponent = () => {
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
+  const [programs, setPrograms] = useState([]); // State to store programs
   const [fieldOfStudy, setFieldOfStudy] = useState([]); // State to store programs
-  const [program, setProgram] = useState([]); // State to store programs
 
   //div useStates
   const [fos, setFos] = useState("");
   const [fullFos, setFullFos] = useState("");
   const [formselectedProgram, setFormSelectedProgram] = useState("");
+  const [openModal, setOpenModal] = useState(false);
 
   const [fosDetails, setFosDetails] = useState({
     fieldsOfStudy_name: "",
@@ -41,27 +42,30 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   useEffect(() => {
     // Fetch all programs when the component mounts
     fetchAllFieldOfStudy();
+    fetchAllProgram();
   }, []);
-
+  // useEffect(() => {
+  //   console.log("ifi", programs)
+  // }, [programs]);
   // Function to fetch all fieldofstudy
   const fetchAllFieldOfStudy = async () => {
     try {
       const response = await CourseService.getAllFieldsOfStudy();
       setFieldOfStudy(response.data.programs);
     } catch (error) {
-      console.error("Error fetching programs:", error);
+      console.error("Error fetching fos:", error);
     }
   };
   const fetchAllProgram = async () => {
     try {
-      const response = await CourseService.getAllProgram();
-      setProgram(response.data.programs);
+      const response = await CourseService.getAllPrograms();
+      setPrograms(response.data.programs);
     } catch (error) {
       console.error("Error fetching programs:", error);
     }
   };
 
-  const fieldsOfStudy = ["CSE", "ECE"];
+  // const fieldsOfStudy = ["CSE", "ECE"];
 
   // State for modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -121,12 +125,12 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
       <div className="flex flex-wrap gap-2 sm:gap-5 ">
         <Dropdown1
           name="Program"
-          options={programs?.map((p)=>p.program_name)}
+          options={programs?.map((p) => p.program_name)}
           onSelect={setSelectedProgram}
         />
         <Dropdown1
           name="Field Of Study"
-          options={fieldsOfStudy}
+          options={fieldOfStudy?.map((p) => p.fieldsOfStudy_name)}
           onSelect={setSelectedFieldOfStudy}
         />
       </div>
@@ -260,7 +264,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
             <div className="pb-2">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button   onClick={handleAddFieldOfStudy} variant="outlined">Add Field Of Study</Button>
+              <Button onClick={handleAddFieldOfStudy} variant="outlined">Add Field Of Study</Button>
             </div>
           </div>
         </Box>

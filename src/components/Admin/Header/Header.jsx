@@ -98,8 +98,8 @@ const Header = (props) => {
                         alt={user?.name}
                       />
                     ) : (
-                      <div class="inline-flex items-center justify-center  w-[38px] h-[38px] lg:w-[45px] lg:h-[45px]  bg-gray-400 rounded-full">
-                        <span class="font-medium text-white text-xl ">
+                      <div className="inline-flex items-center justify-center  w-[38px] h-[38px] lg:w-[45px] lg:h-[45px]  bg-gray-400 rounded-full">
+                        <span className="font-medium text-white text-xl ">
                           {" "}
                           {user?.name ? user?.name[0] : `E`}
                         </span>
