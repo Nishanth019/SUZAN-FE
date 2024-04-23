@@ -92,9 +92,9 @@ const CoursesSection = () => {
 
   const handleSearch = async () => {
     try {
-      console.log("sully")
+      // console.log("sully")
       const response = await CourseService.searchCourse(searchQuery);
-      console.log("cheeku",response.data)
+      // console.log("sully",response.data)
       setCourses(response.data.courses);
     } catch (error) {
       console.error("Error searching courses:", error);

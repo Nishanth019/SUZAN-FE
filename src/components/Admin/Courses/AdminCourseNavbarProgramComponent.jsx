@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import Card from "@mui/material/Card";
 import CourseService from "@/services/course.service.js";
+import { ToastContainer, toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -53,12 +54,13 @@ const AdminCourseNavbarProgramComponent = () => {
           return { ...program, coursesCount, fieldOfStudyCount };
         })
       );
+      // console.log(69,programsWithCounts);
       setPrograms(programsWithCounts);
     } catch (error) {
       console.error("Error fetching programs:", error);
     }
   };
-
+// console.log(70,programs)
   const fetchCourseCountForProgram = async (programId) => {
     try {
       console.log(123456);
@@ -94,9 +96,10 @@ const AdminCourseNavbarProgramComponent = () => {
   // Function to handle opening the modal for editing a program
   const openEditProgramModal = (program) => {
     setCurrentProgram(program);
-    setProgramName(program.programName);
-    setProgramFullName(program.programFullName);
-    setSemetersCount(program.semestersCount);
+    setProgramName(program.program_name);
+    // console.log(71,programName,program,program.progamName);
+    setProgramFullName(program.program_fullname);
+    setSemetersCount(program.no_of_semester);
     setModalOpen(true);
   };
 
@@ -107,20 +110,35 @@ const AdminCourseNavbarProgramComponent = () => {
 
   // Function to handle opening the delete confirmation modal
   const openDeleteModal = () => {
+   
     setDeleteModalOpen(true);
   };
 
   // Function to handle closing the delete confirmation modal
   const closeDeleteModal = () => {
+    
     setDeleteModalOpen(false);
   };
+
+  //search
+   const handleSearch = async () => {
+     try {
+      //  console.log("sully");
+       const response = await CourseService.searchProgram(searchQuery);
+      //  console.log("cheeku", response.data);
+       setPrograms(response.data.programs);
+     } catch (error) {
+       console.error("Error searching Program:", error);
+     }
+   };
+
 
   // Function to handle deleting a program
   const handleDeleteProgram = async () => {
     try {
-      console.log("deleting",1)
-      await CourseService.deleteProgram(currentProgram._id);
-      console.log("deleting",2)
+      
+      const response = await CourseService.deleteProgram( {programId: currentProgram._id} );
+      // console.log("deleting",2)
       // Refetch all programs after deleting
       fetchAllPrograms();
       // Close the delete confirmation modal after deleting the program
@@ -135,23 +153,26 @@ const AdminCourseNavbarProgramComponent = () => {
     if (currentProgram) {
       // If currentProgram exists, edit the program
       try {
-        await CourseService.updateProgram(currentProgram._id, {
+        const response = await CourseService.updateProgram({
+          programId: currentProgram._id,
           programName,
           programFullName,
           semestersCount,
         });
         // Refetch all programs after editing
-        fetchAllPrograms();
         // Close the modal after editing the program
+        toast.success(response.data.message || "Program is updated")
         closeModal();
+        fetchAllPrograms();
       } catch (error) {
         console.error("Error editing program:", error);
       }
     } else {
       // If currentProgram does not exist, add a new program
       try {
+        // console.log(69,"working")
         // Create program with provided data
-        await CourseService.createProgram({
+        const response=await CourseService.createProgram({
           programName,
           programFullName,
           semestersCount,
@@ -159,6 +180,8 @@ const AdminCourseNavbarProgramComponent = () => {
         // Refetch all programs after adding
         fetchAllPrograms();
         // Close the modal after adding the program
+        // console.log(69,response);
+        toast.success(response.data.message || "Program is created");
         closeModal();
       } catch (error) {
         console.error("Error adding program:", error);
@@ -179,18 +202,42 @@ const AdminCourseNavbarProgramComponent = () => {
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-5">
         <div className="w-full md:w-[250px]">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search Program"
-              className="w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm  pl-10"
-            />
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="text-gray-500" />
+          <form
+            className="max-w-md mx-auto"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
+          >
+            <label
+              htmlFor="default-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only "
+            >
+              Search
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <FaSearch
+                  className="w-4 h-4 text-gray-500 "
+                  aria-hidden="true"
+                />
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                placeholder="Search Program"
+              />
+              <button
+                type="submit"
+                className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 "
+              >
+                Search
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
       <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
@@ -327,7 +374,6 @@ const AdminCourseNavbarProgramComponent = () => {
               onClick={handleDeleteProgram}
               className="text-white bg-red-500"
               variant="contained"
-
             >
               Delete
             </Button>
