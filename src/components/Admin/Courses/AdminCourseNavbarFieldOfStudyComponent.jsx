@@ -86,6 +86,16 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     }
   }, [selectedProgram]);
 
+  const fetchFieldOfStudyCountForProgram = async (programId) => {
+    try {
+      const response = await CourseService.getAllFieldsOfStudy(programId);
+      console.log(1233, response);
+      return response.data.fieldsOfStudy.length;
+    } catch (error) {
+      console.error("Error fetching field of study count for program:", error);
+      return 0; // Return 0 if there's an error
+    }
+  };
 
   useEffect(() => {
     //function to get all field of study for a program
@@ -157,7 +167,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   // const fieldsOfStudy = ["CSE", "ECE"];
 
   // State for modal
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setModalOpen] = useState(false);
 
   // Function to handle opening the modal
   const openAddFosModal = () => {
@@ -182,18 +192,11 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     setDeleteModalOpen(false);
   };
 
-  const openAddProgramModal = () => {
-    setCurrentProgram(null);
-    setProgramName("");
-    setProgramFullName("");
-    setSemetersCount("");
-    setModalOpen(true);
-  };
-  const openEditProgramModal = (program) => {
-    setCurrentProgram(program);
-    setProgramName(program.programName);
-    setProgramFullName(program.programFullName);
-    setSemetersCount(program.semestersCount);
+  const openAddFieldOfStudyModal = () => {
+    // setCurrentProgram(null);
+    // setProgramName("");
+    // setProgramFullName("");
+    // setSemetersCount("");
     setModalOpen(true);
   };
 
@@ -203,7 +206,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
       await CourseService.deleteFieldOfStudy(currentFieldOfStudy._id);
       console.log("deleting",2)
       // Refetch all fields of study after deleting
-      fetchFieldsOfStudy();
+      const response = await CourseService.getAllFieldsOfStudy(selectedProgram);
+      setFieldOfStudy(response.data.fieldsOfStudy);
+
       // Close the delete confirmation modal after deleting the program
       closeDeleteModal();
     } catch (error) {
@@ -237,7 +242,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     <div>
       <div className="flex justify-end items-center pb-2 md:pb-5">
         <button
-          onClick={openAddProgramModal}
+          onClick={openAddFieldOfStudyModal}
           type="button"
           className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br font-medium rounded-lg text-sm px-3 py-2 md:px-5 md:py-2.5"
         >
