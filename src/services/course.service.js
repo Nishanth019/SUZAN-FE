@@ -89,8 +89,9 @@ class CourseService {
   }
 
   // Delete course
-  deleteCourse(courseId) {
-    return axiosInstance.delete(`${this.url}/api/course/courses/${courseId}`);
+  deleteCourse({deletingCourseId}) {
+    console.log(555,deletingCourseId)
+    return axiosInstance.delete(`${this.url}/api/course/courses/${deletingCourseId}`);
   }
 
   // Get all courses

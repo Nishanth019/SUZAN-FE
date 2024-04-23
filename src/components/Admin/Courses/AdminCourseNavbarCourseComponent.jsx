@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Dropdown2 from "@/components/TailwindComponents/FormDropdown";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CourseService from "@/services/course.service.js";
 
 import { ToastContainer, toast } from "react-toastify";
 
@@ -26,23 +27,114 @@ const style = {
   borderRadius: "10px",
   p: 4,
 };
+
 const AdminCourseNavbarCourseComponent = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
   const [selectedSemester, setSelectedSemester] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Selected object values
+  const [programs, setPrograms] = useState([]);
+  const [fieldOfStudy, setFieldOfStudy] = useState([]);
+  const [semesters, setSemesters] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [coursesPerPage] = useState(10);
-  const programs = ["Btech", "Mtech"];
-  const fieldsOfStudy = ["CSE", "ECE"];
-  const semesters = ["I", "II", "III", "IV"];
+
+  //deleting course id
+  const [deletingCourseId, setDeletingCourseId] = useState(null); 
+  //editing course id
+  const [editingCourseId, setEditingCourseId] = useState(null);   
+  //viewing course id
+  const [viewingCourseId, setViewingCourseId] = useState(null); 
+  
+  
   //form useStates
   const [formselectedProgram, setFormSelectedProgram] = useState("");
   const [formSelectedFieldOfStudy, setFormSelectedFieldOfStudy] = useState("");
   const [formSelectedSemesters, setFormSelectedSemesters] = useState("");
+
+ 
+  useEffect(() => {
+    // Fetch all programs on component mount
+    async function fetchPrograms() {
+      try {
+        const response = await CourseService.getAllPrograms();
+        setPrograms(response.data.programs);
+        // setSelectedProgram(response.data.programs[0]?._id);
+      } catch (error) {
+        console.error("Error fetching programs:", error);
+      }
+    }
+    fetchPrograms();
+  }, []);
+
+  useEffect(() => {
+    // Fetch fields of study when program selected
+    async function fetchFieldsOfStudy(programId) {
+      try {
+        const response = await CourseService.getAllFieldsOfStudy(programId);
+        setFieldOfStudy(response.data.fieldsOfStudy);
+        // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
+      } catch (error) {
+        console.error("Error fetching fields of study:", error);
+      }
+    }
+    if (selectedProgram) {
+      fetchFieldsOfStudy(selectedProgram);
+    }
+  }, [selectedProgram]);
+
+  useEffect(() => {
+    // Fetch semesters when field of study selected
+    async function fetchSemesters(fieldOfStudyId) {
+      try {
+        const response = await CourseService.getAllSemester(fieldOfStudyId);
+        console.log(12345,response.data)
+        setSemesters(response.data.semesters);
+        // setSelectedSemester(response.data.semesters[0]?._id);
+      } catch (error) {
+        console.error("Error fetching semesters:", error);
+      }
+    }
+    if (selectedFieldOfStudy) {
+      fetchSemesters(selectedFieldOfStudy);
+    }
+  }, [selectedFieldOfStudy]);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [selectedProgram, selectedFieldOfStudy, selectedSemester]);
+
+  async function fetchCourses() {
+    try {
+      console.log(1223456)
+      const response = await CourseService.getAllCourses({programId:selectedProgram,fieldOfStudyId:selectedFieldOfStudy,semesterId:selectedSemester});
+      console.log(5,response.data);
+      console.log(1223455)
+      setCourses(response.data.courses);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  }
+
+  const handleSearch = async () => {
+    try {
+      console.log("sully")
+      const response = await CourseService.searchCourse(searchQuery);
+      console.log("cheeku",response.data)
+      setCourses(response.data.courses);
+    } catch (error) {
+      console.error("Error searching courses:", error);
+    }
+  };
+
   //dummy data
   const [selectedCourse, setSelectedCourse] = useState({
     course_name: "Data Structures and Algorithms",
@@ -58,6 +150,7 @@ const AdminCourseNavbarCourseComponent = () => {
     notes: ["Note 1", "Note 2", "Note 3"],
     pyq: ["PYQ 1", "PYQ 2", "PYQ 3"],
   });
+
   const [courseDetails, setCourseDetails] = useState({
     course_name: "",
     course_code: "",
@@ -72,29 +165,13 @@ const AdminCourseNavbarCourseComponent = () => {
     pyq_link: [[""]],
     pyq_pdf: [[""]],
   });
-
-  // Function to handle viewing course details
-  // const handleView = async (courseID) => {
-  //   try {
-  //     // Make a request to fetch course details using courseID
-  //     const response = await fetch(`backend_url/courses/${courseID}`);
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch course details");
-  //     }
-  //     const data = await response.json();
-  //     setSelectedCourse(data); // Update selected course details state
-  //     openModal(); // Open the modal
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  
   // Dummy courses data
   const openViewModal = () => {
     setViewModalOpen(true);
   };
 
   const [selectedFile, setSelectedFile] = useState(null);
-  // here
   const [selectedInstructorPhoto, setSelectedInstructorPhoto] = useState(null);
   const [selectedSyllabus, setSelectedSyllabus] = useState(null);
   const [selectedResourcepdf, setSelectedResourcepdf] = useState([]);
@@ -104,428 +181,7 @@ const AdminCourseNavbarCourseComponent = () => {
   const closeViewModal = () => {
     setViewModalOpen(false);
   };
-  const courses = [
-    // Array of course objects with properties like course code, course name, credits, professor name, view Button,  edit Button
-    // Example:
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 1,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 2,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 3,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 4,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 5,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 6,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 7,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS104",
-      name: "Introduction to Computer Science",
-      credits: 8,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS103",
-      name: "Introduction to Computer Science",
-      credits: 9,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS102",
-      name: "Introduction to Computer Science",
-      credits: 10,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 11,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 12,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 13,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 14,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 15,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS101",
-      name: "Introduction to Computer Science",
-      credits: 16,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS104",
-      name: "Introduction to Computer Science",
-      credits: 17,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS103",
-      name: "Introduction to Computer Science",
-      credits: 18,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-    {
-      code: "CS102",
-      name: "Introduction to Computer Science",
-      credits: 19,
-      professor: "Dr. John Doe",
-      // Add your view and edit Button  functionality here
-      viewButton: (
-        <Button onClick={openViewModal}>
-          <FaEye size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      editButton: (
-        <Button onClick={() => handleEdit()}>
-          <MdEdit size={20} className="lg:ml-6" />
-        </Button>
-      ),
-      deleteButton: (
-        <Button onClick={() => handleDelete()}>
-          <MdDelete size={20} />
-        </Button>
-      ),
-    },
-  ];
+
   // Function to handle opening the modal
   const openModal = () => {
     setModalOpen(true);
@@ -570,22 +226,22 @@ const AdminCourseNavbarCourseComponent = () => {
 
   // Function to handle closing the delete confirmation modal
   const closeDeleteModal = () => {
+    setDeletingCourseId(null)
     setDeleteModalOpen(false);
   };
-  const handleDelete = async () => {
+  const handleDelete = async (course) => {
+    setDeletingCourseId(course._id)
     openDeleteModal();
-    
   };
 
   // Function to handle deleting a program
-  const handleDeleteProgram = async () => {
+  const handleDeleteCourse = async () => {
     try {
-      console.log("deleting", 1);
-      await CourseService.deleteProgram(currentProgram._id);
+      console.log("deleting", deletingCourseId);
+      const res = await CourseService.deleteCourse({deletingCourseId});
+      console.log(455,res.data.message)
       console.log("deleting", 2);
-      // Refetch all programs after deleting
-      fetchAllPrograms();
-      // Close the delete confirmation modal after deleting the program
+      fetchCourses()
       closeDeleteModal();
     } catch (error) {
       console.error("Error deleting program:", error);
@@ -777,40 +433,67 @@ const AdminCourseNavbarCourseComponent = () => {
         </button>
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-5 ">
-        <Dropdown
-          name="Program"
-          options={programs}
-          onSelect={setSelectedProgram}
-        />
-        <Dropdown
-          name="Field Of Study"
-          options={fieldsOfStudy}
-          onSelect={setSelectedFieldOfStudy}
-        />
-        <Dropdown
-          name="Semester"
-          options={semesters}
-          onSelect={setSelectedSemester}
-        />
-        <div className="w-full md:w-[250px]">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search Program"
-              className="w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm  pl-10"
-            />
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="text-gray-500" />
-            </div>
-          </div>
-        </div>
+              <Dropdown
+                name="Program"
+                options={programs?.map((program) => program?.program_name)}
+                onSelect={(selectedProgramName) => {
+                  const selectedProgram = programs?.find(
+                    (program) => program?.program_name === selectedProgramName
+                  );
+                  setSelectedProgram(selectedProgram?._id);
+                  setSelectedSemester("")
+                  setSelectedFieldOfStudy("")
+                }}
+              />
+              <Dropdown
+                name="Field Of Study"
+                options={fieldOfStudy?.map((field) => field?.field_of_studyname)}
+                onSelect={(selectedFieldOfStudyName) => {
+                  const selectedFieldOfStudy = fieldOfStudy?.find(
+                    (field) => field?.field_of_studyname === selectedFieldOfStudyName
+                  );
+                  setSelectedFieldOfStudy(selectedFieldOfStudy?._id);
+                  setSelectedSemester("")
+                }}
+              />
+              <Dropdown
+                name="Semester"
+                options={semesters?.map((semester) => semester?.semester)}
+                onSelect={(selectedSemesterName) => {
+                  const selectedSemester = semesters?.find(
+                    (semester) => semester?.semester === selectedSemesterName
+                  );
+                  setSelectedSemester(selectedSemester?._id);
+                }}
+              />
+              <div className="w-full md:w-[270px]">
+              <form className="max-w-md mx-auto" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+                <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
+                <div className="relative">
+                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <FaSearch className="w-4 h-4 text-gray-500 " aria-hidden="true" />
+                    </div>
+                    <input
+                      type="search"
+                      id="default-search"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                      placeholder="Search Course"
+                    />
+                    <button type="submit" className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 ">Search</button>
+                </div>
+              </form>
+      </div>
       </div>
       {/* tables */}
       <div className="py-2 md:py-5">
-        <CoursesTable courses={courses} />{" "}
-        {/* Include the CoursesTable component and pass current courses */}
+      <CoursesTable
+          courses={courses}
+          openViewModal={openViewModal}
+          handleEdit={handleEdit} 
+          handleDelete={handleDelete} 
+        />
       </div>
       {/* Modal */}
       <Modal
@@ -871,7 +554,7 @@ const AdminCourseNavbarCourseComponent = () => {
               </label>
               <Dropdown2
                 name="FieldOfStudy"
-                options={fieldsOfStudy}
+                options={fieldOfStudy}
                 onSelect={setFormSelectedFieldOfStudy}
               />
             </div>
@@ -1250,8 +933,6 @@ const AdminCourseNavbarCourseComponent = () => {
                     >
                       <DeleteIcon />
                     </Button> */}
-
-
                     </>
                   )}
                 </div>
@@ -1505,7 +1186,7 @@ const AdminCourseNavbarCourseComponent = () => {
           </p>
           <div className="flex justify-center mt-5 ">
             <Button
-              onClick={handleDeleteProgram}
+              onClick={handleDeleteCourse}
               className="text-white bg-red-500"
               variant="contained"
             >
