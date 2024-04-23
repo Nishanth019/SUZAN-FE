@@ -120,6 +120,19 @@ const AdminCourseNavbarProgramComponent = () => {
     setDeleteModalOpen(false);
   };
 
+  //search
+   const handleSearch = async () => {
+     try {
+      //  console.log("sully");
+       const response = await CourseService.searchProgram(searchQuery);
+      //  console.log("cheeku", response.data);
+       setPrograms(response.data.programs);
+     } catch (error) {
+       console.error("Error searching Program:", error);
+     }
+   };
+
+
   // Function to handle deleting a program
   const handleDeleteProgram = async () => {
     try {
@@ -189,18 +202,42 @@ const AdminCourseNavbarProgramComponent = () => {
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-5">
         <div className="w-full md:w-[250px]">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search Program"
-              className="w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm  pl-10"
-            />
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="text-gray-500" />
+          <form
+            className="max-w-md mx-auto"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
+          >
+            <label
+              htmlFor="default-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only "
+            >
+              Search
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <FaSearch
+                  className="w-4 h-4 text-gray-500 "
+                  aria-hidden="true"
+                />
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                placeholder="Search Program"
+              />
+              <button
+                type="submit"
+                className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 "
+              >
+                Search
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
       <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
@@ -337,7 +374,6 @@ const AdminCourseNavbarProgramComponent = () => {
               onClick={handleDeleteProgram}
               className="text-white bg-red-500"
               variant="contained"
-
             >
               Delete
             </Button>

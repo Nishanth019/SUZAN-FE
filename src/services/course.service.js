@@ -32,7 +32,7 @@ class CourseService {
   }
 
   // Delete program
-  deleteProgram(programId) {
+  deleteProgram({programId}) {
     return axiosInstance.delete(`${this.url}/api/course/programs/${programId}`);
   }
 
@@ -48,7 +48,7 @@ class CourseService {
 
   // Search and get program by name
   searchProgram(searchTerm) {
-    return axiosInstance.get(`${this.url}/api/course/programs/search?searchTerm=${searchTerm}`);
+    return axiosInstance.post(`${this.url}/api/course/programs/search?searchTerm=${searchTerm}`);
   }
 
   // Field of Study
