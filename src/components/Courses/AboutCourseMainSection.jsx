@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { FaCalendar, FaBookOpen, FaUserCircle } from 'react-icons/fa';
-import nishanth from "../../assets/CoreTeam/nishanth.jpg";
+import unknown from "../../assets/Course/unknown.jpg";
 
 function AboutCourseMainSection({ courseDetails }) {
   const {
@@ -48,7 +48,7 @@ function AboutCourseMainSection({ courseDetails }) {
         <div className=" w-full flex md:w-[40%]  items-center justify-center p-2">
         <div className="flex  flex-col gap-2 items-center justify-center p-5 ">
           <Image
-            alt={instructorName}
+            alt={unknown}
             className="rounded-full"
             height="150"
             src={instructorPhoto} 

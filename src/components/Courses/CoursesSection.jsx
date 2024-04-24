@@ -166,7 +166,7 @@ const CoursesSection = () => {
 
         {/* Render courses using map */}
         <div className="flex justify-center">
-          <div className="grid gap-4 w-full sm:w-4/5 lg:w-3/5 mx-3 my-5 overflow-y-auto">
+          <div className="grid gap-4 w-full sm:w-4/5 lg:w-3/5 mx-3 my-5 ">
             {courses.map((course, index) => (
               <CoursesCard key={index} course={course} />
             ))}

@@ -1,47 +1,146 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import nishanth from "../../assets/CoreTeam/nishanth.jpg";
-import { FaCalendar, FaBookOpen, FaUserCircle } from 'react-icons/fa';
-import AboutCourseMainSection from "./AboutCourseMainSection";
-import CourseSyllabus from "./CourseSyllabus";
-import CoursePYQS from "./CoursePYQS";
-import CourseReference from "./CourseReference";
-import "./style.css"
+  "use client";
+  import React, { useState, useEffect } from "react";
+  import Image from "next/image";
+  import nishanth from "../../assets/CoreTeam/nishanth.jpg";
+  import { FaCalendar, FaBookOpen, FaUserCircle } from 'react-icons/fa';
+  import AboutCourseMainSection from "./AboutCourseMainSection";
+  import CourseSyllabus from "./CourseSyllabus";
+  import CoursePYQS from "./CoursePYQS";
+  import CourseReference from "./CourseResources";
+  import { useRouter } from "next/navigation";
+  import { usePathname } from "next/navigation";
+  import "./style.css"
+  import CourseService from "@/services/course.service"; 
 
-const AboutCourse = () => {
+  const AboutCourse = () => {
+      const router = useRouter();
+      const pathname = usePathname();
+      const course_id = pathname.split("/").pop();
 
-  const [courseDetails] = useState({
-    courseName: "Fibre Optics",
-    courseCode: "OE3E30",
-    instructorName: "Dinesh Kumar",
-    courseType: "Elective",
-    credits: 3,
-    instructorPhoto: nishanth,
-    fieldOfStudy: "CSE",
-    semester:"3"
-  });
+    const [courseDetails,setCourseDetails] = useState({
+      courseName: "",
+      courseCode: "",
+      instructorName: "",
+      courseType: "",
+      credits: "",
+      instructorPhoto:"",
+      fieldOfStudy: "",
+      semester:""
+    });
 
-  const [syllabus] = useState([
-    { title: "Introduction to the Course", type: "link", description: "Introduction to the basic concepts of the course.", url: "http://example.com/syllabus" },
-    { title: "Advanced Topics", type: "link", description: "Exploration of advanced topics in the course curriculum.", url: "http://example.com/syllabus2" },
-    { title: "Practical Applications", type: "link", description: "Application of course concepts to real-world scenarios.", url: "http://example.com/syllabus3" },
-    { title: "Introduction to the Course", type: "pdf", description: "Introduction to the basic concepts of the course.", pdfName: "Syllabus.pdf" },
-    { title: "Advanced Topics", type: "pdf", description: "Exploration of advanced topics in the course curriculum.", pdfName: "Syllabus2.pdf" },
-    { title: "Practical Applications", type: "pdf", description: "Application of course concepts to real-world scenarios.", pdfName: "Syllabus3.pdf" }
-  ]);
+    const [resources, setResources] = useState([]);
+    const [pyqs, setPyqs] = useState([]);
+    const [syllabus, setSyllabus] = useState([
+      {
+        title: "",
+        type: "",
+        url: "",
+      },
+    ]);
+    
+    useEffect(() => {
+      const fetchCourseDetails = async () => {
+        try {
+          const response = await CourseService.getCourseById({
+            courseId: course_id,
+          });
+          const { course } = response.data;
+          const response1 = await CourseService.getFieldOfStudyById({
+            fieldOfStudyId: course.field_of_study,
+          });
+          const field_of_study = response1.data.fieldOfStudy;
+          const response2 = await CourseService.getSemesterByCourseId({
+            courseId: course_id,
+          });
+          const semester = response2.data.semester;
+          //  console.log(24, semester);
+          setCourseDetails({
+            courseName: course.course_name,
+            courseCode: course.course_code,
+            instructorName: course.instructor_name,
+            courseType: course.course_type,
+            credits: course.credits,
+            instructorPhoto: course.instructor_photo,
+            fieldOfStudy: field_of_study.field_of_studyfullname,
+            semester: semester.semester,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
-  return (
-   <div className="m-3 md:m-10 lg:mx-[120px] xl:mx-[200px]  boxShadow bg-white rounded-lg">
-     <AboutCourseMainSection courseDetails={courseDetails}/> {/* Pass courseDetails as prop */}
-     <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
-     <CourseSyllabus syllabus={syllabus}/>
-     <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
-     <CoursePYQS pvqs={syllabus}/>
-     <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
-     <CourseReference reference={syllabus}/>
-   </div>
-  );
-};
+      fetchCourseDetails();
+      const fetchMedia = async () => {
+        try {
+          const response = await CourseService.getMediaByCourceId({
+            courseId: course_id,
+          });
+          const course = response.data.course;
+          const syllabus = response.data.syllabus;
+          
+          const resourcesPdf = response.data.resourcesPdf.map((pdf) => ({
+            title: pdf.pdf_name,
+            type: "pdf",
+            url: pdf.pdf_url,
+          }));
+          // console.log(20, resourcesPdf);  
+          const resourcesLinks = response.data.resourcesLinks.map((link) => ({
+            title: link.link_name,
+            type: "link",
+            url: link.link_url,
+          }));
 
-export default AboutCourse;
+          const pyqPdf = response.data.pyqPdf.map((pdf) => ({
+            title: pdf.pdf_name,
+            type: "pdf",
+            url: pdf.pdf_url,
+          }));
+
+          const pyqLinks = response.data.pyqLinks.map((link) => ({
+            title: link.link_name,
+            type: "link",
+            url: link.link_url,
+          }));
+          
+          
+          setSyllabus([
+            {
+              title: syllabus.pdf_name,
+              type: "pdf",
+              url: syllabus.pdf_url,
+            },
+          ]);
+
+          setResources([...resourcesPdf, ...resourcesLinks]);
+          setPyqs([...pyqPdf, ...pyqLinks]);
+          // console.log(23, syllabus);
+          // console.log(25, pyqs);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+
+      fetchMedia();
+      
+    }, []);
+  
+      
+    
+
+  
+
+    return (
+    <div className="m-3 md:m-10 lg:mx-[120px] xl:mx-[200px]  boxShadow bg-white rounded-lg">
+      <AboutCourseMainSection courseDetails={courseDetails}/> {/* Pass courseDetails as prop */}
+      <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
+      <CourseSyllabus syllabus={syllabus}/>
+      <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
+      <CoursePYQS pyqs={pyqs}/>
+      <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
+      <CourseReference resources={resources}/>
+    </div>
+    );
+  };
+
+  export default AboutCourse;
