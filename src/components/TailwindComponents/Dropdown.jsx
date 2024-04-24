@@ -1,9 +1,9 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-const Dropdown = ({ options, onSelect, name , disabled}) => {
-  const [selectedOption, setSelectedOption] = useState('');
+const Dropdown = ({ options, onSelect, name , disabled, value}) => {
+  const [selectedOption, setSelectedOption] = useState(value || ''); 
 
   const handleOptionSelect = (selectedValue) => {
     setSelectedOption(selectedValue);
