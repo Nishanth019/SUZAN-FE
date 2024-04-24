@@ -1,7 +1,8 @@
+'use client'
 import React, { useState } from "react";
 import { Tables } from "../../TailwindComponents/Table";
 
-function CoursesTable({ courses }) {
+function CoursesTable({ courses, openViewModal, handleEdit, handleDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 5; // Number of courses to display per page
 
@@ -26,6 +27,9 @@ function CoursesTable({ courses }) {
       currentPage={currentPage}
       totalPages={totalPages}
       handlePagination={handlePagination}
+      openViewModal={openViewModal} // Pass openViewModal function
+      handleEdit={handleEdit} // Pass handleEdit function
+      handleDelete={handleDelete} // Pass handleDelete function
     />
   );
 }
