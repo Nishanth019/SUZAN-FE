@@ -26,6 +26,7 @@ const AdminCourseSection = () => {
   return (
     <div>
       <nav className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-lg relative">
+        
         <div className="flex items-center space-x-4 font-semibold">
           <button className="md:hidden flex gap-2" onClick={toggleMenu}>
             <MdOutlineMenu className="h-6 w-6" />

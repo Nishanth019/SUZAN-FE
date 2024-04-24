@@ -77,6 +77,11 @@ class CourseService {
     return axiosInstance.get(`${this.url}/api/course/fieldOfStudyById/${fieldOfStudyId}`);
   }
 
+  // Search and get field of study by name
+  searchFieldOfStudy(searchTerm) {
+    return axiosInstance.post(`${this.url}/api/course/fieldOfStudy/search?searchTerm=${searchTerm}`);
+  }
+
   //Semester
   // Get all semesters by fieldOfStudy
   getAllSemestersByFieldOfStudyId({fieldOfStudyId}){
