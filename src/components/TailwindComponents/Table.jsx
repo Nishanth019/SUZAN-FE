@@ -58,7 +58,7 @@
                     <TableCell>{course.instructor_name}</TableCell>
                     <TableCell>
                       {/* Edit Button */}
-                      <Button onClick={openViewModal}>
+                      <Button onClick={()=>openViewModal(course)}>
                         <FaEye size={20} className="lg:ml-6" />
                       </Button>
                     </TableCell>

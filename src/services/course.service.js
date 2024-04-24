@@ -110,7 +110,7 @@ class CourseService {
   }
 
   // Get course by ID
-  getCourseById(courseId) {
+  getCourseById({courseId}) {
     return axiosInstance.get(`${this.url}/api/course/courses/${courseId}`);
   }
   
@@ -121,8 +121,24 @@ class CourseService {
 
   // Upload file
   uploadFile(data) {
-    return axiosInstance.post(`${this.url}/api/course/uploadfile`, data);
+    return axiosInstance.post(`${this.url}/api/course/uploadfile`, data, 
+           {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   }
+
+    // Upload picture
+    uploadPicture(data) {
+      return axiosInstance.post(`${this.url}/api/course/uploadpicture`, data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+    }
 }
 
 export default new CourseService();
