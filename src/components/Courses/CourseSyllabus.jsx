@@ -4,7 +4,7 @@ import { IoMdEye, IoMdDownload } from 'react-icons/io';
 import { FaLink, FaFilePdf } from "react-icons/fa";
 
 const CourseSyllabus = ({ syllabus }) => {
-  const links = syllabus.filter(item => item.type === "link");
+ 
   const pdfs = syllabus.filter(item => item.type === "pdf");
 
   return (
@@ -14,29 +14,11 @@ const CourseSyllabus = ({ syllabus }) => {
           Course Syllabus
         </p>
         <p>
-        {links.length === 0 && pdfs.length === 0 && (
+        {pdfs.length === 0 && (
             <p className="text-sm sm:text-[16px] font-medium text-center"> - No course materials available.</p>
           )}
           </p>
-        {links.length > 0 && (
-          <div className="space-y-4">
-            <p className="font-semibold text-lg md:text-xl">Links:</p>
-            <div className="space-y-4">
-              {links.map((item, index) => (
-                <div key={index} className="flex items-center space-x-4 border p-2 rounded-md">
-                  <FaLink className="text-blue-500  max-md:hidden" size={20} />
-                  <div className="flex-1">
-                    <p className="text-sm md:text-[16px]">{item.title}</p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button variant="outlined" color="primary" size="small" className="max-md:hidden">View</Button>
-                    <IoMdEye className="text-blue-500  md:hidden" size={24} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        
         {pdfs.length > 0 && (
           <div className="space-y-4">
             <p className="font-semibold text-lg md:text-xl">Pdfs:</p>

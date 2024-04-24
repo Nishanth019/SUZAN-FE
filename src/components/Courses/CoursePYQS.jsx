@@ -3,9 +3,9 @@ import { Button } from "@mui/material";
 import { IoMdEye, IoMdDownload } from 'react-icons/io';
 import { FaLink, FaFilePdf } from "react-icons/fa";
 
-const CoursePYQS = ({ pvqs }) => {
-  const links = pvqs.filter(item => item.type === "link");
-  const pdfs = pvqs.filter(item => item.type === "pdf");
+const CoursePYQS = ({ pyqs }) => {
+  const links = pyqs.filter(item => item.type === "link");
+  const pdfs = pyqs.filter(item => item.type === "pdf");
 
   return (
     <div className="w-full p-2 md:py-5 sm:px-5 lg:px-10 xl:px-16">
