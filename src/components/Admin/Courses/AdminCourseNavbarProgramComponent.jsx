@@ -177,11 +177,11 @@ const AdminCourseNavbarProgramComponent = () => {
           programFullName,
           semestersCount,
         });
+        toast.success(response.data.message || "Program is created");
         // Refetch all programs after adding
         fetchAllPrograms();
         // Close the modal after adding the program
         // console.log(69,response);
-        toast.success(response.data.message || "Program is created");
         closeModal();
       } catch (error) {
         console.error("Error adding program:", error);

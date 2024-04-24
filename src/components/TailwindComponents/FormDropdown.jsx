@@ -2,10 +2,8 @@
 import React, { useState } from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-const Dropdown2 = ({ options, onSelect, name }) => {
-  const [selectedOption, setSelectedOption] = useState('');
-
-  console.log(23,options)
+const Dropdown2 = ({ options, onSelect, name, value }) => {
+  const [selectedOption, setSelectedOption] = useState(value || ''); 
 
   const handleOptionSelect = (selectedValue) => {
     setSelectedOption(selectedValue);
@@ -13,7 +11,7 @@ const Dropdown2 = ({ options, onSelect, name }) => {
   };
 
   return (
-    <FormControl   className="w-full " size="small">
+    <FormControl className="w-full" size="small">
       <InputLabel id="demo-simple-select-label">{name}</InputLabel>
       <Select 
         labelId="demo-simple-select-label"

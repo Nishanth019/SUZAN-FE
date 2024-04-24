@@ -110,6 +110,7 @@ const CoursesSection = () => {
             <div className="flex flex-wrap gap-2 sm:gap-5 ">
               <Dropdown
                 name="Program"
+                value={selectedProgram}
                 options={programs?.map((program) => program?.program_name)}
                 onSelect={(selectedProgramName) => {
                   const selectedProgram = programs?.find(
@@ -122,6 +123,7 @@ const CoursesSection = () => {
               />
               <Dropdown
                 name="Field Of Study"
+                value={selectedFieldOfStudy}
                 options={fieldOfStudy?.map((field) => field?.field_of_studyname)}
                 onSelect={(selectedFieldOfStudyName) => {
                   const selectedFieldOfStudy = fieldOfStudy?.find(
@@ -133,6 +135,7 @@ const CoursesSection = () => {
               />
               <Dropdown
                 name="Semester"
+                value={selectedSemester}
                 options={semesters?.map((semester) => semester?.semester)}
                 onSelect={(selectedSemesterName) => {
                   const selectedSemester = semesters?.find(
