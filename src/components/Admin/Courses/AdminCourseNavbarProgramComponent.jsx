@@ -201,7 +201,7 @@ console.log(70,programs)
         </button>
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-5">
-        <div className="w-full md:w-[250px]">
+        <div className="w-full md:w-[250px]"> 
           <form
             className="max-w-md mx-auto"
             onSubmit={(e) => {
@@ -259,7 +259,7 @@ console.log(70,programs)
         ))}
       </div>
 
-      {/* Modal */}
+      {/*Add and edit = Modal */}
       <Modal
         style={{ zIndex: 10000 }}
         open={modalOpen}

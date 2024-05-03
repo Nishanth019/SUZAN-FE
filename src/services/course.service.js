@@ -77,7 +77,7 @@ class CourseService {
   }
 
   // Get field of study by ID
-  getFieldOfStudyById(fieldOfStudyId) {
+  getFieldOfStudyById({fieldOfStudyId}) {
     return axiosInstance.get(`${this.url}/api/course/fieldOfStudyById/${fieldOfStudyId}`);
   }
 
@@ -88,8 +88,12 @@ class CourseService {
 
   //Semester
   // Get all semesters by fieldOfStudy
-  getAllSemester(fieldOfStudyId){
+  getAllSemestersByFieldOfStudyId({fieldOfStudyId}){
     return axiosInstance.get(`${this.url}/api/course/semester/${fieldOfStudyId}`);
+  }
+
+  getSemesterByCourseId({courseId}){
+    return axiosInstance.get(`${this.url}/api/course/semester/course/${courseId}`);
   }
 
   // Course
@@ -138,6 +142,13 @@ class CourseService {
     });
   }
 
+
+  //media
+  getMediaByCourceId({courseId}){
+    return axiosInstance.get(`${this.url}/api/course/courses/media/${courseId}`);
+  }
+  
+
     // Upload picture
     uploadPicture(data) {
       return axiosInstance.post(`${this.url}/api/course/uploadpicture`, data,
@@ -148,6 +159,7 @@ class CourseService {
       }
     );
     }
+
 }
 
 export default new CourseService();
