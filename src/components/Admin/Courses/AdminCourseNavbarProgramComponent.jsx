@@ -54,13 +54,13 @@ const AdminCourseNavbarProgramComponent = () => {
           return { ...program, coursesCount, fieldOfStudyCount };
         })
       );
-      // console.log(69,programsWithCounts);
+      console.log(69,programsWithCounts);
       setPrograms(programsWithCounts);
     } catch (error) {
       console.error("Error fetching programs:", error);
     }
   };
-// console.log(70,programs)
+console.log(70,programs)
   const fetchCourseCountForProgram = async (programId) => {
     try {
       console.log(123456);
@@ -76,7 +76,7 @@ const AdminCourseNavbarProgramComponent = () => {
   const fetchFieldOfStudyCountForProgram = async (programId) => {
     try {
       const response = await CourseService.getAllFieldsOfStudy(programId);
-      console.log(1233, response);
+      // console.log(1233, response);
       return response.data.fieldsOfStudy.length;
     } catch (error) {
       console.error("Error fetching field of study count for program:", error);
@@ -97,7 +97,7 @@ const AdminCourseNavbarProgramComponent = () => {
   const openEditProgramModal = (program) => {
     setCurrentProgram(program);
     setProgramName(program.program_name);
-    // console.log(71,programName,program,program.progamName);
+    console.log(71,programName,program,program.progamName);
     setProgramFullName(program.program_fullname);
     setSemetersCount(program.no_of_semester);
     setModalOpen(true);
@@ -123,9 +123,9 @@ const AdminCourseNavbarProgramComponent = () => {
   //search
    const handleSearch = async () => {
      try {
-      //  console.log("sully");
+       console.log("sully");
        const response = await CourseService.searchProgram(searchQuery);
-      //  console.log("cheeku", response.data);
+       console.log("cheeku", response.data);
        setPrograms(response.data.programs);
      } catch (error) {
        console.error("Error searching Program:", error);
@@ -138,7 +138,7 @@ const AdminCourseNavbarProgramComponent = () => {
     try {
       
       const response = await CourseService.deleteProgram( {programId: currentProgram._id} );
-      // console.log("deleting",2)
+      console.log("deleting",2)
       // Refetch all programs after deleting
       fetchAllPrograms();
       // Close the delete confirmation modal after deleting the program
@@ -170,7 +170,7 @@ const AdminCourseNavbarProgramComponent = () => {
     } else {
       // If currentProgram does not exist, add a new program
       try {
-        // console.log(69,"working")
+        console.log(69,"working")
         // Create program with provided data
         const response=await CourseService.createProgram({
           programName,
@@ -181,7 +181,7 @@ const AdminCourseNavbarProgramComponent = () => {
         // Refetch all programs after adding
         fetchAllPrograms();
         // Close the modal after adding the program
-        // console.log(69,response);
+        console.log(69,response);
         closeModal();
       } catch (error) {
         console.error("Error adding program:", error);

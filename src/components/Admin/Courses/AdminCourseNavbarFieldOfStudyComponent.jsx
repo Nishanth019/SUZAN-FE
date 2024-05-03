@@ -42,8 +42,22 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   }, [fieldsOfStudy])
 
 
-
   useEffect(() => {
+    async function fetchFieldOfStudyOfACollege() {
+      try {
+        const response = await CourseService.getAllFieldOfStudyOfCollege();
+        setFieldOfStudy(response.data.fieldsOfStudy);
+        console.log("daddy::", response.data.program)
+        setSelectedProgram(response.data.program);
+        // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
+      } catch (error) {
+        console.error("Error fetching fields of study for a college", error);
+      }
+    }
+    fetchFieldOfStudyOfACollege();
+  }, []);
+
+    useEffect(() => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
       try {
@@ -89,7 +103,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     async function fetchProgramDetailsById(programId) {
       try {
         const response = await CourseService.getProgramById(programId);
-        console.log(12345, response.data)
+        // console.log(12345, response.data)
         setSelectedProgramDetails(response.data.program);
       } catch (error) {
         console.error("Error fetching program:", error);
@@ -106,8 +120,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
 
   useEffect(() => {
-    console.log("dayday", fieldsOfStudy)
-    console.log("dayday", fieldsOfStudy[0])
+    // console.log("dayday", fieldsOfStudy)
+    // console.log("dayday", fieldsOfStudy[0])
   }, [fieldsOfStudy, selectedFieldOfStudy]);
 
 
@@ -128,9 +142,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
   const fetchCourseCountForFieldOfStudy = async (programId, fieldOfStudyId) => {
     try {
-      console.log(123456);
+      // console.log(123456);
       const response = await CourseService.getAllCourses(programId, fieldOfStudyId);
-      console.log(123, response);
+      // console.log(123, response);
       return response.data.courses.length;
     } catch (error) {
       console.error("Error fetching course count for program:", error);
@@ -187,9 +201,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   //search
   const handleSearch = async () => {
     try {
-      //  console.log("sully");
+       console.log("sully");
       const response = await CourseService.searchFieldOfStudy(searchQuery);
-      //  console.log("cheeku", response.data);
+       console.log("cheeku", response.data);
       setFieldOfStudy(response.data.fieldsOfStudy);
     } catch (error) {
       console.error("Error searching field of study:", error);
@@ -200,7 +214,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   const handleDeleteFieldOfStudy = async () => {
     try {
       const response = await CourseService.deleteFieldOfStudy(currentFieldOfStudy._id);
-      console.log("deleted", response);
+      // console.log("deleted", response);
       fetchAllFieldOfStudy();
       closeDeleteModal();
 
@@ -231,7 +245,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     } else {
       // If currentFieldOfStudy does not exist, add a new Field Of Study
       try {
-        // console.log(69,"working")
+        console.log(69,"working")
         // Create fos with provided data
         const response = await CourseService.createFieldOfStudy({
           //send program id
@@ -242,7 +256,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         // Refetch all fos after adding
         fetchAllFieldOfStudy();
         // Close the modal after adding the program
-        // console.log(69,response);
+        console.log(69,response);
         toast.success(response.data.message || "Field Of Study is created");
         closeModal();
       } catch (error) {
