@@ -12,6 +12,7 @@ import Dropdown from "../TailwindComponents/Dropdown";
 import { FaSearch } from "react-icons/fa";
 import CourseService from "@/services/course.service.js";
 import PencilLoading from "../Ui/PencilLoading.jsx"
+import { CircularProgress } from '@mui/material';
 
 const CoursesSection = () => {
   const router = useRouter();
@@ -191,7 +192,7 @@ const CoursesSection = () => {
             {
               loading?
                   <div className="flex justify-center items-center h-[50vh] md:h-[70vh]"> 
-                  <PencilLoading/>
+                  <CircularProgress/>
                   </div> 
                   :
                   <>

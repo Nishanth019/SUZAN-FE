@@ -13,6 +13,7 @@
   import CourseService from "@/services/course.service"; 
 import CommentSection from "../CommentSection/CommentSection";
 import PencilLoading from "../Ui/PencilLoading.jsx"
+import { CircularProgress } from '@mui/material';
 
   const AboutCourse = () => {
 
@@ -143,7 +144,7 @@ import PencilLoading from "../Ui/PencilLoading.jsx"
          {
       loading?
           <div className="flex justify-center items-center h-[80vh] md:h-[90vh]"> 
-          <PencilLoading/>
+          <CircularProgress/>
           </div> 
           :
           <>
