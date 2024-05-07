@@ -42,7 +42,7 @@ class CourseService {
   }
 
   // Get program by ID
-  getProgramById(programId) {
+  getProgramById({programId}) {
     return axiosInstance.get(`${this.url}/api/course/programs/${programId}`);
   }
 

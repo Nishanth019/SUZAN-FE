@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {required, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const Dropdown2 = ({ options, onSelect, name, value }) => {
   const [selectedOption, setSelectedOption] = useState(value || ''); 
@@ -14,6 +14,7 @@ const Dropdown2 = ({ options, onSelect, name, value }) => {
     <FormControl className="w-full" size="small">
       <InputLabel id="demo-simple-select-label">{name}</InputLabel>
       <Select 
+        required={required}
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         value={selectedOption}
