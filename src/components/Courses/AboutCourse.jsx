@@ -12,8 +12,12 @@
   import "./style.css"
   import CourseService from "@/services/course.service"; 
 import CommentSection from "../CommentSection/CommentSection";
+import PencilLoading from "../Ui/PencilLoading.jsx"
 
   const AboutCourse = () => {
+
+    const [loading,setLoading]  = useState(false);
+
       const router = useRouter();
       const pathname = usePathname();
       const course_id = pathname.split("/").pop();
@@ -42,6 +46,7 @@ import CommentSection from "../CommentSection/CommentSection";
     useEffect(() => {
       const fetchCourseDetails = async () => {
         try {
+          setLoading(true);
           const response = await CourseService.getCourseById({
             courseId: course_id,
           });
@@ -66,7 +71,9 @@ import CommentSection from "../CommentSection/CommentSection";
             fieldOfStudy: field_of_study.field_of_studyfullname,
             semester: semester.semester,
           });
+          setLoading(false);
         } catch (error) {
+          setLoading(false);
           console.error(error);
         }
       };
@@ -74,6 +81,7 @@ import CommentSection from "../CommentSection/CommentSection";
       fetchCourseDetails();
       const fetchMedia = async () => {
         try {
+          setLoading(true);
           const response = await CourseService.getMediaByCourceId({
             courseId: course_id,
           });
@@ -115,9 +123,11 @@ import CommentSection from "../CommentSection/CommentSection";
 
           setResources([...resourcesPdf, ...resourcesLinks]);
           setPyqs([...pyqPdf, ...pyqLinks]);
+          setLoading(false);
           // console.log(23, syllabus);
           // console.log(25, pyqs);
         } catch (error) {
+          setLoading(false);
           console.error(error);
         }
       };
@@ -128,7 +138,15 @@ import CommentSection from "../CommentSection/CommentSection";
     }, []);
 
 
-    return (
+    return (    
+      <>
+         {
+      loading?
+          <div className="flex justify-center items-center h-[80vh] md:h-[90vh]"> 
+          <PencilLoading/>
+          </div> 
+          :
+          <>
     <div className="m-3 md:m-10 lg:mx-[120px] xl:mx-[200px]  boxShadow bg-white rounded-lg">
       <AboutCourseMainSection courseDetails={courseDetails}/> 
       <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
@@ -140,6 +158,9 @@ import CommentSection from "../CommentSection/CommentSection";
       <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
       <CommentSection  />
     </div>
+    </>
+  }
+    </>
     );
   };
 

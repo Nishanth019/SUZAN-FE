@@ -173,26 +173,20 @@ const AdminCourseNavbarCourseComponent = () => {
   async function fetchSingleCourse(courseId) {
     try {
       setEditCourseCode(courseId);
-      console.log(1111)
       const response = await CourseService.getCourseById({ courseId });
-      console.log(5, response.data);
-      console.log(1111)
       setSingleCourse(response.data.course);
       const { course } = response.data;
       const response3 = await CourseService.getProgramById({
         programId: course.program,
       });
-      console.log(123, response3.data?.program.program_fullname)
       setUpdatedProgram(response3.data?.program.program_fullname)
       const response1 = await CourseService.getFieldOfStudyById({
         fieldOfStudyId: course.field_of_study,
       });
-      console.log(1234, response1.data.fieldOfStudy.field_of_studyfullname)
       setUpdatedFieldOfStudy(response1.data.fieldOfStudy.field_of_studyfullname)
       const response2 = await CourseService.getSemesterByCourseId({
         courseId: course._id,
       });
-      console.log(1235, response2.data.semester.semester);
       setUpdatedSemester(response2.data.semester.semester);
 
       // Set updated course details
@@ -261,27 +255,75 @@ const AdminCourseNavbarCourseComponent = () => {
     }
   };
 
-  const handleEditAddResourceLink = (e) => {
-    e.preventDefault();
+  const handleEditAddResourceLink = () => {
+    if(editFormResourceLinkName.length===0 || editFormResourceLinkUrl.length===0){
+      toast.error("Enter both details", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
     setUpdatedResource_links([...updatedResource_links, { link_name: editFormResourceLinkName, link_url: editFormResourceLinkUrl }]);
     setEditFormResourceLinkName("")
     setEditFormResourceLinkUrl("")
   };
   const handleEditAddResourcePdf = (e) => {
-    e.preventDefault();
+    if(editFormResourcePdfName.length===0 || editFormResourcePdfUrl.length===0){
+      toast.error("Enter both details", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
     setUpdatedResource_pdfs([...updatedResource_pdfs, { pdf_name: editFormResourcePdfName, pdf_url: editFormResourcePdfUrl }]);
     setEditFormResourcePdfName("")
     setEditFormResourcePdfUrl("")
   };
 
   const handleEditAddPyqLink = (e) => {
-    e.preventDefault();
+    if(editFormPyqLinkName.length===0 || editFormPyqLinkUrl.length===0){
+      toast.error("Enter both details", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
     setUpdatedPyq_links([...updatedPyq_links, { link_name: editFormPyqLinkName, link_url: editFormPyqLinkUrl }]);
     setEditFormPyqLinkName("")
     setEditFormPyqLinkUrl("")
   };
   const handleEditAddPyqPdf = (e) => {
-    e.preventDefault();
+    if(editFormPyqPdfName.length===0 || editFormPyqPdfUrl.length===0){
+      toast.error("Enter both details", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
     setUpdatedPyq_pdfs([...updatedPyq_pdfs, { pdf_name: editFormPyqPdfName, pdf_url: editFormPyqPdfUrl }]);
     setEditFormPyqPdfName("")
     setEditFormPyqPdfUrl("")
@@ -1526,7 +1568,7 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             )}
             {/* new links to add */}
-            <form className="" onSubmit={handleEditAddResourceLink}>
+            <div>
               <input
                 type="text"
                 value={editFormResourceLinkName}
@@ -1535,7 +1577,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 }
                 placeholder="Resources Link Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                required
+                
               />
               <input
                 type="text"
@@ -1545,11 +1587,11 @@ const AdminCourseNavbarCourseComponent = () => {
                 }
                 placeholder="Resources Link Url"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                required
+                
               />
               <div className="flex justify-end mb-5">
                 <Button
-                  type="submit"
+                  onClick={handleEditAddResourceLink}
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
@@ -1558,7 +1600,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   ADD
                 </Button>
               </div>
-            </form>
+            </div>
 
             <label
               htmlFor="resource_pdfs"
@@ -1628,7 +1670,7 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             )}
             {/* new links to add */}
-            <form className="" onSubmit={handleEditAddResourcePdf}>
+            <div>
               <input
                 type="text"
                 value={editFormResourcePdfName}
@@ -1637,7 +1679,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 }
                 placeholder="Resources Pdf Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                required
+               
               />
               <input
                 onChange={(e) =>
@@ -1646,10 +1688,10 @@ const AdminCourseNavbarCourseComponent = () => {
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                required />
+               />
               <div className="flex justify-end">
                 <Button
-                  type="submit"
+                  onClick={handleEditAddResourcePdf}
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
@@ -1658,7 +1700,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   ADD
                 </Button>
               </div>
-            </form>
+            </div>
 
             <label
               htmlFor="pyq_links"
@@ -1711,7 +1753,7 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             )}
             {/* new links to add */}
-            <form className="" onSubmit={handleEditAddPyqLink}>
+            <div>
               <input
                 type="text"
                 value={editFormPyqLinkName}
@@ -1720,7 +1762,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 }
                 placeholder="PYQ Link Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                required
+                
               />
               <input
                 type="text"
@@ -1730,11 +1772,11 @@ const AdminCourseNavbarCourseComponent = () => {
                 }
                 placeholder="PYQ Link Url"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                required
+                
               />
               <div className="flex justify-end mb-5">
                 <Button
-                  type="submit"
+                  onClick={handleEditAddPyqLink}
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
@@ -1742,7 +1784,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   ADD
                 </Button>
               </div>
-            </form>
+            </div>
 
             <label
               htmlFor="pyq_links"
@@ -1811,7 +1853,7 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             )}
             {/* new links to add */}
-            <form className="" onSubmit={handleEditAddPyqPdf}>
+            <div>
               <input
                 type="text"
                 value={editFormPyqPdfName}
@@ -1820,7 +1862,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 }
                 placeholder="PYQ Pdf Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                required
+                
               />
               <input
                 onChange={(e) =>
@@ -1829,11 +1871,11 @@ const AdminCourseNavbarCourseComponent = () => {
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                required
+              
               />
               <div className="flex justify-end">
                 <Button
-                  type="submit"
+                  onClick={handleEditAddPyqPdf}
                   style={{ textTransform: "none" }}
                   className=" mb-5 "
                   variant="contained"
@@ -1842,7 +1884,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   ADD
                 </Button>
               </div>
-            </form>
+            </div>
 
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
