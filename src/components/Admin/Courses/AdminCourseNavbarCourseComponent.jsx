@@ -11,6 +11,8 @@ import Modal from "@mui/material/Modal";
 import Dropdown2 from "@/components/TailwindComponents/FormDropdown";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CourseService from "@/services/course.service.js";
+import { IoMdEye, IoMdDownload } from 'react-icons/io';
+import { FaLink, FaFilePdf } from "react-icons/fa";
 
 import { ToastContainer, toast } from "react-toastify";
 
@@ -32,6 +34,7 @@ const AdminCourseNavbarCourseComponent = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
@@ -48,11 +51,11 @@ const AdminCourseNavbarCourseComponent = () => {
   const [coursesPerPage] = useState(10);
 
   //deleting course id
-  const [deletingCourseId, setDeletingCourseId] = useState(null); 
+  const [deletingCourseId, setDeletingCourseId] = useState(null);
 
   //Single Course
-  const [singleCourse, setSingleCourse] = useState(null);  
-  
+  const [singleCourse, setSingleCourse] = useState(null);
+
   //form Dropdown useStates
   const [formSelectedProgram, setFormSelectedProgram] = useState("");
   const [formSelectedFieldOfStudy, setFormSelectedFieldOfStudy] = useState("");
@@ -66,11 +69,38 @@ const AdminCourseNavbarCourseComponent = () => {
   const [instructor_name, setInstructor_name] = useState("");
   const [instructor_photo, setInstructor_photo] = useState("");
   const [syllabus, setSyllabus] = useState("");
-  const [resource_links, setResources_link] = useState([{link_name:"",link_url:""}]);
+  const [resource_links, setResources_link] = useState([{ link_name: "", link_url: "" }]);
   const [resource_pdfs, setResources_pdf] = useState([{ pdf_name: "", pdf_url: "" }]);
-  const [pyq_links, setPyq_link] = useState([{link_name:"",link_url:""}]);
+  const [pyq_links, setPyq_link] = useState([{ link_name: "", link_url: "" }]);
   const [pyq_pdfs, setPyq_pdf] = useState([{ pdf_name: "", pdf_url: "" }]);
- 
+
+  // Updated course input useStates
+  const [editCourseCode, setEditCourseCode] = useState("");
+  const [updatedProgram, setUpdatedProgram] = useState("");
+  const [updatedFieldOfStudy, setUpdatedFieldOfStudy] = useState("");
+  const [updatedSemester, setUpdatedSemester] = useState("");
+  const [updatedCourse_name, setUpdatedCourse_name] = useState("");
+  const [updatedCourse_code, setUpdatedCourse_code] = useState("");
+  const [updatedCourse_type, setUpdatedCourse_type] = useState("");
+  const [updatedCredits, setUpdatedCredits] = useState(0);
+  const [updatedInstructor_name, setUpdatedInstructor_name] = useState("");
+  const [updatedInstructor_photo, setUpdatedInstructor_photo] = useState("");
+  const [updatedSyllabus, setUpdatedSyllabus] = useState("");
+  const [updatedResource_links, setUpdatedResource_links] = useState([{ link_name: "", link_url: "" }]);
+  const [updatedResource_pdfs, setUpdatedResource_pdfs] = useState([{ pdf_name: "", pdf_url: "" }]);
+  const [updatedPyq_links, setUpdatedPyq_links] = useState([{ link_name: "", link_url: "" }]);
+  const [updatedPyq_pdfs, setUpdatedPyq_pdfs] = useState([{ pdf_name: "", pdf_url: "" }]);
+
+  //editform useStates
+  const [editFormResourceLinkName, setEditFormResourceLinkName] = useState("")
+  const [editFormResourceLinkUrl, setEditFormResourceLinkUrl] = useState("")
+  const [editFormResourcePdfName, setEditFormResourcePdfName] = useState("")
+  const [editFormResourcePdfUrl, setEditFormResourcePdfUrl] = useState("")
+  const [editFormPyqLinkName, setEditFormPyqLinkName] = useState("")
+  const [editFormPyqLinkUrl, setEditFormPyqLinkUrl] = useState("")
+  const [editFormPyqPdfName, setEditFormPyqPdfName] = useState("")
+  const [editFormPyqPdfUrl, setEditFormPyqPdfUrl] = useState("")
+
   useEffect(() => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
@@ -99,17 +129,17 @@ const AdminCourseNavbarCourseComponent = () => {
     if (selectedProgram) {
       fetchFieldsOfStudy(selectedProgram);
     }
-    else if(formSelectedProgram){
+    else if (formSelectedProgram) {
       fetchFieldsOfStudy(formSelectedProgram);
     }
-  }, [formSelectedProgram,selectedProgram]);
+  }, [formSelectedProgram, selectedProgram]);
 
   useEffect(() => {
     // Fetch semesters when field of study selected
     async function fetchSemesters(fieldOfStudyId) {
       try {
         const response = await CourseService.getAllSemester(fieldOfStudyId);
-        console.log(12345,response.data)
+        console.log(12345, response.data)
         setSemesters(response.data.semesters);
         // setSelectedSemester(response.data.semesters[0]?._id);
       } catch (error) {
@@ -119,7 +149,7 @@ const AdminCourseNavbarCourseComponent = () => {
     if (selectedFieldOfStudy) {
       fetchSemesters(selectedFieldOfStudy);
     }
-    else if(formSelectedFieldOfStudy){
+    else if (formSelectedFieldOfStudy) {
       fetchSemesters(formSelectedFieldOfStudy);
     }
   }, [formSelectedFieldOfStudy, selectedFieldOfStudy]);
@@ -131,8 +161,8 @@ const AdminCourseNavbarCourseComponent = () => {
   async function fetchCourses() {
     try {
       console.log(1223456)
-      const response = await CourseService.getAllCourses({programId:selectedProgram,fieldOfStudyId:selectedFieldOfStudy,semesterId:selectedSemester});
-      console.log(5,response.data);
+      const response = await CourseService.getAllCourses({ programId: selectedProgram, fieldOfStudyId: selectedFieldOfStudy, semesterId: selectedSemester });
+      console.log(5, response.data);
       console.log(1223455)
       setCourses(response.data.courses);
     } catch (error) {
@@ -140,39 +170,245 @@ const AdminCourseNavbarCourseComponent = () => {
     }
   }
 
-  async function fetchSingleCourse(courseId){
+  async function fetchSingleCourse(courseId) {
     try {
+      setEditCourseCode(courseId);
       console.log(1111)
-      const response = await CourseService.getCourseById({courseId});
-      console.log(5,response.data);
+      const response = await CourseService.getCourseById({ courseId });
+      console.log(5, response.data);
       console.log(1111)
       setSingleCourse(response.data.course);
+      const { course } = response.data;
+      const response3 = await CourseService.getProgramById({
+        programId: course.program,
+      });
+      console.log(123, response3.data?.program.program_fullname)
+      setUpdatedProgram(response3.data?.program.program_fullname)
+      const response1 = await CourseService.getFieldOfStudyById({
+        fieldOfStudyId: course.field_of_study,
+      });
+      console.log(1234, response1.data.fieldOfStudy.field_of_studyfullname)
+      setUpdatedFieldOfStudy(response1.data.fieldOfStudy.field_of_studyfullname)
+      const response2 = await CourseService.getSemesterByCourseId({
+        courseId: course._id,
+      });
+      console.log(1235, response2.data.semester.semester);
+      setUpdatedSemester(response2.data.semester.semester);
+
+      // Set updated course details
+      setUpdatedCourse_name(response?.data?.course?.course_name);
+      setUpdatedCourse_code(response?.data?.course?.course_code);
+      setUpdatedCourse_type(response?.data?.course?.course_type);
+      setUpdatedCredits(response?.data?.course?.credits);
+      setUpdatedInstructor_name(response?.data?.course?.instructor_name);
+      setUpdatedInstructor_photo(response?.data?.course?.instructor_photo);
+
+      fetchMedia(response?.data?.course?._id);
     } catch (error) {
       console.error("Error fetching courses:", error);
-    }       
+    }
   }
+
+  const fetchMedia = async (courseId) => {
+    try {
+      console.log(89, courseId);
+      const response = await CourseService.getMediaByCourceId({
+        courseId
+      });
+      console.log(97, response.data);
+      console.log(977, response?.data?.syllabus?.pdf_url);
+      console.log(978, response?.data?.resourcesLinks);
+      console.log(979, response?.data?.resourcesPdf);
+      console.log(980, response?.data?.pyqLinks);
+      console.log(981, response?.data?.pyqPdf)
+
+      // Set updated syllabus
+      setUpdatedSyllabus(response?.data?.syllabus?.pdf_url || "");
+
+      // Set updated resource links
+      setUpdatedResource_links(response?.data?.resourcesLinks || [{ link_name: "", link_url: "" }]);
+
+      // Set updated resource PDFs
+      setUpdatedResource_pdfs(response?.data?.resourcesPdf || [{ pdf_name: "", pdf_url: "" }]);
+
+      // Set updated PYQ links
+      setUpdatedPyq_links(response?.data?.pyqLinks || [{ link_name: "", link_url: "" }]);
+
+      // Set updated PYQ PDFs
+      setUpdatedPyq_pdfs(response?.data?.pyqPdf || [{ pdf_name: "", pdf_url: "" }]);
+
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEditDeleteField = (field, index) => {
+    if (field === "resource_links") {
+      setUpdatedResource_links((prevLinks) => prevLinks.filter((_, i) => i !== index));
+    }
+    if (field === "resource_pdfs") {
+      setUpdatedResource_pdfs((prevLinks) => prevLinks.filter((_, i) => i !== index));
+    }
+    if (field === "pyq_links") {
+      setUpdatedPyq_links((prevLinks) => prevLinks.filter((_, i) => i !== index));
+    }
+    if (field === "pyq_pdfs") {
+      setUpdatedPyq_pdfs((prevLinks) => prevLinks.filter((_, i) => i !== index));
+    }
+    if (field === "syllabus_pdf") {
+      setUpdatedSyllabus("")
+    }
+  };
+
+  const handleEditAddResourceLink = (e) => {
+    e.preventDefault();
+    setUpdatedResource_links([...updatedResource_links, { link_name: editFormResourceLinkName, link_url: editFormResourceLinkUrl }]);
+    setEditFormResourceLinkName("")
+    setEditFormResourceLinkUrl("")
+  };
+  const handleEditAddResourcePdf = (e) => {
+    e.preventDefault();
+    setUpdatedResource_pdfs([...updatedResource_pdfs, { pdf_name: editFormResourcePdfName, pdf_url: editFormResourcePdfUrl }]);
+    setEditFormResourcePdfName("")
+    setEditFormResourcePdfUrl("")
+  };
+
+  const handleEditAddPyqLink = (e) => {
+    e.preventDefault();
+    setUpdatedPyq_links([...updatedPyq_links, { link_name: editFormPyqLinkName, link_url: editFormPyqLinkUrl }]);
+    setEditFormPyqLinkName("")
+    setEditFormPyqLinkUrl("")
+  };
+  const handleEditAddPyqPdf = (e) => {
+    e.preventDefault();
+    setUpdatedPyq_pdfs([...updatedPyq_pdfs, { pdf_name: editFormPyqPdfName, pdf_url: editFormPyqPdfUrl }]);
+    setEditFormPyqPdfName("")
+    setEditFormPyqPdfUrl("")
+  };
+
+  const handleInputChangeresourceeditpdf = async (field, value) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", value);
+      const response = await CourseService.uploadFile(formData);
+      console.log(response.data.file);
+      if (field === "resources_pdf") {
+        setEditFormResourcePdfUrl(response.data.file)
+      }
+      else if (field === "pyq_pdf") {
+        setEditFormPyqPdfUrl(response.data.file)
+      }
+      else if (field === "syllabus_pdf") {
+        setUpdatedSyllabus(response.data.file)
+      }
+
+      toast.success(response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+    console.log(12345, resource_pdfs)
+  };
+
+
+  //upload edit picture
+  const handleUploadEditPicture = async (e) => {
+    const file = e.target.files[0];
+    console.log(23, file);
+    try {
+      const formData = new FormData();
+      formData.append("picture", file);
+      const response = await CourseService.uploadPicture(formData);
+      setUpdatedInstructor_photo(response?.data?.picture);
+      toast.success(response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
 
   const handleSearch = async () => {
     try {
       console.log("sully")
       const response = await CourseService.searchCourse(searchQuery);
-      console.log("cheeku",response.data)
+      console.log("cheeku", response.data)
       setCourses(response.data.courses);
     } catch (error) {
       console.error("Error searching courses:", error);
     }
   };
 
-  const handleAddCourse = async() => {
-    try{
+  const handleAddCourse = async (e) => {
+    e.preventDefault();
+    try {
       console.log("sully")
+      if(formSelectedProgram.length===0){
+        toast.error("Please select Program", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          // transition: Bounce,
+        });
+        return;
+      }
+      if(formSelectedFieldOfStudy.length===0){
+        toast.error("Please select Field Of Study", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          // transition: Bounce,
+        });
+        return;
+      }
+      if(formSelectedSemester.length===0){
+        toast.error("Please select Semester", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          // transition: Bounce,
+        });
+        return;
+      }
       const data = {
-        program:formSelectedProgram, field_of_study:formSelectedFieldOfStudy, semester:formSelectedSemester, course_name, course_code, course_type, credits, instructor_name, instructor_photo, syllabus,
+        program: formSelectedProgram, field_of_study: formSelectedFieldOfStudy, semester: formSelectedSemester, course_name, course_code, course_type, credits, instructor_name, instructor_photo, syllabus,
         resource_links, resource_pdfs, pyq_links, pyq_pdfs
       };
-      console.log(11111,data)
+      console.log(11111, data)
       const response = await CourseService.createCourse(data);
-      console.log("cheeku",response.data)
+      console.log("cheeku", response.data)
       toast.success(response?.data?.message, {
         position: "top-center",
         autoClose: 5000,
@@ -187,14 +423,58 @@ const AdminCourseNavbarCourseComponent = () => {
       fetchCourses();
       closeModal();
     }
-    catch(err){
+    catch (err) {
       console.error("Error searching courses:", err);
     }
   }
 
+  const handleEditCourse = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        program: updatedProgram,
+        field_of_study: updatedFieldOfStudy,
+        semester: updatedSemester,
+        course_name: updatedCourse_name,
+        course_code: updatedCourse_code,
+        course_type: updatedCourse_type,
+        credits: updatedCredits,
+        instructor_name: updatedInstructor_name,
+        instructor_photo: updatedInstructor_photo,
+        syllabus: updatedSyllabus,
+        resource_links: updatedResource_links,
+        resource_pdfs: updatedResource_pdfs,
+        pyq_links: updatedPyq_links,
+        pyq_pdfs: updatedPyq_pdfs
+      };
+
+      console.log(1001, data)
+
+      const courseId = editCourseCode; // Assuming you have a selectedCourseId state variable for the course being edited
+      console.log(1002, courseId);
+      const response = await CourseService.updateCourse(courseId, data);
+      toast.success(response?.data?.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        // transition: Bounce,
+      });
+      fetchCourses(); // Assuming you have a fetchCourses function to refresh the course list after editing
+      setEditModalOpen(false); // Assuming you have a closeEditModal function to close the edit modal
+    } catch (err) {
+      console.error("Error editing course:", err);
+    }
+  };
+
+
   // Dummy courses data
   const openViewModal = (course) => {
-    console.log(22222,course)
+    console.log(22222, course)
     fetchSingleCourse(course._id);
     setViewModalOpen(true);
   };
@@ -209,6 +489,11 @@ const AdminCourseNavbarCourseComponent = () => {
     setViewModalOpen(false);
   };
 
+  const closeEditModal = () => {
+    setEditModalOpen(false)
+  }
+
+
   // Function to handle opening the modal
   const openModal = () => {
     setModalOpen(true);
@@ -220,19 +505,18 @@ const AdminCourseNavbarCourseComponent = () => {
     setCourse_code("");
     setCourse_type("");
     setCredits(0);
-    setCollege_name("");
     setInstructor_name("");
     setInstructor_photo("");
     setSyllabus("");
-    setResources_link([{link_name:"",link_url:""}]);
+    setResources_link([{ link_name: "", link_url: "" }]);
     setResources_pdf([{ pdf_name: "", pdf_url: "" }]);
-    setPyq_link([{link_name:"",link_url:""}]);
+    setPyq_link([{ link_name: "", link_url: "" }]);
     setPyq_pdf([{ pdf_name: "", pdf_url: "" }]);
   };
 
   const handleEdit = async (course) => {
     fetchSingleCourse(course._id);
-    setModalOpen(true);
+    setEditModalOpen(true);
   };
 
   const openDeleteModal = () => {
@@ -253,8 +537,8 @@ const AdminCourseNavbarCourseComponent = () => {
   const handleDeleteCourse = async () => {
     try {
       console.log("deleting", deletingCourseId);
-      const res = await CourseService.deleteCourse({deletingCourseId});
-      console.log(455,res.data.message)
+      const res = await CourseService.deleteCourse({ deletingCourseId });
+      console.log(455, res.data.message)
       console.log("deleting", 2);
       fetchCourses()
       closeDeleteModal();
@@ -274,21 +558,21 @@ const AdminCourseNavbarCourseComponent = () => {
     const updatedLinks = [...resource_links];
     updatedLinks[index][fieldIndex === 0 ? "link_name" : "link_url"] = value;
     setResources_link(updatedLinks);
-    console.log(12345,resource_links)
+    console.log(12345, resource_links)
   };
 
-  const handleInputChangeresourcepdf = async(index, fieldIndex, value) => {
+  const handleInputChangeresourcepdf = async (index, fieldIndex, value) => {
     const updatedResources = [...resource_pdfs];
-    if(fieldIndex === 0){
+    if (fieldIndex === 0) {
       updatedResources[index]["pdf_name"] = value;
     }
-    else if(fieldIndex === 1){
+    else if (fieldIndex === 1) {
       try {
         const formData = new FormData();
         formData.append("file", value);
         const response = await CourseService.uploadFile(formData);
         console.log(response.data.file);
-      updatedResources[index]["pdf_url"] = response.data.file;
+        updatedResources[index]["pdf_url"] = response.data.file;
         toast.success(response.data.message, {
           position: "top-center",
           autoClose: 5000,
@@ -304,22 +588,22 @@ const AdminCourseNavbarCourseComponent = () => {
       }
     }
     setResources_pdf(updatedResources);
-    console.log(12345,resource_pdfs)
+    console.log(12345, resource_pdfs)
   };
-  
+
   const handleInputChangepyqlink = (index, fieldIndex, value) => {
     const updatedPyq = [...pyq_links];
     updatedPyq[index][fieldIndex === 0 ? "link_name" : "link_url"] = value;
     setPyq_link(updatedPyq);
-    console.log(123,pyq_links)
+    console.log(123, pyq_links)
   };
 
-  const handleInputChangepyqpdf = async(index, fieldIndex, value) => {
+  const handleInputChangepyqpdf = async (index, fieldIndex, value) => {
     const updatedPyq = [...pyq_pdfs];
-    if(fieldIndex === 0){ 
+    if (fieldIndex === 0) {
       updatedPyq[index]["pdf_name"] = value;
     }
-    else if(fieldIndex === 1){
+    else if (fieldIndex === 1) {
       try {
         const formData = new FormData();
         formData.append("file", value);
@@ -341,7 +625,7 @@ const AdminCourseNavbarCourseComponent = () => {
       }
     }
     setPyq_pdf(updatedPyq);
-    console.log(12345,pyq_pdfs)
+    console.log(12345, pyq_pdfs)
   };
 
 
@@ -359,18 +643,18 @@ const AdminCourseNavbarCourseComponent = () => {
       setPyq_pdf((prevPdfs) => [...prevPdfs, { pdf_name: "", pdf_url: "" }]);
     }
   };
-  
+
   const handleDeleteField = (field, index) => {
     if (field === "resource_links") {
       setResources_link((prevLinks) => prevLinks.filter((_, i) => i !== index));
     }
-    if(field==="resource_pdfs"){
+    if (field === "resource_pdfs") {
       setResources_pdf((prevLinks) => prevLinks.filter((_, i) => i !== index));
     }
-    if(field==="pyq_links"){
+    if (field === "pyq_links") {
       setPyq_link((prevLinks) => prevLinks.filter((_, i) => i !== index));
     }
-    if(field==="pyq_pdfs"){
+    if (field === "pyq_pdfs") {
       setPyq_pdf((prevLinks) => prevLinks.filter((_, i) => i !== index));
     }
   };
@@ -453,75 +737,75 @@ const AdminCourseNavbarCourseComponent = () => {
         </button>
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-5 ">
-              <Dropdown
-                name="Program"
-                value={selectedProgram}
-                options={programs?.map((program) => program?.program_name)}
-                onSelect={(selectedProgramName) => {
-                  const selectedProgram = programs?.find(
-                    (program) => program?.program_name === selectedProgramName
-                  );
-                  setSelectedProgram(selectedProgram?._id);
-                  setSelectedSemester("")
-                  setSelectedFieldOfStudy("")
-                }}
+        <Dropdown
+          name="Program"
+          value={selectedProgram}
+          options={programs?.map((program) => program?.program_name)}
+          onSelect={(selectedProgramName) => {
+            const selectedProgram = programs?.find(
+              (program) => program?.program_name === selectedProgramName
+            );
+            setSelectedProgram(selectedProgram?._id);
+            setSelectedSemester("")
+            setSelectedFieldOfStudy("")
+          }}
+        />
+        <Dropdown
+          name="Field Of Study"
+          value={selectedFieldOfStudy}
+          options={fieldOfStudy?.map((field) => field?.field_of_studyname)}
+          onSelect={(selectedFieldOfStudyName) => {
+            const selectedFieldOfStudy = fieldOfStudy?.find(
+              (field) => field?.field_of_studyname === selectedFieldOfStudyName
+            );
+            setSelectedFieldOfStudy(selectedFieldOfStudy?._id);
+            setSelectedSemester("")
+          }}
+        />
+        <Dropdown
+          name="Semester"
+          value={selectedSemester}
+          options={semesters?.map((semester) => semester?.semester)}
+          onSelect={(selectedSemesterName) => {
+            const selectedSemester = semesters?.find(
+              (semester) => semester?.semester === selectedSemesterName
+            );
+            setSelectedSemester(selectedSemester?._id);
+          }}
+        />
+        <div className="w-full md:w-[270px]">
+          <form className="max-w-md mx-auto" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+            <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <FaSearch className="w-4 h-4 text-gray-500 " aria-hidden="true" />
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                placeholder="Search Course"
               />
-              <Dropdown
-                name="Field Of Study"
-                value={selectedFieldOfStudy}
-                options={fieldOfStudy?.map((field) => field?.field_of_studyname)}
-                onSelect={(selectedFieldOfStudyName) => {
-                  const selectedFieldOfStudy = fieldOfStudy?.find(
-                    (field) => field?.field_of_studyname === selectedFieldOfStudyName
-                  );
-                  setSelectedFieldOfStudy(selectedFieldOfStudy?._id);
-                  setSelectedSemester("")
-                }}
-              />
-              <Dropdown
-                name="Semester"
-                value={selectedSemester}
-                options={semesters?.map((semester) => semester?.semester)}
-                onSelect={(selectedSemesterName) => {
-                  const selectedSemester = semesters?.find(
-                    (semester) => semester?.semester === selectedSemesterName
-                  );
-                  setSelectedSemester(selectedSemester?._id);
-                }}
-              />
-              <div className="w-full md:w-[270px]">
-              <form className="max-w-md mx-auto" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
-                <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
-                <div className="relative">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <FaSearch className="w-4 h-4 text-gray-500 " aria-hidden="true" />
-                    </div>
-                    <input
-                      type="search"
-                      id="default-search"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-                      placeholder="Search Course"
-                    />
-                    <button type="submit" className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 ">Search</button>
-                </div>
-              </form>
-      </div>
+              <button type="submit" className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 ">Search</button>
+            </div>
+          </form>
+        </div>
       </div>
 
       {/*Course Table */}
       <div className="py-2 md:py-5">
-      <CoursesTable
+        <CoursesTable
           courses={courses}
           openViewModal={openViewModal}
-          handleEdit={handleEdit} 
-          handleDelete={handleDelete} 
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
         />
       </div>
 
-      
-      {/* //////////////////////// modal to Add and Edit the course //////////////////// */}
+
+      {/* //////////////////////// modal to Add the course //////////////////// */}
       <Modal
         //  style={{ zIndex: 9999 }}
         open={modalOpen}
@@ -551,8 +835,8 @@ const AdminCourseNavbarCourseComponent = () => {
           >
             X
           </Button>
-          <div
-            // onSubmit={handleSubmit}
+          <form
+            onSubmit={handleAddCourse}
             className="flex  flex-col w-full h-full py-6 text-center bg-white "
           >
             <h3 className="pb-5  text-[25px]  md:text-[35px]  font-extrabold text-dark-grey-900">
@@ -565,7 +849,8 @@ const AdminCourseNavbarCourseComponent = () => {
               >
                 Select Program*
               </label>
-              <Dropdown2  
+              <Dropdown2
+                required={true}
                 name="Program"
                 value={formSelectedProgram}
                 options={programs?.map((program) => program?.program_name)}
@@ -701,9 +986,9 @@ const AdminCourseNavbarCourseComponent = () => {
             />
 
             <label htmlFor="instructorFileInput" className="mb-2 text-sm text-start text-grey-900 ">
-              Upload Instructor Photo*</label>
+              Upload Instructor Photo</label>
             <div className="flex items-center mb-8">
-              <input required type="file" id="instructorFileInput"   accept="image/*" 
+              <input type="file" id="instructorFileInput" accept="image/*"
                 onChange={handleUploadPicture} className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 " />
             </div>
 
@@ -711,40 +996,40 @@ const AdminCourseNavbarCourseComponent = () => {
               htmlFor="syllabusFileInput"
               className="mb-2 text-sm text-start text-grey-900 "
             >
-              Upload Syllabus*
+              Upload Syllabus
             </label>
             <div className="flex items-center mb-8">
-              <input required type="file" id="syllabusFileInput" onChange={handleSyllabusFile}  accept="application/pdf" className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 " />
+              <input  type="file" id="syllabusFileInput" onChange={handleSyllabusFile} accept="application/pdf" className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 " />
             </div>
 
             <label
               htmlFor="resource_links"
               className="mb-2 text-sm text-start text-grey-900"
             >
-              Upload Resources* (Link)
+              Upload Resources (Link)
             </label>
             {resource_links.map((rsc, index) => (
               <div key={index} className="mb-5">
-                   <input
-      type="text"
-      value={rsc.link_name} // Use link_name from resource_links state
-      onChange={(e) =>
-        handleInputChangeresourcelink(index, 0, e.target.value)
-      }
-      placeholder="Resources Link Name"
-      className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-      required
-    />
-    <input
-      type="text"
-      value={rsc.link_url} // Use link_url from resource_links state
-      onChange={(e) =>
-        handleInputChangeresourcelink(index, 1, e.target.value)
-      }
-      placeholder="Resources Link URL"
-      className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-      required
-    />
+                <input
+                  type="text"
+                  value={rsc.link_name} // Use link_name from resource_links state
+                  onChange={(e) =>
+                    handleInputChangeresourcelink(index, 0, e.target.value)
+                  }
+                  placeholder="Resources Link Name"
+                  className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                  
+                />
+                <input
+                  type="text"
+                  value={rsc.link_url} // Use link_url from resource_links state
+                  onChange={(e) =>
+                    handleInputChangeresourcelink(index, 1, e.target.value)
+                  }
+                  placeholder="Resources Link URL"
+                  className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                  
+                />
                 <div className="flex justify-end">
                   {index > 0 && (
                     <>
@@ -771,13 +1056,11 @@ const AdminCourseNavbarCourseComponent = () => {
               + Add More Resources
             </Button>
 
-
-
             <label
               htmlFor="resources-pdf"
               className="mb-2 text-sm text-start text-grey-900"
             >
-              Upload Resources* (pdf)
+              Upload Resources (pdf)
             </label>
 
             {/* sd */}
@@ -785,23 +1068,23 @@ const AdminCourseNavbarCourseComponent = () => {
               <div key={index} className="mb-5 ">
                 <input
                   type="text"
-                  value={resource.pdf_name} 
+                  value={resource.pdf_name}
                   onChange={(e) =>
                     handleInputChangeresourcepdf(index, 0, e.target.value) // Pass index and 0 to identify the name
                   }
                   placeholder="Resources Pdf Name"
                   className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  required
+                  
                 />
-                <input 
+                <input
                   onChange={(e) =>
                     handleInputChangeresourcepdf(index, 1, e.target.files[0]) // Pass index and 1 to identify the URL
                   }
-                  accept="application/pdf" 
+                  accept="application/pdf"
                   type="file"
                   id={`resourcePdfInput-${index}`}
                   className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                  required />
+                   />
 
                 <div className="flex justify-end">
                   {index > 0 && (
@@ -835,29 +1118,29 @@ const AdminCourseNavbarCourseComponent = () => {
               htmlFor="pyq"
               className="mb-2 text-sm text-start text-grey-900"
             >
-              Upload PYQ*
+              Upload pyq (Link)
             </label>
             {pyq_links.map((pyq, index) => (
               <div key={index} className=" mb-5">
                 <input
                   type="text"
-                  value={pyq.link_name} 
+                  value={pyq.link_name}
                   onChange={(e) =>
                     handleInputChangepyqlink(index, 0, e.target.value)
                   }
                   placeholder="PYQ Link Name"
                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  required
+                  
                 />
                 <input
                   type="text"
-                  value={pyq.link_url} 
+                  value={pyq.link_url}
                   onChange={(e) =>
                     handleInputChangepyqlink(index, 1, e.target.value) // Pass index and 1 to identify the URL
                   }
                   placeholder="PYQ Link url"
                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  required
+                  
                 />
                 <div className="flex justify-end">
                   {index > 0 && (
@@ -886,7 +1169,7 @@ const AdminCourseNavbarCourseComponent = () => {
               htmlFor="pyq-pdf"
               className="mb-2 text-sm text-start text-grey-900"
             >
-              Upload pyq* (pdf)
+              Upload pyq (pdf)
             </label>
 
             {/* sd */}
@@ -900,7 +1183,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   }
                   placeholder="Pyq Pdf Name"
                   className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  required
+                  
                 />
                 {/* <div className="flex items-center mb-8"> */}
 
@@ -908,9 +1191,9 @@ const AdminCourseNavbarCourseComponent = () => {
                   id={`pyqPdfInput-${index}`}
                   type="file"
                   accept="application/pdf"
-                  onChange={(e) => handleInputChangepyqpdf(index, 1,  e.target.files[0])}
+                  onChange={(e) => handleInputChangepyqpdf(index, 1, e.target.files[0])}
                   className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                  required
+                 
                 />
 
                 {/* </div> */}
@@ -942,19 +1225,640 @@ const AdminCourseNavbarCourseComponent = () => {
 
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button onClick={handleAddCourse} variant="contained">Add Course</Button>
+              <Button type="submit" variant="contained">Add Course</Button>
             </div>
-          </div>
+          </form>
+        </Box>
+      </Modal>
+
+      {/* Edit modal */}
+      <Modal
+        open={editModalOpen}
+        onClose={closeEditModal} // Assuming you have a function to close the edit modal
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            ...style,
+            width: "50%",
+            "@media (max-width: 1024px)": {
+              width: "60%",
+            },
+            "@media (max-width: 768px)": {
+              width: "90%",
+              maxHeight: "95vh",
+            },
+            maxHeight: "95vh",
+            overflowY: "auto",
+          }}
+        >
+          <Button
+            variant="outlined"
+            onClick={closeEditModal}
+            sx={{ position: "absolute", top: 8, right: 8 }}
+          >
+            X
+          </Button>
+          <form onSubmit={handleEditCourse} className="flex flex-col w-full h-full py-6 text-center bg-white ">
+            <h3 className="pb-5 text-[25px] md:text-[35px] font-extrabold text-dark-grey-900">
+              Edit Course Details
+            </h3>
+            {/* Populate input fields with course details */}
+            {/* Program */}
+            <div className="py-2 md:pt-3 flex flex-col">
+              <label
+                htmlFor="programName"
+                className="mb-2 text-sm text-start text-grey-900 "
+              >
+                Program
+              </label>
+              <input
+                type="text"
+                value={updatedProgram || ""}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            </div>
+            <div className="pb-2  flex flex-col">
+              <label
+                htmlFor="fieldofstudyName"
+                className="mb-2 text-sm text-start text-grey-900 "
+              >
+                Field Of Study
+              </label>
+              <input
+                type="text"
+                value={updatedFieldOfStudy || ""}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            </div>
+            <div className="pb-2 md:pb-8 flex flex-col">
+              <label
+                htmlFor="semesterName"
+                className="mb-2 text-sm text-start text-grey-900 "
+              >
+                Semester
+              </label>
+              <input
+                type="text"
+                value={updatedSemester || ""}
+                disabled
+                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              />
+            </div>
+            {/* Update Course Name */}
+            <label
+              htmlFor="coursename"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Course Name*
+            </label>
+            <input
+              id="coursename"
+              type="text"
+              value={updatedCourse_name}
+              onChange={(e) => setUpdatedCourse_name(e.target.value)}
+              placeholder="Data Structures and Algorithms"
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              required
+            />
+            <label
+              htmlFor="fieldofstudyName"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Course Type*
+            </label>
+            <input
+              id="coursetype"
+              type="text"
+              value={updatedCourse_type}
+              onChange={(e) => setUpdatedCourse_type(e.target.value)}
+              placeholder="Compulsory "
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              required
+            />
+            <label
+              htmlFor="fieldofstudyName"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Credits*
+            </label>
+            <input
+              id="credits"
+              type="number"
+              value={updatedCredits}
+              onChange={(e) => setUpdatedCredits(e.target.value)}
+              placeholder="Number Of Credits"
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              required
+            />
+            <label
+              htmlFor="fieldofstudyName"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Instructor Name*
+            </label>
+            <input
+              id="instructorname"
+              type="text"
+              value={updatedInstructor_name}
+              onChange={(e) => setUpdatedInstructor_name(e.target.value)}
+              placeholder="Sraban Mohanty"
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              required
+            />
+            <label
+              htmlFor="fieldofstudyName"
+              className="mb-2 text-sm text-start text-grey-900 "
+            >
+              Instructor Photo
+            </label>
+            <div className="flex gap-5 items-center mb-5">
+              <div className="rounded-full overflow-hidden">
+                {updatedInstructor_photo.length > 0 && (
+                  <img
+                    className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
+                    src={updatedInstructor_photo}
+                    alt="Prof"
+                  />
+                )}
+              </div>
+              <div>
+                <label htmlFor="fileInput" className="text-blue-400 cursor-pointer text-sm">
+                  Update Picture
+                </label>
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleUploadEditPicture}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
+            <label
+              htmlFor="syllabus_pdfs"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Syllabus (Pdf)
+            </label>
+            {/* displaying available links */}
+            {updatedSyllabus.length > 0 && (
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  <div>
+                    <div
+                      className="flex items-center space-x-4 border  p-2 rounded-md"
+                    >
+                      <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
+                      <div className="flex-1">
+                        <p className="text-sm md:text-[16px]">Syllabus</p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          className="max-md:!hidden"
+                        >
+                          View
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          size="small"
+                          className="max-md:!hidden"
+                        >
+                          Download
+                        </Button>
+                        <IoMdEye
+                          className="text-blue-500 cursor-pointer md:hidden"
+                          size={24}
+                        />
+                        <IoMdDownload
+                          className="text-red-500 cursor-pointer md:hidden"
+                          size={24}
+                        />
+                      </div>
+                    </div>
+                    {/* Delete button */}
+                    <div className="flex justify-end my-2">
+                      <Button
+                        style={{ textTransform: "none" }}
+                        onClick={() =>
+                          handleEditDeleteField("syllabus_pdf", 0)
+                        }
+                        variant="outlined"
+                        size="small"
+                        startIcon={<DeleteIcon />}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            )}
+            <input
+              onChange={(e) =>
+                handleInputChangeresourceeditpdf("syllabus_pdf", e.target.files[0]) // Pass index and 1 to identify the URL
+              }
+              accept="application/pdf"
+              type="file"
+              className="w-full mb-10 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+               />
+
+            <label
+              htmlFor="resource_links"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Resources (Link)
+            </label>
+            {/* displaying available links */}
+            {updatedResource_links.length > 0 && (
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  {updatedResource_links.map((item, index) => (
+                    <div key={index}>
+                      <div
+                        className="flex items-center space-x-4 border p-2 rounded-md"
+                      >
+                        <FaLink className="text-blue-500  max-md:hidden" size={20} />
+                        <div className="flex-1">
+                          <p className="text-sm md:text-[16px]">{item.link_name}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            View
+                          </Button>
+                          <IoMdEye className="text-blue-500  md:hidden" size={24} />
+                        </div>
+                      </div>
+                      {/* Delete button */}
+                      <div className="flex justify-end my-2">
+                        <Button
+                          style={{ textTransform: "none" }}
+                          onClick={() =>
+                            handleEditDeleteField("resource_links", index)
+                          }
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* new links to add */}
+            <form className="" onSubmit={handleEditAddResourceLink}>
+              <input
+                type="text"
+                value={editFormResourceLinkName}
+                onChange={(e) =>
+                  setEditFormResourceLinkName(e.target.value)
+                }
+                placeholder="Resources Link Name"
+                className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                required
+              />
+              <input
+                type="text"
+                value={editFormResourceLinkUrl}
+                onChange={(e) =>
+                  setEditFormResourceLinkUrl(e.target.value)
+                }
+                placeholder="Resources Link Url"
+                className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                required
+              />
+              <div className="flex justify-end mb-5">
+                <Button
+                  type="submit"
+                  style={{ textTransform: "none" }}
+                  variant="contained"
+                  size="small"
+                // startIcon={<DeleteIcon />}
+                >
+                  ADD
+                </Button>
+              </div>
+            </form>
+
+            <label
+              htmlFor="resource_pdfs"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Resources (Pdf)
+            </label>
+            {/* displaying available links */}
+            {updatedResource_pdfs.length > 0 && (
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  {updatedResource_pdfs.map((item, index) => (
+                    <div
+                      key={index}>
+                      <div
+                        className="flex items-center space-x-4 border  p-2 rounded-md"
+                      >
+                        <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
+                        <div className="flex-1">
+                          <p className="text-sm md:text-[16px]">{item.pdf_name}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            View
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            Download
+                          </Button>
+                          <IoMdEye
+                            className="text-blue-500 cursor-pointer md:hidden"
+                            size={24}
+                          />
+                          <IoMdDownload
+                            className="text-red-500 cursor-pointer md:hidden"
+                            size={24}
+                          />
+                        </div>
+                      </div>
+                      {/* Delete button */}
+                      <div className="flex justify-end my-2">
+                        <Button
+                          style={{ textTransform: "none" }}
+                          onClick={() =>
+                            handleEditDeleteField("resource_pdfs", index)
+                          }
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* new links to add */}
+            <form className="" onSubmit={handleEditAddResourcePdf}>
+              <input
+                type="text"
+                value={editFormResourcePdfName}
+                onChange={(e) =>
+                  setEditFormResourcePdfName(e.target.value)
+                }
+                placeholder="Resources Pdf Name"
+                className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                required
+              />
+              <input
+                onChange={(e) =>
+                  handleInputChangeresourceeditpdf("resources_pdf", e.target.files[0]) // Pass index and 1 to identify the URL
+                }
+                accept="application/pdf"
+                type="file"
+                className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                required />
+              <div className="flex justify-end">
+                <Button
+                  type="submit"
+                  style={{ textTransform: "none" }}
+                  variant="contained"
+                  size="small"
+                // startIcon={<DeleteIcon />}
+                >
+                  ADD
+                </Button>
+              </div>
+            </form>
+
+            <label
+              htmlFor="pyq_links"
+              className="mb-2 mt-5 text-sm text-start text-grey-900"
+            >
+              Previous Year Questions (Link)
+            </label>
+            {/* displaying available links */}
+            {updatedPyq_links.length > 0 && (
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  {updatedPyq_links.map((item, index) => (
+                    <div key={index}>
+                      <div
+                        className="flex items-center space-x-4 border p-2 rounded-md"
+                      >
+                        <FaLink className="text-blue-500 max-md:hidden" size={20} />
+                        <div className="flex-1">
+                          <p className="text-sm md:text-[16px]">{item.link_name}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            View
+                          </Button>
+                          <IoMdEye className="text-blue-500  md:hidden" size={24} />
+                        </div>
+                      </div>
+                      {/* Delete button */}
+                      <div className="flex justify-end my-2">
+                        <Button
+                          style={{ textTransform: "none" }}
+                          onClick={() =>
+                            handleEditDeleteField("pyq_links", index)
+                          }
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* new links to add */}
+            <form className="" onSubmit={handleEditAddPyqLink}>
+              <input
+                type="text"
+                value={editFormPyqLinkName}
+                onChange={(e) =>
+                  setEditFormPyqLinkName(e.target.value)
+                }
+                placeholder="PYQ Link Name"
+                className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                required
+              />
+              <input
+                type="text"
+                value={editFormPyqLinkUrl}
+                onChange={(e) =>
+                  setEditFormPyqLinkUrl(e.target.value)
+                }
+                placeholder="PYQ Link Url"
+                className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                required
+              />
+              <div className="flex justify-end mb-5">
+                <Button
+                  type="submit"
+                  style={{ textTransform: "none" }}
+                  variant="contained"
+                  size="small"
+                >
+                  ADD
+                </Button>
+              </div>
+            </form>
+
+            <label
+              htmlFor="pyq_links"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Previous Year Questions (Pdf)
+            </label>
+            {/* displaying available links */}
+            {updatedPyq_pdfs.length > 0 && (
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  {updatedPyq_pdfs.map((item, index) => (
+                    <div
+                      key={index}>
+                      <div
+                        className="flex items-center space-x-4 border  p-2 rounded-md"
+                      >
+                        <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
+                        <div className="flex-1">
+                          <p className="text-sm md:text-[16px]">{item.pdf_name}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            View
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            Download
+                          </Button>
+                          <IoMdEye
+                            className="text-blue-500 cursor-pointer md:hidden"
+                            size={24}
+                          />
+                          <IoMdDownload
+                            className="text-red-500 cursor-pointer md:hidden"
+                            size={24}
+                          />
+                        </div>
+                      </div>
+                      {/* Delete button */}
+                      <div className="flex justify-end my-2">
+                        <Button
+                          style={{ textTransform: "none" }}
+                          onClick={() =>
+                            handleEditDeleteField("pyq_pdfs", index)
+                          }
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* new links to add */}
+            <form className="" onSubmit={handleEditAddPyqPdf}>
+              <input
+                type="text"
+                value={editFormPyqPdfName}
+                onChange={(e) =>
+                  setEditFormPyqPdfName(e.target.value)
+                }
+                placeholder="PYQ Pdf Name"
+                className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                required
+              />
+              <input
+                onChange={(e) =>
+                  handleInputChangeresourceeditpdf("pyq_pdf", e.target.files[0]) // Pass index and 1 to identify the URL
+                }
+                accept="application/pdf"
+                type="file"
+                className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                required
+              />
+              <div className="flex justify-end">
+                <Button
+                  type="submit"
+                  style={{ textTransform: "none" }}
+                  className=" mb-5 "
+                  variant="contained"
+                  size="small"
+                >
+                  ADD
+                </Button>
+              </div>
+            </form>
+
+            <div className="pb-2 pt-4">
+              {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
+              <Button type="submit"  variant="contained">Update Course</Button>
+            </div>
+
+          </form>
         </Box>
       </Modal>
 
 
 
+
       {/* ////////////////////////modal to view the course //////////////////// */}
-      <Modal
-        // style={{ zIndex: 9999 }}
+       <Modal
         open={viewModalOpen}
-        // onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -981,8 +1885,8 @@ const AdminCourseNavbarCourseComponent = () => {
             X
           </Button>
           <div className="flex flex-col w-full h-full py-6 text-center bg-white ">
-            <h3 className="pb-5  text-[25px]  md:text-[35px]  font-extrabold text-dark-grey-900">
-              Course Details
+            <h3 className="pb-5 text-[25px] md:text-[35px] font-extrabold text-dark-grey-900">
+               Course Details
             </h3>
             <div className="py-2 md:pt-3 flex flex-col">
               <label
@@ -993,7 +1897,7 @@ const AdminCourseNavbarCourseComponent = () => {
               </label>
               <input
                 type="text"
-                value={singleCourse?.program || ""}
+                value={updatedProgram || ""}
                 disabled
                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
               />
@@ -1007,12 +1911,12 @@ const AdminCourseNavbarCourseComponent = () => {
               </label>
               <input
                 type="text"
-                value={singleCourse?.field_of_study || ""}
+                value={updatedFieldOfStudy || ""}
                 disabled
                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
               />
             </div>
-            <div className="pb-2 md:pb-8 flex flex-col">
+            <div className="mb-5 flex flex-col">
               <label
                 htmlFor="semesterName"
                 className="mb-2 text-sm text-start text-grey-900 "
@@ -1021,12 +1925,12 @@ const AdminCourseNavbarCourseComponent = () => {
               </label>
               <input
                 type="text"
-                value={singleCourse?.semester || ""}
+                value={updatedSemester || ""}
                 disabled
                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
               />
             </div>
-            {/* Inputs */}
+            {/* Update Course Name */}
             <label
               htmlFor="coursename"
               className="mb-2 text-sm text-start text-grey-900 "
@@ -1034,128 +1938,304 @@ const AdminCourseNavbarCourseComponent = () => {
               Course Name
             </label>
             <input
+              id="coursename"
               type="text"
-              value={singleCourse?.course_name || ""}
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-            />
-            <label
-              htmlFor="coursecode"
-              className="mb-2 text-sm text-start text-grey-900 "
-            >
-              Course Code
-            </label>
-            <input
-              type="text"
-              value={singleCourse?.course_code || ""}
+              value={updatedCourse_name || ""}
               disabled
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
             />
             <label
-              htmlFor="coursetype"
+              htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
             >
               Course Type
             </label>
             <input
+              id="coursetype"
               type="text"
-              value={singleCourse?.course_type || ""}
+              value={updatedCourse_type || ""}
               disabled
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
             />
             <label
-              htmlFor="credits"
+              htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
             >
               Credits
             </label>
             <input
+              id="credits"
               type="number"
-              value={singleCourse?.credits || ""}
-              disabled
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              value={updatedCredits}
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+                disabled
             />
             <label
-              htmlFor="instructorname"
+              htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
             >
               Instructor Name
             </label>
             <input
+            disabled
+              id="instructorname"
               type="text"
-              value={singleCourse?.instructor_name || ""}
-              disabled
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              value={updatedInstructor_name}
+              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
             />
             <label
-              htmlFor="instructorphoto"
+              htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
             >
               Instructor Photo
             </label>
-            <input
-              type="text"
-              value={singleCourse?.instructor_photo || ""}
-              disabled
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-            />
+            <div className="flex gap-5 items-center mb-5">
+              <div className="rounded-full overflow-hidden">
+                {updatedInstructor_photo.length > 0 && (
+                  <img
+                    className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
+                    src={updatedInstructor_photo}
+                    alt="Prof"
+                  />
+                )}
+              </div>
+            </div>
+
             <label
-              htmlFor="syllabus"
-              className="mb-2 text-sm text-start text-grey-900 "
-            >
-              Syllabus
-            </label>
-            {/* <input
-              type="text"
-              value={singleCourse?.syllabus || ""}
-              disabled
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-            /> */}
-            <label
-              htmlFor="resources"
+              htmlFor="syllabus_pdfs"
               className="mb-2 text-sm text-start text-grey-900"
             >
-              Resources
+              Syllabus (Pdf)
             </label>
-            {/* {singleCourse?.resource_links.map((resource, index) => (
-              <input
-                key={index}
-                type="text"
-                value={resource}
-                disabled
-                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-              />
-            ))} */}
+            {/* displaying available links */}
+            {updatedSyllabus.length > 0 && (
+              <div className="mb-5">
+                <div className="space-y-4">
+                  <div>
+                    <div
+                      className="flex items-center space-x-4 border  p-2 rounded-md"
+                    >
+                      <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
+                      <div className="flex-1">
+                        <p className="text-sm md:text-[16px]">Syllabus</p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          className="max-md:!hidden"
+                        >
+                          View
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          size="small"
+                          className="max-md:!hidden"
+                        >
+                          Download
+                        </Button>
+                        <IoMdEye
+                          className="text-blue-500 cursor-pointer md:hidden"
+                          size={24}
+                        />
+                        <IoMdDownload
+                          className="text-red-500 cursor-pointer md:hidden"
+                          size={24}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <label
-              htmlFor="notes"
+              htmlFor="resource_links"
               className="mb-2 text-sm text-start text-grey-900"
             >
-              Notes
+              Resources (Link)
             </label>
-            {/* {singleCourse?.notes.map((note, index) => (
-              <input
-                key={index}
-                type="text"
-                value={note}
-                disabled
-                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-              />
-            ))} */}
+            {/* displaying available links */}
+            {updatedResource_links.length > 0 && (
+              <div className="mb-5">
+                <div className="space-y-4">
+                  {updatedResource_links.map((item, index) => (
+                    <div key={index}>
+                      <div
+                        className="flex items-center space-x-4 border p-2 rounded-md"
+                      >
+                        <FaLink className="text-blue-500  max-md:hidden" size={20} />
+                        <div className="flex-1">
+                          <p className="text-sm md:text-[16px]">{item.link_name}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            View
+                          </Button>
+                          <IoMdEye className="text-blue-500  md:hidden" size={24} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <label
-              htmlFor="pyq"
+              htmlFor="resource_pdfs"
               className="mb-2 text-sm text-start text-grey-900"
             >
-              PYQ
+              Resources (Pdf)
             </label>
-            {/* {singleCourse?.pyq.map((pyq, index) => (
-              <input
-                key={index}
-                type="text"
-                value={pyq}
-                disabled
-                className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-              />
-            ))} */}
+            {/* displaying available links */}
+            {updatedResource_pdfs.length > 0 && (
+              <div className="mb-5">
+                <div className="space-y-4">
+                  {updatedResource_pdfs.map((item, index) => (
+                    <div
+                      key={index}>
+                      <div
+                        className="flex items-center space-x-4 border  p-2 rounded-md"
+                      >
+                        <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
+                        <div className="flex-1">
+                          <p className="text-sm md:text-[16px]">{item.pdf_name}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            View
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            Download
+                          </Button>
+                          <IoMdEye
+                            className="text-blue-500 cursor-pointer md:hidden"
+                            size={24}
+                          />
+                          <IoMdDownload
+                            className="text-red-500 cursor-pointer md:hidden"
+                            size={24}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                  ))}
+                </div>
+              </div>
+            )}
+            
+
+            <label
+              htmlFor="pyq_links"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Previous Year Questions (Link)
+            </label>
+            {/* displaying available links */}
+            {updatedPyq_links.length > 0 && (
+              <div className="mb-5">
+                <div className="space-y-4">
+                  {updatedPyq_links.map((item, index) => (
+                    <div key={index}>
+                      <div
+                        className="flex items-center space-x-4 border p-2 rounded-md"
+                      >
+                        <FaLink className="text-blue-500 max-md:hidden" size={20} />
+                        <div className="flex-1">
+                          <p className="text-sm md:text-[16px]">{item.link_name}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            View
+                          </Button>
+                          <IoMdEye className="text-blue-500  md:hidden" size={24} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <label
+              htmlFor="pyq_links"
+              className="mb-2 text-sm text-start text-grey-900"
+            >
+              Previous Year Questions (Pdf)
+            </label>
+            {/* displaying available links */}
+            {updatedPyq_pdfs.length > 0 && (
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  {updatedPyq_pdfs.map((item, index) => (
+                    <div
+                      key={index}>
+                      <div
+                        className="flex items-center space-x-4 border  p-2 rounded-md"
+                      >
+                        <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
+                        <div className="flex-1">
+                          <p className="text-sm md:text-[16px]">{item.pdf_name}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            View
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            size="small"
+                            className="max-md:!hidden"
+                          >
+                            Download
+                          </Button>
+                          <IoMdEye
+                            className="text-blue-500 cursor-pointer md:hidden"
+                            size={24}
+                          />
+                          <IoMdDownload
+                            className="text-red-500 cursor-pointer md:hidden"
+                            size={24}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
           </div>
         </Box>
       </Modal>
