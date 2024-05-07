@@ -7,3 +7,18 @@ canvas.react-pdf__Page__canvas {
     margin-bottom:20px;
    
 }
+
+.pdf-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .pdf-document {
+    display: inline-block;
+  }
+  
+  .pdf-page {
+    width: 100%;
+  }
+  

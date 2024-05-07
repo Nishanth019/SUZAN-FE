@@ -74,7 +74,7 @@ const CoursePYQS = ({ pyqs }) => {
                       variant="outlined"
                       color="primary"
                       size="small"
-                      className="max-md:hidden"
+                      className="max-md:!hidden"
                       onClick={() => handleOpenLink(item.url)}
                     >
                       View
@@ -108,6 +108,7 @@ const CoursePYQS = ({ pyqs }) => {
                       variant="outlined"
                       color="primary"
                       size="small"
+                      className="max-md:!hidden"
                       onClick={() => handleViewPdf(item)}
                     >
                       View

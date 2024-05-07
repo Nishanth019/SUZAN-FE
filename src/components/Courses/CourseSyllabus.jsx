@@ -70,6 +70,8 @@ const CourseSyllabus = ({ syllabus }) => {
                       variant="outlined"
                       color="primary"
                       size="small"
+                      className="max-md:!hidden"
+                    
                       onClick={() => handleViewPdf(item)}
                     >
                       View

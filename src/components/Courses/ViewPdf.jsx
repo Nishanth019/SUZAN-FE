@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Document, Page } from "react-pdf";
 
@@ -7,6 +8,19 @@ function ViewPdf({ pdf }) {
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
+
+  // useEffect(() => {
+  //   const resizeHandler = () => {
+  //     // Recalculate the PDF container size on window resize
+  //     setNumPages(null); // Reset numPages to recalculate it based on new dimensions
+  //   };
+
+  //   window.addEventListener("resize", resizeHandler);
+
+  //   return () => {
+  //     window.removeEventListener("resize", resizeHandler);
+  //   };
+  // }, []);
 
 
   return (
