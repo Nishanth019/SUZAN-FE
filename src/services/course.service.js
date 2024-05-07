@@ -88,7 +88,7 @@ class CourseService {
 
   //Semester
   // Get all semesters by fieldOfStudy
-  getAllSemestersByFieldOfStudyId({fieldOfStudyId}){
+  getAllSemestersByFieldOfStudy({fieldOfStudyId}) {
     return axiosInstance.get(`${this.url}/api/course/semester/${fieldOfStudyId}`);
   }
 

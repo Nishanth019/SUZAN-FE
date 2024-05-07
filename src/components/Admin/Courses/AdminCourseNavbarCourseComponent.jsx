@@ -138,7 +138,7 @@ const AdminCourseNavbarCourseComponent = () => {
     // Fetch semesters when field of study selected
     async function fetchSemesters(fieldOfStudyId) {
       try {
-        const response = await CourseService.getAllSemester(fieldOfStudyId);
+        const response = await CourseService.getAllSemestersByFieldOfStudy({ fieldOfStudyId });
         console.log(12345, response.data)
         setSemesters(response.data.semesters);
         // setSelectedSemester(response.data.semesters[0]?._id);
@@ -345,10 +345,10 @@ const AdminCourseNavbarCourseComponent = () => {
   };
 
 
-  const handleSearch = async () => {
+  const handleSearch = async (value) => {
     try {
       console.log("sully")
-      const response = await CourseService.searchCourse(searchQuery);
+      const response = await CourseService.searchCourse(value);
       console.log("cheeku", response.data)
       setCourses(response.data.courses);
     } catch (error) {
@@ -360,7 +360,7 @@ const AdminCourseNavbarCourseComponent = () => {
     e.preventDefault();
     try {
       console.log("sully")
-      if(formSelectedProgram.length===0){
+      if (formSelectedProgram.length === 0) {
         toast.error("Please select Program", {
           position: "top-center",
           autoClose: 5000,
@@ -374,7 +374,7 @@ const AdminCourseNavbarCourseComponent = () => {
         });
         return;
       }
-      if(formSelectedFieldOfStudy.length===0){
+      if (formSelectedFieldOfStudy.length === 0) {
         toast.error("Please select Field Of Study", {
           position: "top-center",
           autoClose: 5000,
@@ -388,7 +388,7 @@ const AdminCourseNavbarCourseComponent = () => {
         });
         return;
       }
-      if(formSelectedSemester.length===0){
+      if (formSelectedSemester.length === 0) {
         toast.error("Please select Semester", {
           position: "top-center",
           autoClose: 5000,
@@ -774,7 +774,12 @@ const AdminCourseNavbarCourseComponent = () => {
           }}
         />
         <div className="w-full md:w-[270px]">
-          <form className="max-w-md mx-auto" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+          <form
+            className="max-w-md mx-auto" 
+            onChange={(e) => {
+              handleSearch(e.target.value);
+            }}
+          >
             <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
             <div className="relative">
               <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -788,7 +793,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
                 placeholder="Search Course"
               />
-              <button type="submit" className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 ">Search</button>
             </div>
           </form>
         </div>
@@ -999,7 +1003,7 @@ const AdminCourseNavbarCourseComponent = () => {
               Upload Syllabus
             </label>
             <div className="flex items-center mb-8">
-              <input  type="file" id="syllabusFileInput" onChange={handleSyllabusFile} accept="application/pdf" className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 " />
+              <input type="file" id="syllabusFileInput" onChange={handleSyllabusFile} accept="application/pdf" className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 " />
             </div>
 
             <label
@@ -1018,7 +1022,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   }
                   placeholder="Resources Link Name"
                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  
+
                 />
                 <input
                   type="text"
@@ -1028,7 +1032,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   }
                   placeholder="Resources Link URL"
                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  
+
                 />
                 <div className="flex justify-end">
                   {index > 0 && (
@@ -1074,7 +1078,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   }
                   placeholder="Resources Pdf Name"
                   className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  
+
                 />
                 <input
                   onChange={(e) =>
@@ -1084,7 +1088,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   type="file"
                   id={`resourcePdfInput-${index}`}
                   className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                   />
+                />
 
                 <div className="flex justify-end">
                   {index > 0 && (
@@ -1130,7 +1134,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   }
                   placeholder="PYQ Link Name"
                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  
+
                 />
                 <input
                   type="text"
@@ -1140,7 +1144,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   }
                   placeholder="PYQ Link url"
                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  
+
                 />
                 <div className="flex justify-end">
                   {index > 0 && (
@@ -1183,7 +1187,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   }
                   placeholder="Pyq Pdf Name"
                   className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                  
+
                 />
                 {/* <div className="flex items-center mb-8"> */}
 
@@ -1193,7 +1197,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   accept="application/pdf"
                   onChange={(e) => handleInputChangepyqpdf(index, 1, e.target.files[0])}
                   className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                 
+
                 />
 
                 {/* </div> */}
@@ -1473,7 +1477,7 @@ const AdminCourseNavbarCourseComponent = () => {
               accept="application/pdf"
               type="file"
               className="w-full mb-10 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-               />
+            />
 
             <label
               htmlFor="resource_links"
@@ -1846,7 +1850,7 @@ const AdminCourseNavbarCourseComponent = () => {
 
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button type="submit"  variant="contained">Update Course</Button>
+              <Button type="submit" variant="contained">Update Course</Button>
             </div>
 
           </form>
@@ -1857,7 +1861,7 @@ const AdminCourseNavbarCourseComponent = () => {
 
 
       {/* ////////////////////////modal to view the course //////////////////// */}
-       <Modal
+      <Modal
         open={viewModalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -1886,7 +1890,7 @@ const AdminCourseNavbarCourseComponent = () => {
           </Button>
           <div className="flex flex-col w-full h-full py-6 text-center bg-white ">
             <h3 className="pb-5 text-[25px] md:text-[35px] font-extrabold text-dark-grey-900">
-               Course Details
+              Course Details
             </h3>
             <div className="py-2 md:pt-3 flex flex-col">
               <label
@@ -1970,7 +1974,7 @@ const AdminCourseNavbarCourseComponent = () => {
               value={updatedCredits}
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-                disabled
+              disabled
             />
             <label
               htmlFor="fieldofstudyName"
@@ -1979,7 +1983,7 @@ const AdminCourseNavbarCourseComponent = () => {
               Instructor Name
             </label>
             <input
-            disabled
+              disabled
               id="instructorname"
               type="text"
               value={updatedInstructor_name}
@@ -2144,7 +2148,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 </div>
               </div>
             )}
-            
+
 
             <label
               htmlFor="pyq_links"

@@ -199,10 +199,10 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   };
 
   //search
-  const handleSearch = async () => {
+  const handleSearch = async (value) => {
     try {
        console.log("sully");
-      const response = await CourseService.searchFieldOfStudy(searchQuery);
+      const response = await CourseService.searchFieldOfStudy(value);
        console.log("cheeku", response.data);
       setFieldOfStudy(response.data.fieldsOfStudy);
     } catch (error) {
@@ -283,10 +283,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         </button>
       </div>
 
-      <div className="flex justify pb-2 md:pb-5">
+      <div className="flex flex-wrap gap-2 sm:gap-5">
 
 
-        <div className="flex flex-wrap gap-2 sm:gap-5 mr-5 ">
           <Dropdown
             name="Program"
             options={programs?.map((program) => program?.program_name)}
@@ -300,16 +299,14 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
             }}
           />
 
-        </div>
 
-        <div className="flex flex-wrap gap-2 sm:gap-5">
+        <div className="w-full md:w-[270px]">
 
           <div className="w-full md:w-[250px]">
             <form
               className="max-w-md mx-auto"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSearch();
+              onChange={(e) => {
+                handleSearch(e.target.value);
               }}
             >
               <label
@@ -333,12 +330,6 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
                   className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
                   placeholder="Search Field Of Study"
                 />
-                <button
-                  type="submit"
-                  className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 "
-                >
-                  Search
-                </button>
               </div>
             </form>
           </div>
