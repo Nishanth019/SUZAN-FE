@@ -1,4 +1,4 @@
-// In your ViewPdf component
+
 import React, { useState, useEffect } from "react";
 import { Document, Page } from "react-pdf";
 
@@ -21,6 +21,7 @@ function ViewPdf({ pdf }) {
   //     window.removeEventListener("resize", resizeHandler);
   //   };
   // }, []);
+
 
   return (
     <>

@@ -77,7 +77,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-white  drop-shadow relative z-50">
+    <nav className="bg-white  drop-shadow relative z-8">
       <div className="mx-auto max-w-7xl px-2 md:px-6 lg:px-8 relative">
         <div className="relative flex h-20 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex space-x-4 items-center md:hidden">
@@ -159,7 +159,7 @@ const Navbar = () => {
                 </div>
 
                 {openProfile && (
-                  <div className="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-md bg-white  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden z-[50]">
+                  <div className="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-md bg-white  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden z-[8]">
                     <p className="block md:hidden px-4 py-2 text-md text-white bg-[#36518F] text-semibold ">
                       {user?.name}
                     </p>
