@@ -17,10 +17,10 @@ const CoursesCard = ({ course }) => {
   };
 
   return (
-    <div className="rounded-lg bg-white cursor-pointer shadow-lg hover:scale-[102%] transition-all" onClick={handleCardClick}>
+    <div className="rounded-lg bg-white  shadow-lg hover:scale-[102%] transition-all" >
       <div className="p-4 grid gap-2">
         <div className="max-sm:flex-col flex justify-between sm:flex">
-          <div className="flex-col mb-4">
+          <div className="flex-col mb-4 cursor-pointer" onClick={handleCardClick} >
             <h3 className="flex max:sm:text-sm text-lg font-semibold">
               {course.course_name}
             </h3>

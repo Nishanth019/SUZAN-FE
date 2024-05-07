@@ -9,6 +9,8 @@ import Link from "next/link";
 import Card from "@mui/material/Card";
 import CourseService from "@/services/course.service.js";
 import { ToastContainer, toast } from "react-toastify";
+import PencilLoading from "../../Ui/PencilLoading.jsx"
+import { CircularProgress } from '@mui/material';
 
 const style = {
   position: "absolute",
@@ -24,6 +26,10 @@ const style = {
 };
 
 const AdminCourseNavbarProgramComponent = () => {
+
+  
+  const [loading,setLoading]  = useState(false);
+  const [buttonLoading, setButtonLoading]  = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -41,6 +47,7 @@ const AdminCourseNavbarProgramComponent = () => {
   // Function to fetch all programs
   const fetchAllPrograms = async () => {
     try {
+      setLoading(true);
       const response = await CourseService.getAllPrograms();
       const programsWithCounts = await Promise.all(
         response.data.programs.map(async (program) => {
@@ -56,7 +63,9 @@ const AdminCourseNavbarProgramComponent = () => {
       );
       // console.log(69,programsWithCounts);
       setPrograms(programsWithCounts);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error fetching programs:", error);
     }
   };
@@ -124,10 +133,13 @@ const AdminCourseNavbarProgramComponent = () => {
    const handleSearch = async () => {
      try {
       //  console.log("sully");
+      setLoading(true);
        const response = await CourseService.searchProgram(searchQuery);
       //  console.log("cheeku", response.data);
        setPrograms(response.data.programs);
+       setLoading(false);
      } catch (error) {
+      setLoading(false);
        console.error("Error searching Program:", error);
      }
    };
@@ -136,14 +148,16 @@ const AdminCourseNavbarProgramComponent = () => {
   // Function to handle deleting a program
   const handleDeleteProgram = async () => {
     try {
-      
+      setButtonLoading(true)
       const response = await CourseService.deleteProgram( {programId: currentProgram._id} );
+      setButtonLoading(false)
       // console.log("deleting",2)
       // Refetch all programs after deleting
       fetchAllPrograms();
       // Close the delete confirmation modal after deleting the program
       closeDeleteModal();
     } catch (error) {
+      setButtonLoading(false)
       console.error("Error deleting program:", error);
     }
   };
@@ -151,39 +165,36 @@ const AdminCourseNavbarProgramComponent = () => {
   // Function to handle adding or editing a program
   const handleProgramAction = async () => {
     if (currentProgram) {
-      // If currentProgram exists, edit the program
       try {
+        setButtonLoading(true)
         const response = await CourseService.updateProgram({
           programId: currentProgram._id,
           programName,
           programFullName,
           semestersCount,
         });
-        // Refetch all programs after editing
-        // Close the modal after editing the program
+        setButtonLoading(false)
         toast.success(response.data.message || "Program is updated")
         closeModal();
         fetchAllPrograms();
       } catch (error) {
+        setButtonLoading(false)
         console.error("Error editing program:", error);
       }
     } else {
-      // If currentProgram does not exist, add a new program
       try {
-        // console.log(69,"working")
-        // Create program with provided data
+        setButtonLoading(true)
         const response=await CourseService.createProgram({
           programName,
           programFullName,
           semestersCount,
         });
+        setButtonLoading(false)
         toast.success(response.data.message || "Program is created");
-        // Refetch all programs after adding
         fetchAllPrograms();
-        // Close the modal after adding the program
-        // console.log(69,response);
         closeModal();
       } catch (error) {
+        setButtonLoading(false)
         console.error("Error adding program:", error);
       }
     }
@@ -240,6 +251,13 @@ const AdminCourseNavbarProgramComponent = () => {
           </form>
         </div>
       </div>
+      {
+      loading?
+          <div className="flex justify-center items-center h-[80vh] md:h-[70vh]"> 
+          <PencilLoading/>
+          </div> 
+          :
+          <>
       <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
         {/* Rendering programs dynamically */}
         {programs.map((program, index) => (
@@ -258,7 +276,8 @@ const AdminCourseNavbarProgramComponent = () => {
           />
         ))}
       </div>
-
+        </>
+      }
       {/*Add and edit = Modal */}
       <Modal
         style={{ zIndex: 10000 }}
@@ -345,12 +364,21 @@ const AdminCourseNavbarProgramComponent = () => {
               required
             />
 
+       {
+      buttonLoading?
+          <div className="pb-2"> 
+          <Button variant="outlined">
+          {currentProgram ? "Update" : "Add"} Program <CircularProgress className="ml-2" size={15}/>
+          </Button>
+          </div> 
+          :
             <div className="pb-2">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
               <Button onClick={handleProgramAction} variant="outlined">
                 {currentProgram ? "Update" : "Add"} Program
               </Button>
             </div>
+            }
           </div>
         </Box>
       </Modal>

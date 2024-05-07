@@ -51,7 +51,7 @@ function AboutCourseMainSection({ courseDetails }) {
             alt={unknown}
             className="rounded-full"
             height="150"
-            src={instructorPhoto} 
+            src={instructorPhoto || unknown} 
             style={{
               aspectRatio: "150/150",
               objectFit: "cover",
