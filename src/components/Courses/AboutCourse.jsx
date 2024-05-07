@@ -45,6 +45,7 @@ import CommentSection from "../CommentSection/CommentSection";
           const response = await CourseService.getCourseById({
             courseId: course_id,
           });
+          // console.log(222,response);
           const { course } = response.data;
           const response1 = await CourseService.getFieldOfStudyById({
             fieldOfStudyId: course.field_of_study,

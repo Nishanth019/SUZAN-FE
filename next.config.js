@@ -21,4 +21,22 @@ module.exports = {
       },
     ],
   },
+  webpack: (config) => {
+    // Add the file loader configuration for PDF files
+    config.module.rules.push({
+      test: /\.(pdf)$/,
+      use: {
+        loader: "file-loader",
+        options: {
+          publicPath: "/_next",
+          name: "static/media/[name].[hash].[ext]",
+        },
+      },
+    });
+
+    // Disable canvas alias
+    config.resolve.alias.canvas = false;
+
+    return config;
+  },
 };
