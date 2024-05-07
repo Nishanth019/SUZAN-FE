@@ -61,7 +61,7 @@ const AdminCourseNavbarProgramComponent = () => {
           return { ...program, coursesCount, fieldOfStudyCount };
         })
       );
-      // console.log(69,programsWithCounts);
+      console.log(69, programsWithCounts);
       setPrograms(programsWithCounts);
       setLoading(false);
     } catch (error) {
@@ -69,7 +69,7 @@ const AdminCourseNavbarProgramComponent = () => {
       console.error("Error fetching programs:", error);
     }
   };
-// console.log(70,programs)
+  console.log(70, programs)
   const fetchCourseCountForProgram = async (programId) => {
     try {
       console.log(123456);
@@ -85,7 +85,7 @@ const AdminCourseNavbarProgramComponent = () => {
   const fetchFieldOfStudyCountForProgram = async (programId) => {
     try {
       const response = await CourseService.getAllFieldsOfStudy(programId);
-      console.log(1233, response);
+      // console.log(1233, response);
       return response.data.fieldsOfStudy.length;
     } catch (error) {
       console.error("Error fetching field of study count for program:", error);
@@ -106,7 +106,7 @@ const AdminCourseNavbarProgramComponent = () => {
   const openEditProgramModal = (program) => {
     setCurrentProgram(program);
     setProgramName(program.program_name);
-    // console.log(71,programName,program,program.progamName);
+    console.log(71, programName, program, program.progamName);
     setProgramFullName(program.program_fullname);
     setSemetersCount(program.no_of_semester);
     setModalOpen(true);
@@ -119,17 +119,17 @@ const AdminCourseNavbarProgramComponent = () => {
 
   // Function to handle opening the delete confirmation modal
   const openDeleteModal = () => {
-   
+
     setDeleteModalOpen(true);
   };
 
   // Function to handle closing the delete confirmation modal
   const closeDeleteModal = () => {
-    
+
     setDeleteModalOpen(false);
   };
 
-  //search
+
    const handleSearch = async () => {
      try {
       //  console.log("sully");
@@ -148,6 +148,7 @@ const AdminCourseNavbarProgramComponent = () => {
   // Function to handle deleting a program
   const handleDeleteProgram = async () => {
     try {
+
       setButtonLoading(true)
       const response = await CourseService.deleteProgram( {programId: currentProgram._id} );
       setButtonLoading(false)
@@ -212,12 +213,11 @@ const AdminCourseNavbarProgramComponent = () => {
         </button>
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-5">
-        <div className="w-full md:w-[250px]"> 
+        <div className="w-full md:w-[250px]">
           <form
             className="max-w-md mx-auto"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSearch();
+            onChange={(e) => {
+              handleSearch(e.target.value);
             }}
           >
             <label
@@ -241,12 +241,7 @@ const AdminCourseNavbarProgramComponent = () => {
                 className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
                 placeholder="Search Program"
               />
-              <button
-                type="submit"
-                className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 "
-              >
-                Search
-              </button>
+              
             </div>
           </form>
         </div>

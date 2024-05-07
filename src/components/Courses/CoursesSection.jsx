@@ -37,6 +37,11 @@ const CoursesSection = () => {
         setLoading(true);
         const response = await CourseService.getAllPrograms();
         setPrograms(response.data.programs);
+        setSelectedProgram("");
+        setSelectedFieldOfStudy("");
+        setSelectedSemester("");
+        setFieldOfStudy([]);
+        setSemesters([]);
         setLoading(false);
         // setSelectedProgram(response.data.programs[0]?._id);
       } catch (error) {
@@ -44,6 +49,11 @@ const CoursesSection = () => {
         console.error("Error fetching programs:", error);
       }
     }
+    setSelectedProgram("");
+    setSelectedFieldOfStudy("");
+    setSelectedSemester("");
+    setFieldOfStudy([]);
+    setSemesters([]);
     fetchPrograms();
   }, []);
 
@@ -54,6 +64,9 @@ const CoursesSection = () => {
         setLoading(true);
         const response = await CourseService.getAllFieldsOfStudy(programId);
         setFieldOfStudy(response.data.fieldsOfStudy);
+        setSelectedFieldOfStudy("");
+        setSelectedSemester("");
+        setSemesters([]);
         setLoading(false);
         // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
       } catch (error) {
@@ -62,6 +75,9 @@ const CoursesSection = () => {
       }
     }
     if (selectedProgram) {
+      setSelectedFieldOfStudy("");
+      setSelectedSemester("");
+      setSemesters([]);
       fetchFieldsOfStudy(selectedProgram);
     }
   }, [selectedProgram]);
@@ -71,8 +87,8 @@ const CoursesSection = () => {
     async function fetchSemesters(fieldOfStudyId) {
       try {
         setLoading(true);
-        const response = await CourseService.getAllSemester(fieldOfStudyId);
-        console.log(12345,response.data)
+        const response = await CourseService.getAllSemestersByFieldOfStudy({ fieldOfStudyId });
+        console.log(12345, response.data)
         setSemesters(response.data.semesters);
         setLoading(false);
         // setSelectedSemester(response.data.semesters[0]?._id);
@@ -82,6 +98,7 @@ const CoursesSection = () => {
       }
     }
     if (selectedFieldOfStudy) {
+      setSelectedSemester("");
       fetchSemesters(selectedFieldOfStudy);
     }
   }, [selectedFieldOfStudy]);
@@ -94,6 +111,7 @@ const CoursesSection = () => {
         setLoading(true);
         const response = await CourseService.getAllCourses({programId:selectedProgram,fieldOfStudyId:selectedFieldOfStudy,semesterId:selectedSemester});
         console.log(5,response.data);
+
         console.log(1223455)
         await setCourses(response.data.courses);
         setLoading(false);
@@ -105,11 +123,10 @@ const CoursesSection = () => {
     fetchCourses();
   }, [selectedProgram, selectedFieldOfStudy, selectedSemester]);
 
-  const handleSearch = async () => {
+  const handleSearch = async (value) => {
     try {
-      // console.log("sully")
-      setLoading(true)
-      const response = await CourseService.searchCourse(searchQuery);
+       setLoading(true)
+      const response = await CourseService.searchCourse(value);
       // console.log("sully",response.data)
       setCourses(response.data.courses);
       setLoading(false);
@@ -136,8 +153,8 @@ const CoursesSection = () => {
                     (program) => program?.program_name === selectedProgramName
                   );
                   setSelectedProgram(selectedProgram?._id);
-                  setSelectedSemester("")
                   setSelectedFieldOfStudy("")
+                  setSelectedSemester("")
                 }}
               />
               <Dropdown
@@ -164,23 +181,25 @@ const CoursesSection = () => {
                 }}
               />
               <div className="w-full md:w-[270px]">
-              <form className="max-w-md mx-auto" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
-                <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
-                <div className="relative">
+                <form className="max-w-md mx-auto" onChange={(e) => { handleSearch(e.target.value); }}>
+                  <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
+                  <div className="relative">
                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <FaSearch className="w-4 h-4 text-gray-500 " aria-hidden="true" />
+                      <FaSearch className="w-4 h-4 text-gray-500 " aria-hidden="true" />
                     </div>
                     <input
                       type="search"
                       id="default-search"
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={(e) => setSearchQuery(e.target.value)
+
+                      }
                       className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
                       placeholder="Search Course"
                     />
-                    <button type="submit" className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 ">Search</button>
-                </div>
-              </form>
+                    {/* <button type="submit" className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 ">Search</button> */}
+                  </div>
+                </form>
               </div>
             </div>
           </div>

@@ -42,8 +42,22 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   }, [fieldsOfStudy])
 
 
-
   useEffect(() => {
+    async function fetchFieldOfStudyOfACollege() {
+      try {
+        const response = await CourseService.getAllFieldOfStudyOfCollege();
+        setFieldOfStudy(response.data.fieldsOfStudy);
+        console.log("daddy::", response.data.program)
+        setSelectedProgram(response.data.program);
+        // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
+      } catch (error) {
+        console.error("Error fetching fields of study for a college", error);
+      }
+    }
+    fetchFieldOfStudyOfACollege();
+  }, []);
+
+    useEffect(() => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
       try {
@@ -89,7 +103,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     async function fetchProgramDetailsById(programId) {
       try {
         const response = await CourseService.getProgramById(programId);
-        console.log(12345, response.data)
+        // console.log(12345, response.data)
         setSelectedProgramDetails(response.data.program);
       } catch (error) {
         console.error("Error fetching program:", error);
@@ -106,8 +120,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
 
   useEffect(() => {
-    console.log("dayday", fieldsOfStudy)
-    console.log("dayday", fieldsOfStudy[0])
+    // console.log("dayday", fieldsOfStudy)
+    // console.log("dayday", fieldsOfStudy[0])
   }, [fieldsOfStudy, selectedFieldOfStudy]);
 
 
@@ -128,9 +142,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
   const fetchCourseCountForFieldOfStudy = async (programId, fieldOfStudyId) => {
     try {
-      console.log(123456);
+      // console.log(123456);
       const response = await CourseService.getAllCourses(programId, fieldOfStudyId);
-      console.log(123, response);
+      // console.log(123, response);
       return response.data.courses.length;
     } catch (error) {
       console.error("Error fetching course count for program:", error);
@@ -185,11 +199,11 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   };
 
   //search
-  const handleSearch = async () => {
+  const handleSearch = async (value) => {
     try {
-      //  console.log("sully");
-      const response = await CourseService.searchFieldOfStudy(searchQuery);
-      //  console.log("cheeku", response.data);
+       console.log("sully");
+      const response = await CourseService.searchFieldOfStudy(value);
+       console.log("cheeku", response.data);
       setFieldOfStudy(response.data.fieldsOfStudy);
     } catch (error) {
       console.error("Error searching field of study:", error);
@@ -200,7 +214,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   const handleDeleteFieldOfStudy = async () => {
     try {
       const response = await CourseService.deleteFieldOfStudy(currentFieldOfStudy._id);
-      console.log("deleted", response);
+      // console.log("deleted", response);
       fetchAllFieldOfStudy();
       closeDeleteModal();
 
@@ -231,7 +245,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     } else {
       // If currentFieldOfStudy does not exist, add a new Field Of Study
       try {
-        // console.log(69,"working")
+        console.log(69,"working")
         // Create fos with provided data
         const response = await CourseService.createFieldOfStudy({
           //send program id
@@ -242,7 +256,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         // Refetch all fos after adding
         fetchAllFieldOfStudy();
         // Close the modal after adding the program
-        // console.log(69,response);
+        console.log(69,response);
         toast.success(response.data.message || "Field Of Study is created");
         closeModal();
       } catch (error) {
@@ -269,10 +283,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         </button>
       </div>
 
-      <div className="flex justify pb-2 md:pb-5">
+      <div className="flex flex-wrap gap-2 sm:gap-5">
 
 
-        <div className="flex flex-wrap gap-2 sm:gap-5 mr-5 ">
           <Dropdown
             name="Program"
             options={programs?.map((program) => program?.program_name)}
@@ -286,16 +299,14 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
             }}
           />
 
-        </div>
 
-        <div className="flex flex-wrap gap-2 sm:gap-5">
+        <div className="w-full md:w-[270px]">
 
           <div className="w-full md:w-[250px]">
             <form
               className="max-w-md mx-auto"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSearch();
+              onChange={(e) => {
+                handleSearch(e.target.value);
               }}
             >
               <label
@@ -319,12 +330,6 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
                   className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
                   placeholder="Search Field Of Study"
                 />
-                <button
-                  type="submit"
-                  className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 "
-                >
-                  Search
-                </button>
               </div>
             </form>
           </div>

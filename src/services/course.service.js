@@ -71,6 +71,10 @@ class CourseService {
   getAllFieldsOfStudy(programId) {
     return axiosInstance.get(`${this.url}/api/course/fieldOfStudy/${programId}`);
   }
+  // Get all fields of study of a college
+  getAllFieldOfStudyOfCollege() {
+    return axiosInstance.get(`${this.url}/api/course/fieldOfStudy`);
+  }
 
   // Get field of study by ID
   getFieldOfStudyById({fieldOfStudyId}) {
@@ -84,7 +88,7 @@ class CourseService {
 
   //Semester
   // Get all semesters by fieldOfStudy
-  getAllSemestersByFieldOfStudyId({fieldOfStudyId}){
+  getAllSemestersByFieldOfStudy({fieldOfStudyId}) {
     return axiosInstance.get(`${this.url}/api/course/semester/${fieldOfStudyId}`);
   }
 
