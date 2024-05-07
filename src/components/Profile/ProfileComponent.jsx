@@ -233,7 +233,6 @@ function ProfileComponent() {
             <div className="rounded-full overflow-hidden">
               {userData.picture ? (
                 <img
-                  
                   className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
                   src={userData.picture}
                   alt={userData.name}
@@ -247,17 +246,18 @@ function ProfileComponent() {
               )}
             </div>
             {isEdit && (
+              <>
               <label htmlFor="fileInput" className="text-blue-400 cursor-pointer text-sm">
                 Update Picture
               </label>
-            )}
             <input
               id="fileInput"
               type="file"
               accept="image/*"
               onChange={handleChangePicture}
               className="hidden"
-            />
+            /> </>
+          )}
           </div>
           <div className="">
             {userData.role === 'admin' ?

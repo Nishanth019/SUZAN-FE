@@ -11,6 +11,7 @@
   import { usePathname } from "next/navigation";
   import "./style.css"
   import CourseService from "@/services/course.service"; 
+import CommentSection from "../CommentSection/CommentSection";
 
   const AboutCourse = () => {
       const router = useRouter();
@@ -108,7 +109,7 @@
               title: syllabus.pdf_name,
               type: "pdf",
               url: syllabus.pdf_url,
-            },
+            },    
           ]);
 
           setResources([...resourcesPdf, ...resourcesLinks]);
@@ -124,21 +125,19 @@
       fetchMedia();
       
     }, []);
-  
-      
-    
 
-  
 
     return (
     <div className="m-3 md:m-10 lg:mx-[120px] xl:mx-[200px]  boxShadow bg-white rounded-lg">
-      <AboutCourseMainSection courseDetails={courseDetails}/> {/* Pass courseDetails as prop */}
+      <AboutCourseMainSection courseDetails={courseDetails}/> 
       <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
       <CourseSyllabus syllabus={syllabus}/>
       <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
       <CoursePYQS pyqs={pyqs}/>
       <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
       <CourseReference resources={resources}/>
+      <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
+      <CommentSection  />
     </div>
     );
   };
