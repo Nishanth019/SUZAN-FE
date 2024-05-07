@@ -139,7 +139,7 @@ const CoursePYQS = ({ pyqs }) => {
         )}
       </div>
       {/* Modal for viewing PDF */}
-      <Modal open={isModalOpen}>
+      <Modal open={isModalOpen} className="z-100">
         <Box
           sx={{
             ...style,
