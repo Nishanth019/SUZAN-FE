@@ -11,9 +11,12 @@ import CoursesCard from "./CoursesCard";
 import Dropdown from "../TailwindComponents/Dropdown";
 import { FaSearch } from "react-icons/fa";
 import CourseService from "@/services/course.service.js";
+import PencilLoading from "../Ui/PencilLoading.jsx"
+import { CircularProgress } from '@mui/material';
 
 const CoursesSection = () => {
   const router = useRouter();
+  const [loading,setLoading]  = useState(false);
 
   // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
@@ -31,6 +34,7 @@ const CoursesSection = () => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
       try {
+        setLoading(true);
         const response = await CourseService.getAllPrograms();
         setPrograms(response.data.programs);
         setSelectedProgram("");
@@ -38,8 +42,10 @@ const CoursesSection = () => {
         setSelectedSemester("");
         setFieldOfStudy([]);
         setSemesters([]);
+        setLoading(false);
         // setSelectedProgram(response.data.programs[0]?._id);
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching programs:", error);
       }
     }
@@ -55,13 +61,16 @@ const CoursesSection = () => {
     // Fetch fields of study when program selected
     async function fetchFieldsOfStudy(programId) {
       try {
+        setLoading(true);
         const response = await CourseService.getAllFieldsOfStudy(programId);
         setFieldOfStudy(response.data.fieldsOfStudy);
         setSelectedFieldOfStudy("");
         setSelectedSemester("");
         setSemesters([]);
+        setLoading(false);
         // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching fields of study:", error);
       }
     }
@@ -77,11 +86,14 @@ const CoursesSection = () => {
     // Fetch semesters when field of study selected
     async function fetchSemesters(fieldOfStudyId) {
       try {
+        setLoading(true);
         const response = await CourseService.getAllSemestersByFieldOfStudy({ fieldOfStudyId });
         console.log(12345, response.data)
         setSemesters(response.data.semesters);
+        setLoading(false);
         // setSelectedSemester(response.data.semesters[0]?._id);
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching semesters:", error);
       }
     }
@@ -96,11 +108,15 @@ const CoursesSection = () => {
     async function fetchCourses() {
       try {
         console.log(1223456)
-        const response = await CourseService.getAllCourses({ programId: selectedProgram, fieldOfStudyId: selectedFieldOfStudy, semesterId: selectedSemester });
-        console.log(5, response.data);
+        setLoading(true);
+        const response = await CourseService.getAllCourses({programId:selectedProgram,fieldOfStudyId:selectedFieldOfStudy,semesterId:selectedSemester});
+        console.log(5,response.data);
+
         console.log(1223455)
-        setCourses(response.data.courses);
+        await setCourses(response.data.courses);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching courses:", error);
       }
     }
@@ -109,14 +125,17 @@ const CoursesSection = () => {
 
   const handleSearch = async (value) => {
     try {
-      // console.log("sully")
+       setLoading(true)
       const response = await CourseService.searchCourse(value);
       // console.log("sully",response.data)
       setCourses(response.data.courses);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error searching courses:", error);
     }
   };
+
 
   return (
     <>
@@ -189,9 +208,18 @@ const CoursesSection = () => {
         {/* Render courses using map */}
         <div className="flex justify-center">
           <div className="grid gap-4 w-full sm:w-4/5 lg:w-3/5 mx-3 my-5 ">
+            {
+              loading?
+                  <div className="flex justify-center items-center h-[50vh] md:h-[70vh]"> 
+                  <CircularProgress/>
+                  </div> 
+                  :
+                  <>
             {courses.map((course, index) => (
               <CoursesCard key={index} course={course} />
             ))}
+                  </>
+            }
           </div>
         </div>
       </div>

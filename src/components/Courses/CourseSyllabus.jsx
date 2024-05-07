@@ -34,7 +34,7 @@ const CourseSyllabus = ({ syllabus }) => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width:400,
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -70,6 +70,8 @@ const CourseSyllabus = ({ syllabus }) => {
                       variant="outlined"
                       color="primary"
                       size="small"
+                      className="max-md:!hidden"
+                    
                       onClick={() => handleViewPdf(item)}
                     >
                       View
@@ -104,10 +106,10 @@ const CourseSyllabus = ({ syllabus }) => {
       <Modal open={isModalOpen}>
         <Box
           sx={{
-            ...style,
-            width: "50%",
+            ...style, 
+            width: "90%",
             "@media (max-width: 1024px)": {
-              width: "60%",
+              width: "90%",
             },
             "@media (max-width: 768px)": {
               width: "90%",
