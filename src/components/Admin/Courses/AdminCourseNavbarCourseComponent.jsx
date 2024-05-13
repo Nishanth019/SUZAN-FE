@@ -775,7 +775,7 @@ const AdminCourseNavbarCourseComponent = () => {
         />
         <div className="w-full md:w-[270px]">
           <form
-            className="max-w-md mx-auto" 
+            className="max-w-md mx-auto"
             onChange={(e) => {
               handleSearch(e.target.value);
             }}
@@ -940,22 +940,29 @@ const AdminCourseNavbarCourseComponent = () => {
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
             />
+
+
             <label
-              htmlFor="fieldofstudyName"
+              htmlFor="coursetype"
               className="mb-2 text-sm text-start text-grey-900 "
             >
               Course Type*
             </label>
-            <input
-              id="coursetype"
-              type="text"
-              value={course_type}
-              onChange={(e) => setCourse_type(e.target.value)}
-              placeholder="Compulsory "
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-              required
-            />
+
+
+            <div className="mb-5">
+              <Dropdown2
+                name="coursetype"
+                value={course_type}
+                options={["compulsory", "elective"]}
+                onSelect={(selectedType) => setCourse_type(selectedType)}
+                className="!mb-3 "
+                required
+              />
+
+            </div>
+
+
             <label
               htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
@@ -1329,12 +1336,12 @@ const AdminCourseNavbarCourseComponent = () => {
               required
             />
             <label
-              htmlFor="fieldofstudyName"
+              htmlFor="coursetype"
               className="mb-2 text-sm text-start text-grey-900 "
             >
               Course Type*
             </label>
-            <input
+            {/* <input
               id="coursetype"
               type="text"
               value={updatedCourse_type}
@@ -1343,7 +1350,18 @@ const AdminCourseNavbarCourseComponent = () => {
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
-            />
+            /> */}
+            <div className="mb-5">
+              <Dropdown2
+                name="coursetype"
+                value={updatedCourse_type}
+                options={["compulsory", "elective"]}
+                onSelect={(selectedType) => setUpdatedCourse_type(selectedType)}
+                className="!mb-3 "
+                required
+              />
+
+            </div>
             <label
               htmlFor="fieldofstudyName"
               className="mb-2 text-sm text-start text-grey-900 "
