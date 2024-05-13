@@ -60,12 +60,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-[9999] flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-800 duration-300 ease-linear  lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-10 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-800 duration-300 ease-linear  lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-16 px-6 lg:px-16 xl:px-20">
+      <div className="flex items-center justify-between gap-16 px-6 lg:px-16 xl:px-20 ">
         <Link href="/" className="">
           <Image
             className="w-[140px] h-auto mt-[-20px] mb-[-20px]"

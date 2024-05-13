@@ -36,7 +36,6 @@ const CourseResources = ({ resources }) => {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      width: 400,
       bgcolor: "background.paper",
       border: "2px solid #000",
       boxShadow: 24,
@@ -62,7 +61,7 @@ const CourseResources = ({ resources }) => {
                   key={index}
                   className="flex items-center space-x-4 border p-2 rounded-md"
                 >
-                  <FaLink className="text-blue-500  max-md:hidden" size={20} />
+                  <FaLink className="text-blue-500  max-md:!hidden" size={20} />
                   <div className="flex-1">
                     <p className="text-sm md:text-[16px]">{item.title}</p>
                   </div>
@@ -71,13 +70,13 @@ const CourseResources = ({ resources }) => {
                       variant="outlined"
                       color="primary"
                       size="small"
-                      className="max-md:hidden"
+                      className="max-md:!hidden"
                       onClick={() => handleOpenLink(item.url)}
                     >
                       View
                     </Button>
                     <IoMdEye
-                      className="text-blue-500  md:hidden"
+                      className="text-blue-500  md:!hidden"
                       size={24}
                       onClick={() => handleOpenLink(item.url)}
                     />
@@ -96,7 +95,7 @@ const CourseResources = ({ resources }) => {
                   key={index}
                   className="flex items-center space-x-4 border  p-2 rounded-md"
                 >
-                  <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
+                  <FaFilePdf className="text-red-500 max-md:!hidden" size={24} />
                   <div className="flex-1">
                     <p className="text-sm md:text-[16px]">{item.title}</p>
                   </div>
@@ -105,6 +104,7 @@ const CourseResources = ({ resources }) => {
                       variant="outlined"
                       color="primary"
                       size="small"
+                      className="max-md:!hidden"
                       onClick={() => handleViewPdf(item)}
                     >
                       View
@@ -113,18 +113,18 @@ const CourseResources = ({ resources }) => {
                       variant="outlined"
                       color="secondary"
                       size="small"
-                      className="max-md:hidden"
+                      className="max-md:!hidden"
                       onClick={() => handleDownload(item.url)}
                     >
                       Download
                     </Button>
                     <IoMdEye
-                      className="text-blue-500 cursor-pointer md:hidden"
+                      className="text-blue-500 cursor-pointer md:!hidden"
                       size={24}
                       onClick={() => handleViewPdf(item)}
                     />
                     <IoMdDownload
-                      className="text-red-500 cursor-pointer md:hidden"
+                      className="text-red-500 cursor-pointer md:!hidden"
                       size={24}
                       onClick={() => handleDownload(item.url)}
                     />
@@ -140,12 +140,12 @@ const CourseResources = ({ resources }) => {
         <Box
           sx={{
             ...style,
-            width: "50%",
+            width: "97vw",
             "@media (max-width: 1024px)": {
-              width: "60%",
+              width: "97vw",
             },
             "@media (max-width: 768px)": {
-              width: "90%",
+              width: "97vw",
               maxHeight: "95vh",
             },
             maxHeight: "95vh",
@@ -160,7 +160,7 @@ const CourseResources = ({ resources }) => {
             X
           </Button>
 
-          <div className="modal-content">
+          <div className="w-full">
             <ViewPdf pdf={selectedPdf} />
           </div>
         </Box>
