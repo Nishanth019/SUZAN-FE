@@ -40,8 +40,8 @@ const AdminCourseNavbarCourseComponent = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-   const [pdfModalOpen, setPdfModalOpen] = useState(false); // State to control modal visibility
-   const [selectedPdf, setSelectedPdf] = useState(null); 
+  const [pdfModalOpen, setPdfModalOpen] = useState(false); // State to control modal visibility
+  const [selectedPdf, setSelectedPdf] = useState(null);
   // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
@@ -136,7 +136,7 @@ const AdminCourseNavbarCourseComponent = () => {
   const handleOpenLink = (url) => {
     window.open(url, "_blank");
   };
-  
+
   useEffect(() => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
@@ -292,7 +292,7 @@ const AdminCourseNavbarCourseComponent = () => {
   };
 
   const handleEditAddResourceLink = () => {
-    if(editFormResourceLinkName.length===0 || editFormResourceLinkUrl.length===0){
+    if (editFormResourceLinkName.length === 0 || editFormResourceLinkUrl.length === 0) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -310,7 +310,7 @@ const AdminCourseNavbarCourseComponent = () => {
     setEditFormResourceLinkUrl("")
   };
   const handleEditAddResourcePdf = (e) => {
-    if(editFormResourcePdfName.length===0 || editFormResourcePdfUrl.length===0){
+    if (editFormResourcePdfName.length === 0 || editFormResourcePdfUrl.length === 0) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -329,7 +329,7 @@ const AdminCourseNavbarCourseComponent = () => {
   };
 
   const handleEditAddPyqLink = (e) => {
-    if(editFormPyqLinkName.length===0 || editFormPyqLinkUrl.length===0){
+    if (editFormPyqLinkName.length === 0 || editFormPyqLinkUrl.length === 0) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -347,7 +347,7 @@ const AdminCourseNavbarCourseComponent = () => {
     setEditFormPyqLinkUrl("")
   };
   const handleEditAddPyqPdf = (e) => {
-    if(editFormPyqPdfName.length===0 || editFormPyqPdfUrl.length===0){
+    if (editFormPyqPdfName.length === 0 || editFormPyqPdfUrl.length === 0) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -853,7 +853,7 @@ const AdminCourseNavbarCourseComponent = () => {
         />
         <div className="w-full md:w-[270px]">
           <form
-            className="max-w-md mx-auto" 
+            className="max-w-md mx-auto"
             onChange={(e) => {
               handleSearch(e.target.value);
             }}
@@ -1103,241 +1103,242 @@ const AdminCourseNavbarCourseComponent = () => {
                 className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
               />
 
-            <label
-              htmlFor="resource_links"
-              className="mb-2 text-sm text-start text-grey-900"
-            >
-              Upload Resources (Link)
-            </label>
-            {resource_links.map((rsc, index) => (
-              <div key={index} className="mb-5">
-                <input
-                  type="text"
-                  value={rsc.link_name} // Use link_name from resource_links state
-                  onChange={(e) =>
-                    handleInputChangeresourcelink(index, 0, e.target.value)
-                  }
-                  placeholder="Resources Link Name"
-                  className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+              <label
+                htmlFor="resource_links"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Upload Resources (Link)
+              </label>
+              {resource_links.map((rsc, index) => (
+                <div key={index} className="mb-5">
+                  <input
+                    type="text"
+                    value={rsc.link_name} // Use link_name from resource_links state
+                    onChange={(e) =>
+                      handleInputChangeresourcelink(index, 0, e.target.value)
+                    }
+                    placeholder="Resources Link Name"
+                    className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
 
-                />
-                <input
-                  type="text"
-                  value={rsc.link_url} // Use link_url from resource_links state
-                  onChange={(e) =>
-                    handleInputChangeresourcelink(index, 1, e.target.value)
-                  }
-                  placeholder="Resources Link URL"
-                  className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                  />
+                  <input
+                    type="text"
+                    value={rsc.link_url} // Use link_url from resource_links state
+                    onChange={(e) =>
+                      handleInputChangeresourcelink(index, 1, e.target.value)
+                    }
+                    placeholder="Resources Link URL"
+                    className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
 
-                />
-                <div className="flex justify-end">
-                  {index > 0 && (
-                    <>
-                      <Button
-                        style={{ textTransform: "none" }}
-                        className="max-md:hidden mb-5 "
-                        onClick={() =>
-                          handleDeleteField("resource_links", index)
-                        }
-                        variant="outlined"
-                        size="small"
-                        startIcon={<DeleteIcon />}
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  )}
+                  />
+                  <div className="flex justify-end">
+                    {index > 0 && (
+                      <>
+                        <Button
+                          style={{ textTransform: "none" }}
+                          className="max-md:hidden mb-5 "
+                          onClick={() =>
+                            handleDeleteField("resource_links", index)
+                          }
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
-            <Button
-              onClick={() => handleAddField("resource_links")}
-              cariant="outlined"
-            >
-              + Add More Resources
-            </Button>
-
-            <label
-              htmlFor="resources-pdf"
-              className="mb-2 text-sm text-start text-grey-900"
-            >
-              Upload Resources (pdf)
-            </label>
-
-            {/* sd */}
-            {resource_pdfs.map((resource, index) => (
-              <div key={index} className="mb-5 ">
-                <input
-                  type="text"
-                  value={resource.pdf_name}
-                  onChange={
-                    (e) =>
-                      handleInputChangeresourcepdf(index, 0, e.target.value) // Pass index and 0 to identify the name
-                  }
-                  placeholder="Resources Pdf Name"
-                  className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-
-                />
-                <input
-                  onChange={
-                    (e) =>
-                      handleInputChangeresourcepdf(index, 1, e.target.files[0]) // Pass index and 1 to identify the URL
-                  }
-                  accept="application/pdf"
-                  type="file"
-                  id={`resourcePdfInput-${index}`}
-                  className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                />
-
-                <div className="flex justify-end">
-                  {index > 0 && (
-                    <>
-                      <Button
-                        style={{ textTransform: "none" }}
-                        className="max-md:hidden mb-2"
-                        onClick={() =>
-                          handleDeleteField("resource_pdfs", index)
-                        }
-                        variant="outlined"
-                        size="small"
-                        startIcon={<DeleteIcon />}
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            <Button
-              onClick={() => handleAddField("resource_pdfs")}
-              className="mb-10"
-              cariant="outlined"
-            >
-              + Add More Resources
-            </Button>
-
-            <label
-              htmlFor="pyq"
-              className="mb-2 text-sm text-start text-grey-900"
-            >
-              Upload pyq (Link)
-            </label>
-            {pyq_links.map((pyq, index) => (
-              <div key={index} className=" mb-5">
-                <input
-                  type="text"
-                  value={pyq.link_name}
-                  onChange={(e) =>
-                    handleInputChangepyqlink(index, 0, e.target.value)
-                  }
-                  placeholder="PYQ Link Name"
-                  className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-
-                />
-                <input
-                  type="text"
-                  value={pyq.link_url}
-                  onChange={
-                    (e) => handleInputChangepyqlink(index, 1, e.target.value) // Pass index and 1 to identify the URL
-                  }
-                  placeholder="PYQ Link url"
-                  className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-
-                />
-                <div className="flex justify-end">
-                  {index > 0 && (
-                    <>
-                      <Button
-                        style={{ textTransform: "none" }}
-                        className="max-md:hidden "
-                        onClick={() => handleDeleteField("pyq_links", index)}
-                        variant="outlined"
-                        size="small"
-                        startIcon={<DeleteIcon />}
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            <Button
-              onClick={() => handleAddField("pyq_links")}
-              cariant="outlined"
-            >
-              + Add More PYQs
-            </Button>
-            <label
-              htmlFor="pyq-pdf"
-              className="mb-2 text-sm text-start text-grey-900"
-            >
-              Upload pyq (pdf)
-            </label>
-
-            {/* sd */}
-            {pyq_pdfs.map((pyq, index) => (
-              <div key={index} className=" mb-5 ">
-                <input
-                  type="text"
-                  value={pyq.pdf_name} // Assuming resource[0] is the name of the resource
-                  onChange={
-                    (e) => handleInputChangepyqpdf(index, 0, e.target.value) // Pass index and 0 to identify the name
-                  }
-                  placeholder="Pyq Pdf Name"
-                  className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-
-                />
-                {/* <div className="flex items-center mb-8"> */}
-
-                <input
-                  id={`pyqPdfInput-${index}`}
-                  type="file"
-                  accept="application/pdf"
-                  onChange={(e) =>
-                    handleInputChangepyqpdf(index, 1, e.target.files[0])
-                  }
-                  className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-
-                />
-
-                {/* </div> */}
-                <div className="flex justify-end">
-                  {index > 0 && (
-                    <>
-                      <Button
-                        style={{ textTransform: "none" }}
-                        className="max-md:hidden "
-                        onClick={() => handleDeleteField("pyq_pdfs", index)}
-                        variant="outlined"
-                        size="small"
-                        startIcon={<DeleteIcon />}
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            <Button
-              onClick={() => handleAddField("pyq_pdfs")}
-              cariant="outlined"
-            >
-              + Add More Resources
-            </Button>
-
-            <div className="pb-2 pt-4">
-              {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button type="submit" variant="contained">
-                Add Course
+              <Button
+                onClick={() => handleAddField("resource_links")}
+                cariant="outlined"
+              >
+                + Add More Resources
               </Button>
+
+              <label
+                htmlFor="resources-pdf"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Upload Resources (pdf)
+              </label>
+
+              {/* sd */}
+              {resource_pdfs.map((resource, index) => (
+                <div key={index} className="mb-5 ">
+                  <input
+                    type="text"
+                    value={resource.pdf_name}
+                    onChange={
+                      (e) =>
+                        handleInputChangeresourcepdf(index, 0, e.target.value) // Pass index and 0 to identify the name
+                    }
+                    placeholder="Resources Pdf Name"
+                    className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+
+                  />
+                  <input
+                    onChange={
+                      (e) =>
+                        handleInputChangeresourcepdf(index, 1, e.target.files[0]) // Pass index and 1 to identify the URL
+                    }
+                    accept="application/pdf"
+                    type="file"
+                    id={`resourcePdfInput-${index}`}
+                    className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                  />
+
+                  <div className="flex justify-end">
+                    {index > 0 && (
+                      <>
+                        <Button
+                          style={{ textTransform: "none" }}
+                          className="max-md:hidden mb-2"
+                          onClick={() =>
+                            handleDeleteField("resource_pdfs", index)
+                          }
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              <Button
+                onClick={() => handleAddField("resource_pdfs")}
+                className="mb-10"
+                cariant="outlined"
+              >
+                + Add More Resources
+              </Button>
+
+              <label
+                htmlFor="pyq"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Upload pyq (Link)
+              </label>
+              {pyq_links.map((pyq, index) => (
+                <div key={index} className=" mb-5">
+                  <input
+                    type="text"
+                    value={pyq.link_name}
+                    onChange={(e) =>
+                      handleInputChangepyqlink(index, 0, e.target.value)
+                    }
+                    placeholder="PYQ Link Name"
+                    className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+
+                  />
+                  <input
+                    type="text"
+                    value={pyq.link_url}
+                    onChange={
+                      (e) => handleInputChangepyqlink(index, 1, e.target.value) // Pass index and 1 to identify the URL
+                    }
+                    placeholder="PYQ Link url"
+                    className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+
+                  />
+                  <div className="flex justify-end">
+                    {index > 0 && (
+                      <>
+                        <Button
+                          style={{ textTransform: "none" }}
+                          className="max-md:hidden "
+                          onClick={() => handleDeleteField("pyq_links", index)}
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              <Button
+                onClick={() => handleAddField("pyq_links")}
+                cariant="outlined"
+              >
+                + Add More PYQs
+              </Button>
+              <label
+                htmlFor="pyq-pdf"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Upload pyq (pdf)
+              </label>
+
+              {/* sd */}
+              {pyq_pdfs.map((pyq, index) => (
+                <div key={index} className=" mb-5 ">
+                  <input
+                    type="text"
+                    value={pyq.pdf_name} // Assuming resource[0] is the name of the resource
+                    onChange={
+                      (e) => handleInputChangepyqpdf(index, 0, e.target.value) // Pass index and 0 to identify the name
+                    }
+                    placeholder="Pyq Pdf Name"
+                    className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+
+                  />
+                  {/* <div className="flex items-center mb-8"> */}
+
+                  <input
+                    id={`pyqPdfInput-${index}`}
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(e) =>
+                      handleInputChangepyqpdf(index, 1, e.target.files[0])
+                    }
+                    className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+
+                  />
+
+                  {/* </div> */}
+                  <div className="flex justify-end">
+                    {index > 0 && (
+                      <>
+                        <Button
+                          style={{ textTransform: "none" }}
+                          className="max-md:hidden "
+                          onClick={() => handleDeleteField("pyq_pdfs", index)}
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              <Button
+                onClick={() => handleAddField("pyq_pdfs")}
+                cariant="outlined"
+              >
+                + Add More Resources
+              </Button>
+
+              <div className="pb-2 pt-4">
+                {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
+                <Button type="submit" variant="contained">
+                  Add Course
+                </Button>
+              </div>
             </div>
           </form>
         </Box>
@@ -1675,7 +1676,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormResourceLinkName(e.target.value)}
                 placeholder="Resources Link Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+
               />
               <input
                 type="text"
@@ -1683,7 +1684,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormResourceLinkUrl(e.target.value)}
                 placeholder="Resources Link Url"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+
               />
               <div className="flex justify-end mb-5">
                 <Button
@@ -1691,7 +1692,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
-                  // startIcon={<DeleteIcon />}
+                // startIcon={<DeleteIcon />}
                 >
                   ADD
                 </Button>
@@ -1788,7 +1789,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormResourcePdfName(e.target.value)}
                 placeholder="Resources Pdf Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-               
+
               />
               <input
                 onChange={
@@ -1801,14 +1802,14 @@ const AdminCourseNavbarCourseComponent = () => {
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-               />
+              />
               <div className="flex justify-end">
                 <Button
                   onClick={handleEditAddResourcePdf}
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
-                  // startIcon={<DeleteIcon />}
+                // startIcon={<DeleteIcon />}
                 >
                   ADD
                 </Button>
@@ -1881,7 +1882,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormPyqLinkName(e.target.value)}
                 placeholder="PYQ Link Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+
               />
               <input
                 type="text"
@@ -1889,7 +1890,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormPyqLinkUrl(e.target.value)}
                 placeholder="PYQ Link Url"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+
               />
               <div className="flex justify-end mb-5">
                 <Button
@@ -1993,7 +1994,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormPyqPdfName(e.target.value)}
                 placeholder="PYQ Pdf Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+
               />
               <input
                 onChange={
@@ -2006,7 +2007,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-              
+
               />
               <div className="flex justify-end">
                 <Button
