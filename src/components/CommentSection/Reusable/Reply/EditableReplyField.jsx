@@ -4,10 +4,10 @@ import React from "react";
 const EditableReplyField = ({ text, setText, placeHolder }) => {
   return (
     <TextField
-      sx={{ p: "20px 0" }}
+      sx={{ p: "10px 0" }}
       multiline
       fullWidth
-      minRows={4}
+      minRows={2}
       id="outlined-multilined"
       placeholder={placeHolder}
       value={text}

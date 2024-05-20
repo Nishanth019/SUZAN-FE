@@ -3,7 +3,7 @@ import React from "react";
 
 const CommentText = ({ commentText }) => {
   return (
-    <Typography sx={{ color: "neutral.grayishBlue", p: "20px 0" }}>
+    <Typography className="!text-[17px] md:!text-lg px-[10px] pt-[10px] md:px-[20px] md:pt-[20px]" sx={{ color: "neutral.grayishBlue" }}>
       {commentText}
     </Typography>
   );

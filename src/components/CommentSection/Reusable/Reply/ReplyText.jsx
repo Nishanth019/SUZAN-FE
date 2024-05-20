@@ -5,9 +5,10 @@ const ReplyText = ({ repText, onTar }) => {
   return (
     <Typography
       component="div"
-      sx={{ color: "neutral.grayishBlue", p: "20px 0" }}
+      sx={{ color: "neutral.grayishBlue", p: "10px 0" }}
+      className="!text-[17px] md:!text-lg"
     >
-      <Tag onTar={onTar} />
+      <Tag onTar={onTar} />{" "}
       {repText}
     </Typography>
   );

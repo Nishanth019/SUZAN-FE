@@ -17,7 +17,7 @@ const AddComment = () => {
         <div className="p-[10px] md:p-[15px]">
           <Stack direction="row" spacing={2} alignItems="flex-start">
             <Avatar
-            className="max-md:hidden"
+            className="max-md:!hidden"
               src={avatar}
               variant="rounded"
               alt="user-avatar"

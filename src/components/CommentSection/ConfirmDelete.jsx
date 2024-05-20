@@ -25,26 +25,21 @@ const ConfirmDelete = ({ onOpen, onClose, id, onDel, comId }) => {
         </Typography>
         <Stack direction="row" display="flex" justifyContent="space-between">
           <Button
-            variant="contained"
+            variant="variant"
             disableElevation
-            sx={{
-              bgcolor: "neutral.grayishBlue",
-              "&:hover": { bgcolor: "neutral.grayishBlue" },
-            }}
+           
             onClick={onClose}
           >
             No, cancel
           </Button>
           <Button
-            variant="contained"
+            variant="variant"
             disableElevation
-            sx={{
-              bgcolor: "custom.softRed",
-              "&:hover": { bgcolor: "custom.softRed" },
-            }}
+            
             onClick={() => {
             //   onDel ? onDel(comId) : deleteComment(id);
             }}
+            className="text-red-800"
           >
             Yes, delete
           </Button>

@@ -8,7 +8,7 @@ const CommentSection = () => {
   const [commentSection, setCommentSection] = useState([
     {
       id: 1,
-      content: "This is the first comment!",
+      content: "This is the first comment! This is the first comment! This is the first comment! This is the first comment! This is the first comment! This is the first comment!",
       createdAt: "2024-04-30T10:00:00Z",
       score: 5,
       replies: [

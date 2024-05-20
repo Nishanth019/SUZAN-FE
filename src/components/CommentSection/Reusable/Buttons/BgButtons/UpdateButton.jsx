@@ -4,7 +4,7 @@ import React from "react";
 const UpdateButton = ({ commentText, editingComm, setEditingComm }) => {
   return (
     <Button
-    size="large"
+    size="medium"
     variant="outlined"
     sx={{ textTransform: "none", float:"right"
    }}

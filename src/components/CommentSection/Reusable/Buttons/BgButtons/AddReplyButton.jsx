@@ -4,7 +4,7 @@ import React from "react";
 const AddReplyButton = ({ setReplyText, onAdd, replyText }) => {
   return (
     <Button
-    size="large"
+    size="small"
     variant="outlined"
     sx={{ textTransform: "none" }}
       onClick={(e) => {
