@@ -5,10 +5,10 @@ import YouTag from "../YouTag";
 const Username = ({ userName }) => {
   return (
     <>
-      <Typography fontWeight="bold" sx={{ color: "neutral.darkBlue" }}>
+      <Typography className="text-sm md:text-lg" fontWeight="bold" sx={{ color: "neutral.darkBlue" }}>
         {userName}
       </Typography>
-      {userName === "juliusomo" ? <YouTag /> : null}
+      {userName === "juliusomo" ? <YouTag/> : null}
     </>
   );
 };

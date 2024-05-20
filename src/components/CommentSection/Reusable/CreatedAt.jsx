@@ -3,7 +3,7 @@ import React from "react";
 
 const CreatedAt = ({ createdAt }) => {
   return (
-    <Typography sx={{ color: "neutral.grayishBlue" }}>{createdAt}</Typography>
+    <Typography sx={{ color: "neutral.grayishBlue" }}  className="max-md:!hidden">{createdAt}</Typography>
   );
 };
 

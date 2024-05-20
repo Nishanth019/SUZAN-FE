@@ -5,10 +5,14 @@ import ScoreChanger from "./ScoreChanger";
 import { RiReplyFill } from 'react-icons/ri'; // Importing the reply icon from react-icons
 import AddReply from "./AddReply";
 import OwnReply from "./OwnReply";
+import Username from "./Reusable/Username";
+import CreatedAt from "./Reusable/CreatedAt";
+import ReplyButton from "./Reusable/Buttons/TextButtons/ReplyButton";
 
 const RepliesSection = ({ onReplies, onClicked, onTar }) => {
   // const { IMGOBJ } = useContext(CommentContext);
   const [repliess, setReplies] = useState(onReplies);
+  const [replyingToId, setReplyingToId] = useState(null);
 
   const addReply = (data) => {
     setReplies([
@@ -23,14 +27,35 @@ const RepliesSection = ({ onReplies, onClicked, onTar }) => {
         user: { username: "juliusomo" },
       },
     ]);
+    setReplyingToId(null); 
   };
+
+  const addReplyToReply = (data) => {
+    setReplies([
+      ...repliess,
+      {
+        id: Math.floor(Math.random() * 10000),
+        content: data,
+        createdAt: "Just now",
+        score: 0,
+        replyingTo: `${onTar}`,
+        replies: [],
+        user: { username: "Nishanth" },
+      },
+    ]);
+    setReplyingToId(null); 
+  }
+
   const deleteReply = (id) => {
     setReplies(repliess.filter((reply) => reply.id !== id));
   };
+
   return (
-    <Stack spacing={2} width="800px" alignSelf="flex-end">
+    <Stack className="w-[90%]" spacing={2} alignSelf="flex-end">
+      {onClicked ? <AddReply onAdd={addReply} /> : null}
+
       {repliess.map((rep) => {
-        const { content, createdAt, score, user, replyingTo } = rep;
+        const { id, content, createdAt, score, user, replyingTo } = rep;
         const userName = user.username;
         // const ava = IMGOBJ[`${userName}`];
         const ava = "nishu"
@@ -45,12 +70,10 @@ const RepliesSection = ({ onReplies, onClicked, onTar }) => {
             onDel={deleteReply}
           />
         ) : (
+          <>
           <Card key={rep.id}>
             <Box sx={{ p: "15px" }}>
-              <Stack spacing={2} direction="row">
-                <Box>
-                  <ScoreChanger onScore={score} />
-                </Box>
+              <div className="flex flex-col gap-2 items-start">
                 <Box sx={{ width: "100%" }}>
                   <Stack
                     spacing={2}
@@ -58,33 +81,25 @@ const RepliesSection = ({ onReplies, onClicked, onTar }) => {
                     justifyContent="space-between"
                     alignItems="center"
                   >
-                    <Stack spacing={2} direction="row" alignItems="center">
-                      <Avatar src={ava}></Avatar>
-                      <Typography
-                        fontWeight="bold"
-                        sx={{ color: "neutral.darkBlue" }}
-                      >
-                        {userName}
-                      </Typography>
-                      <Typography sx={{ color: "neutral.grayishBlue" }}>
-                        {createdAt}
-                      </Typography>
-                    </Stack>
-                    <Button
-                      variant="text"
-                      sx={{
-                        fontWeight: 500,
-                        textTransform: "capitalize",
-                        color: "custom.moderateBlue",
-                      }}
-                      startIcon={<RiReplyFill />} // Using the reply icon component
-                    >
-                      Reply
+                <div className="flex items-center gap-2 ">
+                  <Avatar src={ava}></Avatar>
+                  <Username userName={userName} />
+                  <CreatedAt createdAt={createdAt} className="max-md:hidden" />
+                </div>
+                <Button onClick={() =>{
+                  if(id==replyingToId){
+                    setReplyingToId(null)
+                  }
+                  else{
+                  setReplyingToId(id)
+                }}}> {/* Set replyingToId when Reply button is clicked */}
+                <ReplyButton  />
                     </Button>
                   </Stack>
                   <Typography
                     component="div"
-                    sx={{ color: "neutral.grayishBlue", p: "20px 0" }}
+                    className="!text-[17px] md:!text-lg"
+                    sx={{ color: "neutral.grayishBlue", p: "10px 0" }}
                   >
                     <Typography
                       sx={{
@@ -99,12 +114,16 @@ const RepliesSection = ({ onReplies, onClicked, onTar }) => {
                     {content}
                   </Typography>
                 </Box>
-              </Stack>
+                <Box>
+                  <ScoreChanger onScore={score} />
+                </Box>
+              </div>
             </Box>
           </Card>
+          {replyingToId===id ? <AddReply onAdd={addReplyToReply } /> : null}
+          </>
         );
       })}
-      {onClicked ? <AddReply onAdd={addReply} /> : null}
     </Stack>
   );
 };

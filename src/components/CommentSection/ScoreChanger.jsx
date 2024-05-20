@@ -1,52 +1,47 @@
-'use client'
 import { Box, IconButton, Typography } from "@mui/material";
 import React, { useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-const ScoreChanger = ({ onScore }) => {
-  const [score, setScore] = useState(onScore);
+const Likes = ({ initialCount }) => {
+  // const [count, setCount] = useState(initialCount);
+  const [count, setCount] = useState(10);
+  const [liked, setLiked] = useState(false);
+
+  const handleLike = () => {
+    if (liked) {
+      setCount(count - 1);
+    } else {
+      setCount(count + 1);
+    }
+    setLiked(!liked);
+  };
 
   return (
     <Box
       style={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
-        flexDirection: "column",
-        backgroundColor: "hsl(228, 33%, 97%)",
-        borderRadius: "5px",
-        "& svg": {
-          color: "hsl(239, 57%, 85%)",
-          "&:hover": {
-            color: "hsl(238, 40%, 52%)",
-          },
-        },
-      }}
+        justifyContent: "center",
+        flexDirection: "row",
+  }}
     >
       <IconButton
         disableRipple
-        aria-label="increase score"
-        onClick={() => {
-          setScore(score + 1);
-        }}
+        aria-label="like"
+        onClick={handleLike}
       >
-        <AddIcon sx={{ height: "20px", width: " 20px" }} />
+        {liked ? (
+          <ThumbUpIcon className="text-[18px]" sx={{ color: "#3f51b5" }} />
+        ) : (
+          <ThumbUpOutlinedIcon className="text-[18px]"/>
+        )}
       </IconButton>
-      <Typography sx={{ color: "custom.moderateBlue", fontWeight: 500 }}>
-        {score}
+      <Typography sx={{ color: liked ? "#3f51b5" : "inherit", fontWeight: 500 }}>
+        {count}
       </Typography>
-      <IconButton
-        disableRipple
-        aria-label="decrease score"
-        onClick={() => {
-          setScore(score - 1);
-        }}
-      >
-        <RemoveIcon sx={{ height: "20px", width: " 20px" }} />
-      </IconButton>
     </Box>
   );
 };
 
-export default ScoreChanger;
+export default Likes;

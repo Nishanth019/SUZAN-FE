@@ -5,7 +5,7 @@ const SendButton = ({ setCommentTxt, commentTxt }) => {
 
   return (
     <Button
-      size="large"
+      size="medium"
       variant="outlined"
       sx={{ textTransform: "none" }} // This line removes the capitalization
       onClick={(e) => {

@@ -19,7 +19,7 @@ const Comment = ({ onPass }) => {
   const { id, content, createdAt, score, replies, user } = onPass;
   const userName = user.username;
 //   const ava = IMGOBJ[`${userName}`];
-  const ava = "@Nishanth"
+  const [ava,setAva] = useState("");
 
   const [clicked, setClicked] = useState(false);
   const [editingComm, setEditingComm] = useState(false);
@@ -37,32 +37,28 @@ const Comment = ({ onPass }) => {
   return (
     <ThemeProvider theme={theme}>
       <ConfirmDelete onOpen={openModal} onClose={handleClose} id={id} />
-      <Card>
-        <Box sx={{ p: "15px" }}>
-          <Stack spacing={2} direction="row">
-            <Box>
-              <ScoreChanger onScore={score} />
-            </Box>
+      <Card >
+        <Box className="!p-[15px]">
+          <div className="flex flex-col gap-2 items-start">
             <Box sx={{ width: "100%" }}>
               <Stack
-                spacing={2}
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Stack spacing={2} direction="row" alignItems="center">
+                <div className="flex items-center gap-2 ">
                   <Avatar src={ava}></Avatar>
                   <Username userName={userName} />
-                  <CreatedAt createdAt={createdAt} />
-                </Stack>
+                  <CreatedAt createdAt={createdAt} className="max-md:!hidden" />
+                </div>
                 {userName === "juliusomo" ? (
-                  <Stack direction="row" spacing={1}>
+                  <div className="flex gap-2">
                     <DeleteButton functionality={() => handleOpen()} />
                     <EditButton
                       functionality={() => setEditingComm(!editingComm)}
                       editingComm={editingComm}
                     />
-                  </Stack>
+                  </div>
                 ) : (
                   <ReplyButton functionality={() => setClicked(!clicked)} />
                 )}
@@ -84,7 +80,10 @@ const Comment = ({ onPass }) => {
                 <CommentText commentText={commentText} />
               )}
             </Box>
-          </Stack>
+            <Box>
+              <ScoreChanger/>
+            </Box>
+          </div>
         </Box>
       </Card>
       {replies ? (
