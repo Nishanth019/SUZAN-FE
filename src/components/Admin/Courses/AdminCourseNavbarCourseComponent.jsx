@@ -1102,7 +1102,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 accept="application/pdf"
                 className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
               />
-
+            </div>      
               <label
                 htmlFor="resource_links"
                 className="mb-2 text-sm text-start text-grey-900"
@@ -1339,7 +1339,6 @@ const AdminCourseNavbarCourseComponent = () => {
                   Add Course
                 </Button>
               </div>
-            </div>
           </form>
         </Box>
       </Modal>

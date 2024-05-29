@@ -51,7 +51,7 @@ const MainSection = () => {
                 <div className=' flex justify-center items-center  h-full '>
                     <div className='relative px-12'>
                         <div className='md:w-[300px] md:h-[300px] lg:h-[450px] lg:w-[450px] xl:h-[500px] xl:w-[500px]  rounded-full border border-solid border-[#129172] absolute inset-0'></div>
-                        <Image src={MainSectionLogo} className='md:w-auto md:h-[300px] lg:h-[450px] lg:w-auto xl:h-[500px] xl:w-auto relative z-[1]' alt="Clg Student" />
+                        <Image src={MainSectionLogo} className='md:w-auto md:h-[300px] lg:h-[450px] lg:w-auto xl:h-[500px] xl:w-auto relative z-[10]' alt="Clg Student" />
                     </div>
                 </div>
             </div>

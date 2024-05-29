@@ -159,7 +159,7 @@ const Navbar = () => {
                 </div>
 
                 {openProfile && (
-                  <div className="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-md bg-white  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden z-[1000]">
+                  <div className="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-md bg-white  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden z-[100000]">
                     <p className="block md:hidden px-4 py-2 text-md text-white bg-[#36518F] text-semibold ">
                       {user?.name}
                     </p>
