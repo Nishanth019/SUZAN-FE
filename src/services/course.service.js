@@ -10,8 +10,8 @@ const axiosInstance = axios.create({
 class CourseService {
   constructor() {
     // this.url = BACKEND_URL;
-    this.url = "http://localhost:8000"; // Backend URL
-    // this.url = 'https://suzan-be.vercel.app'; // Backend URL if deployed
+    // this.url = "http://localhost:8000"; // Backend URL
+    this.url = "https://suzan-be-mmz3.onrender.com"; // Backend URL if deployed
   }
 
   // Programs
