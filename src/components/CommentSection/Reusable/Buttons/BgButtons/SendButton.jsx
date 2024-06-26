@@ -1,17 +1,14 @@
+// SendButton.jsx
 import { Button } from "@mui/material";
-import React, { useContext } from "react";
+import React from "react";
 
-const SendButton = ({ setCommentTxt, commentTxt }) => {
-
+const SendButton = ({ onClick }) => {
   return (
     <Button
       size="medium"
       variant="outlined"
       sx={{ textTransform: "none" }} // This line removes the capitalization
-      onClick={(e) => {
-        // !commentTxt.trim() ? e.preventDefault() : addComment(commentTxt.trim());
-        setCommentTxt("");
-      }}
+      onClick={onClick}
     >
       Post Comment
     </Button>

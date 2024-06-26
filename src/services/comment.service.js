@@ -10,8 +10,8 @@ const axiosInstance = axios.create({
 class commentService {
   constructor() {
     // this.url=BACKEND_URL;
-    // this.url = "http://localhost:8000";
-    this.url = "https://suzan-be-mmz3.onrender.com";
+    this.url = "http://localhost:8000";
+    // this.url = "https://suzan-be-mmz3.onrender.com";
   }
 
   createMainComment(commentData) {
@@ -34,7 +34,7 @@ class commentService {
     return axiosInstance.delete(`${this.url}/api/comments/comment/${commentId}`);
   }
 
-  deleteReplyComment(replyId) {
+  deleteReplyComment({replyId}) {
     return axiosInstance.delete(`${this.url}/api/comments/replycomment/${replyId}`);
   }
 
@@ -53,6 +53,23 @@ class commentService {
   updateReplyComment(replyId, replyData) {
     return axiosInstance.put(`${this.url}/api/comments/replycomment/${replyId}`, replyData);
   }
+
+  getComment(commentId) {
+    return axiosInstance.get(`${this.url}/api/comments/comment/${commentId}`);
+  }
+
+  getReplyComment(replyId) {
+    return axiosInstance.get(`${this.url}/api/comments/replycomment/${replyId}`);
+  }
+
+    getCommentLikes(commentId) {
+      return axiosInstance.get(`${this.url}/api/comments/comment/${commentId}/likes`);
+    }
+  
+    getReplyCommentLikes(replyId) {
+      return axiosInstance.get(`${this.url}/api/comments/replycomment/${replyId}/likes`);
+    }
+
 }
 
 export default new commentService();
