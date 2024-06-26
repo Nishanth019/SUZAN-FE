@@ -157,7 +157,8 @@ import { CircularProgress } from '@mui/material';
       <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
       <CourseReference resources={resources}/>
       <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
-      <CommentSection  />
+      <CommentSection type="course"  />
+
     </div>
     </>
   }

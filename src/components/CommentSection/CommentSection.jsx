@@ -1,71 +1,55 @@
-'use client'
-import React, { useState } from 'react'
-import { Container, Stack } from "@mui/material";
-import Comment from "./Comment";
-import AddComment from "./AddComment";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { Container, Stack } from '@mui/material';
+import Comment from './Comment';
+import AddComment from './AddComment';
+import { usePathname } from 'next/navigation';
+import commentService from '../../services/comment.service.js';
 
-const CommentSection = () => {
-  const [commentSection, setCommentSection] = useState([
-    {
-      id: 1,
-      content: "This is the first comment! This is the first comment! This is the first comment! This is the first comment! This is the first comment! This is the first comment!",
-      createdAt: "2024-04-30T10:00:00Z",
-      score: 5,
-      replies: [
-        {
-          id: 101,
-          content: "Reply to the first comment!",
-          createdAt: "2024-04-30T10:05:00Z",
-          score: 3,
-          user: { username: "user1" },
-          replyingTo: "juliusomo",
-          replies: []
-        },
-        {
-          id: 102,
-          content: "Another reply to the first comment!",
-          createdAt: "2024-04-30T10:10:00Z",
-          score: 2,
-          user: { username: "user2" },
-          replyingTo: "juliusomo",
-          replies: []
-        }
-      ],
-      user: { username: "juliusomo" }
-    },
-    {
-      id: 2,
-      content: "Second comment here!",
-      createdAt: "2024-04-30T11:00:00Z",
-      score: 7,
-      replies: [],
-      user: { username: "user3" }
-    },
-    {
-      id: 3,
-      content: "Yet another comment!",
-      createdAt: "2024-04-30T12:00:00Z",
-      score: 2,
-      replies: [],
-      user: { username: "user4" }
-    }
-  ]);
-  
+const CommentSection = ({ type }) => {
+  const pathname = usePathname();
+  const course_id = pathname.split('/').pop();
+  const [commentSection, setCommentSection] = useState([]);
+  const [commentsUpdated, setCommentsUpdated] = useState(false);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await commentService.getAllComments(course_id);
+        const sortedComments = response.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        setCommentSection(sortedComments);
+        console.log(123999, sortedComments);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
+
+    fetchComments();
+  }, [course_id, commentsUpdated]);
+
+  const handleCommentAdded = () => {
+    setCommentsUpdated(prev => !prev); // Toggle the state
+  };
+
+  const handleRepliesUpdated = () => {
+    setCommentsUpdated(prev => !prev); // Toggle the state
+  };
+
   return (
-    <div className="w-full p-2 md:py-5  sm:px-5 lg:px-10 xl:px-16">
-    <div class="text-black mb-6">
-    <p className="text-2xl sm:text-4xl font-bold">Discussion (20)</p>
+    <div className="w-full p-2 md:py-5 sm:px-5 lg:px-10 xl:px-16">
+      <div className="text-black mb-6">
+        <p className="text-2xl sm:text-4xl font-bold">Discussion (20)</p>
+      </div>
+      <Container maxWidth="md">
+        <Stack spacing={3}>
+          <AddComment target={course_id} targetType="course" onCommentAdded={handleCommentAdded} />
+          {commentSection.map((comment) => {
+            return <Comment key={comment.id} onPass={comment} onRepliesUpdated={handleRepliesUpdated} />;
+          })}
+        </Stack>
+      </Container>
     </div>
-    <Container maxWidth="md">
-      <Stack spacing={3}>
-        <AddComment />
-        {commentSection.map((comment) => {
-          return <Comment key={comment.id} onPass={comment} />;
-        })}
-      </Stack>
-    </Container>
-    </div>
-  )
-}
+  );
+};
 
-export default CommentSection
+export default CommentSection;
