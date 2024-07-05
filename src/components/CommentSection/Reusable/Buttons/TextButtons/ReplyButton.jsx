@@ -3,19 +3,14 @@ import { RiReplyFill } from 'react-icons/ri';
 
 const ReplyButton = ({ functionality }) => {
   return (
-    <Button
-      startIcon={<RiReplyFill />}
-      sx={{
-        color: "custom.moderateBlue",
-        fontWeight: 500,
-        textTransform: "capitalize",
-      }}
+    <button
       onClick={() => {
         functionality();
       }}
+      className="flex items-center gap-1 text-blue-700"
     >
-      Reply
-    </Button>
+      < RiReplyFill className="md:text-[18px] text-[15px]"/><p className="max-md:!hidden text-sm">Reply</p>
+    </button>
   );
 };
 

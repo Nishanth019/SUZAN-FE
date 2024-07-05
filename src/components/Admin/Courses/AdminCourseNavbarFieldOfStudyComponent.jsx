@@ -45,8 +45,22 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   }, [fieldsOfStudy])
 
 
-
   useEffect(() => {
+    async function fetchFieldOfStudyOfACollege() {
+      try {
+        const response = await CourseService.getAllFieldOfStudyOfCollege();
+        setFieldOfStudy(response.data.fieldsOfStudy);
+        console.log("daddy::", response.data.program)
+        setSelectedProgram(response.data.program);
+        // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
+      } catch (error) {
+        console.error("Error fetching fields of study for a college", error);
+      }
+    }
+    fetchFieldOfStudyOfACollege();
+  }, []);
+
+    useEffect(() => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
       try {
@@ -100,6 +114,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
          setLoading(true);
         const response = await CourseService.getProgramById(programId);
         // console.log(12345, response.data)
+        // console.log(12345, response.data)
         setSelectedProgramDetails(response.data.program);
          setLoading(false);
       } catch (error) {
@@ -118,6 +133,8 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
 
   useEffect(() => {
+    // console.log("dayday", fieldsOfStudy)
+    // console.log("dayday", fieldsOfStudy[0])
     // console.log("dayday", fieldsOfStudy)
     // console.log("dayday", fieldsOfStudy[0])
   }, [fieldsOfStudy, selectedFieldOfStudy]);
@@ -143,9 +160,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
   const fetchCourseCountForFieldOfStudy = async (programId, fieldOfStudyId) => {
     try {
-      console.log(123456);
+      // console.log(123456);
       const response = await CourseService.getAllCourses(programId, fieldOfStudyId);
-      console.log(123, response);
+      // console.log(123, response);
       return response.data.courses.length;
     } catch (error) {
       console.error("Error fetching course count for program:", error);
@@ -200,7 +217,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   };
 
   //search
-  const handleSearch = async () => {
+  const handleSearch = async (value) => {
     try {
       //  console.log("sully");
        setLoading(true);
@@ -260,7 +277,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     else {
       // If currentFieldOfStudy does not exist, add a new Field Of Study
       try {
-        // console.log(69,"working")
+        console.log(69,"working")
         // Create fos with provided data
         console.log(69);
         setButtonLoading(true);
@@ -274,7 +291,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         setButtonLoading(false);
         fetchAllFieldOfStudy();
         // Close the modal after adding the program
-        // console.log(69,response);
+        console.log(69,response);
         toast.success(response.data.message || "Field Of Study is created");
         closeModal();
       } catch (error) {

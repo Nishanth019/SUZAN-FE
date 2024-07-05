@@ -61,7 +61,7 @@ const AdminCourseNavbarProgramComponent = () => {
           return { ...program, coursesCount, fieldOfStudyCount };
         })
       );
-      // console.log(69,programsWithCounts);
+      console.log(69, programsWithCounts);
       setPrograms(programsWithCounts);
       setLoading(false);
     } catch (error) {
@@ -69,7 +69,7 @@ const AdminCourseNavbarProgramComponent = () => {
       console.error("Error fetching programs:", error);
     }
   };
-// console.log(70,programs)
+  console.log(70, programs)
   const fetchCourseCountForProgram = async (programId) => {
     try {
       // console.log(123456);
@@ -85,6 +85,7 @@ const AdminCourseNavbarProgramComponent = () => {
   const fetchFieldOfStudyCountForProgram = async (programId) => {
     try {
       const response = await CourseService.getAllFieldsOfStudy(programId);
+      // console.log(1233, response);
       // console.log(1233, response);
       return response.data.fieldsOfStudy.length;
     } catch (error) {
@@ -106,7 +107,7 @@ const AdminCourseNavbarProgramComponent = () => {
   const openEditProgramModal = (program) => {
     setCurrentProgram(program);
     setProgramName(program.program_name);
-    // console.log(71,programName,program,program.progamName);
+    console.log(71, programName, program, program.progamName);
     setProgramFullName(program.program_fullname);
     setSemetersCount(program.no_of_semester);
     setModalOpen(true);
@@ -119,17 +120,17 @@ const AdminCourseNavbarProgramComponent = () => {
 
   // Function to handle opening the delete confirmation modal
   const openDeleteModal = () => {
-   
+
     setDeleteModalOpen(true);
   };
 
   // Function to handle closing the delete confirmation modal
   const closeDeleteModal = () => {
-    
+
     setDeleteModalOpen(false);
   };
 
-  //search
+
    const handleSearch = async () => {
      try {
       //  console.log("sully");
@@ -154,6 +155,7 @@ const AdminCourseNavbarProgramComponent = () => {
   // Function to handle deleting a program
   const handleDeleteProgram = async () => {
     try {
+
       setButtonLoading(true)
       const response = await CourseService.deleteProgram( {programId: currentProgram._id} );
       setButtonLoading(false)

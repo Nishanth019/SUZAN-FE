@@ -44,29 +44,25 @@ const OwnReply = ({ onContent, onCount, onTar, onDel, comId }) => {
       />
       <Card>
         <Box sx={{ p: "15px" }}>
-          <Stack spacing={2} direction="row">
-            <Box>
-              <ScoreChanger onScore={onCount} />
-            </Box>
+        <div className="flex flex-col gap-2 items-start">
             <Box sx={{ width: "100%" }}>
               <Stack
-                spacing={2}
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Stack spacing={2} direction="row" alignItems="center">
+                  <div className="flex items-center gap-2 ">
                   <Avatar src={prsAva}></Avatar>
                   <Username userName="juliusomo" />
-                  <CreatedAt createdAt="Just now" />
-                </Stack>
-                <Stack direction="row" spacing={1}>
+                  <CreatedAt createdAt="Just now" className="max-md:!hidden"/>
+                </div>
+                <div className="flex gap-2">
                   <DeleteButton functionality={() => handleOpen()} />
                   <EditButton
                     editingComm={clicked}
                     functionality={handleEdit}
                   />
-                </Stack>
+                </div>
               </Stack>
               {editingRep ? (
                 <>
@@ -87,7 +83,10 @@ const OwnReply = ({ onContent, onCount, onTar, onDel, comId }) => {
                 <ReplyText onTar={onTar} repText={repText} />
               )}
             </Box>
-          </Stack>
+            <Box>
+              <ScoreChanger/>
+            </Box>
+          </div>
         </Box>
       </Card>
     </>

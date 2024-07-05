@@ -8,7 +8,6 @@ const YouTag = () => {
       <Chip
         label="you"
         variant="filled"
-        size="small"
         sx={{
           bgcolor: "custom.moderateBlue",
           color: "neutral.white",

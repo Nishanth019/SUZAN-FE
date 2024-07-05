@@ -7,7 +7,7 @@ const EditableCommentField = ({ commentText, setCommentText, placeHolder }) => {
       sx={{ p: "20px 0" }}
       multiline
       fullWidth
-      minRows={4}
+      minRows={3}
       id="outlined-multilined"
       placeholder={placeHolder}
       value={commentText}

@@ -10,15 +10,9 @@ const UpdateReplyButton = ({
 }) => {
   return (
     <Button
-      sx={{
-        bgcolor: "custom.moderateBlue",
-        color: "neutral.white",
-        p: "8px 25px",
-        float: "right",
-        "&:hover": {
-          bgcolor: "custom.lightGrayishBlue",
-        },
-      }}
+    size="medium"
+    variant="outlined"
+    sx={{ textTransform: "none", float:"right"}}
       onClick={() => {
         !repText.trim()
           ? alert("Read the placeholder.")

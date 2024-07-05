@@ -11,7 +11,7 @@ class CourseService {
   constructor() {
     // this.url = BACKEND_URL;
     this.url = "http://localhost:8000"; // Backend URL
-    // this.url = 'https://suzan-be.vercel.app'; // Backend URL if deployed
+    // this.url = "https://suzan-be-mmz3.onrender.com"; // Backend URL if deployed
   }
 
   // Programs
@@ -63,6 +63,10 @@ class CourseService {
   // Get all fields of study
   getAllFieldsOfStudy(programId) {
     return axiosInstance.get(`${this.url}/api/course/fieldOfStudy/${programId}`);
+  }
+  // Get all fields of study of a college
+  getAllFieldOfStudyOfCollege() {
+    return axiosInstance.get(`${this.url}/api/course/fieldOfStudy`);
   }
 
   // Get field of study by ID

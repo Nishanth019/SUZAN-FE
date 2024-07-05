@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Button,
   Stack,
@@ -8,8 +8,7 @@ import {
   DialogContent,
 } from "@mui/material";
 
-const ConfirmDelete = ({ onOpen, onClose, id, onDel, comId }) => {
-//   const { deleteComment } = useContext(CommentContext);
+const ConfirmDelete = ({ onOpen, onClose, onDelete }) => {
   return (
     <Dialog open={onOpen} onClose={onClose}>
       <DialogContent sx={{ maxWidth: "430px" }}>
@@ -24,26 +23,15 @@ const ConfirmDelete = ({ onOpen, onClose, id, onDel, comId }) => {
           comment and it can't be undone.
         </Typography>
         <Stack direction="row" display="flex" justifyContent="space-between">
-          <Button
-            variant="contained"
-            disableElevation
-            sx={{
-              bgcolor: "neutral.grayishBlue",
-              "&:hover": { bgcolor: "neutral.grayishBlue" },
-            }}
-            onClick={onClose}
-          >
+          <Button variant="" onClick={onClose}>
             No, cancel
           </Button>
           <Button
-            variant="contained"
-            disableElevation
-            sx={{
-              bgcolor: "custom.softRed",
-              "&:hover": { bgcolor: "custom.softRed" },
-            }}
+            variant=""
+            color="error"
             onClick={() => {
-            //   onDel ? onDel(comId) : deleteComment(id);
+              onDelete();
+              onClose();
             }}
           >
             Yes, delete

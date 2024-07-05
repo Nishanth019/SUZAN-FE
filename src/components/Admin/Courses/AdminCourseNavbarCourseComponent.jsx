@@ -48,6 +48,8 @@ const AdminCourseNavbarCourseComponent = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [pdfModalOpen, setPdfModalOpen] = useState(false); // State to control modal visibility
   const [selectedPdf, setSelectedPdf] = useState(null);
+  const [pdfModalOpen, setPdfModalOpen] = useState(false); // State to control modal visibility
+  const [selectedPdf, setSelectedPdf] = useState(null);
   // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
@@ -154,6 +156,7 @@ const AdminCourseNavbarCourseComponent = () => {
     window.open(url, "_blank");
   };
 
+
   useEffect(() => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
@@ -190,6 +193,7 @@ const AdminCourseNavbarCourseComponent = () => {
     // Fetch semesters when field of study selected
     async function fetchSemesters(fieldOfStudyId) {
       try {
+        const response = await CourseService.getAllSemestersByFieldOfStudy({ fieldOfStudyId });
         const response = await CourseService.getAllSemestersByFieldOfStudy({ fieldOfStudyId });
         console.log(12345, response.data)
         setSemesters(response.data.semesters);
@@ -391,6 +395,7 @@ const AdminCourseNavbarCourseComponent = () => {
 
   const handleEditAddPyqLink = (e) => {
     if (editFormPyqLinkName.length === 0 || editFormPyqLinkUrl.length === 0) {
+    if (editFormPyqLinkName.length === 0 || editFormPyqLinkUrl.length === 0) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -413,6 +418,7 @@ const AdminCourseNavbarCourseComponent = () => {
     setButtonLoading(false);
   };
   const handleEditAddPyqPdf = (e) => {
+    if (editFormPyqPdfName.length === 0 || editFormPyqPdfUrl.length === 0) {
     if (editFormPyqPdfName.length === 0 || editFormPyqPdfUrl.length === 0) {
       toast.error("Enter both details", {
         position: "top-center",
@@ -496,6 +502,7 @@ const AdminCourseNavbarCourseComponent = () => {
     }
   };
 
+
   const handleSearch = async () => {
     try {
       // console.log("sully")
@@ -513,8 +520,8 @@ const AdminCourseNavbarCourseComponent = () => {
   const handleAddCourse = async (e) => {
     e.preventDefault();
     try {
-      console.log("sully");
-      if (formSelectedProgram.length === 0) {
+      console.log("sully")
+      if(formSelectedProgram.length===0){
         toast.error("Please select Program", {
           position: "top-center",
           autoClose: 5000,
@@ -970,17 +977,11 @@ const AdminCourseNavbarCourseComponent = () => {
         <div className="w-full md:w-[270px]">
           <form
             className="max-w-md mx-auto"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSearch();
+            onChange={(e) => {
+              handleSearch(e.target.value);
             }}
           >
-            <label
-              htmlFor="default-search"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only "
-            >
-              Search
-            </label>
+            <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
             <div className="relative">
               <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <FaSearch
@@ -996,12 +997,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
                 placeholder="Search Course"
               />
-              <button
-                type="submit"
-                className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 "
-              >
-                Search
-              </button>
             </div>
           </form>
         </div>
@@ -1322,19 +1317,19 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             ))}
 
-            <Button
-              onClick={() => handleAddField("resource_links")}
-              cariant="outlined"
-            >
-              + Add More Resources
-            </Button>
+              <Button
+                onClick={() => handleAddField("resource_links")}
+                cariant="outlined"
+              >
+                + Add More Resources
+              </Button>
 
-            <label
-              htmlFor="resources-pdf"
-              className="mb-2 text-sm text-start text-grey-900"
-            >
-              Upload Resources (pdf)
-            </label>
+              <label
+                htmlFor="resources-pdf"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Upload Resources (pdf)
+              </label>
 
             {/* sd */}
             {resource_pdfs.map((resource, index) => (
@@ -1420,13 +1415,13 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             ))}
 
-            <Button
-              onClick={() => handleAddField("resource_pdfs")}
-              className="mb-10"
-              cariant="outlined"
-            >
-              + Add More Resources
-            </Button>
+              <Button
+                onClick={() => handleAddField("resource_pdfs")}
+                className="mb-10"
+                cariant="outlined"
+              >
+                + Add More Resources
+              </Button>
 
             <label
               htmlFor="pyq"
@@ -1493,18 +1488,18 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             ))}
 
-            <Button
-              onClick={() => handleAddField("pyq_links")}
-              cariant="outlined"
-            >
-              + Add More PYQs
-            </Button>
-            <label
-              htmlFor="pyq-pdf"
-              className="mb-2 text-sm text-start text-grey-900"
-            >
-              Upload pyq (pdf)
-            </label>
+              <Button
+                onClick={() => handleAddField("pyq_links")}
+                cariant="outlined"
+              >
+                + Add More PYQs
+              </Button>
+              <label
+                htmlFor="pyq-pdf"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Upload pyq (pdf)
+              </label>
 
             {/* sd */}
             {pyq_pdfs.map((pyq, index) => (
@@ -1588,12 +1583,12 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             ))}
 
-            <Button
-              onClick={() => handleAddField("pyq_pdfs")}
-              cariant="outlined"
-            >
-              + Add More Resources
-            </Button>
+              <Button
+                onClick={() => handleAddField("pyq_pdfs")}
+                cariant="outlined"
+              >
+                + Add More Resources
+              </Button>
 
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
@@ -1982,7 +1977,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
-                  // startIcon={<DeleteIcon />}
+                // startIcon={<DeleteIcon />}
                 >
                   ADD
                 </Button>
@@ -2116,7 +2111,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
-                  // startIcon={<DeleteIcon />}
+                // startIcon={<DeleteIcon />}
                 >
                   ADD
                 </Button>
@@ -2311,6 +2306,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+              
               />
               <div className="flex justify-end">
                 <Button
@@ -2327,9 +2323,8 @@ const AdminCourseNavbarCourseComponent = () => {
 
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button type="submit" variant="contained">
-                Update Course
-              </Button>
+              <Button type="submit" variant="contained">Update Course</Button>
+
             </div>
           </form>
         </Box>
