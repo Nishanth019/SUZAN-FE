@@ -15,14 +15,15 @@ const Home = () => {
   const [user,setUser] = useState(null);
   return (
     <div className="bg-[#FFFFFF]">
-        <MainSection />
-        <Services />
-        <TrustedSection />
-        <CoursesSection />
-        <NearbyPlaces />
-        <CoreTeamSection />
-        <FaqSection />
-        <ContactSection />
+      <MainSection/>
+      <Services/>
+      {/* <TrustedSection/> */}
+      <CoursesSection/>
+      {/* <NearbyPlaces/> */}
+      {/* <CoreTeamSection/> */}
+      <FaqSection/>
+      <ContactSection/>
+
     </div>
   );
 }

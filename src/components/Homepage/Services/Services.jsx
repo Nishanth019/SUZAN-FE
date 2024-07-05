@@ -4,9 +4,9 @@ import Link from 'next/link';
 
 const Services = () => {
   return (
-    <div className="w-full py-6 sm:py-12 lg:py-16">
+    <div id="services-section"  className="w-full py-6 sm:py-12 lg:py-16">
         <div>
-            <p className='text-center text-[30px] md:text-[36px] lg:text-[42px] xl:text-[50px] font-bold pb-5 md:pb-10'>Our Services</p>
+            <p className='text-center text-[30px] md:text-[36px] lg:text-[42px] xl:text-[50px] font-bold pb-5 md:pb-10'>Our Features</p>
         </div>
       <div className="container mx-auto">
         <div className="flex flex-row flex-wrap  justify-center ">
@@ -35,7 +35,7 @@ const Services = () => {
             icon={<BsMap className="mx-auto  w-8 h-8 md:w-12 md:h-12 text-[#f58f29]" />}
             title="Nearby Places"
             description="Explore the neighborhood. Find nearby places for fun and convenience."
-            link="/places"
+            link="/nearby-places"
             buttonText="Explore Places"
           />
         </div>
@@ -58,7 +58,7 @@ const ServiceItem = ({ icon, title, description, link, buttonText }) => {
             <p className="text-[12px] md:text-[16px] px-5">{description}</p>
           </div>
           <Link href={link}>
-          <button  className="border border-solid p-2  mb-5 px-10 bg-[#41E2BA] overflow-hidden">
+          <button  className="border border-solid p-2  mb-5 px-10 bg-[#41E2BA] overflow-hidden rounded-lg hover:scale-105 transition">
            {buttonText}
           </button>
           </Link>

@@ -17,7 +17,7 @@ const navigation = [
   { name: "Courses", href: "/courses" },
   { name: "Events", href: "/events" },
   { name: "Clubs", href: "/clubs" },
-  { name: "NearBy Places", href: "/nearbyplaces" },
+  { name: "NearBy Places", href: "/nearby-places" },
   
  
 ];

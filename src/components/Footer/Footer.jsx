@@ -79,7 +79,7 @@ const Footer = () => {
                         variant="small"
                         className="mb-4 text-center font-normal text-black md:mb-0"
                     >
-                        &copy; {currentYear} <p>Suzan Organisation</p>. All
+                       <p> &copy; {currentYear} Suzan Organisation.</p> All
                         Rights Reserved.
                     </p>
                     <div className="flex gap-4 text-black sm:justify-center">
