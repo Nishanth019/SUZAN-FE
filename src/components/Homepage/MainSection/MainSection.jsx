@@ -9,6 +9,9 @@ import MainSectionLogo from "../../../assets/Homepage/MainSectionLogo.png";
 import play from "../../../assets/Homepage/play.png";
 
 const MainSection = () => {
+    const handleScroll = () => {
+        document.getElementById('services-section').scrollIntoView({ behavior: 'smooth' });
+    };
     return (
         <div className='w-full  items-center justify-center flex flex-row overflow-hidden py-5 md:py-10 lg:pt-16'>
             <div id='left_container' className='flex-1  flex-col  items-center justify-center w-full h-ful'>
@@ -34,7 +37,7 @@ const MainSection = () => {
                         </div>
 
                         <div className='flex gap-4 lg:gap-8 xl:gap-12 '>
-                            <button className='whitespace-nowrap rounded-lg px-3 lg:px-5 text-sm lg:text-lg primary-bg-color font-semibold text-white cursor-pointer relative'>
+                            <button onClick={handleScroll} className='whitespace-nowrap rounded-lg px-3 lg:px-5 text-sm lg:text-lg primary-bg-color font-semibold text-white cursor-pointer relative'>
                                 Lets Explore
                             </button>
                             <div className='flex items-center gap-2 lg:gap-4  '>

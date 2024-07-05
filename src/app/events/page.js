@@ -1,10 +1,10 @@
 import React from 'react'
+import ComingSoon from '@/components/general/comingsoon.jsx'
+
 
 const Events = () => {
   return (
-    <div className='text-center'>
-      Hello, Welcome to Events!!
-    </div>
+    <ComingSoon/>
   )
 }
 

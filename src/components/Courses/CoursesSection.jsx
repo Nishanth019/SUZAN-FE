@@ -215,10 +215,16 @@ const CoursesSection = () => {
                   </div> 
                   :
                   <>
-            {courses.map((course, index) => (
-              <CoursesCard key={index} course={course} />
-            ))}
-                  </>
+                  {courses.length === 0 ? (
+                  <p className="text-center text-gray-700 text-xl md:text-2xl  flex items-center justify-center h-[50vh]">
+                  No courses available
+                </p>
+                  ) : (
+                    courses.map((course, index) => (
+                      <CoursesCard key={index} course={course} />
+                    ))
+                  )}
+                </>
             }
           </div>
         </div>

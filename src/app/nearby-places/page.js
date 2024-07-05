@@ -1,10 +1,11 @@
 import React from 'react'
+import ComingSoon from '@/components/general/comingsoon.jsx'
 
 const NearbyPlaces = () => {
   return (
-    <div className='text-center'>
-        Hello, Welcome to Nearby Places!!
-    </div>
+    <>
+    <ComingSoon/>
+    </>
   )
 }
 

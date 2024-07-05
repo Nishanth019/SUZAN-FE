@@ -16,11 +16,11 @@ const Home = () => {
     <div className="bg-[#FFFFFF]">
       <MainSection/>
       <Services/>
-      <TrustedSection/>
+      {/* <TrustedSection/> */}
       <CoursesSection/>
-      <NearbyPlaces/>
-      <CoreTeamSection/>
-      {/* <FaqSection/> */}
+      {/* <NearbyPlaces/> */}
+      {/* <CoreTeamSection/> */}
+      <FaqSection/>
       <ContactSection/>
     </div>
   )
