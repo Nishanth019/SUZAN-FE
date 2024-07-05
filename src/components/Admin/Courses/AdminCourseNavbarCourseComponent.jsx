@@ -11,12 +11,13 @@ import Modal from "@mui/material/Modal";
 import Dropdown2 from "@/components/TailwindComponents/FormDropdown";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CourseService from "@/services/course.service.js";
-import { IoMdEye, IoMdDownload } from 'react-icons/io';
+import { IoMdEye, IoMdDownload } from "react-icons/io";
 import { FaLink, FaFilePdf } from "react-icons/fa";
 import { pdfjs } from "react-pdf";
 import ViewPdf from "../../Courses/ViewPdf";
 import "../../Courses/style.css";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
+import { CircularProgress } from "@mui/material";
 
 //react pdf
 const workerSrc = require("pdfjs-dist/build/pdf.worker.min.js");
@@ -36,12 +37,17 @@ const style = {
 };
 
 const AdminCourseNavbarCourseComponent = () => {
+  const [loading, setLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);  
+  const [buttonLoading1, setButtonLoading1] = useState(false);  
+  const [buttonLoading2, setButtonLoading2] = useState(false);  
+  const [buttonLoading3, setButtonLoading3] = useState(false);  
   const [modalOpen, setModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-   const [pdfModalOpen, setPdfModalOpen] = useState(false); // State to control modal visibility
-   const [selectedPdf, setSelectedPdf] = useState(null); 
+  const [pdfModalOpen, setPdfModalOpen] = useState(false); // State to control modal visibility
+  const [selectedPdf, setSelectedPdf] = useState(null);
   // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
@@ -75,8 +81,12 @@ const AdminCourseNavbarCourseComponent = () => {
   const [instructor_name, setInstructor_name] = useState("");
   const [instructor_photo, setInstructor_photo] = useState("");
   const [syllabus, setSyllabus] = useState("");
-  const [resource_links, setResources_link] = useState([{ link_name: "", link_url: "" }]);
-  const [resource_pdfs, setResources_pdf] = useState([{ pdf_name: "", pdf_url: "" }]);
+  const [resource_links, setResources_link] = useState([
+    { link_name: "", link_url: "" },
+  ]);
+  const [resource_pdfs, setResources_pdf] = useState([
+    { pdf_name: "", pdf_url: "" },
+  ]);
   const [pyq_links, setPyq_link] = useState([{ link_name: "", link_url: "" }]);
   const [pyq_pdfs, setPyq_pdf] = useState([{ pdf_name: "", pdf_url: "" }]);
 
@@ -92,21 +102,28 @@ const AdminCourseNavbarCourseComponent = () => {
   const [updatedInstructor_name, setUpdatedInstructor_name] = useState("");
   const [updatedInstructor_photo, setUpdatedInstructor_photo] = useState("");
   const [updatedSyllabus, setUpdatedSyllabus] = useState("");
-  const [updatedResource_links, setUpdatedResource_links] = useState([{ link_name: "", link_url: "" }]);
-  const [updatedResource_pdfs, setUpdatedResource_pdfs] = useState([{ pdf_name: "", pdf_url: "" }]);
-  const [updatedPyq_links, setUpdatedPyq_links] = useState([{ link_name: "", link_url: "" }]);
-  const [updatedPyq_pdfs, setUpdatedPyq_pdfs] = useState([{ pdf_name: "", pdf_url: "" }]);
+  const [updatedResource_links, setUpdatedResource_links] = useState([
+    { link_name: "", link_url: "" },
+  ]);
+  const [updatedResource_pdfs, setUpdatedResource_pdfs] = useState([
+    { pdf_name: "", pdf_url: "" },
+  ]);
+  const [updatedPyq_links, setUpdatedPyq_links] = useState([
+    { link_name: "", link_url: "" },
+  ]);
+  const [updatedPyq_pdfs, setUpdatedPyq_pdfs] = useState([
+    { pdf_name: "", pdf_url: "" },
+  ]);
 
   //editform useStates
-  const [editFormResourceLinkName, setEditFormResourceLinkName] = useState("")
-  const [editFormResourceLinkUrl, setEditFormResourceLinkUrl] = useState("")
-  const [editFormResourcePdfName, setEditFormResourcePdfName] = useState("")
-  const [editFormResourcePdfUrl, setEditFormResourcePdfUrl] = useState("")
-  const [editFormPyqLinkName, setEditFormPyqLinkName] = useState("")
-  const [editFormPyqLinkUrl, setEditFormPyqLinkUrl] = useState("")
-  const [editFormPyqPdfName, setEditFormPyqPdfName] = useState("")
-  const [editFormPyqPdfUrl, setEditFormPyqPdfUrl] = useState("")
-
+  const [editFormResourceLinkName, setEditFormResourceLinkName] = useState("");
+  const [editFormResourceLinkUrl, setEditFormResourceLinkUrl] = useState("");
+  const [editFormResourcePdfName, setEditFormResourcePdfName] = useState("");
+  const [editFormResourcePdfUrl, setEditFormResourcePdfUrl] = useState("");
+  const [editFormPyqLinkName, setEditFormPyqLinkName] = useState("");
+  const [editFormPyqLinkUrl, setEditFormPyqLinkUrl] = useState("");
+  const [editFormPyqPdfName, setEditFormPyqPdfName] = useState("");
+  const [editFormPyqPdfUrl, setEditFormPyqPdfUrl] = useState("");
 
   const style = {
     position: "absolute",
@@ -136,7 +153,7 @@ const AdminCourseNavbarCourseComponent = () => {
   const handleOpenLink = (url) => {
     window.open(url, "_blank");
   };
-  
+
   useEffect(() => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
@@ -164,8 +181,7 @@ const AdminCourseNavbarCourseComponent = () => {
     }
     if (selectedProgram) {
       fetchFieldsOfStudy(selectedProgram);
-    }
-    else if (formSelectedProgram) {
+    } else if (formSelectedProgram) {
       fetchFieldsOfStudy(formSelectedProgram);
     }
   }, [formSelectedProgram, selectedProgram]);
@@ -174,7 +190,7 @@ const AdminCourseNavbarCourseComponent = () => {
     // Fetch semesters when field of study selected
     async function fetchSemesters(fieldOfStudyId) {
       try {
-        const response = await CourseService.getAllSemester(fieldOfStudyId);
+        const response = await CourseService.getAllSemestersByFieldOfStudy({ fieldOfStudyId });
         console.log(12345, response.data)
         setSemesters(response.data.semesters);
         // setSelectedSemester(response.data.semesters[0]?._id);
@@ -196,18 +212,26 @@ const AdminCourseNavbarCourseComponent = () => {
 
   async function fetchCourses() {
     try {
-      console.log(1223456)
-      const response = await CourseService.getAllCourses({ programId: selectedProgram, fieldOfStudyId: selectedFieldOfStudy, semesterId: selectedSemester });
-      console.log(5, response.data);
-      console.log(1223455)
+      // console.log(1223456)
+      setLoading(true);
+      const response = await CourseService.getAllCourses({
+        programId: selectedProgram,
+        fieldOfStudyId: selectedFieldOfStudy,
+        semesterId: selectedSemester,
+      });
+      // console.log(5, response.data);
+      // console.log(1223455)
       setCourses(response.data.courses);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error fetching courses:", error);
     }
   }
 
   async function fetchSingleCourse(courseId) {
     try {
+      setLoading(true);
       setEditCourseCode(courseId);
       const response = await CourseService.getCourseById({ courseId });
       setSingleCourse(response.data.course);
@@ -215,11 +239,13 @@ const AdminCourseNavbarCourseComponent = () => {
       const response3 = await CourseService.getProgramById({
         programId: course.program,
       });
-      setUpdatedProgram(response3.data?.program.program_fullname)
+      setUpdatedProgram(response3.data?.program.program_fullname);
       const response1 = await CourseService.getFieldOfStudyById({
         fieldOfStudyId: course.field_of_study,
       });
-      setUpdatedFieldOfStudy(response1.data.fieldOfStudy.field_of_studyfullname)
+      setUpdatedFieldOfStudy(
+        response1.data.fieldOfStudy.field_of_studyfullname
+      );
       const response2 = await CourseService.getSemesterByCourseId({
         courseId: course._id,
       });
@@ -234,40 +260,48 @@ const AdminCourseNavbarCourseComponent = () => {
       setUpdatedInstructor_photo(response?.data?.course?.instructor_photo);
 
       fetchMedia(response?.data?.course?._id);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error fetching courses:", error);
     }
   }
 
   const fetchMedia = async (courseId) => {
     try {
-      console.log(89, courseId);
+      // console.log(89, courseId);
       const response = await CourseService.getMediaByCourceId({
-        courseId
+        courseId,
       });
-      console.log(97, response.data);
-      console.log(977, response?.data?.syllabus?.pdf_url);
-      console.log(978, response?.data?.resourcesLinks);
-      console.log(979, response?.data?.resourcesPdf);
-      console.log(980, response?.data?.pyqLinks);
-      console.log(981, response?.data?.pyqPdf)
+      // console.log(97, response.data);
+      // console.log(977, response?.data?.syllabus?.pdf_url);
+      // console.log(978, response?.data?.resourcesLinks);
+      // console.log(979, response?.data?.resourcesPdf);
+      // console.log(980, response?.data?.pyqLinks);
+      // console.log(981, response?.data?.pyqPdf)
 
       // Set updated syllabus
       setUpdatedSyllabus(response?.data?.syllabus?.pdf_url || "");
 
       // Set updated resource links
-      setUpdatedResource_links(response?.data?.resourcesLinks || [{ link_name: "", link_url: "" }]);
+      setUpdatedResource_links(
+        response?.data?.resourcesLinks || [{ link_name: "", link_url: "" }]
+      );
 
       // Set updated resource PDFs
-      setUpdatedResource_pdfs(response?.data?.resourcesPdf || [{ pdf_name: "", pdf_url: "" }]);
+      setUpdatedResource_pdfs(
+        response?.data?.resourcesPdf || [{ pdf_name: "", pdf_url: "" }]
+      );
 
       // Set updated PYQ links
-      setUpdatedPyq_links(response?.data?.pyqLinks || [{ link_name: "", link_url: "" }]);
+      setUpdatedPyq_links(
+        response?.data?.pyqLinks || [{ link_name: "", link_url: "" }]
+      );
 
       // Set updated PYQ PDFs
-      setUpdatedPyq_pdfs(response?.data?.pyqPdf || [{ pdf_name: "", pdf_url: "" }]);
-
-
+      setUpdatedPyq_pdfs(
+        response?.data?.pyqPdf || [{ pdf_name: "", pdf_url: "" }]
+      );
     } catch (error) {
       console.error(error);
     }
@@ -275,24 +309,35 @@ const AdminCourseNavbarCourseComponent = () => {
 
   const handleEditDeleteField = (field, index) => {
     if (field === "resource_links") {
-      setUpdatedResource_links((prevLinks) => prevLinks.filter((_, i) => i !== index));
+      setUpdatedResource_links((prevLinks) =>
+        prevLinks.filter((_, i) => i !== index)
+      );
     }
     if (field === "resource_pdfs") {
-      setUpdatedResource_pdfs((prevLinks) => prevLinks.filter((_, i) => i !== index));
+      setUpdatedResource_pdfs((prevLinks) =>
+        prevLinks.filter((_, i) => i !== index)
+      );
     }
     if (field === "pyq_links") {
-      setUpdatedPyq_links((prevLinks) => prevLinks.filter((_, i) => i !== index));
+      setUpdatedPyq_links((prevLinks) =>
+        prevLinks.filter((_, i) => i !== index)
+      );
     }
     if (field === "pyq_pdfs") {
-      setUpdatedPyq_pdfs((prevLinks) => prevLinks.filter((_, i) => i !== index));
+      setUpdatedPyq_pdfs((prevLinks) =>
+        prevLinks.filter((_, i) => i !== index)
+      );
     }
     if (field === "syllabus_pdf") {
-      setUpdatedSyllabus("")
+      setUpdatedSyllabus("");
     }
   };
 
   const handleEditAddResourceLink = () => {
-    if(editFormResourceLinkName.length===0 || editFormResourceLinkUrl.length===0){
+    if (
+      editFormResourceLinkName.length === 0 ||
+      editFormResourceLinkUrl.length === 0
+    ) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -305,12 +350,23 @@ const AdminCourseNavbarCourseComponent = () => {
       });
       return;
     }
-    setUpdatedResource_links([...updatedResource_links, { link_name: editFormResourceLinkName, link_url: editFormResourceLinkUrl }]);
-    setEditFormResourceLinkName("")
-    setEditFormResourceLinkUrl("")
+    setButtonLoading(true);
+    setUpdatedResource_links([
+      ...updatedResource_links,
+      {
+        link_name: editFormResourceLinkName,
+        link_url: editFormResourceLinkUrl,
+      },
+    ]);
+    setEditFormResourceLinkName("");
+    setEditFormResourceLinkUrl("");
+    setButtonLoading(false);
   };
   const handleEditAddResourcePdf = (e) => {
-    if(editFormResourcePdfName.length===0 || editFormResourcePdfUrl.length===0){
+    if (
+      editFormResourcePdfName.length === 0 ||
+      editFormResourcePdfUrl.length === 0
+    ) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -323,13 +379,18 @@ const AdminCourseNavbarCourseComponent = () => {
       });
       return;
     }
-    setUpdatedResource_pdfs([...updatedResource_pdfs, { pdf_name: editFormResourcePdfName, pdf_url: editFormResourcePdfUrl }]);
-    setEditFormResourcePdfName("")
-    setEditFormResourcePdfUrl("")
+    setButtonLoading(true);
+    setUpdatedResource_pdfs([
+      ...updatedResource_pdfs,
+      { pdf_name: editFormResourcePdfName, pdf_url: editFormResourcePdfUrl },
+    ]);
+    setEditFormResourcePdfName("");
+    setEditFormResourcePdfUrl("");
+    setButtonLoading(false);
   };
 
   const handleEditAddPyqLink = (e) => {
-    if(editFormPyqLinkName.length===0 || editFormPyqLinkUrl.length===0){
+    if (editFormPyqLinkName.length === 0 || editFormPyqLinkUrl.length === 0) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -342,12 +403,17 @@ const AdminCourseNavbarCourseComponent = () => {
       });
       return;
     }
-    setUpdatedPyq_links([...updatedPyq_links, { link_name: editFormPyqLinkName, link_url: editFormPyqLinkUrl }]);
-    setEditFormPyqLinkName("")
-    setEditFormPyqLinkUrl("")
+    setButtonLoading(true);
+    setUpdatedPyq_links([
+      ...updatedPyq_links,
+      { link_name: editFormPyqLinkName, link_url: editFormPyqLinkUrl },
+    ]);
+    setEditFormPyqLinkName("");
+    setEditFormPyqLinkUrl("");
+    setButtonLoading(false);
   };
   const handleEditAddPyqPdf = (e) => {
-    if(editFormPyqPdfName.length===0 || editFormPyqPdfUrl.length===0){
+    if (editFormPyqPdfName.length === 0 || editFormPyqPdfUrl.length === 0) {
       toast.error("Enter both details", {
         position: "top-center",
         autoClose: 3000,
@@ -360,26 +426,31 @@ const AdminCourseNavbarCourseComponent = () => {
       });
       return;
     }
-    setUpdatedPyq_pdfs([...updatedPyq_pdfs, { pdf_name: editFormPyqPdfName, pdf_url: editFormPyqPdfUrl }]);
-    setEditFormPyqPdfName("")
-    setEditFormPyqPdfUrl("")
+    setButtonLoading(true);
+    setUpdatedPyq_pdfs([
+      ...updatedPyq_pdfs,
+      { pdf_name: editFormPyqPdfName, pdf_url: editFormPyqPdfUrl },
+    ]);
+    setEditFormPyqPdfName("");
+    setEditFormPyqPdfUrl("");
+    setButtonLoading(false);
   };
 
   const handleInputChangeresourceeditpdf = async (field, value) => {
     try {
+      setButtonLoading1(true);
       const formData = new FormData();
       formData.append("file", value);
       const response = await CourseService.uploadFile(formData);
       console.log(response.data.file);
       if (field === "resources_pdf") {
-        setEditFormResourcePdfUrl(response.data.file)
+        setEditFormResourcePdfUrl(response.data.file);
+      } else if (field === "pyq_pdf") {
+        setEditFormPyqPdfUrl(response.data.file);
+      } else if (field === "syllabus_pdf") {
+        setUpdatedSyllabus(response.data.file);
       }
-      else if (field === "pyq_pdf") {
-        setEditFormPyqPdfUrl(response.data.file)
-      }
-      else if (field === "syllabus_pdf") {
-        setUpdatedSyllabus(response.data.file)
-      }
+       setButtonLoading1(false);
 
       toast.success(response.data.message, {
         position: "top-center",
@@ -392,21 +463,23 @@ const AdminCourseNavbarCourseComponent = () => {
         theme: "colored",
       });
     } catch (error) {
+       setButtonLoading1(false);
       console.error("Error updating user:", error);
     }
-    console.log(12345, resource_pdfs)
+    console.log(12345, resource_pdfs);
   };
-
 
   //upload edit picture
   const handleUploadEditPicture = async (e) => {
     const file = e.target.files[0];
     console.log(23, file);
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append("picture", file);
       const response = await CourseService.uploadPicture(formData);
       setUpdatedInstructor_photo(response?.data?.picture);
+      setLoading(false);
       toast.success(response.data.message, {
         position: "top-center",
         autoClose: 5000,
@@ -418,18 +491,21 @@ const AdminCourseNavbarCourseComponent = () => {
         theme: "colored",
       });
     } catch (error) {
+      setLoading(false);
       console.error("Error updating user:", error);
     }
   };
 
-
   const handleSearch = async () => {
     try {
-      console.log("sully")
+      // console.log("sully")
+      setLoading(true);
       const response = await CourseService.searchCourse(searchQuery);
-      console.log("cheeku", response.data)
+      // console.log("cheeku", response.data)
       setCourses(response.data.courses);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error searching courses:", error);
     }
   };
@@ -437,8 +513,8 @@ const AdminCourseNavbarCourseComponent = () => {
   const handleAddCourse = async (e) => {
     e.preventDefault();
     try {
-      console.log("sully")
-      if(formSelectedProgram.length===0){
+      console.log("sully");
+      if (formSelectedProgram.length === 0) {
         toast.error("Please select Program", {
           position: "top-center",
           autoClose: 5000,
@@ -452,7 +528,7 @@ const AdminCourseNavbarCourseComponent = () => {
         });
         return;
       }
-      if(formSelectedFieldOfStudy.length===0){
+      if (formSelectedFieldOfStudy.length === 0) {
         toast.error("Please select Field Of Study", {
           position: "top-center",
           autoClose: 5000,
@@ -466,7 +542,7 @@ const AdminCourseNavbarCourseComponent = () => {
         });
         return;
       }
-      if(formSelectedSemester.length===0){
+      if (formSelectedSemester.length === 0) {
         toast.error("Please select Semester", {
           position: "top-center",
           autoClose: 5000,
@@ -480,13 +556,27 @@ const AdminCourseNavbarCourseComponent = () => {
         });
         return;
       }
+      setButtonLoading(true);
       const data = {
-        program: formSelectedProgram, field_of_study: formSelectedFieldOfStudy, semester: formSelectedSemester, course_name, course_code, course_type, credits, instructor_name, instructor_photo, syllabus,
-        resource_links, resource_pdfs, pyq_links, pyq_pdfs
+        program: formSelectedProgram,
+        field_of_study: formSelectedFieldOfStudy,
+        semester: formSelectedSemester,
+        course_name,
+        course_code,
+        course_type,
+        credits,
+        instructor_name,
+        instructor_photo,
+        syllabus,
+        resource_links,
+        resource_pdfs,
+        pyq_links,
+        pyq_pdfs,
       };
-      console.log(11111, data)
+      console.log(11111, data);
       const response = await CourseService.createCourse(data);
-      console.log("cheeku", response.data)
+      setButtonLoading(false);
+      console.log("cheeku", response.data);
       toast.success(response?.data?.message, {
         position: "top-center",
         autoClose: 5000,
@@ -500,15 +590,16 @@ const AdminCourseNavbarCourseComponent = () => {
       });
       fetchCourses();
       closeModal();
-    }
-    catch (err) {
+    } catch (err) {
+      setButtonLoading(false);
       console.error("Error searching courses:", err);
     }
-  }
+  };
 
   const handleEditCourse = async (e) => {
     e.preventDefault();
     try {
+      setButtonLoading(true);
       const data = {
         program: updatedProgram,
         field_of_study: updatedFieldOfStudy,
@@ -523,14 +614,15 @@ const AdminCourseNavbarCourseComponent = () => {
         resource_links: updatedResource_links,
         resource_pdfs: updatedResource_pdfs,
         pyq_links: updatedPyq_links,
-        pyq_pdfs: updatedPyq_pdfs
+        pyq_pdfs: updatedPyq_pdfs,
       };
 
-      console.log(1001, data)
+      console.log(1001, data);
 
       const courseId = editCourseCode; // Assuming you have a selectedCourseId state variable for the course being edited
       console.log(1002, courseId);
       const response = await CourseService.updateCourse(courseId, data);
+      setButtonLoading(false);
       toast.success(response?.data?.message, {
         position: "top-center",
         autoClose: 5000,
@@ -549,10 +641,9 @@ const AdminCourseNavbarCourseComponent = () => {
     }
   };
 
-
   // Dummy courses data
   const openViewModal = (course) => {
-    console.log(22222, course)
+    console.log(22222, course);
     fetchSingleCourse(course._id);
     setViewModalOpen(true);
   };
@@ -568,9 +659,8 @@ const AdminCourseNavbarCourseComponent = () => {
   };
 
   const closeEditModal = () => {
-    setEditModalOpen(false)
-  }
-
+    setEditModalOpen(false);
+  };
 
   // Function to handle opening the modal
   const openModal = () => {
@@ -603,24 +693,27 @@ const AdminCourseNavbarCourseComponent = () => {
 
   // Function to handle closing the delete confirmation modal
   const closeDeleteModal = () => {
-    setDeletingCourseId(null)
+    setDeletingCourseId(null);
     setDeleteModalOpen(false);
   };
   const handleDelete = async (course) => {
-    setDeletingCourseId(course._id)
+    setDeletingCourseId(course._id);
     openDeleteModal();
   };
 
   // Function to handle deleting a program
   const handleDeleteCourse = async () => {
     try {
+      setButtonLoading(true);
       console.log("deleting", deletingCourseId);
       const res = await CourseService.deleteCourse({ deletingCourseId });
-      console.log(455, res.data.message)
+      setButtonLoading(false);
+      console.log(455, res.data.message);
       console.log("deleting", 2);
-      fetchCourses()
+      fetchCourses();
       closeDeleteModal();
     } catch (error) {
+      setButtonLoading(false);
       console.error("Error deleting program:", error);
     }
   };
@@ -636,21 +729,25 @@ const AdminCourseNavbarCourseComponent = () => {
     const updatedLinks = [...resource_links];
     updatedLinks[index][fieldIndex === 0 ? "link_name" : "link_url"] = value;
     setResources_link(updatedLinks);
-    console.log(12345, resource_links)
+    console.log(12345, resource_links);
   };
 
   const handleInputChangeresourcepdf = async (index, fieldIndex, value) => {
+    
     const updatedResources = [...resource_pdfs];
     if (fieldIndex === 0) {
+      
       updatedResources[index]["pdf_name"] = value;
-    }
-    else if (fieldIndex === 1) {
+     
+    } else if (fieldIndex === 1) {
       try {
+        setButtonLoading2(true);
         const formData = new FormData();
         formData.append("file", value);
         const response = await CourseService.uploadFile(formData);
         console.log(response.data.file);
         updatedResources[index]["pdf_url"] = response.data.file;
+        setButtonLoading2(false);
         toast.success(response.data.message, {
           position: "top-center",
           autoClose: 5000,
@@ -662,32 +759,36 @@ const AdminCourseNavbarCourseComponent = () => {
           theme: "colored",
         });
       } catch (error) {
+        setButtonLoading2(false);
         console.error("Error updating user:", error);
       }
     }
     setResources_pdf(updatedResources);
-    console.log(12345, resource_pdfs)
+    setButtonLoading2(false);
+    console.log(12345, resource_pdfs);
   };
 
   const handleInputChangepyqlink = (index, fieldIndex, value) => {
     const updatedPyq = [...pyq_links];
     updatedPyq[index][fieldIndex === 0 ? "link_name" : "link_url"] = value;
     setPyq_link(updatedPyq);
-    console.log(123, pyq_links)
+    console.log(123, pyq_links);
   };
 
   const handleInputChangepyqpdf = async (index, fieldIndex, value) => {
     const updatedPyq = [...pyq_pdfs];
     if (fieldIndex === 0) {
       updatedPyq[index]["pdf_name"] = value;
-    }
-    else if (fieldIndex === 1) {
+     
+    } else if (fieldIndex === 1) {
+      setButtonLoading3(true)
       try {
         const formData = new FormData();
         formData.append("file", value);
         const response = await CourseService.uploadFile(formData);
         console.log(response.data.file);
         updatedPyq[index]["pdf_url"] = response.data.file;
+        setButtonLoading3(false)
         toast.success(response.data.message, {
           position: "top-center",
           autoClose: 5000,
@@ -699,23 +800,34 @@ const AdminCourseNavbarCourseComponent = () => {
           theme: "colored",
         });
       } catch (error) {
+         setButtonLoading3(false)
         console.error("Error updating user:", error);
       }
     }
-    setPyq_pdf(updatedPyq);
-    console.log(12345, pyq_pdfs)
-  };
 
+    setPyq_pdf(updatedPyq);
+   
+    console.log(12345, pyq_pdfs);
+  };
 
   const handleAddField = (field) => {
     if (field === "resource_links") {
-      setResources_link((prevLinks) => [...prevLinks, { link_name: "", link_url: "" }]);
+      setResources_link((prevLinks) => [
+        ...prevLinks,
+        { link_name: "", link_url: "" },
+      ]);
     }
     if (field === "resource_pdfs") {
-      setResources_pdf((prevPdfs) => [...prevPdfs, { pdf_name: "", pdf_url: "" }]);
+      setResources_pdf((prevPdfs) => [
+        ...prevPdfs,
+        { pdf_name: "", pdf_url: "" },
+      ]);
     }
     if (field === "pyq_links") {
-      setPyq_link((prevLinks) => [...prevLinks, { link_name: "", link_url: "" }]);
+      setPyq_link((prevLinks) => [
+        ...prevLinks,
+        { link_name: "", link_url: "" },
+      ]);
     }
     if (field === "pyq_pdfs") {
       setPyq_pdf((prevPdfs) => [...prevPdfs, { pdf_name: "", pdf_url: "" }]);
@@ -723,6 +835,7 @@ const AdminCourseNavbarCourseComponent = () => {
   };
 
   const handleDeleteField = (field, index) => {
+    setButtonLoading(true);
     if (field === "resource_links") {
       setResources_link((prevLinks) => prevLinks.filter((_, i) => i !== index));
     }
@@ -735,6 +848,7 @@ const AdminCourseNavbarCourseComponent = () => {
     if (field === "pyq_pdfs") {
       setPyq_pdf((prevLinks) => prevLinks.filter((_, i) => i !== index));
     }
+    setButtonLoading(false);
   };
 
   //upload picture
@@ -742,9 +856,11 @@ const AdminCourseNavbarCourseComponent = () => {
     const file = e.target.files[0];
     console.log(23, file);
     try {
+      setButtonLoading(true);
       const formData = new FormData();
       formData.append("picture", file);
       const response = await CourseService.uploadPicture(formData);
+      setButtonLoading(false);
       setInstructor_photo(response?.data?.picture);
       toast.success(response.data.message, {
         position: "top-center",
@@ -757,20 +873,22 @@ const AdminCourseNavbarCourseComponent = () => {
         theme: "colored",
       });
     } catch (error) {
+      setButtonLoading(false);
       console.error("Error updating user:", error);
     }
   };
-
 
   //upload file
   const handleSyllabusFile = async (e) => {
     const file = e.target.files[0];
     try {
+       setButtonLoading1(true);
       const formData = new FormData();
       formData.append("file", file);
       const response = await CourseService.uploadFile(formData);
       console.log(response.data.file);
       setSyllabus(response?.data?.file);
+       setButtonLoading1(false);
       toast.success(response.data.message, {
         position: "top-center",
         autoClose: 5000,
@@ -782,24 +900,22 @@ const AdminCourseNavbarCourseComponent = () => {
         theme: "colored",
       });
     } catch (error) {
+      setButtonLoading1(false);
       console.error("Error updating user:", error);
     }
   };
 
   const handleChangepyqpdf = async (index, fieldIndex, e) => {
-
     const file = e.target.files[0];
     const fileName = file.name; // Extracting file name from the file object
     const newSelectedpyqpdf = [...selectedpyqpdf];
     newSelectedpyqpdf[index] = fileName; // Storing only the file name
     setSelectedpyqpdf(newSelectedpyqpdf);
 
-
     const updatedpyq = [...courseDetails.pyq_pdfs];
     updatedpyq[index][fieldIndex] = file;
     setCourseDetails({ ...courseDetails, pyq_pdfs: updatedpyq });
     console.log(23, newSelectedpyqpdf[index], " + ", e.target.value);
-
   };
 
   return (
@@ -1001,7 +1117,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   setFormSelectedSemester(selectedSemester?._id);
                 }}
               />
-            </div>
+            </div>
             {/* Inputs */}
             <label
               htmlFor="fieldofstudyName"
@@ -1090,15 +1206,27 @@ const AdminCourseNavbarCourseComponent = () => {
             >
               Upload Instructor Photo
             </label>
-            <div className="flex items-center mb-8">
-              <input
-                type="file"
-                id="instructorFileInput"
-                accept="image/*"
-                onChange={handleUploadPicture}
-                className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-              />
-            </div>
+            {buttonLoading ? (
+              <div className="flex items-center mb-8">
+                <input
+                  type="file"
+                  id="instructorFileInput"
+                  accept="image/*"
+                  className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                />{" "}
+                <CircularProgress className="ml-2" size={15} />
+              </div>
+            ) : (
+              <div className="flex items-center mb-8">
+                <input
+                  type="file"
+                  id="instructorFileInput"
+                  accept="image/*"
+                  onChange={handleUploadPicture}
+                  className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                />
+              </div>
+            )}
 
             <label
               htmlFor="syllabusFileInput"
@@ -1106,15 +1234,27 @@ const AdminCourseNavbarCourseComponent = () => {
             >
               Upload Syllabus
             </label>
-            <div className="flex items-center mb-8">
-              <input
-                type="file"
-                id="syllabusFileInput"
-                onChange={handleSyllabusFile}
-                accept="application/pdf"
-                className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-              />
-            </div>
+            {buttonLoading1 ? (
+              <div className="flex items-center mb-8">
+                <input
+                  type="file"
+                  id="syllabusFileInput"
+                  accept="application/pdf"
+                  className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                />{" "}
+                <CircularProgress className="ml-2" size={15} />
+              </div>
+            ) : (
+              <div className="flex items-center mb-8">
+                <input
+                  type="file"
+                  id="syllabusFileInput"
+                  onChange={handleSyllabusFile}
+                  accept="application/pdf"
+                  className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                />
+              </div>
+            )}
 
             <label
               htmlFor="resource_links"
@@ -1145,7 +1285,23 @@ const AdminCourseNavbarCourseComponent = () => {
                 <div className="flex justify-end">
                   {index > 0 && (
                     <>
-                      <Button
+                      {buttonLoading ? (
+                        <>
+                        <Button
+                        style={{ textTransform: "none" }}
+                        className="max-md:hidden mb-5 "
+                        
+                        variant="outlined"
+                        size="small"
+                        startIcon={<DeleteIcon />}
+                        >
+                        Delete
+                      </Button>{" "}
+                      <CircularProgress className="ml-2" size={15} />
+                      </>
+                      ) : (
+                        <>
+                         <Button
                         style={{ textTransform: "none" }}
                         className="max-md:hidden mb-5 "
                         onClick={() =>
@@ -1157,6 +1313,9 @@ const AdminCourseNavbarCourseComponent = () => {
                       >
                         Delete
                       </Button>
+                      </>
+                      )}
+                     
                     </>
                   )}
                 </div>
@@ -1190,7 +1349,23 @@ const AdminCourseNavbarCourseComponent = () => {
                   placeholder="Resources Pdf Name"
                   className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                 />
-                <input
+                
+                 { buttonLoading2 ?(
+                  <>
+                  <div className="flex items-center mb-8">
+                  <input
+                  accept="application/pdf"
+                  type="file"
+                  id={`resourcePdfInput-${index}`}
+                  className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                />{" "}
+                 
+                  <CircularProgress className="ml-2" size={15} />
+                  </div>
+                  </>
+                  ):(
+                    <>
+                     <input
                   onChange={
                     (e) =>
                       handleInputChangeresourcepdf(index, 1, e.target.files[0]) // Pass index and 1 to identify the URL
@@ -1200,13 +1375,34 @@ const AdminCourseNavbarCourseComponent = () => {
                   id={`resourcePdfInput-${index}`}
                   className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                 />
+                </>
+                  )}
+                
+               
+               
 
                 <div className="flex justify-end">
                   {index > 0 && (
                     <>
-                      <Button
+                     {buttonLoading ? (
+                        <>
+                        <Button
                         style={{ textTransform: "none" }}
-                        className="max-md:hidden mb-2"
+                        className="max-md:hidden mb-5 "
+                        
+                        variant="outlined"
+                        size="small"
+                        startIcon={<DeleteIcon />}
+                        >
+                        Delete
+                      </Button>{" "}
+                      <CircularProgress className="ml-2" size={15} />
+                      </>
+                      ) : (
+                        <>
+                         <Button
+                        style={{ textTransform: "none" }}
+                        className="max-md:hidden mb-5 "
                         onClick={() =>
                           handleDeleteField("resource_pdfs", index)
                         }
@@ -1216,6 +1412,8 @@ const AdminCourseNavbarCourseComponent = () => {
                       >
                         Delete
                       </Button>
+                      </>
+                      )}
                     </>
                   )}
                 </div>
@@ -1259,16 +1457,36 @@ const AdminCourseNavbarCourseComponent = () => {
                 <div className="flex justify-end">
                   {index > 0 && (
                     <>
-                      <Button
+                      {buttonLoading ? (
+                        <>
+                        <Button
                         style={{ textTransform: "none" }}
-                        className="max-md:hidden "
-                        onClick={() => handleDeleteField("pyq_links", index)}
+                        className="max-md:hidden mb-5 "
+                        
+                        variant="outlined"
+                        size="small"
+                        startIcon={<DeleteIcon />}
+                        >
+                        Delete
+                      </Button>{" "}
+                      <CircularProgress className="ml-2" size={15} />
+                      </>
+                      ) : (
+                        <>
+                         <Button
+                        style={{ textTransform: "none" }}
+                        className="max-md:hidden mb-5 "
+                        onClick={() =>
+                          handleDeleteField("pyq_links", index)
+                        }
                         variant="outlined"
                         size="small"
                         startIcon={<DeleteIcon />}
                       >
                         Delete
                       </Button>
+                      </>
+                      )}
                     </>
                   )}
                 </div>
@@ -1291,7 +1509,7 @@ const AdminCourseNavbarCourseComponent = () => {
             {/* sd */}
             {pyq_pdfs.map((pyq, index) => (
               <div key={index} className=" mb-5 ">
-                <input
+                      <input
                   type="text"
                   value={pyq.pdf_name} // Assuming resource[0] is the name of the resource
                   onChange={
@@ -1301,8 +1519,20 @@ const AdminCourseNavbarCourseComponent = () => {
                   className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                 />
                 {/* <div className="flex items-center mb-8"> */}
+                 <>
+                 { buttonLoading3?(
+                    <div className="flex items-center mb-8">
+                      <input
+                  id={`pyqPdfInput-${index}`}
+                  type="file"
+                  accept="application/pdf"
+                  className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                />{" "}
+                  <CircularProgress className="ml-2" size={15} />
+                  </div>
+                  ):(
 
-                <input
+                      <input
                   id={`pyqPdfInput-${index}`}
                   type="file"
                   accept="application/pdf"
@@ -1311,21 +1541,47 @@ const AdminCourseNavbarCourseComponent = () => {
                   }
                   className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                 />
+                  )}
+                </>
+               
+            
+
+               
 
                 {/* </div> */}
                 <div className="flex justify-end">
                   {index > 0 && (
                     <>
-                      <Button
+                      {buttonLoading ? (
+                        <>
+                        <Button
                         style={{ textTransform: "none" }}
-                        className="max-md:hidden "
-                        onClick={() => handleDeleteField("pyq_pdfs", index)}
+                        className="max-md:hidden mb-5 "
+                        
+                        variant="outlined"
+                        size="small"
+                        startIcon={<DeleteIcon />}
+                        >
+                        Delete
+                      </Button>{" "}
+                      <CircularProgress className="ml-2" size={15} />
+                      </>
+                      ) : (
+                        <>
+                         <Button
+                        style={{ textTransform: "none" }}
+                        className="max-md:hidden mb-5 "
+                        onClick={() =>
+                          handleDeleteField("pyq_pdfs", index)
+                        }
                         variant="outlined"
                         size="small"
                         startIcon={<DeleteIcon />}
                       >
                         Delete
                       </Button>
+                      </>
+                      )}
                     </>
                   )}
                 </div>
@@ -1341,9 +1597,21 @@ const AdminCourseNavbarCourseComponent = () => {
 
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button type="submit" variant="contained">
+              {buttonLoading?(
+                <>
+                <Button  variant="contained">
+                Add Course
+                </Button>{" "}
+                <CircularProgress className="ml-2" size={15} />
+                </>
+              ):(
+                <>
+                <Button type="submit" variant="contained">
                 Add Course
               </Button>
+                </>
+              )}
+              
             </div>
           </form>
         </Box>
@@ -1533,7 +1801,7 @@ const AdminCourseNavbarCourseComponent = () => {
               Syllabus (Pdf)
             </label>
             {/* displaying available links */}
-            {updatedSyllabus.length > 0 && (
+            {updatedSyllabus.length > 0 ? (
               <div className="space-y-4">
                 <div className="space-y-4">
                   <div>
@@ -1601,8 +1869,21 @@ const AdminCourseNavbarCourseComponent = () => {
                   </div>
                 </div>
               </div>
-            )}
-            <input
+            ):(
+              <>
+                {buttonLoading1 ? (
+              <div className="flex items-center mb-8">
+                <input
+      
+              accept="application/pdf"
+              type="file"
+              className="w-full mb-10 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+            />{" "}
+                <CircularProgress className="ml-2" size={15} />
+              </div>
+            ) : (
+              <div className="flex items-center mb-8">
+               <input
               onChange={
                 (e) =>
                   handleInputChangeresourceeditpdf(
@@ -1614,6 +1895,12 @@ const AdminCourseNavbarCourseComponent = () => {
               type="file"
               className="w-full mb-10 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
             />
+              </div>
+            )}
+              </>
+            )}
+            
+            
 
             <label
               htmlFor="resource_links"
@@ -1681,7 +1968,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormResourceLinkName(e.target.value)}
                 placeholder="Resources Link Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
               />
               <input
                 type="text"
@@ -1689,7 +1975,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormResourceLinkUrl(e.target.value)}
                 placeholder="Resources Link Url"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
               />
               <div className="flex justify-end mb-5">
                 <Button
@@ -1794,9 +2079,22 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormResourcePdfName(e.target.value)}
                 placeholder="Resources Pdf Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-               
               />
-              <input
+               { buttonLoading1 ?(
+                  <>
+                  <div className="flex items-center mb-8">
+                  <input
+                accept="application/pdf"
+                type="file"
+                className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+              />{" "}
+                 
+                  <CircularProgress className="ml-2" size={15} />
+                  </div>
+                  </>
+                  ):(
+                    <>
+                     <input
                 onChange={
                   (e) =>
                     handleInputChangeresourceeditpdf(
@@ -1807,7 +2105,11 @@ const AdminCourseNavbarCourseComponent = () => {
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-               />
+              />
+                </>
+                  )}
+                
+              
               <div className="flex justify-end">
                 <Button
                   onClick={handleEditAddResourcePdf}
@@ -1887,7 +2189,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormPyqLinkName(e.target.value)}
                 placeholder="PYQ Link Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
               />
               <input
                 type="text"
@@ -1895,7 +2196,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormPyqLinkUrl(e.target.value)}
                 placeholder="PYQ Link Url"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
               />
               <div className="flex justify-end mb-5">
                 <Button
@@ -1999,7 +2299,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 onChange={(e) => setEditFormPyqPdfName(e.target.value)}
                 placeholder="PYQ Pdf Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
               />
               <input
                 onChange={
@@ -2012,7 +2311,6 @@ const AdminCourseNavbarCourseComponent = () => {
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-              
               />
               <div className="flex justify-end">
                 <Button

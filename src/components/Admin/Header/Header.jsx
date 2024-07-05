@@ -7,6 +7,7 @@ import logo from "../../../assets/Navbar/logo.png";
 import { MdOutlineMenu } from "react-icons/md";
 import { useGlobalContext } from "@/context/AuthContext";
 import { IoIosArrowDown } from "react-icons/io";
+import { Button } from "radix-ui";
 
 const Header = (props) => {
   
@@ -133,7 +134,7 @@ const Header = (props) => {
                     </Link>
                     <p
                     onClick={handleSignOut}
-                      className="block px-4 py-2 text-md text-gray-700 hover:text-white hover:text-semibold hover:bg-red-500  transition-all duration-75"
+                      className="block px-4 py-2 text-md text-gray-700 hover:text-white hover:text-semibold hover:cursor-pointer hover:bg-red-500  transition-all duration-75"
                     >
                       Sign out
                     </p>

@@ -6,7 +6,7 @@ import Image from "next/image";
 import authService from "@/services/auth.service";
 
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useGlobalContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
@@ -46,21 +46,21 @@ const SignIn = () => {
       // Validation passed, you can proceed with form submission
       const { data } = await authService.signIn({ email, password });
 
-      console.log(1, data);
+      // console.log(1, data);
 
       // Set authentication state to true and set user information after successful login
+      toast.success("Login successful")
       setIsAuth(true);
       setUser(data.user);
-      console.log(isAuth, user);
+      // console.log(isAuth, user);
       router.push("/");
-      console.log("Email:", email);
-      console.log("Password:", password);
+      // console.log("Email:", email);
+      // console.log("Password:", password);
       setError("");
     } catch (error) {
       // Validation failed
       setError("");
-      console.log(12,error)
-      console.log(1, error?.response?.data?.message);
+      
       toast.error(error?.response?.data?.message, {
         position: "top-center",
         autoClose: 5000,
@@ -74,7 +74,9 @@ const SignIn = () => {
       });
     }
   };
-
+  const notify = () => {
+    toast.success("Login successful");
+  }
   return (
     <div className="">
       <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
@@ -168,8 +170,10 @@ const SignIn = () => {
           </div>
         </div>
       </div>
+     
     </div>
   );
+  
 };
 
 export default SignIn;

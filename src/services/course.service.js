@@ -26,15 +26,8 @@ class CourseService {
     return axiosInstance.delete(`${this.url}/api/course/programs/${programId}`);
   }
 
-  // Update program
-  updateProgram(programId, data) {
-    return axiosInstance.put(`${this.url}/api/course/programs/${programId}`, data);
-  }
-
-  // Delete program
-  deleteProgram({programId}) {
-    return axiosInstance.delete(`${this.url}/api/course/programs/${programId}`);
-  }
+  
+ 
 
   // Get all programs
   getAllPrograms() {
@@ -84,10 +77,9 @@ class CourseService {
 
   //Semester
   // Get all semesters by fieldOfStudy
-  getAllSemestersByFieldOfStudyId({fieldOfStudyId}){
+  getAllSemestersByFieldOfStudy({fieldOfStudyId}) {
     return axiosInstance.get(`${this.url}/api/course/semester/${fieldOfStudyId}`);
   }
-
   getSemesterByCourseId({courseId}){
     return axiosInstance.get(`${this.url}/api/course/semester/course/${courseId}`);
   }
