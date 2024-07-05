@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 // import TokenHelper from "../../helpers/Token.helper";
 import { useRouter } from "next/navigation";
 import authService from "@/services/auth.service";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useGlobalContext } from "@/context/AuthContext";
 
 const AdminSignup = () => {
