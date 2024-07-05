@@ -10,6 +10,7 @@ import NearbyPlaces from '@/components/Homepage/NearbyPlaces/NearbyPlaces'
 import FaqSection from '@/components/Homepage/FaqSection/FaqSection'
 import ContactSection from '@/components/Homepage/ContactSection/ContactSection'
 
+
 const Home = () => {
   const [user,setUser] = useState(null);
   return (
@@ -22,8 +23,9 @@ const Home = () => {
       {/* <CoreTeamSection/> */}
       <FaqSection/>
       <ContactSection/>
+
     </div>
-  )
+  );
 }
 
 export default Home

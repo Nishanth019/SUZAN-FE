@@ -10,7 +10,7 @@ import RegistrationAbout from "./RegistrationAbout";
 import RegistrationBasic from "./RegistrationBasic";
 import authService from "@/services/auth.service";
 import { useGlobalContext } from "@/context/AuthContext";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const AdminRegistration = () => {
   const router = useRouter();
@@ -150,7 +150,10 @@ const AdminRegistration = () => {
           ) : (
             <>
               <button
-                onClick={handleStageClick}
+                onClick={() => {
+                  handleStageClick();
+                  setIsCheckboxChecked(false);
+                }}
                 className="px-4 py-2 sm:px-6 sm:py-3  text-lg text-paleBlue rounded-full mt-6 border-paleBlue border-2 font-medium capitalize flex items-center justify-center gap-2 hover:bg-[#36518F] hover:text-white"
               >
                 <BsArrowLeft size={20} />

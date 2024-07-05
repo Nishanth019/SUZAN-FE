@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import Card from "@mui/material/Card";
 import CourseService from "@/services/course.service.js";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import PencilLoading from "../../Ui/PencilLoading.jsx"
 import { CircularProgress } from '@mui/material';
 
@@ -72,9 +72,9 @@ const AdminCourseNavbarProgramComponent = () => {
   console.log(70, programs)
   const fetchCourseCountForProgram = async (programId) => {
     try {
-      console.log(123456);
+      // console.log(123456);
       const response = await CourseService.getAllCourses(programId);
-      console.log(123, response);
+      // console.log(123, response);
       return response.data.courses.length;
     } catch (error) {
       console.error("Error fetching course count for program:", error);
@@ -85,6 +85,7 @@ const AdminCourseNavbarProgramComponent = () => {
   const fetchFieldOfStudyCountForProgram = async (programId) => {
     try {
       const response = await CourseService.getAllFieldsOfStudy(programId);
+      // console.log(1233, response);
       // console.log(1233, response);
       return response.data.fieldsOfStudy.length;
     } catch (error) {
@@ -133,6 +134,10 @@ const AdminCourseNavbarProgramComponent = () => {
    const handleSearch = async () => {
      try {
       //  console.log("sully");
+      if(searchQuery === "") {
+        fetchAllPrograms();
+        return;
+      }
       setLoading(true);
        const response = await CourseService.searchProgram(searchQuery);
       //  console.log("cheeku", response.data);
@@ -144,7 +149,9 @@ const AdminCourseNavbarProgramComponent = () => {
      }
    };
 
-
+   useEffect(() => {
+    fetchAllPrograms();
+  }, [searchQuery===""]);
   // Function to handle deleting a program
   const handleDeleteProgram = async () => {
     try {
@@ -154,12 +161,14 @@ const AdminCourseNavbarProgramComponent = () => {
       setButtonLoading(false)
       // console.log("deleting",2)
       // Refetch all programs after deleting
+      toast.success(response.data.message || "Program is deleted");
       fetchAllPrograms();
       // Close the delete confirmation modal after deleting the program
       closeDeleteModal();
     } catch (error) {
       setButtonLoading(false)
-      console.error("Error deleting program:", error);
+      console.error("Error int deleting program:", error);
+      toast.error("Error in deleting program:" ||  error);
     }
   };
 
@@ -168,11 +177,10 @@ const AdminCourseNavbarProgramComponent = () => {
     if (currentProgram) {
       try {
         setButtonLoading(true)
+        // console.log("hii")
         const response = await CourseService.updateProgram({
-          programId: currentProgram._id,
-          programName,
-          programFullName,
-          semestersCount,
+          programId: currentProgram._id,  
+          programFullName: programFullName,     
         });
         setButtonLoading(false)
         toast.success(response.data.message || "Program is updated")
@@ -181,6 +189,10 @@ const AdminCourseNavbarProgramComponent = () => {
       } catch (error) {
         setButtonLoading(false)
         console.error("Error editing program:", error);
+        const errorMessage =
+          error.response?.data?.error ||
+          "An error occurred while updating the program";
+        toast.error(errorMessage);
       }
     } else {
       try {
@@ -197,6 +209,9 @@ const AdminCourseNavbarProgramComponent = () => {
       } catch (error) {
         setButtonLoading(false)
         console.error("Error adding program:", error);
+       const errorMessage =error.response?.data?.error || "An error occurred while creating the program";
+        toast.error(errorMessage);
+
       }
     }
   };
@@ -214,65 +229,56 @@ const AdminCourseNavbarProgramComponent = () => {
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-5">
         <div className="w-full md:w-[250px]">
-          <form
-            className="max-w-md mx-auto"
-            onChange={(e) => {
-              handleSearch(e.target.value);
-            }}
+          <label
+            htmlFor="default-search"
+            className="mb-2 text-sm font-medium text-gray-900 sr-only"
           >
-            <label
-              htmlFor="default-search"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only "
-            >
-              Search
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <FaSearch
-                  className="w-4 h-4 text-gray-500 "
-                  aria-hidden="true"
-                />
-              </div>
-              <input
-                type="search"
-                id="default-search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-                placeholder="Search Program"
-              />
-              
+            Search
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <FaSearch className="w-4 h-4 text-gray-500" aria-hidden="true" />
             </div>
-          </form>
+            <input
+              type="search"
+              id="default-search"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                handleSearch();
+              }}
+              className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
+              placeholder="Search Program"
+            />
+          </div>
         </div>
       </div>
-      {
-      loading?
-          <div className="flex justify-center items-center h-[80vh] md:h-[70vh]"> 
-          <PencilLoading/>
-          </div> 
-          :
-          <>
-      <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
-        {/* Rendering programs dynamically */}
-        {programs.map((program, index) => (
-          <ProgramCard
-            key={index}
-            title={program.program_fullname}
-            abbreviation={program.program_name}
-            fieldOfStudyCount={program.fieldOfStudyCount}
-            semestersCount={program.no_of_semester}
-            coursesCount={program.coursesCount}
-            onEdit={() => openEditProgramModal(program)}
-            onDelete={() => {
-              setCurrentProgram(program);
-              openDeleteModal();
-            }}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center h-[80vh] md:h-[70vh]">
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
+            {/* Rendering programs dynamically */}
+            {programs.map((program, index) => (
+              <ProgramCard
+                key={index}
+                title={program.program_fullname}
+                abbreviation={program.program_name}
+                fieldOfStudyCount={program.fieldOfStudyCount}
+                semestersCount={program.no_of_semester}
+                coursesCount={program.coursesCount}
+                onEdit={() => openEditProgramModal(program)}
+                onDelete={() => {
+                  setCurrentProgram(program);
+                  openDeleteModal();
+                }}
+              />
+            ))}
+          </div>
         </>
-      }
+      )}
       {/*Add and edit = Modal */}
       <Modal
         style={{ zIndex: 10000 }}
@@ -319,10 +325,14 @@ const AdminCourseNavbarProgramComponent = () => {
               id="programname"
               type="text"
               value={programName}
-              onChange={(e) => setProgramName(e.target.value)}
+              onChange={(e) => setProgramName(e.target.value.toUpperCase())}
               placeholder="Btech"
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              className={`flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 text-dark-grey-900 rounded-md border border-gray-300  ${
+                  currentProgram
+                    ? "bg-gray-200 text-gray-600"
+                    : "bg-grey-300 text-dark-grey-900"
+                }`}
               required
               disabled={currentProgram ? true : false}
             />
@@ -337,7 +347,7 @@ const AdminCourseNavbarProgramComponent = () => {
               id="programfullname"
               type="text"
               value={programFullName}
-              onChange={(e) => setProgramFullName(e.target.value)}
+              onChange={(e) => setProgramFullName(e.target.value.toUpperCase())}
               placeholder="Bachelor of Technology"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
@@ -355,25 +365,29 @@ const AdminCourseNavbarProgramComponent = () => {
               value={semestersCount}
               onChange={(e) => setSemetersCount(e.target.value)}
               placeholder="8"
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-              required
+              className={`flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 rounded-md border border-gray-300 ${
+                currentProgram
+                  ? "bg-gray-200 text-gray-600"
+                  : "bg-grey-300 text-dark-grey-900"
+              }`}
+              disabled={currentProgram ? true : false}
             />
 
-       {
-      buttonLoading?
-          <div className="pb-2"> 
-          <Button variant="outlined">
-          {currentProgram ? "Update" : "Add"} Program <CircularProgress className="ml-2" size={15}/>
-          </Button>
-          </div> 
-          :
-            <div className="pb-2">
-              {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button onClick={handleProgramAction} variant="outlined">
-                {currentProgram ? "Update" : "Add"} Program
-              </Button>
-            </div>
-            }
+            {buttonLoading ? (
+              <div className="pb-2">
+                <Button variant="outlined">
+                  {currentProgram ? "Update" : "Add"} Program{"  "}
+                  <CircularProgress className="ml-2" size={15} />
+                </Button>
+              </div>
+            ) : (
+              <div className="pb-2">
+                {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
+                <Button onClick={handleProgramAction} variant="outlined">
+                  {currentProgram ? "Update" : "Add"} Program
+                </Button>
+              </div>
+            )}
           </div>
         </Box>
       </Modal>
@@ -393,13 +407,20 @@ const AdminCourseNavbarProgramComponent = () => {
             Are you sure you want to delete this program?
           </p>
           <div className="flex justify-center mt-5 ">
-            <Button
-              onClick={handleDeleteProgram}
-              className="text-white bg-red-500"
-              variant="contained"
-            >
-              Delete
-            </Button>
+            {buttonLoading ? (
+              <Button className="text-white bg-red-500" variant="contained">
+                Delete <CircularProgress className="ml-2" size={15} />
+              </Button>
+            ) : (
+              <Button
+                onClick={handleDeleteProgram}
+                className="text-white bg-red-500"
+                variant="contained"
+              >
+                Delete
+              </Button>
+            )}
+
             <Button
               onClick={closeDeleteModal}
               className="text-black "
