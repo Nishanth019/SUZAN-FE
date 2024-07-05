@@ -417,7 +417,6 @@ const AdminCourseNavbarCourseComponent = () =>
      setButtonLoading(false);
    };
    const handleEditAddPyqPdf = (e) => {
-     if (editFormPyqPdfName.length === 0 || editFormPyqPdfUrl.length === 0) {
        if (editFormPyqPdfName.length === 0 || editFormPyqPdfUrl.length === 0) {
          toast.error("Enter both details", {
            position: "top-center",
@@ -2830,7 +2829,5 @@ const AdminCourseNavbarCourseComponent = () =>
          </Modal>
        </div>
      );
-    }
-
-};
+    };
 export default AdminCourseNavbarCourseComponent;
