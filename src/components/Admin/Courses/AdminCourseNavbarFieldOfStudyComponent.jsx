@@ -217,11 +217,15 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
   };
 
   //search
-  const handleSearch = async (value) => {
+  const handleSearch = async () => {
     try {
       //  console.log("sully");
        setLoading(true);
-      const response = await CourseService.searchFieldOfStudy(searchQuery);
+      const payload={
+        searchTerm:searchQuery,
+        programId: selectedProgram,
+      }
+      const response = await CourseService.searchFieldOfStudy(payload);
       //  console.log("cheeku", response.data);
       setFieldOfStudy(response.data.fieldsOfStudy);
        setLoading(false);
@@ -342,34 +346,31 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
         <div className="flex flex-wrap gap-2 sm:gap-5">
           <div className="w-full md:w-[250px]">
-            
-              <label
-                htmlFor="default-search"
-                className="mb-2 text-sm font-medium text-gray-900 sr-only "
-              >
-                Search
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <FaSearch
-                    className="w-4 h-4 text-gray-500 "
-                    aria-hidden="true"
-                  />
-                </div>
-                <input
-                  type="search"
-                  id="default-search"
-                  value={searchQuery}
-                  onChange={(e) =>{
-                     setSearchQuery(e.target.value);
-                     handleSearch();
-                  }}
-                  className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-                  placeholder="Search Field Of Study"
+            <label
+              htmlFor="default-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only "
+            >
+              Search
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <FaSearch
+                  className="w-4 h-4 text-gray-500 "
+                  aria-hidden="true"
                 />
-               
               </div>
-  
+              <input
+                type="search"
+                id="default-search"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  handleSearch();
+                }}
+                className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                placeholder="Search Field Of Study"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -377,32 +378,37 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         <div className="flex justify-center items-center h-[80vh] md:h-[70vh]">
           <CircularProgress />
         </div>
+      ) : selectedProgram ? (
+        <div>
+          <div className="flex flex-wrap py-5 md:py-10 gap-5 md:gap-10">
+            {fieldsOfStudy.length === 0 ? (
+              
+               <div className="flex justify-center items-center h-[60vh] md:h-[40vh] ">
+                <p className="text-gray-500">No field of study found</p>
+              </div>
+            ) : (
+              fieldsOfStudy.map((fos, index) => (
+                <FieldOfStudyCard
+                  key={index}
+                  title={fos.field_of_studyfullname}
+                  abbreviation={fos.field_of_studyname}
+                  programName={selectedProgramDetails.program_name}
+                  semestersCount={selectedProgramDetails.no_of_semester}
+                  coursesCount={courseCount}
+                  onEdit={() => openEditFieldOfStudyModal(fos)}
+                  onDelete={() => {
+                    setCurrentFieldOfStudy(fos);
+                    openDeleteModal();
+                  }}
+                />
+              ))
+            )}
+          </div>
+        </div>
       ) : (
-        selectedProgram?(
-        <>
-          <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
-            {fieldsOfStudy?.map((fos, index) => (
-              <FieldOfStudyCard
-                key={index}
-                title={fos.field_of_studyfullname}
-                abbreviation={fos.field_of_studyname}
-                programName={selectedProgramDetails.program_name}
-                semestersCount={selectedProgramDetails.no_of_semester}
-                coursesCount={courseCount}
-                onEdit={() => openEditFieldOfStudyModal(fos)}
-                onDelete={() => {
-                  setCurrentFieldOfStudy(fos);
-                  openDeleteModal();
-                }}
-              />
-            ))}
-          </div>
-        </>
-        ) : (
-          <div className="flex justify-center items-center h-[60vh] md:h-[40vh]">
-            <p className="text-gray-500">Select a Program from the dropdown</p>
-          </div>
-        )
+        <div className="flex justify-center items-center h-[60vh] md:h-[40vh]">
+          <p className="text-gray-500">Select a Program from the dropdown</p>
+        </div>
       )}
 
       {/* For add and edit Modal */}
@@ -464,12 +470,10 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
                       (program) => program?.program_name === selectedProgramName
                     );
                     setCurrentProgram(selectedProgram?._id);
-                    
+
                     // setSelectedSemester("")
                     // setCurrentFieldOfStudy("")
-                     
                   }}
-                 
                 />
               </div>
             ) : null}
@@ -484,7 +488,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
               id="fosname"
               type="text"
               value={field_of_studyname}
-              onChange={(e) => setfield_of_studyname(e.target.value.toUpperCase())}
+              onChange={(e) =>
+                setfield_of_studyname(e.target.value.toUpperCase())
+              }
               placeholder="CSE"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
@@ -501,7 +507,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
               id="fullfosname"
               type="text"
               value={field_of_studyfullname}
-              onChange={(e) => setfield_of_studyfullname(e.target.value.toUpperCase())}
+              onChange={(e) =>
+                setfield_of_studyfullname(e.target.value.toUpperCase())
+              }
               placeholder="Computer Science Engineering"
               className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
               required
