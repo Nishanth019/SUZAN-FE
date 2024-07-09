@@ -118,7 +118,7 @@ const ContactSection = () => {
         </div>
         <div className="xl:flex-1 max-md:mx-2 md:mx-10">
         <div className="bg-[#129172] rounded-xl py-8 mt-10 h-[max-content] flex flex-col items-center justify-between space-y-10 xl:pb-20 xl:w-[500px] ">
-          <div className=" text-white font-semibold text-xl text-center sm:text-2xl sm:px-5 ">Talk to our team on WhatsApp</div>
+          <div className=" text-white font-semibold text-xl text-center sm:text-2xl sm:px-5 ">Reach out to us on Whatsapp!</div>
           <div>
           <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
             <Image className="w-[200px] h-fit" src={WhatsappQr} alt="WhatsApp Scanner Code"/>

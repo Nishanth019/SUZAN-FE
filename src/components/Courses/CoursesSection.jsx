@@ -123,10 +123,16 @@ const CoursesSection = () => {
     fetchCourses();
   }, [selectedProgram, selectedFieldOfStudy, selectedSemester]);
 
-  const handleSearch = async (value) => {
+  const handleSearch = async () => {
     try {
        setLoading(true)
-      const response = await CourseService.searchCourse(value);
+       const payload = {
+         searchTerm: searchQuery,
+         programId: selectedProgram,
+         fieldOfStudyId: selectedFieldOfStudy,
+         semesterId: selectedSemester,
+       };
+      const response = await CourseService.searchCourse(payload);
       // console.log("sully",response.data)
       setCourses(response.data.courses);
       setLoading(false);
@@ -181,7 +187,7 @@ const CoursesSection = () => {
                 }}
               />
               <div className="w-full md:w-[270px]">
-                <form className="max-w-md mx-auto" onChange={(e) => { handleSearch(e.target.value); }}>
+                <form className="max-w-md mx-auto" onChange={(e) => { handleSearch(); }}>
                   <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
