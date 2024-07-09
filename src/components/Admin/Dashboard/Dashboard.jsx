@@ -22,15 +22,16 @@ const Dashboard = () => {
       </Typography>
 
       <Grid container spacing={3}>
+
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
-            title="Weekly Sales"
-            total={714000}
-            color="success"
+            title="Total Users"
+            total={1352831}
+            color="info"
             icon={
               <Image
-                alt="Weekly Sales"
-                src={bagIcon}
+                alt="New Users"
+                src={usersIcon}
                 width={64}
                 height={64}
               />
@@ -40,13 +41,13 @@ const Dashboard = () => {
 
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
-            title="New Users"
-            total={1352831}
-            color="info"
+            title="Weekly Sales"
+            total={714000}
+            color="success"
             icon={
               <Image
-                alt="New Users"
-                src={usersIcon}
+                alt="Weekly Sales"
+                src={bagIcon}
                 width={64}
                 height={64}
               />
