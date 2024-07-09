@@ -4,7 +4,7 @@ import { Tables } from "../../TailwindComponents/Table";
 
 function CoursesTable({ courses, openViewModal, handleEdit, handleDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const coursesPerPage = 5; // Number of courses to display per page
+  const coursesPerPage = 5;
 
   // Calculate the start and end index of courses to display based on the current page
   const startIndex = (currentPage - 1) * coursesPerPage;
@@ -12,9 +12,6 @@ function CoursesTable({ courses, openViewModal, handleEdit, handleDelete }) {
 
   // Get the courses to display for the current page
   const currentCourses = Object.values(courses).slice(startIndex, endIndex);
-
-  // Calculate the total number of pages based on the total number of courses and coursesPerPage
-  const totalPages = Math.ceil(Object.values(courses).length / coursesPerPage);
 
   // Handle pagination
   const handlePagination = (pageNumber) => {
@@ -25,11 +22,12 @@ function CoursesTable({ courses, openViewModal, handleEdit, handleDelete }) {
     <Tables
       currentCourses={currentCourses}
       currentPage={currentPage}
-      totalPages={totalPages}
+      totalCourses={Object.values(courses).length}
       handlePagination={handlePagination}
-      openViewModal={openViewModal} // Pass openViewModal function
-      handleEdit={handleEdit} // Pass handleEdit function
-      handleDelete={handleDelete} // Pass handleDelete function
+      openViewModal={openViewModal}
+      handleEdit={handleEdit}
+      handleDelete={handleDelete}
+      coursesPerPage={coursesPerPage}
     />
   );
 }
