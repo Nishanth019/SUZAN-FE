@@ -13,14 +13,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CourseService from "@/services/course.service.js";
 import { IoMdEye, IoMdDownload } from 'react-icons/io';
 import { FaLink, FaFilePdf } from "react-icons/fa";
-import { pdfjs } from "react-pdf";
-import ViewPdf from "../../Courses/ViewPdf";
-import "../../Courses/style.css";
+
 import { ToastContainer, toast } from "react-toastify";
 
-//react pdf
-const workerSrc = require("pdfjs-dist/build/pdf.worker.min.js");
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 const style = {
   position: "absolute",
@@ -40,8 +35,7 @@ const AdminCourseNavbarCourseComponent = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-   const [pdfModalOpen, setPdfModalOpen] = useState(false); // State to control modal visibility
-   const [selectedPdf, setSelectedPdf] = useState(null); 
+
   // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
@@ -107,36 +101,6 @@ const AdminCourseNavbarCourseComponent = () => {
   const [editFormPyqPdfName, setEditFormPyqPdfName] = useState("")
   const [editFormPyqPdfUrl, setEditFormPyqPdfUrl] = useState("")
 
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    borderRadius: "10px",
-    p: 4,
-  };
-
-  const handleViewPdf = (pdf) => {
-    setSelectedPdf(pdf);
-    setPdfModalOpen(true);
-  };
-  const closePdfModal = () => {
-    setPdfModalOpen(false);
-  };
-
-  const handleDownload = (url) => {
-    window.open(url, "_blank");
-  };
-
-  const handleOpenLink = (url) => {
-    window.open(url, "_blank");
-  };
-  
   useEffect(() => {
     // Fetch all programs on component mount
     async function fetchPrograms() {
@@ -209,20 +173,26 @@ const AdminCourseNavbarCourseComponent = () => {
   async function fetchSingleCourse(courseId) {
     try {
       setEditCourseCode(courseId);
+      console.log(1111)
       const response = await CourseService.getCourseById({ courseId });
+      console.log(5, response.data);
+      console.log(1111)
       setSingleCourse(response.data.course);
       const { course } = response.data;
       const response3 = await CourseService.getProgramById({
         programId: course.program,
       });
+      console.log(123, response3.data?.program.program_fullname)
       setUpdatedProgram(response3.data?.program.program_fullname)
       const response1 = await CourseService.getFieldOfStudyById({
         fieldOfStudyId: course.field_of_study,
       });
+      console.log(1234, response1.data.fieldOfStudy.field_of_studyfullname)
       setUpdatedFieldOfStudy(response1.data.fieldOfStudy.field_of_studyfullname)
       const response2 = await CourseService.getSemesterByCourseId({
         courseId: course._id,
       });
+      console.log(1235, response2.data.semester.semester);
       setUpdatedSemester(response2.data.semester.semester);
 
       // Set updated course details
@@ -291,75 +261,27 @@ const AdminCourseNavbarCourseComponent = () => {
     }
   };
 
-  const handleEditAddResourceLink = () => {
-    if(editFormResourceLinkName.length===0 || editFormResourceLinkUrl.length===0){
-      toast.error("Enter both details", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      return;
-    }
+  const handleEditAddResourceLink = (e) => {
+    e.preventDefault();
     setUpdatedResource_links([...updatedResource_links, { link_name: editFormResourceLinkName, link_url: editFormResourceLinkUrl }]);
     setEditFormResourceLinkName("")
     setEditFormResourceLinkUrl("")
   };
   const handleEditAddResourcePdf = (e) => {
-    if(editFormResourcePdfName.length===0 || editFormResourcePdfUrl.length===0){
-      toast.error("Enter both details", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      return;
-    }
+    e.preventDefault();
     setUpdatedResource_pdfs([...updatedResource_pdfs, { pdf_name: editFormResourcePdfName, pdf_url: editFormResourcePdfUrl }]);
     setEditFormResourcePdfName("")
     setEditFormResourcePdfUrl("")
   };
 
   const handleEditAddPyqLink = (e) => {
-    if(editFormPyqLinkName.length===0 || editFormPyqLinkUrl.length===0){
-      toast.error("Enter both details", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      return;
-    }
+    e.preventDefault();
     setUpdatedPyq_links([...updatedPyq_links, { link_name: editFormPyqLinkName, link_url: editFormPyqLinkUrl }]);
     setEditFormPyqLinkName("")
     setEditFormPyqLinkUrl("")
   };
   const handleEditAddPyqPdf = (e) => {
-    if(editFormPyqPdfName.length===0 || editFormPyqPdfUrl.length===0){
-      toast.error("Enter both details", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      return;
-    }
+    e.preventDefault();
     setUpdatedPyq_pdfs([...updatedPyq_pdfs, { pdf_name: editFormPyqPdfName, pdf_url: editFormPyqPdfUrl }]);
     setEditFormPyqPdfName("")
     setEditFormPyqPdfUrl("")
@@ -824,8 +746,8 @@ const AdminCourseNavbarCourseComponent = () => {
               (program) => program?.program_name === selectedProgramName
             );
             setSelectedProgram(selectedProgram?._id);
-            setSelectedSemester("");
-            setSelectedFieldOfStudy("");
+            setSelectedSemester("")
+            setSelectedFieldOfStudy("")
           }}
         />
         <Dropdown
@@ -837,7 +759,7 @@ const AdminCourseNavbarCourseComponent = () => {
               (field) => field?.field_of_studyname === selectedFieldOfStudyName
             );
             setSelectedFieldOfStudy(selectedFieldOfStudy?._id);
-            setSelectedSemester("");
+            setSelectedSemester("")
           }}
         />
         <Dropdown
@@ -861,10 +783,7 @@ const AdminCourseNavbarCourseComponent = () => {
             <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
             <div className="relative">
               <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <FaSearch
-                  className="w-4 h-4 text-gray-500 "
-                  aria-hidden="true"
-                />
+                <FaSearch className="w-4 h-4 text-gray-500 " aria-hidden="true" />
               </div>
               <input
                 type="search"
@@ -888,6 +807,7 @@ const AdminCourseNavbarCourseComponent = () => {
           handleDelete={handleDelete}
         />
       </div>
+
 
       {/* //////////////////////// modal to Add the course //////////////////// */}
       <Modal
@@ -943,8 +863,8 @@ const AdminCourseNavbarCourseComponent = () => {
                     (program) => program?.program_name === selectedProgramName
                   );
                   setFormSelectedProgram(selectedProgram?._id);
-                  setFormSelectedSemester("");
-                  setFormSelectedFieldOfStudy("");
+                  setFormSelectedSemester("")
+                  setFormSelectedFieldOfStudy("")
                 }}
               />
             </div>
@@ -958,16 +878,13 @@ const AdminCourseNavbarCourseComponent = () => {
               <Dropdown2
                 name="Field Of Study"
                 value={formSelectedFieldOfStudy}
-                options={fieldOfStudy?.map(
-                  (field) => field?.field_of_studyname
-                )}
+                options={fieldOfStudy?.map((field) => field?.field_of_studyname)}
                 onSelect={(selectedFieldOfStudyName) => {
                   const selectedFieldOfStudy = fieldOfStudy?.find(
-                    (field) =>
-                      field?.field_of_studyname === selectedFieldOfStudyName
+                    (field) => field?.field_of_studyname === selectedFieldOfStudyName
                   );
                   setFormSelectedFieldOfStudy(selectedFieldOfStudy?._id);
-                  setFormSelectedSemester("");
+                  setFormSelectedSemester("")
                 }}
               />
             </div>
@@ -1079,20 +996,11 @@ const AdminCourseNavbarCourseComponent = () => {
               required
             />
 
-            <label
-              htmlFor="instructorFileInput"
-              className="mb-2 text-sm text-start text-grey-900 "
-            >
-              Upload Instructor Photo
-            </label>
+            <label htmlFor="instructorFileInput" className="mb-2 text-sm text-start text-grey-900 ">
+              Upload Instructor Photo</label>
             <div className="flex items-center mb-8">
-              <input
-                type="file"
-                id="instructorFileInput"
-                accept="image/*"
-                onChange={handleUploadPicture}
-                className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-              />
+              <input type="file" id="instructorFileInput" accept="image/*"
+                onChange={handleUploadPicture} className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 " />
             </div>
 
             <label
@@ -1102,13 +1010,8 @@ const AdminCourseNavbarCourseComponent = () => {
               Upload Syllabus
             </label>
             <div className="flex items-center mb-8">
-              <input
-                type="file"
-                id="syllabusFileInput"
-                onChange={handleSyllabusFile}
-                accept="application/pdf"
-                className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-              />
+              <input type="file" id="syllabusFileInput" onChange={handleSyllabusFile} accept="application/pdf" className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 " />
+            </div>
 
             <label
               htmlFor="resource_links"
@@ -1144,9 +1047,7 @@ const AdminCourseNavbarCourseComponent = () => {
                       <Button
                         style={{ textTransform: "none" }}
                         className="max-md:hidden mb-5 "
-                        onClick={() =>
-                          handleDeleteField("resource_links", index)
-                        }
+                        onClick={() => handleDeleteField("resource_links", index)}
                         variant="outlined"
                         size="small"
                         startIcon={<DeleteIcon />}
@@ -1179,18 +1080,16 @@ const AdminCourseNavbarCourseComponent = () => {
                 <input
                   type="text"
                   value={resource.pdf_name}
-                  onChange={
-                    (e) =>
-                      handleInputChangeresourcepdf(index, 0, e.target.value) // Pass index and 0 to identify the name
+                  onChange={(e) =>
+                    handleInputChangeresourcepdf(index, 0, e.target.value) // Pass index and 0 to identify the name
                   }
                   placeholder="Resources Pdf Name"
                   className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
 
                 />
                 <input
-                  onChange={
-                    (e) =>
-                      handleInputChangeresourcepdf(index, 1, e.target.files[0]) // Pass index and 1 to identify the URL
+                  onChange={(e) =>
+                    handleInputChangeresourcepdf(index, 1, e.target.files[0]) // Pass index and 1 to identify the URL
                   }
                   accept="application/pdf"
                   type="file"
@@ -1204,9 +1103,7 @@ const AdminCourseNavbarCourseComponent = () => {
                       <Button
                         style={{ textTransform: "none" }}
                         className="max-md:hidden mb-2"
-                        onClick={() =>
-                          handleDeleteField("resource_pdfs", index)
-                        }
+                        onClick={() => handleDeleteField("resource_pdfs", index)}
                         variant="outlined"
                         size="small"
                         startIcon={<DeleteIcon />}
@@ -1216,6 +1113,7 @@ const AdminCourseNavbarCourseComponent = () => {
                     </>
                   )}
                 </div>
+
               </div>
             ))}
 
@@ -1248,8 +1146,8 @@ const AdminCourseNavbarCourseComponent = () => {
                 <input
                   type="text"
                   value={pyq.link_url}
-                  onChange={
-                    (e) => handleInputChangepyqlink(index, 1, e.target.value) // Pass index and 1 to identify the URL
+                  onChange={(e) =>
+                    handleInputChangepyqlink(index, 1, e.target.value) // Pass index and 1 to identify the URL
                   }
                   placeholder="PYQ Link url"
                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
@@ -1268,16 +1166,14 @@ const AdminCourseNavbarCourseComponent = () => {
                       >
                         Delete
                       </Button>
+
                     </>
                   )}
                 </div>
               </div>
             ))}
 
-            <Button
-              onClick={() => handleAddField("pyq_links")}
-              cariant="outlined"
-            >
+            <Button onClick={() => handleAddField("pyq_links")} cariant="outlined">
               + Add More PYQs
             </Button>
             <label
@@ -1293,8 +1189,8 @@ const AdminCourseNavbarCourseComponent = () => {
                 <input
                   type="text"
                   value={pyq.pdf_name} // Assuming resource[0] is the name of the resource
-                  onChange={
-                    (e) => handleInputChangepyqpdf(index, 0, e.target.value) // Pass index and 0 to identify the name
+                  onChange={(e) =>
+                    handleInputChangepyqpdf(index, 0, e.target.value) // Pass index and 0 to identify the name
                   }
                   placeholder="Pyq Pdf Name"
                   className="flex items-center w-full mb-2 px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
@@ -1306,9 +1202,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   id={`pyqPdfInput-${index}`}
                   type="file"
                   accept="application/pdf"
-                  onChange={(e) =>
-                    handleInputChangepyqpdf(index, 1, e.target.files[0])
-                  }
+                  onChange={(e) => handleInputChangepyqpdf(index, 1, e.target.files[0])}
                   className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
 
                 />
@@ -1342,9 +1236,7 @@ const AdminCourseNavbarCourseComponent = () => {
 
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-              <Button type="submit" variant="contained">
-                Add Course
-              </Button>
+              <Button type="submit" variant="contained">Add Course</Button>
             </div>
           </form>
         </Box>
@@ -1379,10 +1271,7 @@ const AdminCourseNavbarCourseComponent = () => {
           >
             X
           </Button>
-          <form
-            onSubmit={handleEditCourse}
-            className="flex flex-col w-full h-full py-6 text-center bg-white "
-          >
+          <form onSubmit={handleEditCourse} className="flex flex-col w-full h-full py-6 text-center bg-white ">
             <h3 className="pb-5 text-[25px] md:text-[35px] font-extrabold text-dark-grey-900">
               Edit Course Details
             </h3>
@@ -1452,16 +1341,7 @@ const AdminCourseNavbarCourseComponent = () => {
             >
               Course Type*
             </label>
-            {/* <input
-              id="coursetype"
-              type="text"
-              value={updatedCourse_type}
-              onChange={(e) => setUpdatedCourse_type(e.target.value)}
-              placeholder="Compulsory "
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-              required
-            /> */}
+            
             <div className="mb-5">
               <Dropdown2
                 name="coursetype"
@@ -1522,10 +1402,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 )}
               </div>
               <div>
-                <label
-                  htmlFor="fileInput"
-                  className="text-blue-400 cursor-pointer text-sm"
-                >
+                <label htmlFor="fileInput" className="text-blue-400 cursor-pointer text-sm">
                   Update Picture
                 </label>
                 <input
@@ -1549,11 +1426,10 @@ const AdminCourseNavbarCourseComponent = () => {
               <div className="space-y-4">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex items-center space-x-4 border  p-2 rounded-md">
-                      <FaFilePdf
-                        className="text-red-500 max-md:hidden"
-                        size={24}
-                      />
+                    <div
+                      className="flex items-center space-x-4 border  p-2 rounded-md"
+                    >
+                      <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
                       <div className="flex-1">
                         <p className="text-sm md:text-[16px]">Syllabus</p>
                       </div>
@@ -1563,12 +1439,6 @@ const AdminCourseNavbarCourseComponent = () => {
                           color="primary"
                           size="small"
                           className="max-md:!hidden"
-                          onClick={() =>
-                            handleViewPdf({
-                              title: "Syllabus",
-                              url: updatedSyllabus,
-                            })
-                          }
                         >
                           View
                         </Button>
@@ -1577,24 +1447,16 @@ const AdminCourseNavbarCourseComponent = () => {
                           color="secondary"
                           size="small"
                           className="max-md:!hidden"
-                          onClick={() => handleDownload(updatedSyllabus)}
                         >
                           Download
                         </Button>
                         <IoMdEye
                           className="text-blue-500 cursor-pointer md:hidden"
                           size={24}
-                          onClick={() =>
-                            handleViewPdf({
-                              title: "Syllabus",
-                              url: updatedSyllabus,
-                            })
-                          }
                         />
                         <IoMdDownload
                           className="text-red-500 cursor-pointer md:hidden"
                           size={24}
-                          onClick={() => handleDownload(updatedSyllabus)}
                         />
                       </div>
                     </div>
@@ -1602,7 +1464,9 @@ const AdminCourseNavbarCourseComponent = () => {
                     <div className="flex justify-end my-2">
                       <Button
                         style={{ textTransform: "none" }}
-                        onClick={() => handleEditDeleteField("syllabus_pdf", 0)}
+                        onClick={() =>
+                          handleEditDeleteField("syllabus_pdf", 0)
+                        }
                         variant="outlined"
                         size="small"
                         startIcon={<DeleteIcon />}
@@ -1611,16 +1475,13 @@ const AdminCourseNavbarCourseComponent = () => {
                       </Button>
                     </div>
                   </div>
+
                 </div>
               </div>
             )}
             <input
-              onChange={
-                (e) =>
-                  handleInputChangeresourceeditpdf(
-                    "syllabus_pdf",
-                    e.target.files[0]
-                  ) // Pass index and 1 to identify the URL
+              onChange={(e) =>
+                handleInputChangeresourceeditpdf("syllabus_pdf", e.target.files[0]) // Pass index and 1 to identify the URL
               }
               accept="application/pdf"
               type="file"
@@ -1639,15 +1500,12 @@ const AdminCourseNavbarCourseComponent = () => {
                 <div className="space-y-4">
                   {updatedResource_links.map((item, index) => (
                     <div key={index}>
-                      <div className="flex items-center space-x-4 border p-2 rounded-md">
-                        <FaLink
-                          className="text-blue-500  max-md:hidden"
-                          size={20}
-                        />
+                      <div
+                        className="flex items-center space-x-4 border p-2 rounded-md"
+                      >
+                        <FaLink className="text-blue-500  max-md:hidden" size={20} />
                         <div className="flex-1">
-                          <p className="text-sm md:text-[16px]">
-                            {item.link_name}
-                          </p>
+                          <p className="text-sm md:text-[16px]">{item.link_name}</p>
                         </div>
                         <div className="flex space-x-2">
                           <Button
@@ -1655,15 +1513,10 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="primary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() => handleOpenLink(item.link_url)}
                           >
                             View
                           </Button>
-                          <IoMdEye
-                            className="text-blue-500  md:hidden"
-                            size={24}
-                            onClick={() => handleOpenLink(item.link_url)}
-                          />
+                          <IoMdEye className="text-blue-500  md:hidden" size={24} />
                         </div>
                       </div>
                       {/* Delete button */}
@@ -1686,35 +1539,39 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             )}
             {/* new links to add */}
-            <div>
+            <form className="" onSubmit={handleEditAddResourceLink}>
               <input
                 type="text"
                 value={editFormResourceLinkName}
-                onChange={(e) => setEditFormResourceLinkName(e.target.value)}
+                onChange={(e) =>
+                  setEditFormResourceLinkName(e.target.value)
+                }
                 placeholder="Resources Link Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+                required
               />
               <input
                 type="text"
                 value={editFormResourceLinkUrl}
-                onChange={(e) => setEditFormResourceLinkUrl(e.target.value)}
+                onChange={(e) =>
+                  setEditFormResourceLinkUrl(e.target.value)
+                }
                 placeholder="Resources Link Url"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+                required
               />
               <div className="flex justify-end mb-5">
                 <Button
-                  onClick={handleEditAddResourceLink}
+                  type="submit"
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
-                  // startIcon={<DeleteIcon />}
+                // startIcon={<DeleteIcon />}
                 >
                   ADD
                 </Button>
               </div>
-            </div>
+            </form>
 
             <label
               htmlFor="resource_pdfs"
@@ -1727,16 +1584,14 @@ const AdminCourseNavbarCourseComponent = () => {
               <div className="space-y-4">
                 <div className="space-y-4">
                   {updatedResource_pdfs.map((item, index) => (
-                    <div key={index}>
-                      <div className="flex items-center space-x-4 border  p-2 rounded-md">
-                        <FaFilePdf
-                          className="text-red-500 max-md:hidden"
-                          size={24}
-                        />
+                    <div
+                      key={index}>
+                      <div
+                        className="flex items-center space-x-4 border  p-2 rounded-md"
+                      >
+                        <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
                         <div className="flex-1">
-                          <p className="text-sm md:text-[16px]">
-                            {item.pdf_name}
-                          </p>
+                          <p className="text-sm md:text-[16px]">{item.pdf_name}</p>
                         </div>
                         <div className="flex space-x-2">
                           <Button
@@ -1744,12 +1599,6 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="primary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() =>
-                              handleViewPdf({
-                                title: item.pdf_name,
-                                url: item.pdf_url,
-                              })
-                            }
                           >
                             View
                           </Button>
@@ -1758,24 +1607,16 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="secondary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() => handleDownload(item.pdf_url)}
                           >
                             Download
                           </Button>
                           <IoMdEye
                             className="text-blue-500 cursor-pointer md:hidden"
                             size={24}
-                            onClick={() =>
-                              handleViewPdf({
-                                title: item.pdf_name,
-                                url: item.pdf_url,
-                              })
-                            }
                           />
                           <IoMdDownload
                             className="text-red-500 cursor-pointer md:hidden"
                             size={24}
-                            onClick={() => handleDownload(item.pdf_url)}
                           />
                         </div>
                       </div>
@@ -1794,44 +1635,43 @@ const AdminCourseNavbarCourseComponent = () => {
                         </Button>
                       </div>
                     </div>
+
                   ))}
                 </div>
               </div>
             )}
             {/* new links to add */}
-            <div>
+            <form className="" onSubmit={handleEditAddResourcePdf}>
               <input
                 type="text"
                 value={editFormResourcePdfName}
-                onChange={(e) => setEditFormResourcePdfName(e.target.value)}
+                onChange={(e) =>
+                  setEditFormResourcePdfName(e.target.value)
+                }
                 placeholder="Resources Pdf Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-               
+                required
               />
               <input
-                onChange={
-                  (e) =>
-                    handleInputChangeresourceeditpdf(
-                      "resources_pdf",
-                      e.target.files[0]
-                    ) // Pass index and 1 to identify the URL
+                onChange={(e) =>
+                  handleInputChangeresourceeditpdf("resources_pdf", e.target.files[0]) // Pass index and 1 to identify the URL
                 }
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-               />
+                required />
               <div className="flex justify-end">
                 <Button
-                  onClick={handleEditAddResourcePdf}
+                  type="submit"
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
-                  // startIcon={<DeleteIcon />}
+                // startIcon={<DeleteIcon />}
                 >
                   ADD
                 </Button>
               </div>
-            </div>
+            </form>
 
             <label
               htmlFor="pyq_links"
@@ -1845,15 +1685,12 @@ const AdminCourseNavbarCourseComponent = () => {
                 <div className="space-y-4">
                   {updatedPyq_links.map((item, index) => (
                     <div key={index}>
-                      <div className="flex items-center space-x-4 border p-2 rounded-md">
-                        <FaLink
-                          className="text-blue-500 max-md:hidden"
-                          size={20}
-                        />
+                      <div
+                        className="flex items-center space-x-4 border p-2 rounded-md"
+                      >
+                        <FaLink className="text-blue-500 max-md:hidden" size={20} />
                         <div className="flex-1">
-                          <p className="text-sm md:text-[16px]">
-                            {item.link_name}
-                          </p>
+                          <p className="text-sm md:text-[16px]">{item.link_name}</p>
                         </div>
                         <div className="flex space-x-2">
                           <Button
@@ -1861,15 +1698,10 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="primary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() => handleOpenLink(item.link_url)}
                           >
                             View
                           </Button>
-                          <IoMdEye
-                            className="text-blue-500  md:hidden"
-                            size={24}
-                            onClick={() => handleOpenLink(item.link_url)}
-                          />
+                          <IoMdEye className="text-blue-500  md:hidden" size={24} />
                         </div>
                       </div>
                       {/* Delete button */}
@@ -1892,26 +1724,30 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             )}
             {/* new links to add */}
-            <div>
+            <form className="" onSubmit={handleEditAddPyqLink}>
               <input
                 type="text"
                 value={editFormPyqLinkName}
-                onChange={(e) => setEditFormPyqLinkName(e.target.value)}
+                onChange={(e) =>
+                  setEditFormPyqLinkName(e.target.value)
+                }
                 placeholder="PYQ Link Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+                required
               />
               <input
                 type="text"
                 value={editFormPyqLinkUrl}
-                onChange={(e) => setEditFormPyqLinkUrl(e.target.value)}
+                onChange={(e) =>
+                  setEditFormPyqLinkUrl(e.target.value)
+                }
                 placeholder="PYQ Link Url"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+                required
               />
               <div className="flex justify-end mb-5">
                 <Button
-                  onClick={handleEditAddPyqLink}
+                  type="submit"
                   style={{ textTransform: "none" }}
                   variant="contained"
                   size="small"
@@ -1919,7 +1755,7 @@ const AdminCourseNavbarCourseComponent = () => {
                   ADD
                 </Button>
               </div>
-            </div>
+            </form>
 
             <label
               htmlFor="pyq_links"
@@ -1932,16 +1768,14 @@ const AdminCourseNavbarCourseComponent = () => {
               <div className="space-y-4">
                 <div className="space-y-4">
                   {updatedPyq_pdfs.map((item, index) => (
-                    <div key={index}>
-                      <div className="flex items-center space-x-4 border  p-2 rounded-md">
-                        <FaFilePdf
-                          className="text-red-500 max-md:hidden"
-                          size={24}
-                        />
+                    <div
+                      key={index}>
+                      <div
+                        className="flex items-center space-x-4 border  p-2 rounded-md"
+                      >
+                        <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
                         <div className="flex-1">
-                          <p className="text-sm md:text-[16px]">
-                            {item.pdf_name}
-                          </p>
+                          <p className="text-sm md:text-[16px]">{item.pdf_name}</p>
                         </div>
                         <div className="flex space-x-2">
                           <Button
@@ -1949,12 +1783,6 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="primary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() =>
-                              handleViewPdf({
-                                title: item.pdf_name,
-                                url: item.pdf_url,
-                              })
-                            }
                           >
                             View
                           </Button>
@@ -1963,24 +1791,16 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="secondary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() => handleDownload(item.pdf_url)}
                           >
                             Download
                           </Button>
                           <IoMdEye
                             className="text-blue-500 cursor-pointer md:hidden"
                             size={24}
-                            onClick={() =>
-                              handleViewPdf({
-                                title: item.pdf_name,
-                                url: item.pdf_url,
-                              })
-                            }
                           />
                           <IoMdDownload
                             className="text-red-500 cursor-pointer md:hidden"
                             size={24}
-                            onClick={() => handleDownload(item.pdf_url)}
                           />
                         </div>
                       </div>
@@ -2004,31 +1824,29 @@ const AdminCourseNavbarCourseComponent = () => {
               </div>
             )}
             {/* new links to add */}
-            <div>
+            <form className="" onSubmit={handleEditAddPyqPdf}>
               <input
                 type="text"
                 value={editFormPyqPdfName}
-                onChange={(e) => setEditFormPyqPdfName(e.target.value)}
+                onChange={(e) =>
+                  setEditFormPyqPdfName(e.target.value)
+                }
                 placeholder="PYQ Pdf Name"
                 className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
-                
+                required
               />
               <input
-                onChange={
-                  (e) =>
-                    handleInputChangeresourceeditpdf(
-                      "pyq_pdf",
-                      e.target.files[0]
-                    ) // Pass index and 1 to identify the URL
+                onChange={(e) =>
+                  handleInputChangeresourceeditpdf("pyq_pdf", e.target.files[0]) // Pass index and 1 to identify the URL
                 }
                 accept="application/pdf"
                 type="file"
                 className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-              
+                required
               />
               <div className="flex justify-end">
                 <Button
-                  onClick={handleEditAddPyqPdf}
+                  type="submit"
                   style={{ textTransform: "none" }}
                   className=" mb-5 "
                   variant="contained"
@@ -2037,16 +1855,19 @@ const AdminCourseNavbarCourseComponent = () => {
                   ADD
                 </Button>
               </div>
-            </div>
+            </form>
 
             <div className="pb-2 pt-4">
               {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
               <Button type="submit" variant="contained">Update Course</Button>
-
             </div>
+
           </form>
         </Box>
       </Modal>
+
+
+
 
       {/* ////////////////////////modal to view the course //////////////////// */}
       <Modal
@@ -2207,11 +2028,10 @@ const AdminCourseNavbarCourseComponent = () => {
               <div className="mb-5">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex items-center space-x-4 border  p-2 rounded-md">
-                      <FaFilePdf
-                        className="text-red-500 max-md:hidden"
-                        size={24}
-                      />
+                    <div
+                      className="flex items-center space-x-4 border  p-2 rounded-md"
+                    >
+                      <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
                       <div className="flex-1">
                         <p className="text-sm md:text-[16px]">Syllabus</p>
                       </div>
@@ -2221,12 +2041,6 @@ const AdminCourseNavbarCourseComponent = () => {
                           color="primary"
                           size="small"
                           className="max-md:!hidden"
-                          onClick={() =>
-                            handleViewPdf({
-                              title: "Syllabus",
-                              url: updatedSyllabus,
-                            })
-                          }
                         >
                           View
                         </Button>
@@ -2235,24 +2049,16 @@ const AdminCourseNavbarCourseComponent = () => {
                           color="secondary"
                           size="small"
                           className="max-md:!hidden"
-                          onClick={() => handleDownload(updatedSyllabus)}
                         >
                           Download
                         </Button>
                         <IoMdEye
                           className="text-blue-500 cursor-pointer md:hidden"
                           size={24}
-                          onClick={() =>
-                            handleViewPdf({
-                              title: "Syllabus",
-                              url: updatedSyllabus,
-                            })
-                          }
                         />
                         <IoMdDownload
                           className="text-red-500 cursor-pointer md:hidden"
                           size={24}
-                          onClick={() => handleDownload(updatedSyllabus)}
                         />
                       </div>
                     </div>
@@ -2273,15 +2079,12 @@ const AdminCourseNavbarCourseComponent = () => {
                 <div className="space-y-4">
                   {updatedResource_links.map((item, index) => (
                     <div key={index}>
-                      <div className="flex items-center space-x-4 border p-2 rounded-md">
-                        <FaLink
-                          className="text-blue-500  max-md:hidden"
-                          size={20}
-                        />
+                      <div
+                        className="flex items-center space-x-4 border p-2 rounded-md"
+                      >
+                        <FaLink className="text-blue-500  max-md:hidden" size={20} />
                         <div className="flex-1">
-                          <p className="text-sm md:text-[16px]">
-                            {item.link_name}
-                          </p>
+                          <p className="text-sm md:text-[16px]">{item.link_name}</p>
                         </div>
                         <div className="flex space-x-2">
                           <Button
@@ -2289,15 +2092,10 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="primary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() => handleOpenLink(item.link_url)}
                           >
                             View
                           </Button>
-                          <IoMdEye
-                            className="text-blue-500  md:hidden"
-                            size={24}
-                            onClick={() => handleOpenLink(item.link_url)}
-                          />
+                          <IoMdEye className="text-blue-500  md:hidden" size={24} />
                         </div>
                       </div>
                     </div>
@@ -2317,16 +2115,14 @@ const AdminCourseNavbarCourseComponent = () => {
               <div className="mb-5">
                 <div className="space-y-4">
                   {updatedResource_pdfs.map((item, index) => (
-                    <div key={index}>
-                      <div className="flex items-center space-x-4 border  p-2 rounded-md">
-                        <FaFilePdf
-                          className="text-red-500 max-md:hidden"
-                          size={24}
-                        />
+                    <div
+                      key={index}>
+                      <div
+                        className="flex items-center space-x-4 border  p-2 rounded-md"
+                      >
+                        <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
                         <div className="flex-1">
-                          <p className="text-sm md:text-[16px]">
-                            {item.pdf_name}
-                          </p>
+                          <p className="text-sm md:text-[16px]">{item.pdf_name}</p>
                         </div>
                         <div className="flex space-x-2">
                           <Button
@@ -2334,12 +2130,6 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="primary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() =>
-                              handleViewPdf({
-                                title: item.pdf_name,
-                                url: item.pdf_url,
-                              })
-                            }
                           >
                             View
                           </Button>
@@ -2348,32 +2138,26 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="secondary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() => handleDownload(item.pdf_url)}
                           >
                             Download
                           </Button>
                           <IoMdEye
                             className="text-blue-500 cursor-pointer md:hidden"
                             size={24}
-                            onClick={() =>
-                              handleViewPdf({
-                                title: item.pdf_name,
-                                url: item.pdf_url,
-                              })
-                            }
                           />
                           <IoMdDownload
                             className="text-red-500 cursor-pointer md:hidden"
                             size={24}
-                            onClick={() => handleDownload(item.pdf_url)}
                           />
                         </div>
                       </div>
                     </div>
+
                   ))}
                 </div>
               </div>
             )}
+
 
             <label
               htmlFor="pyq_links"
@@ -2387,15 +2171,12 @@ const AdminCourseNavbarCourseComponent = () => {
                 <div className="space-y-4">
                   {updatedPyq_links.map((item, index) => (
                     <div key={index}>
-                      <div className="flex items-center space-x-4 border p-2 rounded-md">
-                        <FaLink
-                          className="text-blue-500 max-md:hidden"
-                          size={20}
-                        />
+                      <div
+                        className="flex items-center space-x-4 border p-2 rounded-md"
+                      >
+                        <FaLink className="text-blue-500 max-md:hidden" size={20} />
                         <div className="flex-1">
-                          <p className="text-sm md:text-[16px]">
-                            {item.link_name}
-                          </p>
+                          <p className="text-sm md:text-[16px]">{item.link_name}</p>
                         </div>
                         <div className="flex space-x-2">
                           <Button
@@ -2403,15 +2184,10 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="primary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() => handleOpenLink(item.link_url)}
                           >
                             View
                           </Button>
-                          <IoMdEye
-                            className="text-blue-500  md:hidden"
-                            size={24}
-                            onClick={() => handleOpenLink(item.link_url)}
-                          />
+                          <IoMdEye className="text-blue-500  md:hidden" size={24} />
                         </div>
                       </div>
                     </div>
@@ -2431,16 +2207,14 @@ const AdminCourseNavbarCourseComponent = () => {
               <div className="space-y-4">
                 <div className="space-y-4">
                   {updatedPyq_pdfs.map((item, index) => (
-                    <div key={index}>
-                      <div className="flex items-center space-x-4 border  p-2 rounded-md">
-                        <FaFilePdf
-                          className="text-red-500 max-md:hidden"
-                          size={24}
-                        />
+                    <div
+                      key={index}>
+                      <div
+                        className="flex items-center space-x-4 border  p-2 rounded-md"
+                      >
+                        <FaFilePdf className="text-red-500 max-md:hidden" size={24} />
                         <div className="flex-1">
-                          <p className="text-sm md:text-[16px]">
-                            {item.pdf_name}
-                          </p>
+                          <p className="text-sm md:text-[16px]">{item.pdf_name}</p>
                         </div>
                         <div className="flex space-x-2">
                           <Button
@@ -2448,12 +2222,6 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="primary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() =>
-                              handleViewPdf({
-                                title: item.pdf_name,
-                                url: item.pdf_url,
-                              })
-                            }
                           >
                             View
                           </Button>
@@ -2462,24 +2230,16 @@ const AdminCourseNavbarCourseComponent = () => {
                             color="secondary"
                             size="small"
                             className="max-md:!hidden"
-                            onClick={() => handleDownload(item.pdf_url)}
                           >
                             Download
                           </Button>
                           <IoMdEye
                             className="text-blue-500 cursor-pointer md:hidden"
                             size={24}
-                            onClick={() =>
-                              handleViewPdf({
-                                title: item.pdf_name,
-                                url: item.pdf_url,
-                              })
-                            }
                           />
                           <IoMdDownload
                             className="text-red-500 cursor-pointer md:hidden"
                             size={24}
-                            onClick={() => handleDownload(item.pdf_url)}
                           />
                         </div>
                       </div>
@@ -2488,6 +2248,7 @@ const AdminCourseNavbarCourseComponent = () => {
                 </div>
               </div>
             )}
+
           </div>
         </Box>
       </Modal>
@@ -2522,38 +2283,6 @@ const AdminCourseNavbarCourseComponent = () => {
             >
               Cancel
             </Button>
-          </div>
-        </Box>
-      </Modal>
-
-      {/* Modal for viewing PDF */}
-      <Modal open={pdfModalOpen}>
-        <Box
-          sx={{
-            ...style,
-            width: "97vw",
-            "@media (max-width: 1024px)": {
-              width: "97vw",
-            },
-
-            "@media (max-width: 768px)": {
-              width: "97vw",
-              maxHeight: "95vh",
-            },
-            maxHeight: "95vh",
-            overflowY: "auto",
-          }}
-        >
-          <Button
-            variant="outlined"
-            onClick={closePdfModal}
-            sx={{ position: "absolute", top: 8, right: 8 }}
-          >
-            X
-          </Button>
-
-          <div className="modal-content">
-            <ViewPdf pdf={selectedPdf} />
           </div>
         </Box>
       </Modal>
