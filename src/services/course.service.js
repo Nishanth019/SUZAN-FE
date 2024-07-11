@@ -1,19 +1,15 @@
 import axios from "axios";
-
 const { BACKEND_URL } = process.env;
-
 // Creating a global instance of Axios with default configuration
 const axiosInstance = axios.create({
   withCredentials: true,
 });
-
 class CourseService {
   constructor() {
     // this.url = BACKEND_URL;
     this.url = "http://localhost:8000"; // Backend URL
-    // this.url = 'https://suzan-be.vercel.app'; // Backend URL if deployed
-  }
-
+    // this.url = "https://suzan-be-mmz3.onrender.com"; // Backend URL if deployed
+  } 
   // Programs
   // Create a program under a college
   createProgram(data) {
@@ -25,43 +21,27 @@ class CourseService {
   deleteProgram({programId}) {
     return axiosInstance.delete(`${this.url}/api/course/programs/${programId}`);
   }
-
-  // Update program
-  updateProgram(programId, data) {
-    return axiosInstance.put(`${this.url}/api/course/programs/${programId}`, data);
-  }
-
-  // Delete program
-  deleteProgram({programId}) {
-    return axiosInstance.delete(`${this.url}/api/course/programs/${programId}`);
-  }
-
   // Get all programs
   getAllPrograms() {
     return axiosInstance.get(`${this.url}/api/course/programs`);
   }
-
   // Get program by ID
   getProgramById({programId}) {
     return axiosInstance.get(`${this.url}/api/course/programs/${programId}`);
   }
-
   // Search and get program by name
   searchProgram(searchTerm) {
     return axiosInstance.post(`${this.url}/api/course/programs/search?searchTerm=${searchTerm}`);
   }
-
   // Field of Study
   // Create field of study under a program
   createFieldOfStudy(data) {
     return axiosInstance.post(`${this.url}/api/course/fieldOfStudy`, data);
   }
-
   // Update field of study
   updateFieldOfStudy(fieldOfStudyId, data) {
     return axiosInstance.put(`${this.url}/api/course/fieldOfStudy/${fieldOfStudyId}`, data);
   }
-
   // Delete field of study
   deleteFieldOfStudy(fieldOfStudyId) {
     return axiosInstance.delete(`${this.url}/api/course/fieldOfStudy/${fieldOfStudyId}`);
@@ -75,23 +55,19 @@ class CourseService {
   getAllFieldOfStudyOfCollege() {
     return axiosInstance.get(`${this.url}/api/course/fieldOfStudy`);
   }
-
   // Get field of study by ID
   getFieldOfStudyById({fieldOfStudyId}) {
     return axiosInstance.get(`${this.url}/api/course/fieldOfStudyById/${fieldOfStudyId}`);
   }
-
   // Search and get field of study by name
-  searchFieldOfStudy(searchTerm) {
-    return axiosInstance.post(`${this.url}/api/course/fieldOfStudy/search?searchTerm=${searchTerm}`);
+  searchFieldOfStudy(payload) {
+    return axiosInstance.post(`${this.url}/api/course/fieldOfStudy/search`,payload);
   }
-
   //Semester
   // Get all semesters by fieldOfStudy
   getAllSemestersByFieldOfStudy({fieldOfStudyId}) {
     return axiosInstance.get(`${this.url}/api/course/semester/${fieldOfStudyId}`);
   }
-
   getSemesterByCourseId({courseId}){
     return axiosInstance.get(`${this.url}/api/course/semester/course/${courseId}`);
   }
@@ -128,8 +104,8 @@ class CourseService {
   }
   
   // Search and get Courses by name
-  searchCourse(searchTerm) {
-    return axiosInstance.post(`${this.url}/api/course/courses/search?searchTerm=${searchTerm}`);
+  searchCourse(payload) {
+    return axiosInstance.post(`${this.url}/api/course/courses/search`,payload);
   }
 
   // Upload file

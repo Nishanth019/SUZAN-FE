@@ -11,7 +11,7 @@ class collegeService {
   constructor() {
     // this.url=BACKEND_URL;
     this.url = "http://localhost:8000";
-    // this.url = "https://suzan-be.vercel.app";
+    // this.url = "https://suzan-be-mmz3.onrender.com";
   }
 
   getCollegeById(collegeId) {

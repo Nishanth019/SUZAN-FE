@@ -1,15 +1,27 @@
-'use client'
-import { Avatar, Card, Stack, ThemeProvider } from "@mui/material";
-import { div } from "@mui/system";
-import React, { useContext, useState } from "react";
-import theme from "./styles";
-import EditableCommentField from "./Reusable/Comment/EditableCommentField";
-import SendButton from "./Reusable/Buttons/BgButtons/SendButton";
-import avatar from "@/assets/Comment/avatar.png"
+'use client';
+import { Avatar, Card, Stack, ThemeProvider } from '@mui/material';
+import React, { useState } from 'react';
+import theme from './styles';
+import EditableCommentField from './Reusable/Comment/EditableCommentField';
+import SendButton from './Reusable/Buttons/BgButtons/SendButton';
+import avatar from '@/assets/Comment/avatar.png';
+import commentService from '../../services/comment.service';
 
-const AddComment = () => {
-  // const { IMGOBJ } = useContext(CommentContext);
+const AddComment = ({ targetType, target, onCommentAdded }) => {
   const [commentTxt, setCommentTxt] = useState("");
+
+  const handleSendComment = async () => {
+    try {
+      if (commentTxt.trim()) {
+        const response = await commentService.createMainComment({ content: commentTxt, target, targetType });
+        console.log('Comment created:', response.data);
+        setCommentTxt("");
+        onCommentAdded(); // Call the callback function
+      }
+    } catch (error) {
+      console.error('Error creating comment:', error);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -17,18 +29,18 @@ const AddComment = () => {
         <div className="p-[10px] md:p-[15px]">
           <Stack direction="row" spacing={2} alignItems="flex-start">
             <Avatar
-            className="max-md:hidden"
+              className="max-md:!hidden"
               src={avatar}
               variant="rounded"
               alt="user-avatar"
             />
             <div className="w-full">
-            <EditableCommentField
-              commentText={commentTxt}
-              setCommentText={setCommentTxt}
-              placeHolder="Add a comment"
-            />
-            <SendButton commentTxt={commentTxt} setCommentTxt={setCommentTxt} />
+              <EditableCommentField
+                commentText={commentTxt}
+                setCommentText={setCommentTxt}
+                placeHolder="Add a comment"
+              />
+              <SendButton onClick={handleSendComment} />
             </div>
           </Stack>
         </div>

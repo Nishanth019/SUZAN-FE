@@ -1,19 +1,18 @@
 import { Button } from "@mui/material";
 import React from "react";
 
-const UpdateButton = ({ commentText, editingComm, setEditingComm }) => {
+const UpdateButton = ({ commentText, handleUpdate }) => {
   return (
     <Button
-    size="large"
-    variant="outlined"
-    sx={{ textTransform: "none", float:"right"
-   }}
+      size="medium"
+      variant="outlined"
+      sx={{ textTransform: "none", float: "right" }}
       onClick={() => {
-        !commentText.trim()
-          ? alert(
-              "If  you want to remove the comment text, just delete the comment."
-            )
-          : setEditingComm(!editingComm);
+        if (!commentText.trim()) {
+          alert("If you want to remove the comment text, just delete the comment.");
+        } else {
+          handleUpdate();
+        }
       }}
     >
       Update

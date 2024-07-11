@@ -10,6 +10,7 @@ const Tag = ({ onTar }) => {
         display: "inline-block",
         fontWeight: 500,
       }}
+      className="!text-[17px] md:!text-lg"
     >
       {`@${onTar}`}
     </Typography>

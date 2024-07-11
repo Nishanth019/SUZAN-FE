@@ -25,7 +25,7 @@ const ContactSection = () => {
 
     try {
 
-       await ContactInfoService.createContactInfo(formData);
+      //  await ContactInfoService.createContactInfo(formData);
       toast.success('Message sent successfully!', {
         position: 'top-center',
         autoClose: 3000, // Auto close the toast after 3 seconds
@@ -60,7 +60,7 @@ const ContactSection = () => {
     <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-10 sm:pt-20 pb-16 flex items-center justify-around ">
       <div className="flex-1 grid md:grid-cols-2 lg:grid-cols-2 gap-y-8 md:gap-x-8 md:gap-y-8 lg:gap-x-8 lg:gap-y-16 xl:ml-[100 px]">
         <div className="flex-1">
-          <p className="font-bold pb-4 text-2xl sm:text-3xl lg:text-4xl xl:text-5xl">Get In Touch</p>
+          <p className="font-bold pb-4 text-xl sm:text-2xl lg:text-3xl xl:text-4xl">Feel free to share your feedback or queries.</p>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <input
@@ -118,11 +118,10 @@ const ContactSection = () => {
         </div>
         <div className="xl:flex-1 max-md:mx-2 md:mx-10">
         <div className="bg-[#129172] rounded-xl py-8 mt-10 h-[max-content] flex flex-col items-center justify-between space-y-10 xl:pb-20 xl:w-[500px] ">
-          <div className=" text-white font-semibold text-xl text-center sm:text-2xl sm:px-5 ">Talk to our experts on WhatsApp</div>
+          <div className=" text-white font-semibold text-xl text-center sm:text-2xl sm:px-5 ">Reach out to us on Whatsapp!</div>
           <div>
           <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
             <Image className="w-[200px] h-fit" src={WhatsappQr} alt="WhatsApp Scanner Code"/>
-
             </a>
           </div>
         </div>

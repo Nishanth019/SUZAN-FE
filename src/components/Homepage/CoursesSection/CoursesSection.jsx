@@ -6,8 +6,11 @@ import man from "../../../assets/Homepage/CourseSectionManImage.png";
 import arrow from "../../../assets/Homepage/CoursesArrow.png"
 
 const CoursesSection = ({ user }) => {
-  const navigate = useRouter();
+  const router = useRouter();
 
+  const handleRedirect = () => {
+    router.push('/courses');
+  };
   return (
     <div
       className="flex flex-col pb-10 md:pt-10 w-full gap-5 items-center justify-center overflow-hidden"
@@ -56,8 +59,7 @@ const CoursesSection = ({ user }) => {
           </div>
           <div className="text-center lg:text-left">
             <button
-              onClick={(e) => {
-              }}
+              onClick={handleRedirect}
               className="primary-bg-color text-white font-bold text-[16px] w-56  py-2 rounded-lg"
             >
               Open The Course-List

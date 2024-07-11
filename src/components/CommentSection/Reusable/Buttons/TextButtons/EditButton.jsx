@@ -4,20 +4,15 @@ import { Button } from "@mui/material";
 
 const EditButton = ({ functionality, editingComm }) => {
   return (
-    <Button
-      startIcon={<Edit />}
-      disabled={editingComm}
-      sx={{
-        color: "custom.moderateBlue",
-        fontWeight: 500,
-        textTransform: "capitalize",
-      }}
+    <button
+    disabled={editingComm}
       onClick={() => {
         functionality();
       }}
+      className="flex items-center gap-1 text-blue-700"
     >
-      Edit
-    </Button>
+      <Edit className="text-[18px]"/><p className="max-md:!hidden text-sm">Edit</p>
+    </button>
   );
 };
 

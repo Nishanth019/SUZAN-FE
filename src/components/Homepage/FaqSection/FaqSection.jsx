@@ -10,62 +10,58 @@ const FaqSection = () => {
   const faqs = [
     {
       id: 1,
-      question: 'Is there support available if I have questions during my subscription?',
+      question: "What is Suzan?",
       answer: [
-        'Absolutely. During your subscription, you will have the opportunity to engage with our experts in various Q&amp;A sessions, where you can freely ask any questions you may have.Additionally, members have access to our dedicated WhatsApp support for prompt resolution of any queries.',
+        "Suzan is a college community platform where students can find course details, events, clubs, and nearby hangout spots.",
       ],
     },
     {
       id: 2,
-      question: 'What makes EDZER Edge different from other interview prep platforms?',
+      question: "How do I create an account on Suzan?",
       answer: [
-        'At EDZER Edge, we pride ourselves on the reliability and authenticity of our information. Unlike random online videos or free apps, our content is meticulously crafted by a team of seasoned professionals, including MNC recruiters, startup founders, and senior corporate executives. Our workshops are conducted by industry veterans who have a proven track record of guiding thousands to their dream jobs.'
+        "Click on the 'Sign Up' button and follow the instructions to create an account using your college email.",
       ],
     },
     {
       id: 3,
-      question: 'How often are the workshops conducted?',
+      question: "How can I register my college on Suzan?",
       answer: [
-        'We host 4-5 workshops each month, covering a variety of topics designed to enhance your candidacy and secure your dream job. These sessions are integral to our commitment to providing continuous learning and development.',
+        "One student from your college must sign up as an admin and register the college. This admin will then input all relevant college data.",
       ],
     },
     {
       id: 4,
-      question: 'What is the cancellation and refund policy?',
+      question: "Who can register as an admin?",
       answer: [
-        'Our policy allows for cancellation and a full refund only before your first workshop. Once you have attended a workshop, we are unable to offer a refund, as you have already begun to benefit from our expert services.',
+        "Any student from the college can register as an admin. The admin is responsible for entering and maintaining college-related data.",
       ],
     },
-     {
+    {
       id: 5,
-      question: 'Can I upgrade or downgrade my plan after purchase?',
+      question: "How many admins can register fo a college?",
       answer: [
-        'Yes, you have the flexibility to either upgrade or downgrade your plan. For detailed information and assistance, please connect with our team via WhatsApp Chat.',
+        "First one student can register as an admin for a college. However, the admin can add maximum 4 other students as admins to help manage the college data.",
       ],
     },
     {
       id: 6,
-      question: 'Are there any additional costs apart from the plan prices?',
+      question: "What information can I find on Suzan?",
       answer: [
-        'The pricing for EDZER Edge access and workshops is all-inclusive, with no hidden fees. However, we offer a range of other services such as specialized courses, Resume Diagnostic reports, and hiring assistance, which are available at additional costs.',
+        "You can find details about your courses, college events, clubs, and suggestions for nearby hangout places",
       ],
     },
     {
       id: 7,
-      question: 'How do I choose the right plan for me?',
+      question: "Is there a mobile app for Suzan?",
       answer: [
-        'Choosing the right plan depends on your individual career stage and needs:',
-        'Students seeking internships: The annual plan is recommended to ensure you are fully prepared for placement season.',
-        'Job seekers planning to apply next year: Opt for the half-yearly plan to get job-ready.',
-        'Professionals needing minor guidance: The quarterly plan is ideal for fine-tuning your skills.',
-        'New users exploring the platform: The monthly plan offers a great way to experience our offerings.',
+        "Currently, Suzan is available as a website. A mobile app is in development and will be released soon.",
       ],
     },
     {
       id: 8,
-      question: 'What does each pricing plan include?',
+      question: "How do I report an issue or give feedback?",
       answer: [
-        'Each plan grants you access to the EDZER Edge interview preparation resources for the duration of your subscription. Additionally, you gain complimentary access to all our in-house paid workshops related to interview preparation for the duration of your plan.',
+        "You can report issues or provide feedback through the 'Contact Us' section on the website.",
       ],
     },
   ];
