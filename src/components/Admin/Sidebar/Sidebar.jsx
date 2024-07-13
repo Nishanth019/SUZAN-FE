@@ -6,63 +6,62 @@ import Link from "next/link";
 import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import logo from "../../../assets/Navbar/logo.png";
-import { MdOutlineMenu } from "react-icons/md";
+import { MdBarChart, MdFeedback, MdOutlineMenu } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa6";
 import { RxDashboard } from "react-icons/rx";
 import { MdDashboard, MdBook, MdGroup, MdEvent, MdPlace } from "react-icons/md";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-    let storedSidebarExpanded = "true";
+  let storedSidebarExpanded = "true";
 
-    const [sidebarExpanded, setSidebarExpanded] = useState(
-      storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
-    );
-      const pathname = usePathname();
-    
-      const trigger = useRef(null);
-      const sidebar = useRef(null);
-    
-      // close on click outside
-      useEffect(() => {
-        const clickHandler = ({ target }) => {
-          if (!sidebar.current || !trigger.current) return;
-          if (
-            !sidebarExpanded ||
-            sidebar.current.contains(target) ||
-            trigger.current.contains(target)
-          )
-            return;
-          setSidebarExpanded(false);
-        };
-        document.addEventListener("click", clickHandler);
-        return () => document.removeEventListener("click", clickHandler);
-      });
-    
-      // close if the esc key is pressed
-      useEffect(() => {
-        const keyHandler = ({ key }) => {
-          if (!sidebarExpanded || key !== "Escape") return;
-          setSidebarExpanded(false);
-        };
-        document.addEventListener("keydown", keyHandler);
-        return () => document.removeEventListener("keydown", keyHandler);
-      });
-    
-      useEffect(() => {
-        localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
-        if (sidebarExpanded) {
-          document.querySelector("body")?.classList.add("sidebar-expanded");
-        } else {
-          document.querySelector("body")?.classList.remove("sidebar-expanded");
-        }
-      }, [sidebarExpanded]);
-    
+  const [sidebarExpanded, setSidebarExpanded] = useState(
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
+  );
+  const pathname = usePathname();
+
+  const trigger = useRef(null);
+  const sidebar = useRef(null);
+
+  // close on click outside
+  useEffect(() => {
+    const clickHandler = ({ target }) => {
+      if (!sidebar.current || !trigger.current) return;
+      if (
+        !sidebarExpanded ||
+        sidebar.current.contains(target) ||
+        trigger.current.contains(target)
+      )
+        return;
+      setSidebarExpanded(false);
+    };
+    document.addEventListener("click", clickHandler);
+    return () => document.removeEventListener("click", clickHandler);
+  });
+
+  // close if the esc key is pressed
+  useEffect(() => {
+    const keyHandler = ({ key }) => {
+      if (!sidebarExpanded || key !== "Escape") return;
+      setSidebarExpanded(false);
+    };
+    document.addEventListener("keydown", keyHandler);
+    return () => document.removeEventListener("keydown", keyHandler);
+  });
+
+  useEffect(() => {
+    localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
+    if (sidebarExpanded) {
+      document.querySelector("body")?.classList.add("sidebar-expanded");
+    } else {
+      document.querySelector("body")?.classList.remove("sidebar-expanded");
+    }
+  }, [sidebarExpanded]);
+
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-10 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-800 duration-300 ease-linear  lg:static lg:translate-x-0 ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      }`}
+      className={`absolute left-0 top-0 z-10 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-800 duration-300 ease-linear  lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-16 px-6 lg:px-16 xl:px-20 ">
@@ -82,7 +81,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           aria-expanded={sidebarOpen}
           className="block lg:hidden text-white"
         >
-         <FaArrowLeft  size={25} />
+          <FaArrowLeft size={25} />
         </button>
       </div>
       {/* <!-- SIDEBAR HEADER --> */}
@@ -98,67 +97,72 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* admin dashboard */}
-            <li>
-  <Link
-    href="/admin"
-    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${
-      pathname === "/admin" &&
-      "bg-[#333A48] "
-    }`}
-  >
-    <MdDashboard size={18} /> {/* Replace SVG with MdDashboard icon */}
-    Dashboard
-  </Link>
-</li>
-{/* Courses */}
-<li>
-  <Link
-    href="/admin/courses"
-    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${
-      pathname.includes("courses") &&
-      "bg-[#333A48] "
-    }`}
-  >
-    <MdBook size={18} /> {/* Replace SVG with MdBook icon */}
-    Courses
-  </Link>
-</li>
-{/* Clubs */}
-<li>
-  <Link
-    href="/admin/clubs"
-    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${
-      pathname.includes("clubs") && "bg-[#333A48] "
-    }`}
-  >
-    <MdGroup size={18} /> {/* Replace SVG with MdGroup icon */}
-    Clubs
-  </Link>
-</li>
-{/* Events */}
-<li>
-  <Link
-    href="/admin/events"
-    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${
-      pathname.includes("events") && "bg-[#333A48] "
-    }`}
-  >
-    <MdEvent size={18} /> {/* Replace SVG with MdEvent icon */}
-    Events
-  </Link>
-</li>
-{/* Nearby Places */}
-<li>
-  <Link
-    href="/admin/nearby-places"
-    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${
-      pathname.includes("nearby-places") && "bg-[#333A48] "
-    }`}
-  >
-    <MdPlace size={18} /> {/* Replace SVG with MdPlace icon */}
-    Nearby Places
-  </Link>
-</li>
+              <li>
+                <Link
+                  href="/admin"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname === "/admin" &&
+                    "bg-[#333A48] "
+                    }`}
+                >
+                  <MdDashboard size={18} /> {/* Replace SVG with MdDashboard icon */}
+                  Dashboard
+                </Link>
+              </li>
+              {/* Courses */}
+              <li>
+                <Link
+                  href="/admin/courses"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("courses") &&
+                    "bg-[#333A48] "
+                    }`}
+                >
+                  <MdBook size={18} /> {/* Replace SVG with MdBook icon */}
+                  Courses
+                </Link>
+              </li>
+              {/* Clubs */}
+              <li>
+                <Link
+                  href="/admin/clubs"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("clubs") && "bg-[#333A48] "
+                    }`}
+                >
+                  <MdGroup size={18} /> {/* Replace SVG with MdGroup icon */}
+                  Clubs
+                </Link>
+              </li>
+              {/* Events */}
+              <li>
+                <Link
+                  href="/admin/events"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("events") && "bg-[#333A48] "
+                    }`}
+                >
+                  <MdEvent size={18} /> {/* Replace SVG with MdEvent icon */}
+                  Events
+                </Link>
+              </li>
+              {/* Nearby Places */}
+              <li>
+                <Link
+                  href="/admin/nearby-places"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("nearby-places") && "bg-[#333A48] "
+                    }`}
+                >
+                  <MdPlace size={18} /> {/* Replace SVG with MdPlace icon */}
+                  Nearby Places
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin/feedback"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("feedback") && "bg-[#333A48] "
+                    }`}
+                >
+                  <MdFeedback size={18} /> {/* Replace SVG with MdPlace icon */}
+                  Feedbacks
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -173,9 +177,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               <li>
                 <Link
                   href="/admin/students-list"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${
-                    pathname.includes("students-list") && "bg-[#333A48] "
-                  }`}
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${pathname.includes("students-list") && "bg-[#333A48] "
+                    }`}
                 >
                   Students List
                 </Link>
@@ -184,9 +187,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               <li>
                 <Link
                   href="/admin/admin-requests"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${
-                    pathname.includes("admin-requests") && "bg-[#333A48] "
-                  }`}
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${pathname.includes("admin-requests") && "bg-[#333A48] "
+                    }`}
                 >
                   Admin Requests
                 </Link>
@@ -200,10 +202,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     <React.Fragment>
                       <Link
                         href="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${
-                          (pathname === "/ui" || pathname.includes("ui")) &&
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${(pathname === "/ui" || pathname.includes("ui")) &&
                           "bg-[#333A48] "
-                        }`}
+                          }`}
                         onClick={(e) => {
                           e.preventDefault();
                           sidebarExpanded
@@ -213,9 +214,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       >
                         Chats
                         <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-                            open && "rotate-180"
-                          }`}
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"
+                            }`}
                           width="20"
                           height="20"
                           viewBox="0 0 20 20"
@@ -232,17 +232,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       </Link>
                       {/* <!-- Dropdown Menu Start --> */}
                       <div
-                        className={`translate transform overflow-hidden ${
-                          !open && "hidden"
-                        }`}
+                        className={`translate transform overflow-hidden ${!open && "hidden"
+                          }`}
                       >
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
                               href="/ui/alerts"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-[#8A99AF] duration-300 ease-in-out hover:text-white ${
-                                pathname === "/ui/alerts" && "text-white"
-                              }`}
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-[#8A99AF] duration-300 ease-in-out hover:text-white ${pathname === "/ui/alerts" && "text-white"
+                                }`}
                             >
                               Student Chats
                             </Link>
@@ -250,9 +248,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                           <li>
                             <Link
                               href="/ui/buttons"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-[#8A99AF] duration-300 ease-in-out hover:text-white ${
-                                pathname === "/ui/buttons" && "text-white"
-                              }`}
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-[#8A99AF] duration-300 ease-in-out hover:text-white ${pathname === "/ui/buttons" && "text-white"
+                                }`}
                             >
                               Admin Chats
                             </Link>
