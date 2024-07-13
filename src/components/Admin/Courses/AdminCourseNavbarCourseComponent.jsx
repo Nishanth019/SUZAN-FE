@@ -19,9 +19,6 @@ import "../../Courses/style.css";
 import toast from "react-hot-toast";
 import { CircularProgress } from "@mui/material";
 
-//react pdf
-const workerSrc = require("pdfjs-dist/build/pdf.worker.min.js");
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 const style = {
   position: "absolute",

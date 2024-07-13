@@ -3,15 +3,18 @@ import React, {useState} from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import Image from 'next/image';
 import WhatsappQr from '../../../assets/Contact/WhatsappQr.jpeg'
+import feedbackService from '@/services/feedback.service';
+import { useGlobalContext } from "@/context/AuthContext";
 
 const ContactSection = () => {
 
   const [formData, setFormData] = useState({
-    name: '',
+    fullname: '',
     email: '',
-    phone: '',
+    mobile: '',
     message: '',
   });
+  const { isAuth } = useGlobalContext();
 
   const handleChange = (e) => {
     setFormData({
@@ -24,6 +27,22 @@ const ContactSection = () => {
     e.preventDefault();
 
     try {
+      //only allow if there is a user logged in
+      
+      
+      if(!isAuth){
+        toast.error('Please login to send message', {
+          position: 'top-center',
+          autoClose: 3000, // Auto close the toast after 3 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+
+      const { data } = await feedbackService.createFeedback(formData);
 
       //  await ContactInfoService.createContactInfo(formData);
       toast.success('Message sent successfully!', {
@@ -36,9 +55,9 @@ const ContactSection = () => {
       });
 
       setFormData({
-        name: '',
+        fullname: '',
         email: '',
-        phone: '',
+        mobile: '',
         message: '',
       });
     } catch (error) {
@@ -69,8 +88,8 @@ const ContactSection = () => {
                 placeholder="Full Name"
                 autoComplete="false"
                 className="w-full px-3 py-2 border border-[#129172] rounded-xl outline-none bg-[#E3EDEB] text-sm sm:text-base lg:text-lg "
-                name="name"
-                value={formData.name}
+                name="fullname"
+                value={formData.fullname}
                 onChange={handleChange}
               />
             </div>
@@ -93,8 +112,8 @@ const ContactSection = () => {
                 placeholder="Mobile Number"
                 autoComplete="false"
                 className="w-full px-3 py-2 border border-[#129172] rounded-xl outline-none bg-[#E3EDEB] text-sm sm:text-base lg:text-lg"
-                name="phone"
-                value={formData.phone}
+                name="mobile"
+                value={formData.mobile}
                 onChange={handleChange}
               />
             </div>
