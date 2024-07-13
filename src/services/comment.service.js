@@ -10,8 +10,8 @@ const axiosInstance = axios.create({
 class commentService {
   constructor() {
     // this.url=BACKEND_URL;
-    this.url = "http://localhost:8000";
-    // this.url = "https://suzan-be-mmz3.onrender.com";
+    // this.url = "http://localhost:8000";
+    this.url = "https://suzan-be-mmz3.onrender.com";
   }
 
   createMainComment(commentData) {
