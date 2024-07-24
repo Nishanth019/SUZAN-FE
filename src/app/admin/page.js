@@ -1,3 +1,6 @@
+
+"use client";
+
 import Dashboard from "@/components/Admin/Dashboard/Dashboard";
 import DefaultLayout from "@/components/Admin/Layouts/DefaultLayout";
 

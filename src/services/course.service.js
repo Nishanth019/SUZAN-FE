@@ -98,6 +98,11 @@ class CourseService {
     });
   }
 
+  //get all courses of a college
+  getAllCoursesOfCollege() {
+    return axiosInstance.get(`${this.url}/api/course/courses/college`);
+  }
+
   // Get course by ID
   getCourseById({courseId}) {
     return axiosInstance.get(`${this.url}/api/course/courses/${courseId}`);
