@@ -77,6 +77,20 @@ class AuthService {
   signout() {
     return axiosInstance.post(`${this.url}/api/auth/signout`);
   }
+
+    // New methods for OTP and password update
+    sendOtp(data) {
+      return axiosInstance.post(`${this.url}/api/auth/sendotp`, data);
+    }
+  
+    verifyOtp(data) {
+      return axiosInstance.post(`${this.url}/api/auth/verifyotp`, data);
+    }
+  
+    updatePassword(data) {
+      return axiosInstance.post(`${this.url}/api/auth/updatepassword`, data);
+    }
+
 }
 
 export default new AuthService();
