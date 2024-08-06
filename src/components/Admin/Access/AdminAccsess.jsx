@@ -50,8 +50,9 @@ const AdminAccsess = () => {
     if (!userData) return; // No user data available
 
     const updatedRole = userData.role === "admin" ? "student" : "admin";
+    const isAdmin = userData.role === "admin" ? 0 : 1;
     try {
-      await UserService.updateUserRole({ ...userData, role: updatedRole });
+      await UserService.updateUserRole({ ...userData, role: updatedRole,isAdminVerified: isAdmin});
       setUserData({ ...userData, role: updatedRole }); // Update local state
       setErrorMessage(""); // Clear error message
 
