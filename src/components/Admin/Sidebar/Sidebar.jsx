@@ -186,11 +186,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
               <li>
                 <Link
-                  href="/admin/admin-requests"
+                  href="/admin/admin-access"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${pathname.includes("admin-requests") && "bg-[#333A48] "
                     }`}
                 >
-                  Admin Requests
+                  Admin Access
                 </Link>
               </li>
 
