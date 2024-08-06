@@ -11,18 +11,29 @@ class UserService {
   constructor() {
     // You can use the BACKEND_URL from environment variables if available
     // this.url = BACKEND_URL;
-    // this.url = "http://localhost:8000";
-    this.url = "https://suzan-be-mmz3.onrender.com";
+    this.url = "http://localhost:8000";
+    // this.url = "https://suzan-be-mmz3.onrender.com";
   }
 
   getCurrentUser() {
     return axiosInstance.get(`${this.url}/api/users/currentuser`);
+  }
+  getUserByEmail(email) {
+    return axiosInstance.get(`${this.url}/api/users/userbyemail`, {
+      params: { email },
+    });
   }
 
     // Function to update user 
     updateUser( userData) {
       return axiosInstance.put(
         `${this.url}/api/users/updateuser`,
+        userData
+      );
+    }
+    updateUserRole( userData) {
+      return axiosInstance.put(
+        `${this.url}/api/users/updateuserrole`,
         userData
       );
     }
