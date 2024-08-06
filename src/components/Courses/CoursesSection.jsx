@@ -11,7 +11,6 @@ import CoursesCard from "./CoursesCard";
 import Dropdown from "../TailwindComponents/Dropdown";
 import { FaSearch } from "react-icons/fa";
 import CourseService from "@/services/course.service.js";
-import PencilLoading from "../Ui/PencilLoading.jsx";
 import { CircularProgress } from "@mui/material";
 import { FcEmptyBattery } from "react-icons/fc";
 
@@ -33,7 +32,7 @@ const CoursesSection = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const coursesPerPage = 2;
+  const coursesPerPage = 4;
 
   useEffect(() => {
     // Fetch all programs on component mount
@@ -146,25 +145,30 @@ const CoursesSection = () => {
     }
   };
 
- useEffect(() => {
-   async function fetchCourses() {
-     try {
-       setLoading(true);
-       const response = await CourseService.getAllCourses({
-         programId: selectedProgram,
-         fieldOfStudyId: selectedFieldOfStudy,
-         semesterId: selectedSemester,
-       });
-       setCourses(response.data.courses);
-       setLoading(false);
-       setCurrentPage(1); // Reset to first page when filters change
-     } catch (error) {
-       setLoading(false);
-       console.error("Error fetching courses:", error);
-     }
-   }
-   fetchCourses();
- }, [searchQuery === ""]);
+  useEffect(() => {
+    if (searchQuery !== "") {
+      handleSearch();
+    }
+  }, [searchQuery]);
+  useEffect(() => {
+    async function fetchCourses() {
+      try {
+        setLoading(true);
+        const response = await CourseService.getAllCourses({
+          programId: selectedProgram,
+          fieldOfStudyId: selectedFieldOfStudy,
+          semesterId: selectedSemester,
+        });
+        setCourses(response.data.courses);
+        setLoading(false);
+        setCurrentPage(1); // Reset to first page when filters change
+      } catch (error) {
+        setLoading(false);
+        console.error("Error fetching courses:", error);
+      }
+    }
+    fetchCourses();
+  }, [searchQuery === ""]);
 
   // Calculate the start and end index of courses to display based on the current page
   const startIndex = (currentPage - 1) * coursesPerPage;
@@ -230,9 +234,7 @@ const CoursesSection = () => {
               <div className="w-full md:w-[270px]">
                 <form
                   className="max-w-md mx-auto"
-                  onChange={(e) => {
-                    handleSearch();
-                  }}
+                  onSubmit={(e) => e.preventDefault()} // Prevent default form submission
                 >
                   <label
                     htmlFor="default-search"
@@ -252,6 +254,12 @@ const CoursesSection = () => {
                       id="default-search"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault(); // Prevent default form submission
+                          handleSearch();
+                        }
+                      }}
                       className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
                       placeholder="Search Course"
                     />
