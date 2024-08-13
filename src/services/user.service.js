@@ -44,6 +44,17 @@ class UserService {
       `${this.url}/api/users/deleteuser`
     );
   }
+
+  getUsersCount(){
+    return axiosInstance.get(
+      `${this.url}/api/users/getuserscount`
+    );
+  }
+  getAdminsCount(){
+    return axiosInstance.get(
+      `${this.url}/api/users/getadminscount`
+    );
+  }
     
 
   getUserById(userId) {

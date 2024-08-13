@@ -83,6 +83,8 @@ class CourseService {
     return axiosInstance.put(`${this.url}/api/course/courses/${courseId}`, data);
   }
 
+
+
   // Delete course
   deleteCourse({deletingCourseId}) {
     console.log(555,deletingCourseId)
@@ -98,9 +100,24 @@ class CourseService {
     });
   }
 
+  //get all courses of a college
+  getAllCoursesOfCollege() {
+    return axiosInstance.get(`${this.url}/api/course/courses/college`);
+  }
+
   // Get course by ID
   getCourseById({courseId}) {
     return axiosInstance.get(`${this.url}/api/course/courses/${courseId}`);
+  }
+
+  // increment course views count
+  incrementCourseViews() {
+    return axiosInstance.patch(`${this.url}/api/course/courses/inc`);
+  }
+
+  // Get course views of a college
+  getCourseViews() {
+    return axiosInstance.post(`${this.url}/api/course/courses/countviews`);
   }
   
   // Search and get Courses by name
