@@ -10,8 +10,8 @@ const axiosInstance = axios.create({
 class AuthService {
   constructor() {
     // this.url=BACKEND_URL;
-    this.url = "http://localhost:8000";
-    // this.url = "https://suzan-be-mmz3.onrender.com";
+    // this.url = "http://localhost:8000";
+    this.url = "https://suzan-be-mmz3.onrender.com";
   }
 
   signIn(data) {
@@ -77,6 +77,20 @@ class AuthService {
   signout() {
     return axiosInstance.post(`${this.url}/api/auth/signout`);
   }
+
+    // New methods for OTP and password update
+    sendOtp(data) {
+      return axiosInstance.post(`${this.url}/api/auth/sendotp`, data);
+    }
+  
+    verifyOtp(data) {
+      return axiosInstance.post(`${this.url}/api/auth/verifyotp`, data);
+    }
+  
+    updatePassword(data) {
+      return axiosInstance.post(`${this.url}/api/auth/updatepassword`, data);
+    }
+
 }
 
 export default new AuthService();

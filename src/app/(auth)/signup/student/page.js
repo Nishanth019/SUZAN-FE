@@ -48,15 +48,15 @@ const StudentSignup = () => {
     try {
       const response = await collegeService.getAllVerifiedColleges();
       // Check if the request was successful
-      console.log(1,response);
+      // console.log(1,response);
       if (response.data.success) {
         // Extract colleges array from the response
         const colleges = response.data.colleges;
 
         // Now you can set the colleges state or use it as needed
         setColleges(colleges);
-        console.log(2, colleges);
-        console.log(3, colleges.college_name);
+        // console.log(2, colleges);
+        // console.log(3, colleges.college_name);
       } else {
         // Handle the case where the request was not successful
         console.error("Error fetching colleges:", response.data.error);
@@ -70,7 +70,7 @@ const StudentSignup = () => {
     fetchColleges();
   }, []);
   const initialValues = {
-    college_name: "", // Initialize college_name to an empty string
+    college_name: "Select a college", // Initialize college_name to an empty string
     name: "",
     email: "",
     password: "",

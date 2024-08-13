@@ -141,7 +141,7 @@ const SignIn = () => {
 
               <div className="flex flex-row justify-end mb-8">
                 <Link
-                  href=""
+                  href="/forgetpassword"
                   className="mr-4 text-sm font-medium text-purple-blue-500 text-blue-600 hover:text-blue-900"
                 >
                   Forget password?

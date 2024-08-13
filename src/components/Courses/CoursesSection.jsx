@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Input from "../Generals/Input";
@@ -11,12 +11,12 @@ import CoursesCard from "./CoursesCard";
 import Dropdown from "../TailwindComponents/Dropdown";
 import { FaSearch } from "react-icons/fa";
 import CourseService from "@/services/course.service.js";
-import PencilLoading from "../Ui/PencilLoading.jsx"
-import { CircularProgress } from '@mui/material';
+import { CircularProgress } from "@mui/material";
+import { FcEmptyBattery } from "react-icons/fc";
 
 const CoursesSection = () => {
   const router = useRouter();
-  const [loading,setLoading]  = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Dropdown selected useStates
   const [selectedProgram, setSelectedProgram] = useState("");
@@ -29,6 +29,10 @@ const CoursesSection = () => {
   const [fieldOfStudy, setFieldOfStudy] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [courses, setCourses] = useState([]);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const coursesPerPage = 4;
 
   useEffect(() => {
     // Fetch all programs on component mount
@@ -43,7 +47,6 @@ const CoursesSection = () => {
         setFieldOfStudy([]);
         setSemesters([]);
         setLoading(false);
-        // setSelectedProgram(response.data.programs[0]?._id);
       } catch (error) {
         setLoading(false);
         console.error("Error fetching programs:", error);
@@ -68,7 +71,6 @@ const CoursesSection = () => {
         setSelectedSemester("");
         setSemesters([]);
         setLoading(false);
-        // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
       } catch (error) {
         setLoading(false);
         console.error("Error fetching fields of study:", error);
@@ -87,11 +89,11 @@ const CoursesSection = () => {
     async function fetchSemesters(fieldOfStudyId) {
       try {
         setLoading(true);
-        const response = await CourseService.getAllSemestersByFieldOfStudy({ fieldOfStudyId });
-        console.log(12345, response.data)
+        const response = await CourseService.getAllSemestersByFieldOfStudy({
+          fieldOfStudyId,
+        });
         setSemesters(response.data.semesters);
         setLoading(false);
-        // setSelectedSemester(response.data.semesters[0]?._id);
       } catch (error) {
         setLoading(false);
         console.error("Error fetching semesters:", error);
@@ -107,14 +109,15 @@ const CoursesSection = () => {
     // Fetch courses when program, field of study, or semester selected
     async function fetchCourses() {
       try {
-        console.log(1223456)
         setLoading(true);
-        const response = await CourseService.getAllCourses({programId:selectedProgram,fieldOfStudyId:selectedFieldOfStudy,semesterId:selectedSemester});
-        console.log(5,response.data);
-
-        console.log(1223455)
-        await setCourses(response.data.courses);
+        const response = await CourseService.getAllCourses({
+          programId: selectedProgram,
+          fieldOfStudyId: selectedFieldOfStudy,
+          semesterId: selectedSemester,
+        });
+        setCourses(response.data.courses);
         setLoading(false);
+        setCurrentPage(1); // Reset to first page when filters change
       } catch (error) {
         setLoading(false);
         console.error("Error fetching courses:", error);
@@ -125,23 +128,62 @@ const CoursesSection = () => {
 
   const handleSearch = async () => {
     try {
-       setLoading(true)
-       const payload = {
-         searchTerm: searchQuery,
-         programId: selectedProgram,
-         fieldOfStudyId: selectedFieldOfStudy,
-         semesterId: selectedSemester,
-       };
+      setLoading(true);
+      const payload = {
+        searchTerm: searchQuery,
+        programId: selectedProgram,
+        fieldOfStudyId: selectedFieldOfStudy,
+        semesterId: selectedSemester,
+      };
       const response = await CourseService.searchCourse(payload);
-      // console.log("sully",response.data)
       setCourses(response.data.courses);
       setLoading(false);
+      setCurrentPage(1); // Reset to first page when search results change
     } catch (error) {
       setLoading(false);
       console.error("Error searching courses:", error);
     }
   };
 
+  useEffect(() => {
+    if (searchQuery !== "") {
+      handleSearch();
+    }
+  }, [searchQuery]);
+  useEffect(() => {
+    async function fetchCourses() {
+      try {
+        setLoading(true);
+        const response = await CourseService.getAllCourses({
+          programId: selectedProgram,
+          fieldOfStudyId: selectedFieldOfStudy,
+          semesterId: selectedSemester,
+        });
+        setCourses(response.data.courses);
+        setLoading(false);
+        setCurrentPage(1); // Reset to first page when filters change
+      } catch (error) {
+        setLoading(false);
+        console.error("Error fetching courses:", error);
+      }
+    }
+    fetchCourses();
+  }, [searchQuery === ""]);
+
+  // Calculate the start and end index of courses to display based on the current page
+  const startIndex = (currentPage - 1) * coursesPerPage;
+  const endIndex = Math.min(startIndex + coursesPerPage, courses.length);
+
+  // Get the courses to display for the current page
+  const currentCourses = courses.slice(startIndex, endIndex);
+
+  // Calculate the total number of pages based on the total number of courses and coursesPerPage
+  const totalPages = Math.ceil(courses.length / coursesPerPage);
+
+  // Handle pagination
+  const handlePagination = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <>
@@ -159,20 +201,23 @@ const CoursesSection = () => {
                     (program) => program?.program_name === selectedProgramName
                   );
                   setSelectedProgram(selectedProgram?._id);
-                  setSelectedFieldOfStudy("")
-                  setSelectedSemester("")
+                  setSelectedFieldOfStudy("");
+                  setSelectedSemester("");
                 }}
               />
               <Dropdown
                 name="Field Of Study"
                 value={selectedFieldOfStudy}
-                options={fieldOfStudy?.map((field) => field?.field_of_studyname)}
+                options={fieldOfStudy?.map(
+                  (field) => field?.field_of_studyname
+                )}
                 onSelect={(selectedFieldOfStudyName) => {
                   const selectedFieldOfStudy = fieldOfStudy?.find(
-                    (field) => field?.field_of_studyname === selectedFieldOfStudyName
+                    (field) =>
+                      field?.field_of_studyname === selectedFieldOfStudyName
                   );
                   setSelectedFieldOfStudy(selectedFieldOfStudy?._id);
-                  setSelectedSemester("")
+                  setSelectedSemester("");
                 }}
               />
               <Dropdown
@@ -187,23 +232,37 @@ const CoursesSection = () => {
                 }}
               />
               <div className="w-full md:w-[270px]">
-                <form className="max-w-md mx-auto" onChange={(e) => { handleSearch(); }}>
-                  <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
+                <form
+                  className="max-w-md mx-auto"
+                  onSubmit={(e) => e.preventDefault()} // Prevent default form submission
+                >
+                  <label
+                    htmlFor="default-search"
+                    className="mb-2 text-sm font-medium text-gray-900 sr-only"
+                  >
+                    Search
+                  </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <FaSearch className="w-4 h-4 text-gray-500 " aria-hidden="true" />
+                      <FaSearch
+                        className="w-4 h-4 text-gray-500"
+                        aria-hidden="true"
+                      />
                     </div>
                     <input
                       type="search"
                       id="default-search"
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)
-
-                      }
-                      className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault(); // Prevent default form submission
+                          handleSearch();
+                        }
+                      }}
+                      className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
                       placeholder="Search Course"
                     />
-                    {/* <button type="submit" className="text-white absolute end-1 bottom-1 bg-blue-500 hover:bg-blue-600   font-medium rounded-lg text-sm px-4 py-2 ">Search</button> */}
                   </div>
                 </form>
               </div>
@@ -213,25 +272,42 @@ const CoursesSection = () => {
 
         {/* Render courses using map */}
         <div className="flex justify-center">
-          <div className="grid gap-4 w-full sm:w-4/5 lg:w-3/5 mx-3 my-5 ">
-            {
-              loading?
-                  <div className="flex justify-center items-center h-[50vh] md:h-[70vh]"> 
-                  <CircularProgress/>
-                  </div> 
-                  :
-                  <>
-                  {courses.length === 0 ? (
-                  <p className="text-center text-gray-700 text-xl md:text-2xl  flex items-center justify-center h-[50vh]">
-                  No courses available
-                </p>
-                  ) : (
-                    courses.map((course, index) => (
-                      <CoursesCard key={index} course={course} />
-                    ))
-                  )}
-                </>
-            }
+          <div className="grid gap-4 w-full sm:w-4/5 lg:w-3/5 mx-3 my-5">
+            {loading ? (
+              <div className="flex justify-center items-center h-[50vh] md:h-[70vh]">
+                <CircularProgress />
+              </div>
+            ) : (
+              <>
+                {courses.length === 0 ? (
+                  <p className="text-center text-gray-700 text-xl md:text-2xl flex items-center justify-center h-[50vh]">
+                    No courses available
+                  </p>
+                ) : (
+                  currentCourses.map((course, index) => (
+                    <CoursesCard key={index} course={course} />
+                  ))
+                )}
+                <div className="flex justify-center mt-4">
+                  {Array.from(
+                    { length: totalPages },
+                    (_, index) => index + 1
+                  ).map((pageNumber) => (
+                    <button
+                      key={pageNumber}
+                      className={`px-3 py-1 mx-1 ${
+                        currentPage === pageNumber
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-200 text-gray-700"
+                      } rounded`}
+                      onClick={() => handlePagination(pageNumber)}
+                    >
+                      {pageNumber}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
