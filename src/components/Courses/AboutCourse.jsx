@@ -135,6 +135,21 @@ import { CircularProgress } from '@mui/material';
 
 
       fetchMedia();
+      const incrementCourseViewsCount = async () => {
+        try {
+          setLoading(true);
+          const response = await CourseService.incrementCourseViews();
+          
+        } catch (error) {
+          setLoading(false);
+          console.error(error);
+        }
+      };
+
+
+      incrementCourseViewsCount();
+
+
       
     }, []);
 

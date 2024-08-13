@@ -60,20 +60,20 @@ const Dashboard = () => {
   }, []);
 
   useEffect(()=>{
-    const fetchCountCourses = async () => {
+    const fetchCountCoursesVisits = async () => {
       try{
-        console.log("hi1!");
-        const response = await courseService.getAllCoursesOfCollege();
-        console.log("hi!",response);
-        const {courseCount}=response.data;
-        setCourseCount(courseCount);
+        // console.log("hi1!");
+        const response = await courseService.getCourseViews();
+        // console.log("hi!",response);
+        const {courseViews}=response.data;
+        setCourseCount(courseViews);
       }
       catch(err){
         console.log("Error in fetching courses",err);
       }
     };
 
-    fetchCountCourses();
+    fetchCountCoursesVisits();
 
   },[]);
 
@@ -140,7 +140,7 @@ const Dashboard = () => {
 
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
-            title="Total Courses"
+            title="Courses Explored"
             total={CourseCount}
             color="success"
             icon={
