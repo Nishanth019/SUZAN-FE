@@ -18,6 +18,11 @@ class UserService {
   getCurrentUser() {
     return axiosInstance.get(`${this.url}/api/users/currentuser`);
   }
+  getUserByEmail(email) {
+    return axiosInstance.get(`${this.url}/api/users/userbyemail`, {
+      params: { email },
+    });
+  }
 
     // Function to update user 
     updateUser( userData) {
@@ -26,11 +31,28 @@ class UserService {
         userData
       );
     }
+    updateUserRole( userData) {
+      return axiosInstance.put(
+        `${this.url}/api/users/updateuserrole`,
+        userData
+      );
+    }
 
   // Function to delete user
   deleteUser() {
     return axiosInstance.delete(
       `${this.url}/api/users/deleteuser`
+    );
+  }
+
+  getUsersCount(){
+    return axiosInstance.get(
+      `${this.url}/api/users/getuserscount`
+    );
+  }
+  getAdminsCount(){
+    return axiosInstance.get(
+      `${this.url}/api/users/getadminscount`
     );
   }
     

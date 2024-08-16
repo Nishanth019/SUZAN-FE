@@ -69,7 +69,7 @@ const AdminCourseNavbarProgramComponent = () => {
       console.error("Error fetching programs:", error);
     }
   };
-  console.log(70, programs)
+  // console.log(70, programs)
   const fetchCourseCountForProgram = async (programId) => {
     try {
       // console.log(123456);

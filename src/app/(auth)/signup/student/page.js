@@ -48,15 +48,15 @@ const StudentSignup = () => {
     try {
       const response = await collegeService.getAllVerifiedColleges();
       // Check if the request was successful
-      console.log(1,response);
+      // console.log(1,response);
       if (response.data.success) {
         // Extract colleges array from the response
         const colleges = response.data.colleges;
 
         // Now you can set the colleges state or use it as needed
         setColleges(colleges);
-        console.log(2, colleges);
-        console.log(3, colleges.college_name);
+        // console.log(2, colleges);
+        // console.log(3, colleges.college_name);
       } else {
         // Handle the case where the request was not successful
         console.error("Error fetching colleges:", response.data.error);
@@ -70,7 +70,7 @@ const StudentSignup = () => {
     fetchColleges();
   }, []);
   const initialValues = {
-    college_name: "", // Initialize college_name to an empty string
+    college_name: "Select a college", // Initialize college_name to an empty string
     name: "",
     email: "",
     password: "",
@@ -372,23 +372,7 @@ const StudentSignup = () => {
                       {show ? "Show" : "Hide"}
                     </p>
                   </div>
-                  <div className="w-full text-right">
-                    {canResend ? (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          resendOtp(e);
-                        }}
-                        className="text-xs text-blue-600  text-right"
-                      >
-                        Resend OTP
-                      </button>
-                    ) : (
-                      <p className="text-xs leading-tight text-[#4F4F4F]">
-                        {timer} s
-                      </p>
-                    )}
-                  </div>
+            
                 </div>
 
                 <div className=" flex gap-4 flex-col">
