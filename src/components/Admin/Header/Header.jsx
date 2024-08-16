@@ -8,17 +8,19 @@ import { MdOutlineMenu } from "react-icons/md";
 import { useGlobalContext } from "@/context/AuthContext";
 import { IoIosArrowDown } from "react-icons/io";
 import { Button } from "radix-ui";
+import authService from "@/services/auth.service";
+import { useRouter } from "next/navigation";
 
 const Header = (props) => {
   
   const [openProfile, setOpenProfile] = useState(false);
 
-  const { isAuth, user } = useGlobalContext();
+  const { isAuth, user ,setIsAuth,setUser} = useGlobalContext();
 
-  console.log(22,user,isAuth);
+  // console.log(22,user,isAuth);
 
   const profileRef = useRef(null);
-
+  const router = useRouter();
   const handleSignOut = async () => {
     try {
       await authService.signout(); 
