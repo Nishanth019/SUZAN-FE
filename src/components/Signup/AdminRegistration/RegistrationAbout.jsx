@@ -56,7 +56,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
             <h1 className="text-neutral-500">College Email domain</h1>
             <input
               type="text"
-              placeholder="Ex: @iiitdmj.ac.in"
+              placeholder="Ex: iiitdmj.ac.in "
               name="email_domain"
               value={details.email_domain}
               onChange={handleChange}

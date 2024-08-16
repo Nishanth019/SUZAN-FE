@@ -12,7 +12,7 @@ const ClientProvider = ({ children }) => {
   console.log(2, pathname);
   return (
     <>
-      {pathname && !pathname.includes("admin") ? (
+      {pathname && !pathname.includes("admin-dashboard") ? (
         (pathname.includes("signin") ||
           pathname.includes("signup") ||
           pathname.includes("student") ||

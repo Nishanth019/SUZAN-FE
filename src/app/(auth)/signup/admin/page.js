@@ -307,23 +307,7 @@ const AdminSignup = () => {
                       {show ? "Show" : "Hide"}
                     </p>
                   </div>
-                  <div className="w-full text-right">
-                    {canResend ? (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          resendOtp(e);
-                        }}
-                        className="text-xs text-blue-600  text-right"
-                      >
-                        Resend OTP
-                      </button>
-                    ) : (
-                      <p className="text-xs leading-tight text-[#4F4F4F]">
-                        {timer} s
-                      </p>
-                    )}
-                  </div>
+                 
                 </div>
 
                 <div className=" flex gap-4 flex-col">

@@ -231,6 +231,10 @@ const StudentSignup = () => {
                         className="appearance-none w-full rounded px-4 leading-tight focus:outline-none focus:border-blue-500 max-sm:text-sm"
                       >
                         {/* Populate select options */}
+                        <option
+                          >
+                            Select College
+                          </option>
                         {colleges.map((college) => (
                           <option
                             key={college._id}
@@ -368,23 +372,7 @@ const StudentSignup = () => {
                       {show ? "Show" : "Hide"}
                     </p>
                   </div>
-                  <div className="w-full text-right">
-                    {canResend ? (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          resendOtp(e);
-                        }}
-                        className="text-xs text-blue-600  text-right"
-                      >
-                        Resend OTP
-                      </button>
-                    ) : (
-                      <p className="text-xs leading-tight text-[#4F4F4F]">
-                        {timer} s
-                      </p>
-                    )}
-                  </div>
+            
                 </div>
 
                 <div className=" flex gap-4 flex-col">

@@ -2,7 +2,7 @@ import React from "react";
 import DefaultLayout from "@/components/Admin/Layouts/DefaultLayout";
 import AdminAccsess from "@/components/Admin/Access/AdminAccsess";
 
-const AdminAccess = () => {
+const ManageAdmin = () => {
   return (
     <DefaultLayout>
       <AdminAccsess />
@@ -10,4 +10,4 @@ const AdminAccess = () => {
   );
 };
 
-export default AdminAccess;
+export default ManageAdmin;
