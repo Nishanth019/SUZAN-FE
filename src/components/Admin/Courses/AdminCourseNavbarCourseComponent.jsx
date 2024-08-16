@@ -1175,7 +1175,7 @@ const AdminCourseNavbarCourseComponent = () =>
                  type="number"
                  value={credits}
                  onChange={(e) => setCredits(e.target.value)}
-                 placeholder="Data Structures and Algorithms"
+                 placeholder="ex:4"
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
