@@ -1,20 +1,36 @@
-
 import Link from "next/link";
 import { useGlobalContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
-    const router = useRouter();
-    
+  const router = useRouter();
   const { isAuth } = useGlobalContext();
+  const [errors, setErrors] = useState({});
 
   if (isAuth) {
     router.push("/");
   }
 
-
   const handleChange = (e) => {
-    setDetails({ ...details, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // Pincode validation logic
+    if (name === "pincode") {
+      if (!/^\d{6}$/.test(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          pincode: "Please enter a valid 6-digit pincode",
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          pincode: "",
+        }));
+      }
+    }
+
+    setDetails({ ...details, [name]: value });
   };
 
   const handleCheckboxChange = (e) => {
@@ -23,7 +39,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 ">
-      <div className="flex  flex-col items-center gap-4 w-full mt-4">
+      <div className="flex flex-col items-center gap-4 w-full mt-4">
         <div className="w-full md:flex-1">
           <h1 className="text-neutral-500">College Name</h1>
           <input
@@ -37,7 +53,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
         </div>
         <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
           <div className="w-full md:flex-1">
-            <h1 className="text-neutral-500">College Email domain </h1>
+            <h1 className="text-neutral-500">College Email domain</h1>
             <input
               type="text"
               placeholder="Ex: iiitdmj.ac.in "
@@ -56,7 +72,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
               name="street_name"
               value={details.street_name}
               onChange={handleChange}
-              className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
             />
           </div>
         </div>
@@ -69,7 +85,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
               name="city"
               value={details.city}
               onChange={handleChange}
-              className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
             />
           </div>
           <div className="w-full md:flex-1">
@@ -80,7 +96,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
               name="state"
               value={details.state}
               onChange={handleChange}
-              className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
             />
           </div>
         </div>
@@ -93,7 +109,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
               name="country"
               value={details.country}
               onChange={handleChange}
-              className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
             />
           </div>
           <div className="w-full md:flex-1">
@@ -104,8 +120,11 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
               name="pincode"
               value={details.pincode}
               onChange={handleChange}
-              className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className={`border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg ${
+                errors.pincode ? "border-red-500" : ""
+              }`}
             />
+            <p className="text-xs text-red-500 m-1">{errors.pincode}</p>
           </div>
         </div>
       </div>
@@ -130,7 +149,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
             name="branch"
             value={details.branch}
             onChange={handleChange}
-            className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
           />
         </div>
       </div>
@@ -143,7 +162,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
             placeholder="Enter Your college Roll Number"
             value={details.roll_no}
             onChange={handleChange}
-            className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
           />
         </div>
         <div className="w-full md:flex-1">
@@ -154,12 +173,12 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
             placeholder="Enter Your Batch"
             value={details.batch}
             onChange={handleChange}
-            className="border w-full  px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
           />
         </div>
       </div>
 
-      <div className="flex  justify-start items-center text-center gap-4">
+      <div className="flex justify-start items-center text-center gap-4">
         <input
           type="checkbox"
           id="terms-condition"
@@ -167,14 +186,14 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
           onChange={handleCheckboxChange}
           className="w-[18px] h-[18px] mt-6 mb-6"
         />
-        <p className=" text-[14px]">
+        <p className="text-[14px]">
           I agree to{" "}
           <Link
             href="/terms"
             className="text-bold text-green-600 cursor-pointer"
           >
             Terms & Conditions
-          </Link>{" "}
+          </Link>
         </p>
       </div>
     </div>
