@@ -211,8 +211,8 @@ function ProfileComponent() {
             >
               Edit College 
             </button>
-
           ) : (
+             userData.role === "admin" &&
             <button
               onClick={() => {
                 setIsEditCollegeDetails(true);
