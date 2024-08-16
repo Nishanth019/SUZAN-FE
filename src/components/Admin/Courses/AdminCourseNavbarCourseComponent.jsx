@@ -511,91 +511,114 @@ const AdminCourseNavbarCourseComponent = () =>
        }
      };
 
-     const handleAddCourse = async (e) => {
-       e.preventDefault();
-       try {
-         console.log("sully");
-         if (formSelectedProgram.length === 0) {
-           toast.error("Please select Program", {
-             position: "top-center",
-             autoClose: 5000,
-             hideProgressBar: false,
-             closeOnClick: true,
-             pauseOnHover: true,
-             draggable: true,
-             progress: undefined,
-             theme: "colored",
-             // transition: Bounce,
-           });
-           return;
-         }
-         if (formSelectedFieldOfStudy.length === 0) {
-           toast.error("Please select Field Of Study", {
-             position: "top-center",
-             autoClose: 5000,
-             hideProgressBar: false,
-             closeOnClick: true,
-             pauseOnHover: true,
-             draggable: true,
-             progress: undefined,
-             theme: "colored",
-             // transition: Bounce,
-           });
-           return;
-         }
-         if (formSelectedSemester.length === 0) {
-           toast.error("Please select Semester", {
-             position: "top-center",
-             autoClose: 5000,
-             hideProgressBar: false,
-             closeOnClick: true,
-             pauseOnHover: true,
-             draggable: true,
-             progress: undefined,
-             theme: "colored",
-             // transition: Bounce,
-           });
-           return;
-         }
-         setButtonLoading(true);
-         const data = {
-           program: formSelectedProgram,
-           field_of_study: formSelectedFieldOfStudy,
-           semester: formSelectedSemester,
-           course_name,
-           course_code,
-           course_type,
-           credits,
-           instructor_name,
-           instructor_photo,
-           syllabus,
-           resource_links,
-           resource_pdfs,
-           pyq_links,
-           pyq_pdfs,
-         };
-         console.log(11111, data);
-         const response = await CourseService.createCourse(data);
-         setButtonLoading(false);
-         console.log("cheeku", response.data);
-         toast.success(response?.data?.message, {
-           position: "top-center",
-           autoClose: 5000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           progress: undefined,
-           theme: "colored",
-           // transition: Bounce,
-         });
-         fetchCourses();
-         closeModal();
-       } catch (err) {
-         setButtonLoading(false);
-         console.error("Error searching courses:", err);
-       }
-     };
+const handleAddCourse = async (e) => {
+  e.preventDefault();
+
+  try {
+    // Validate required fields
+    if (formSelectedProgram.length === 0) {
+      toast.error("Please select Program", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
+
+    if (formSelectedFieldOfStudy.length === 0) {
+      toast.error("Please select Field Of Study", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
+
+    if (formSelectedSemester.length === 0) {
+      toast.error("Please select Semester", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
+
+    setButtonLoading(true);
+
+     const filteredSyllabus = syllabus.trim() !== "" ? syllabus : null;
+    // Filter out empty resource links
+    const filteredResourceLinks = resource_links.filter(
+      (rsc) => rsc.link_name.trim() !== "" && rsc.link_url.trim() !== ""
+    );
+
+    // Filter out empty resource PDFs
+    const filteredResourcePdfs = resource_pdfs.filter(
+      (pdf) => pdf.pdf_name.trim() !== "" && pdf.pdf_url
+    );
+
+    // Filter out empty PYQ links
+    const filteredPyqLinks = pyq_links.filter(
+      (pyq) => pyq.link_name.trim() !== "" && pyq.link_url.trim() !== ""
+    );
+
+    // Filter out empty PYQ PDFs
+    const filteredPyqPdfs = pyq_pdfs.filter(
+      (pdf) => pdf.pdf_name.trim() !== "" && pdf.pdf_url
+    );
+
+    const data = {
+      program: formSelectedProgram,
+      field_of_study: formSelectedFieldOfStudy,
+      semester: formSelectedSemester,
+      course_name,
+      course_code,
+      course_type,
+      credits,
+      instructor_name,
+      instructor_photo,
+      syllabus:filteredSyllabus,
+      resource_links: filteredResourceLinks,
+      resource_pdfs: filteredResourcePdfs,
+      pyq_links: filteredPyqLinks,
+      pyq_pdfs: filteredPyqPdfs,
+    };
+
+    const response = await CourseService.createCourse(data);
+    setButtonLoading(false);
+
+    toast.success(response?.data?.message, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+
+    fetchCourses();
+    closeModal();
+  } catch (err) {
+    setButtonLoading(false);
+    console.error("Error adding course:", err);
+  }
+};
 
      const handleEditCourse = async (e) => {
        e.preventDefault();
@@ -1159,7 +1182,7 @@ const AdminCourseNavbarCourseComponent = () =>
                  type="text"
                  value={course_type}
                  onChange={(e) => setCourse_type(e.target.value)}
-                 placeholder="Compulsory "
+                 placeholder="compulsory or elective"
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
