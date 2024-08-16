@@ -231,6 +231,10 @@ const StudentSignup = () => {
                         className="appearance-none w-full rounded px-4 leading-tight focus:outline-none focus:border-blue-500 max-sm:text-sm"
                       >
                         {/* Populate select options */}
+                        <option
+                          >
+                            Select College
+                          </option>
                         {colleges.map((college) => (
                           <option
                             key={college._id}

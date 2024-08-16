@@ -265,7 +265,7 @@ function ProfileComponent() {
                 className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer"
               >
                 <Link
-                  href="/admin"
+                  href="/admin-dashboard"
                 >
                   Admin
                 </Link>

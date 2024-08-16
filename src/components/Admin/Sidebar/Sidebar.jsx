@@ -96,11 +96,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
-              {/* admin dashboard */}
+              {/* admin-dashboard dashboard */}
               <li>
                 <Link
-                  href="/admin"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname === "/admin" &&
+                  href="/admin-dashboard"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname === "/admin-dashboard" &&
                     "bg-[#333A48] "
                     }`}
                 >
@@ -111,7 +111,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               {/* Courses */}
               <li>
                 <Link
-                  href="/admin/courses"
+                  href="/admin-dashboard/courses"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("courses") &&
                     "bg-[#333A48] "
                     }`}
@@ -123,7 +123,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               {/* Clubs */}
               <li>
                 <Link
-                  href="/admin/clubs"
+                  href="/admin-dashboard/clubs"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("clubs") && "bg-[#333A48] "
                     }`}
                 >
@@ -134,7 +134,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               {/* Events */}
               <li>
                 <Link
-                  href="/admin/events"
+                  href="/admin-dashboard/events"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("events") && "bg-[#333A48] "
                     }`}
                 >
@@ -145,7 +145,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               {/* Nearby Places */}
               <li>
                 <Link
-                  href="/admin/nearby-places"
+                  href="/admin-dashboard/nearby-places"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("nearby-places") && "bg-[#333A48] "
                     }`}
                 >
@@ -155,7 +155,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </li>
               <li>
                 <Link
-                  href="/admin/feedback"
+                  href="/admin-dashboard/feedback"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48]  ${pathname.includes("feedback") && "bg-[#333A48] "
                     }`}
                 >
@@ -176,7 +176,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               {/* <!-- Menu Item Chart --> */}
               <li>
                 <Link
-                  href="/admin/students-list"
+                  href="/admin-dashboard/students-list"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${pathname.includes("students-list") && "bg-[#333A48] "
                     }`}
                 >
@@ -186,11 +186,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
               <li>
                 <Link
-                  href="/admin/admin-requests"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${pathname.includes("admin-requests") && "bg-[#333A48] "
+                  href="/admin-dashboard/manage-admins"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${pathname.includes("manage-admins") && "bg-[#333A48] "
                     }`}
                 >
-                  Admin Requests
+                  manage-admins
                 </Link>
               </li>
 
