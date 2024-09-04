@@ -11,7 +11,8 @@ class AuthService {
   constructor() {
     // this.url=BACKEND_URL;
     // this.url = "http://localhost:8000";
-    this.url = "https://suzan-be-mmz3.onrender.com";
+    // this.url = "https://suzan-be-mmz3.onrender.com";
+    this.url = "https://suzan-be-production.onrender.com";
   }
 
   signIn(data) {

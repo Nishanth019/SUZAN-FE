@@ -11,7 +11,8 @@ class FeedbackService {
   constructor() {
     // this.url = BACKEND_URL;
     // this.url = "http://localhost:8000"; // Backend URL
-    this.url = "https://suzan-be-mmz3.onrender.com"; // Backend URL if deployed
+    // this.url = "https://suzan-be-mmz3.onrender.com"; // Backend URL if deployed
+    this.url = "https://suzan-be-production.onrender.com";
   } 
 
   createFeedback(data) {
@@ -20,7 +21,6 @@ class FeedbackService {
   getAllFeedbacks() {
     return axiosInstance.get(`${this.url}/api/feedback/`);
   }
-
 
 }
 
