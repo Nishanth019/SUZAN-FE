@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Document, Page } from "react-pdf";
-
+import test from './test.pdf'
 function ViewPdf({ pdf }) {
   const [numPages, setNumPages] = useState(null);
 
@@ -32,7 +32,7 @@ function ViewPdf({ pdf }) {
       </div>
       <div className="bg-gray-300 mt-4 p-2 md:p-4 w-full h-full ">
         <Document
-          file={pdf.url}
+          file={test}
           onLoadSuccess={onDocumentLoadSuccess}
           loading={<div>Loading PDF...</div>}
         >
