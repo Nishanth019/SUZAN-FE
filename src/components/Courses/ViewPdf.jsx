@@ -32,7 +32,7 @@ function ViewPdf({ pdf }) {
       </div>
       <div className="bg-gray-300 mt-4 p-2 md:p-4 w-full h-full ">
         <Document
-          file={test}
+          file={pdf.url}
           onLoadSuccess={onDocumentLoadSuccess}
           loading={<div>Loading PDF...</div>}
         >
