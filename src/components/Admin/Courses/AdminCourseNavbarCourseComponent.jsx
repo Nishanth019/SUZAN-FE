@@ -641,11 +641,12 @@ const handleAddCourse = async (e) => {
            pyq_pdfs: updatedPyq_pdfs,
          };
 
-         console.log(1001, data);
+        //  console.log(1001, data);
 
          const courseId = editCourseCode; // Assuming you have a selectedCourseId state variable for the course being edited
-         console.log(1002, courseId);
+        //  console.log(1002, courseId);
          const response = await CourseService.updateCourse(courseId, data);
+        //  console.log(1003, response);
          setButtonLoading(false);
          toast.success(response?.data?.message, {
            position: "top-center",
@@ -911,7 +912,7 @@ const handleAddCourse = async (e) => {
          const formData = new FormData();
          formData.append("file", file);
          const response = await CourseService.uploadFile(formData);
-         console.log(response.data.file);
+        //  console.log(response.data.file);
          setSyllabus(response?.data?.file);
          setButtonLoading1(false);
          toast.success(response.data.message, {
@@ -1608,12 +1609,12 @@ const handleAddCourse = async (e) => {
                  {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
                  {buttonLoading ? (
                    <>
-                     <Button variant="contained">Add Course</Button>{" "}
+                     <Button variant="outlined">Add Course</Button>{" "}
                      <CircularProgress className="ml-2" size={15} />
                    </>
                  ) : (
                    <>
-                     <Button type="submit" variant="contained">
+                     <Button type="submit" variant="outlined">
                        Add Course
                      </Button>
                    </>
@@ -1985,7 +1986,7 @@ const handleAddCourse = async (e) => {
                    <Button
                      onClick={handleEditAddResourceLink}
                      style={{ textTransform: "none" }}
-                     variant="contained"
+                     variant="outlined"
                      size="small"
                      // startIcon={<DeleteIcon />}
                    >
@@ -2076,7 +2077,7 @@ const handleAddCourse = async (e) => {
                    </div>
                  </div>
                )}
-               {/* new links to add */}
+               {/* new pdfs to add */}
                <div>
                  <input
                    type="text"
@@ -2117,7 +2118,7 @@ const handleAddCourse = async (e) => {
                    <Button
                      onClick={handleEditAddResourcePdf}
                      style={{ textTransform: "none" }}
-                     variant="contained"
+                     variant="outlined"
                      size="small"
                      // startIcon={<DeleteIcon />}
                    >
@@ -2204,7 +2205,7 @@ const handleAddCourse = async (e) => {
                    <Button
                      onClick={handleEditAddPyqLink}
                      style={{ textTransform: "none" }}
-                     variant="contained"
+                     variant="outlined"
                      size="small"
                    >
                      ADD
@@ -2320,7 +2321,7 @@ const handleAddCourse = async (e) => {
                      onClick={handleEditAddPyqPdf}
                      style={{ textTransform: "none" }}
                      className=" mb-5 "
-                     variant="contained"
+                     variant="outlined"
                      size="small"
                    >
                      ADD
@@ -2330,7 +2331,7 @@ const handleAddCourse = async (e) => {
 
                <div className="pb-2 pt-4">
                  {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-                 <Button type="submit" variant="contained">
+                 <Button type="submit" variant="outlined">
                    Update Course
                  </Button>
                </div>
@@ -2493,7 +2494,7 @@ const handleAddCourse = async (e) => {
                  Syllabus (Pdf)
                </label>
                {/* displaying available links */}
-               {updatedSyllabus.length > 0 && (
+               {updatedSyllabus.length > 0 ? (
                  <div className="mb-5">
                    <div className="space-y-4">
                      <div>
@@ -2549,6 +2550,10 @@ const handleAddCourse = async (e) => {
                      </div>
                    </div>
                  </div>
+               ) : (
+                 <p className="text-center text-gray-500 text-sm" >
+                   No syllabus available
+                 </p>
                )}
 
                <label
@@ -2558,7 +2563,7 @@ const handleAddCourse = async (e) => {
                  Resources (Link)
                </label>
                {/* displaying available links */}
-               {updatedResource_links.length > 0 && (
+               {updatedResource_links.length > 0 ? (
                  <div className="mb-5">
                    <div className="space-y-4">
                      {updatedResource_links.map((item, index) => (
@@ -2594,7 +2599,9 @@ const handleAddCourse = async (e) => {
                      ))}
                    </div>
                  </div>
-               )}
+               ):(<p className="text-center text-gray-500 text-sm" >
+                   No Resource links available
+                 </p>)}
 
                <label
                  htmlFor="resource_pdfs"
@@ -2603,7 +2610,7 @@ const handleAddCourse = async (e) => {
                  Resources (Pdf)
                </label>
                {/* displaying available links */}
-               {updatedResource_pdfs.length > 0 && (
+               {updatedResource_pdfs.length > 0 ? (
                  <div className="mb-5">
                    <div className="space-y-4">
                      {updatedResource_pdfs.map((item, index) => (
@@ -2663,7 +2670,13 @@ const handleAddCourse = async (e) => {
                      ))}
                    </div>
                  </div>
-               )}
+               ):
+               (
+                <p className="text-center text-gray-500 text-sm" >
+                   No Resource pdf available
+                 </p>
+               )
+               }
 
                <label
                  htmlFor="pyq_links"
@@ -2672,7 +2685,7 @@ const handleAddCourse = async (e) => {
                  Previous Year Questions (Link)
                </label>
                {/* displaying available links */}
-               {updatedPyq_links.length > 0 && (
+               {updatedPyq_links.length > 0 ? (
                  <div className="mb-5">
                    <div className="space-y-4">
                      {updatedPyq_links.map((item, index) => (
@@ -2708,7 +2721,10 @@ const handleAddCourse = async (e) => {
                      ))}
                    </div>
                  </div>
-               )}
+               ):
+               (<p className="text-center text-gray-500 text-sm" >
+                   No PYQ links available
+                 </p>)}
 
                <label
                  htmlFor="pyq_links"
@@ -2717,7 +2733,7 @@ const handleAddCourse = async (e) => {
                  Previous Year Questions (Pdf)
                </label>
                {/* displaying available links */}
-               {updatedPyq_pdfs.length > 0 && (
+               {updatedPyq_pdfs.length > 0 ? (
                  <div className="space-y-4">
                    <div className="space-y-4">
                      {updatedPyq_pdfs.map((item, index) => (
@@ -2777,7 +2793,9 @@ const handleAddCourse = async (e) => {
                      ))}
                    </div>
                  </div>
-               )}
+               ):(<p className="text-center text-gray-500 text-sm" >
+                   No PYQ pdf available
+                 </p>)}
              </div>
            </Box>
          </Modal>
@@ -2800,7 +2818,7 @@ const handleAddCourse = async (e) => {
                <Button
                  onClick={handleDeleteCourse}
                  className="text-white bg-red-500"
-                 variant="contained"
+                 variant="outlined"
                >
                  Delete
                </Button>
