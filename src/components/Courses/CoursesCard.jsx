@@ -46,11 +46,7 @@ const CoursesCard = ({ course }) => {
             <span className="text-center">{course.course_type}</span>
             <div className="w-auto h-auto flex-grow" />
           </div>
-          <div className="flex px-3 py-1 items-center rounded-lg bg-gray-200">
-            <div className="w-auto h-auto flex-grow" />
-            <span className="text-center w-auto">{course.instructor_name}</span>
-            <div className="w-auto h-auto flex-grow" />
-          </div>
+         
         </div>
       </div>
     </div>

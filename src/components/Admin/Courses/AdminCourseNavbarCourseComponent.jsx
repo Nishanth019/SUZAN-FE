@@ -44,7 +44,6 @@ const AdminCourseNavbarCourseComponent = () =>
    const [viewModalOpen, setViewModalOpen] = useState(false);
    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
    const [editModalOpen, setEditModalOpen] = useState(false);
-
    const [pdfModalOpen, setPdfModalOpen] = useState(false); // State to control modal visibility
    const [selectedPdf, setSelectedPdf] = useState(null);
    // Dropdown selected useStates
@@ -77,8 +76,8 @@ const AdminCourseNavbarCourseComponent = () =>
    const [course_code, setCourse_code] = useState("");
    const [course_type, setCourse_type] = useState("");
    const [credits, setCredits] = useState(0);
-   const [instructor_name, setInstructor_name] = useState("");
-   const [instructor_photo, setInstructor_photo] = useState("");
+  //  const [instructor_name, setInstructor_name] = useState("");
+  //  const [instructor_photo, setInstructor_photo] = useState("");
    const [syllabus, setSyllabus] = useState("");
    const [resource_links, setResources_link] = useState([
      { link_name: "", link_url: "" },
@@ -87,6 +86,7 @@ const AdminCourseNavbarCourseComponent = () =>
      { pdf_name: "", pdf_url: "" },
    ]);
    const [pyq_links, setPyq_link] = useState([{ link_name: "", link_url: "" }]);
+   const [video_links, setVideo_link] = useState([{ link_name: "", link_url: "" }]);
    const [pyq_pdfs, setPyq_pdf] = useState([{ pdf_name: "", pdf_url: "" }]);
 
    // Updated course input useStates
@@ -98,8 +98,8 @@ const AdminCourseNavbarCourseComponent = () =>
    const [updatedCourse_code, setUpdatedCourse_code] = useState("");
    const [updatedCourse_type, setUpdatedCourse_type] = useState("");
    const [updatedCredits, setUpdatedCredits] = useState(0);
-   const [updatedInstructor_name, setUpdatedInstructor_name] = useState("");
-   const [updatedInstructor_photo, setUpdatedInstructor_photo] = useState("");
+  //  const [updatedInstructor_name, setUpdatedInstructor_name] = useState("");
+  //  const [updatedInstructor_photo, setUpdatedInstructor_photo] = useState("");
    const [updatedSyllabus, setUpdatedSyllabus] = useState("");
    const [updatedResource_links, setUpdatedResource_links] = useState([
      { link_name: "", link_url: "" },
@@ -108,6 +108,9 @@ const AdminCourseNavbarCourseComponent = () =>
      { pdf_name: "", pdf_url: "" },
    ]);
    const [updatedPyq_links, setUpdatedPyq_links] = useState([
+     { link_name: "", link_url: "" },
+   ]);
+   const [updatedVideo_links, setUpdatedVideo_links] = useState([
      { link_name: "", link_url: "" },
    ]);
    const [updatedPyq_pdfs, setUpdatedPyq_pdfs] = useState([
@@ -121,6 +124,8 @@ const AdminCourseNavbarCourseComponent = () =>
    const [editFormResourcePdfUrl, setEditFormResourcePdfUrl] = useState("");
    const [editFormPyqLinkName, setEditFormPyqLinkName] = useState("");
    const [editFormPyqLinkUrl, setEditFormPyqLinkUrl] = useState("");
+   const [editFormVideoLinkName, setEditFormVideoLinkName] = useState("");
+   const [editFormVideoLinkUrl, setEditFormVideoLinkUrl] = useState("");
    const [editFormPyqPdfName, setEditFormPyqPdfName] = useState("");
    const [editFormPyqPdfUrl, setEditFormPyqPdfUrl] = useState("");
 
@@ -257,8 +262,8 @@ const AdminCourseNavbarCourseComponent = () =>
        setUpdatedCourse_code(response?.data?.course?.course_code);
        setUpdatedCourse_type(response?.data?.course?.course_type);
        setUpdatedCredits(response?.data?.course?.credits);
-       setUpdatedInstructor_name(response?.data?.course?.instructor_name);
-       setUpdatedInstructor_photo(response?.data?.course?.instructor_photo);
+      //  setUpdatedInstructor_name(response?.data?.course?.instructor_name);
+      //  setUpdatedInstructor_photo(response?.data?.course?.instructor_photo);
 
        fetchMedia(response?.data?.course?._id);
        setLoading(false);
@@ -298,6 +303,11 @@ const AdminCourseNavbarCourseComponent = () =>
        setUpdatedPyq_links(
          response?.data?.pyqLinks || [{ link_name: "", link_url: "" }]
        );
+      //  console.log(222,response.data)
+       setUpdatedVideo_links(
+         response?.data?.videoLinks || [{ link_name: "", link_url: "" }]
+        );
+        // console.log(333,updatedVideo_links)
 
        // Set updated PYQ PDFs
        setUpdatedPyq_pdfs(
@@ -321,6 +331,11 @@ const AdminCourseNavbarCourseComponent = () =>
      }
      if (field === "pyq_links") {
        setUpdatedPyq_links((prevLinks) =>
+         prevLinks.filter((_, i) => i !== index)
+       );
+     }
+     if (field === "video_links") {
+       setUpdatedVideo_links((prevLinks) =>
          prevLinks.filter((_, i) => i !== index)
        );
      }
@@ -413,6 +428,29 @@ const AdminCourseNavbarCourseComponent = () =>
      setEditFormPyqLinkUrl("");
      setButtonLoading(false);
    };
+   const handleEditAddVideoLink = (e) => {
+     if (editFormVideoLinkName.length === 0 || editFormVideoLinkUrl.length === 0) {
+       toast.error("Enter both details", {
+         position: "top-center",
+         autoClose: 3000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+         theme: "colored",
+       });
+       return;
+     }
+     setButtonLoading(true);
+     setUpdatedVideo_links([
+       ...updatedVideo_links,
+       { link_name: editFormVideoLinkName, link_url: editFormVideoLinkUrl },
+     ]);
+     setEditFormVideoLinkName("");
+     setEditFormVideoLinkUrl("");
+     setButtonLoading(false);
+   };
    const handleEditAddPyqPdf = (e) => {
        if (editFormPyqPdfName.length === 0 || editFormPyqPdfUrl.length === 0) {
          toast.error("Enter both details", {
@@ -450,6 +488,7 @@ const AdminCourseNavbarCourseComponent = () =>
            setEditFormPyqPdfUrl(response.data.file);
          } else if (field === "syllabus_pdf") {
            setUpdatedSyllabus(response.data.file);
+           
          }
          setButtonLoading1(false);
 
@@ -471,45 +510,64 @@ const AdminCourseNavbarCourseComponent = () =>
      };
 
      //upload edit picture
-     const handleUploadEditPicture = async (e) => {
-       const file = e.target.files[0];
-       console.log(23, file);
-       try {
-         setLoading(true);
-         const formData = new FormData();
-         formData.append("picture", file);
-         const response = await CourseService.uploadPicture(formData);
-         setUpdatedInstructor_photo(response?.data?.picture);
-         setLoading(false);
-         toast.success(response.data.message, {
-           position: "top-center",
-           autoClose: 5000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           progress: undefined,
-           theme: "colored",
-         });
-       } catch (error) {
-         setLoading(false);
-         console.error("Error updating user:", error);
-       }
+    //  const handleUploadEditPicture = async (e) => {
+    //    const file = e.target.files[0];
+    //    console.log(23, file);
+    //    try {
+    //      setLoading(true);
+    //      const formData = new FormData();
+    //      formData.append("picture", file);
+    //      const response = await CourseService.uploadPicture(formData);
+    //      setUpdatedInstructor_photo(response?.data?.picture);
+    //      setLoading(false);
+    //      toast.success(response.data.message, {
+    //        position: "top-center",
+    //        autoClose: 5000,
+    //        hideProgressBar: false,
+    //        closeOnClick: true,
+    //        pauseOnHover: true,
+    //        draggable: true,
+    //        progress: undefined,
+    //        theme: "colored",
+    //      });
+    //    } catch (error) {
+    //      setLoading(false);
+    //      console.error("Error updating user:", error);
+    //    }
+    //  };
+ const handleSearch = async () => {
+   try {
+     setLoading(true);
+     const payload = {
+       searchTerm: searchQuery,
+       programId: selectedProgram,
+       fieldOfStudyId: selectedFieldOfStudy,
+       semesterId: selectedSemester,
      };
+     const response = await CourseService.searchCourse(payload);
+     setCourses(response.data.courses);
+     setLoading(false);
 
-     const handleSearch = async () => {
-       try {
-         // console.log("sully")
-         setLoading(true);
-         const response = await CourseService.searchCourse(searchQuery);
-         // console.log("cheeku", response.data)
-         setCourses(response.data.courses);
-         setLoading(false);
-       } catch (error) {
-         setLoading(false);
-         console.error("Error searching courses:", error);
-       }
-     };
+   } catch (error) {
+     setLoading(false);
+     console.error("Error searching courses:", error);
+   }
+ };
+    //  const handleSearch = async () => {
+    //    try {
+    //      // console.log("sully")
+       
+    //      setLoading(true);
+    //      const response = await CourseService.searchCourse(searchQuery);
+    //      // console.log("cheeku", response.data)
+    //      setCourses(response.data.courses);
+    //      console.log("cheeku",courses )
+    //      setLoading(false);
+    //    } catch (error) {
+    //      setLoading(false);
+    //      console.error("Error searching courses:", error);
+    //    }
+    //  };
 
 const handleAddCourse = async (e) => {
   e.preventDefault();
@@ -575,6 +633,9 @@ const handleAddCourse = async (e) => {
     const filteredPyqLinks = pyq_links.filter(
       (pyq) => pyq.link_name.trim() !== "" && pyq.link_url.trim() !== ""
     );
+    const filteredVideoLinks = video_links.filter(
+      (video) => video.link_name.trim() !== "" && video.link_url.trim() !== ""
+    );
 
     // Filter out empty PYQ PDFs
     const filteredPyqPdfs = pyq_pdfs.filter(
@@ -589,12 +650,13 @@ const handleAddCourse = async (e) => {
       course_code,
       course_type,
       credits,
-      instructor_name,
-      instructor_photo,
+      // instructor_name,
+      // instructor_photo,
       syllabus:filteredSyllabus,
       resource_links: filteredResourceLinks,
       resource_pdfs: filteredResourcePdfs,
       pyq_links: filteredPyqLinks,
+      video_links: filteredVideoLinks,
       pyq_pdfs: filteredPyqPdfs,
     };
 
@@ -632,12 +694,13 @@ const handleAddCourse = async (e) => {
            course_code: updatedCourse_code,
            course_type: updatedCourse_type,
            credits: updatedCredits,
-           instructor_name: updatedInstructor_name,
-           instructor_photo: updatedInstructor_photo,
+          //  instructor_name: updatedInstructor_name,
+          //  instructor_photo: updatedInstructor_photo,
            syllabus: updatedSyllabus,
            resource_links: updatedResource_links,
            resource_pdfs: updatedResource_pdfs,
            pyq_links: updatedPyq_links,
+           video_links: updatedVideo_links,
            pyq_pdfs: updatedPyq_pdfs,
          };
 
@@ -673,8 +736,8 @@ const handleAddCourse = async (e) => {
        setViewModalOpen(true);
      };
 
-     const [selectedInstructorPhoto, setSelectedInstructorPhoto] =
-       useState(null);
+    //  const [selectedInstructorPhoto, setSelectedInstructorPhoto] =
+    //    useState(null);
      const [selectedSyllabus, setSelectedSyllabus] = useState(null);
      const [selectedResourcepdf, setSelectedResourcepdf] = useState([]);
      const [selectedpyqpdf, setSelectedpyqpdf] = useState([]);
@@ -699,8 +762,8 @@ const handleAddCourse = async (e) => {
        setCourse_code("");
        setCourse_type("");
        setCredits(0);
-       setInstructor_name("");
-       setInstructor_photo("");
+      //  setInstructor_name("");
+      //  setInstructor_photo("");
        setSyllabus("");
        setResources_link([{ link_name: "", link_url: "" }]);
        setResources_pdf([{ pdf_name: "", pdf_url: "" }]);
@@ -797,6 +860,12 @@ const handleAddCourse = async (e) => {
        setPyq_link(updatedPyq);
        console.log(123, pyq_links);
      };
+     const handleInputChangevideolink = (index, fieldIndex, value) => {
+       const updatedVideo = [...video_links];
+       updatedVideo[index][fieldIndex === 0 ? "link_name" : "link_url"] = value;
+       setVideo_link(updatedVideo);
+       console.log(123, pyq_links);
+     };
 
      const handleInputChangepyqpdf = async (index, fieldIndex, value) => {
        const updatedPyq = [...pyq_pdfs];
@@ -851,6 +920,12 @@ const handleAddCourse = async (e) => {
            { link_name: "", link_url: "" },
          ]);
        }
+       if (field === "video_links") {
+         setVideo_link((prevLinks) => [
+           ...prevLinks,
+           { link_name: "", link_url: "" },
+         ]);
+       }
        if (field === "pyq_pdfs") {
          setPyq_pdf((prevPdfs) => [...prevPdfs, { pdf_name: "", pdf_url: "" }]);
        }
@@ -871,6 +946,9 @@ const handleAddCourse = async (e) => {
        if (field === "pyq_links") {
          setPyq_link((prevLinks) => prevLinks.filter((_, i) => i !== index));
        }
+       if (field === "video_links") {
+         setPyq_link((prevLinks) => prevLinks.filter((_, i) => i !== index));
+       }
        if (field === "pyq_pdfs") {
          setPyq_pdf((prevLinks) => prevLinks.filter((_, i) => i !== index));
        }
@@ -887,7 +965,7 @@ const handleAddCourse = async (e) => {
          formData.append("picture", file);
          const response = await CourseService.uploadPicture(formData);
          setButtonLoading(false);
-         setInstructor_photo(response?.data?.picture);
+        //  setInstructor_photo(response?.data?.picture);
          toast.success(response.data.message, {
            position: "top-center",
            autoClose: 5000,
@@ -994,36 +1072,42 @@ const handleAddCourse = async (e) => {
                setSelectedSemester(selectedSemester?._id);
              }}
            />
-           <div className="w-full md:w-[270px]">
-             <form
-               className="max-w-md mx-auto"
-               onChange={(e) => {
-                 handleSearch(e.target.value);
-               }}
-             >
-               <label
-                 htmlFor="default-search"
-                 className="mb-2 text-sm font-medium text-gray-900 sr-only "
+           <div className="flex flex-wrap gap-2 sm:gap-5">
+             <div className="w-full md:w-[270px]">
+               <form
+                 className="max-w-md mx-auto"
+                 onSubmit={(e) => e.preventDefault()} // Prevent default form submission
                >
-                 Search
-               </label>
-               <div className="relative">
-                 <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                   <FaSearch
-                     className="w-4 h-4 text-gray-500 "
-                     aria-hidden="true"
+                 <label
+                   htmlFor="default-search"
+                   className="mb-2 text-sm font-medium text-gray-900 sr-only"
+                 >
+                   Search
+                 </label>
+                 <div className="relative">
+                   <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                     <FaSearch
+                       className="w-4 h-4 text-gray-500"
+                       aria-hidden="true"
+                     />
+                   </div>
+                   <input
+                     type="search"
+                     id="default-search"
+                     value={searchQuery}
+                     onChange={(e) => setSearchQuery(e.target.value)}
+                     onKeyDown={(e) => {
+                       if (e.key === "Enter") {
+                         e.preventDefault(); // Prevent default form submission
+                         handleSearch();
+                       }
+                     }}
+                     className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
+                     placeholder="Search Course"
                    />
                  </div>
-                 <input
-                   type="search"
-                   id="default-search"
-                   value={searchQuery}
-                   onChange={(e) => setSearchQuery(e.target.value)}
-                   className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-                   placeholder="Search Course"
-                 />
-               </div>
-             </form>
+               </form>
+             </div>
            </div>
          </div>
 
@@ -1178,6 +1262,7 @@ const handleAddCourse = async (e) => {
                >
                  Course Type*
                </label>
+
                <input
                  id="coursetype"
                  type="text"
@@ -1204,7 +1289,7 @@ const handleAddCourse = async (e) => {
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
-               <label
+               {/* <label
                  htmlFor="fieldofstudyName"
                  className="mb-2 text-sm text-start text-grey-900 "
                >
@@ -1219,9 +1304,9 @@ const handleAddCourse = async (e) => {
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
-               />
+               /> */}
 
-               <label
+               {/* <label
                  htmlFor="instructorFileInput"
                  className="mb-2 text-sm text-start text-grey-900 "
                >
@@ -1247,7 +1332,7 @@ const handleAddCourse = async (e) => {
                      className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                    />
                  </div>
-               )}
+               )} */}
 
                <label
                  htmlFor="syllabusFileInput"
@@ -1604,7 +1689,76 @@ const handleAddCourse = async (e) => {
                >
                  + Add More Resources
                </Button>
+               <label
+                 htmlFor="video_links"
+                 className="mb-2 text-sm text-start text-grey-900"
+               >
+                 Upload Videos (Link)
+               </label>
+               {video_links.map((rsc, index) => (
+                 <div key={index} className="mb-5">
+                   <input
+                     type="text"
+                     value={rsc.link_name} // Use link_name from resource_links state
+                     onChange={(e) =>
+                       handleInputChangevideolink(index, 0, e.target.value)
+                     }
+                     placeholder="Video Link Name"
+                     className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   />
+                   <input
+                     type="text"
+                     value={rsc.link_url} // Use link_url from resource_links state
+                     onChange={(e) =>
+                       handleInputChangevideolink(index, 1, e.target.value)
+                     }
+                     placeholder="Video Link URL"
+                     className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   />
+                   <div className="flex justify-end">
+                     {index > 0 && (
+                       <>
+                         {buttonLoading ? (
+                           <>
+                             <Button
+                               style={{ textTransform: "none" }}
+                               className="max-md:hidden mb-5 "
+                               variant="outlined"
+                               size="small"
+                               startIcon={<DeleteIcon />}
+                             >
+                               Delete
+                             </Button>{" "}
+                             <CircularProgress className="ml-2" size={15} />
+                           </>
+                         ) : (
+                           <>
+                             <Button
+                               style={{ textTransform: "none" }}
+                               className="max-md:hidden mb-5 "
+                               onClick={() =>
+                                 handleDeleteField("video_links", index)
+                               }
+                               variant="outlined"
+                               size="small"
+                               startIcon={<DeleteIcon />}
+                             >
+                               Delete
+                             </Button>
+                           </>
+                         )}
+                       </>
+                     )}
+                   </div>
+                 </div>
+               ))}
 
+               <Button
+                 onClick={() => handleAddField("video_links")}
+                 cariant="outlined"
+               >
+                 + Add More Videos
+               </Button>
                <div className="pb-2 pt-4">
                  {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
                  {buttonLoading ? (
@@ -1752,7 +1906,7 @@ const handleAddCourse = async (e) => {
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
-               <label
+               {/* <label
                  htmlFor="fieldofstudyName"
                  className="mb-2 text-sm text-start text-grey-900 "
                >
@@ -1799,7 +1953,7 @@ const handleAddCourse = async (e) => {
                      className="hidden"
                    />
                  </div>
-               </div>
+               </div> */}
 
                <label
                  htmlFor="syllabus_pdfs"
@@ -1808,6 +1962,7 @@ const handleAddCourse = async (e) => {
                  Syllabus (Pdf)
                </label>
                {/* displaying available links */}
+
                {updatedSyllabus.length > 0 ? (
                  <div className="space-y-4">
                    <div className="space-y-4">
@@ -2328,6 +2483,92 @@ const handleAddCourse = async (e) => {
                    </Button>
                  </div>
                </div>
+               <label
+                 htmlFor="resource_links"
+                 className="mb-2 text-sm text-start text-grey-900"
+               >
+                 Videos (Link)
+               </label>
+               {/* displaying available links */}
+               {updatedVideo_links.length > 0 && (
+                 <div className="space-y-4">
+                   <div className="space-y-4">
+                     {updatedVideo_links.map((item, index) => (
+                       <div key={index}>
+                         <div className="flex items-center space-x-4 border p-2 rounded-md">
+                           <FaLink
+                             className="text-blue-500  max-md:hidden"
+                             size={20}
+                           />
+                           <div className="flex-1">
+                             <p className="text-sm md:text-[16px]">
+                               {item.link_name}
+                             </p>
+                           </div>
+                           <div className="flex space-x-2">
+                             <Button
+                               variant="outlined"
+                               color="primary"
+                               size="small"
+                               className="max-md:!hidden"
+                               onClick={() => handleOpenLink(item.link_url)}
+                             >
+                               View
+                             </Button>
+                             <IoMdEye
+                               className="text-blue-500  md:hidden"
+                               size={24}
+                               onClick={() => handleOpenLink(item.link_url)}
+                             />
+                           </div>
+                         </div>
+                         {/* Delete button */}
+                         <div className="flex justify-end my-2">
+                           <Button
+                             style={{ textTransform: "none" }}
+                             onClick={() =>
+                               handleEditDeleteField("video_links", index)
+                             }
+                             variant="outlined"
+                             size="small"
+                             startIcon={<DeleteIcon />}
+                           >
+                             Delete
+                           </Button>
+                         </div>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+               )}
+               {/* new links to add */}
+               <div>
+                 <input
+                   type="text"
+                   value={editFormVideoLinkName}
+                   onChange={(e) => setEditFormVideoLinkName(e.target.value)}
+                   placeholder="Videos Link Name"
+                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                 />
+                 <input
+                   type="text"
+                   value={editFormVideoLinkUrl}
+                   onChange={(e) => setEditFormVideoLinkUrl(e.target.value)}
+                   placeholder="Videos Link Url"
+                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                 />
+                 <div className="flex justify-end mb-5">
+                   <Button
+                     onClick={handleEditAddVideoLink}
+                     style={{ textTransform: "none" }}
+                     variant="outlined"
+                     size="small"
+                     // startIcon={<DeleteIcon />}
+                   >
+                     ADD
+                   </Button>
+                 </div>
+               </div>
 
                <div className="pb-2 pt-4">
                  {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
@@ -2455,7 +2696,7 @@ const handleAddCourse = async (e) => {
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  disabled
                />
-               <label
+               {/* <label
                  htmlFor="fieldofstudyName"
                  className="mb-2 text-sm text-start text-grey-900 "
                >
@@ -2485,7 +2726,7 @@ const handleAddCourse = async (e) => {
                      />
                    )}
                  </div>
-               </div>
+               </div> */}
 
                <label
                  htmlFor="syllabus_pdfs"
@@ -2551,7 +2792,7 @@ const handleAddCourse = async (e) => {
                    </div>
                  </div>
                ) : (
-                 <p className="text-center text-gray-500 text-sm" >
+                 <p className="text-center text-gray-500 text-sm">
                    No syllabus available
                  </p>
                )}
@@ -2599,9 +2840,11 @@ const handleAddCourse = async (e) => {
                      ))}
                    </div>
                  </div>
-               ):(<p className="text-center text-gray-500 text-sm" >
+               ) : (
+                 <p className="text-center text-gray-500 text-sm">
                    No Resource links available
-                 </p>)}
+                 </p>
+               )}
 
                <label
                  htmlFor="resource_pdfs"
@@ -2670,13 +2913,11 @@ const handleAddCourse = async (e) => {
                      ))}
                    </div>
                  </div>
-               ):
-               (
-                <p className="text-center text-gray-500 text-sm" >
+               ) : (
+                 <p className="text-center text-gray-500 text-sm">
                    No Resource pdf available
                  </p>
-               )
-               }
+               )}
 
                <label
                  htmlFor="pyq_links"
@@ -2721,10 +2962,11 @@ const handleAddCourse = async (e) => {
                      ))}
                    </div>
                  </div>
-               ):
-               (<p className="text-center text-gray-500 text-sm" >
+               ) : (
+                 <p className="text-center text-gray-500 text-sm">
                    No PYQ links available
-                 </p>)}
+                 </p>
+               )}
 
                <label
                  htmlFor="pyq_links"
@@ -2793,9 +3035,61 @@ const handleAddCourse = async (e) => {
                      ))}
                    </div>
                  </div>
-               ):(<p className="text-center text-gray-500 text-sm" >
+               ) : (
+                 <p className="text-center text-gray-500 text-sm">
                    No PYQ pdf available
-                 </p>)}
+                 </p>
+               )}
+
+               <label
+                 htmlFor="resource_links"
+                 className="mb-2 text-sm text-start text-grey-900"
+               >
+                 Videos (Link)
+               </label>
+               {/* displaying available links */}
+               {/* {console.log(111,updatedVideo_links)} */}
+               {updatedVideo_links.length > 0 ? (
+                 <div className="mb-5">
+                   <div className="space-y-4">
+                     {updatedVideo_links.map((item, index) => (
+                       <div key={index}>
+                         <div className="flex items-center space-x-4 border p-2 rounded-md">
+                           <FaLink
+                             className="text-blue-500  max-md:hidden"
+                             size={20}
+                           />
+                           <div className="flex-1">
+                             <p className="text-sm md:text-[16px]">
+                               {item.link_name}
+                             </p>
+                           </div>
+                           <div className="flex space-x-2">
+                             <Button
+                               variant="outlined"
+                               color="primary"
+                               size="small"
+                               className="max-md:!hidden"
+                               onClick={() => handleOpenLink(item.link_url)}
+                             >
+                               View
+                             </Button>
+                             <IoMdEye
+                               className="text-blue-500  md:hidden"
+                               size={24}
+                               onClick={() => handleOpenLink(item.link_url)}
+                             />
+                           </div>
+                         </div>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+               ) : (
+                 <p className="text-center text-gray-500 text-sm">
+                   No Video links available
+                 </p>
+               )}
              </div>
            </Box>
          </Modal>

@@ -6,6 +6,7 @@ import AboutCourseMainSection from "./AboutCourseMainSection";
 import CourseSyllabus from "./CourseSyllabus";
 import CoursePYQS from "./CoursePYQS";
 import CourseReference from "./CourseResources";
+import CourseVideos from "./CourseVideos";
 import CommentSection from "../CommentSection/CommentSection";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
@@ -20,16 +21,17 @@ const AboutCourse = () => {
   const [courseDetails, setCourseDetails] = useState({
     courseName: "",
     courseCode: "",
-    instructorName: "",
+    // instructorName: "",
     courseType: "",
     credits: "",
-    instructorPhoto: "",
+    // instructorPhoto: "",
     fieldOfStudy: "",
     semester: "",
   });
 
   const [resources, setResources] = useState([]);
   const [pyqs, setPyqs] = useState([]);
+  const [videos, setVideos] = useState([]);
   const [syllabus, setSyllabus] = useState([]); // Changed to empty array
 
   useEffect(() => {
@@ -52,10 +54,10 @@ const AboutCourse = () => {
         setCourseDetails({
           courseName: course.course_name,
           courseCode: course.course_code,
-          instructorName: course.instructor_name,
+          // instructorName: course.instructor_name,
           courseType: course.course_type,
           credits: course.credits,
-          instructorPhoto: course.instructor_photo,
+          // instructorPhoto: course.instructor_photo,
           fieldOfStudy: field_of_study.field_of_studyfullname,
           semester: semester.semester,
         });
@@ -111,9 +113,15 @@ const AboutCourse = () => {
           type: "link",
           url: link.link_url,
         }));
+        const videoLinks = response.data.videoLinks.map((link) => ({
+          title: link.link_name,
+          type: "link",
+          url: link.link_url,
+        }));
 
         setResources([...resourcesPdf, ...resourcesLinks]);
         setPyqs([...pyqPdf, ...pyqLinks]);
+        setVideos([...videoLinks]);
       } catch (error) {
         console.error(error);
       } finally {
@@ -149,6 +157,8 @@ const AboutCourse = () => {
           <CoursePYQS pyqs={pyqs} />
           <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20" />
           <CourseReference resources={resources} />
+          <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20" />
+          <CourseVideos videos={videos} />
           <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20" />
           <CommentSection type="course" />
         </div>

@@ -221,6 +221,7 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     try {
       //  console.log("sully");
        setLoading(true);
+
       const payload={
         searchTerm:searchQuery,
         programId: selectedProgram,
