@@ -77,7 +77,7 @@ const AdminSignup = () => {
             name: values.name,
             email: values.email,
             password: values.password,
-            role: "admin",
+            role: "mainadmin",
           };
           console.log(0, payload);
           const data = await authService.signUpAdmin(payload);
@@ -203,7 +203,7 @@ const AdminSignup = () => {
                     error={
                       loginForm.touched.email && Boolean(loginForm.errors.email)
                     }
-                    placeholder="Enter Email ID"
+                    placeholder="Enter College Email ID"
                     className="rounded-full border border-[#E0E0E0] w-full p-3 max-sm:text-sm"
                   />
                 </div>

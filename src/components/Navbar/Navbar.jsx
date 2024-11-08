@@ -170,7 +170,7 @@ const Navbar = () => {
                       Your Profile
                     </Link>
                     {
-                      user?.role === "admin" && (
+                     ( user?.role === "admin" || user?.role === "mainadmin" )&& (
                         <Link
                           href='/admin-dashboard'
                           className="block px-4 py-2 text-md text-gray-700 hover:text-black hover:text-semibold hover:bg-black/5"

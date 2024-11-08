@@ -4,6 +4,7 @@ import Input from "../Generals/Input";
 import { useRouter } from "next/navigation";
 import UserService from "@/services/user.service";
 import collegeService from "@/services/college.service";
+import { Modal,Box, Typography, Button, Text } from "@mui/material"; 
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,6 +17,7 @@ function ProfileComponent() {
       router.push("/profile");
     }
   }, []);
+  
 
   const [currentUser, setCurrentUser] = useState(null);
   const [collegeDetails, setCollegeDetails] = useState(null);
@@ -48,6 +50,14 @@ function ProfileComponent() {
     country: "",
     email_domain: "",
   });
+
+    // State management for "Switch Main Admin Access" functionality
+    const [isSwitchAdminModalOpen, setIsSwitchAdminModalOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchedUser, setSearchedUser] = useState(null);
+    const [searchErrorMessage, setSearchErrorMessage] = useState("");
+    const [adminList, setAdminList] = useState([]); // Store list of admins
+  
 
   const handleChangePicture = async (e) => {
     const file = e.target.files[0];
@@ -112,7 +122,7 @@ function ProfileComponent() {
         role: currentUser.role,
       });
 
-      if (role === "admin" && collegeDetails) {
+      if ((role === "admin"|| role === "mainadmin")  && collegeDetails) {
         setCollegeData({
           id: collegeDetails._id,
           college_name: collegeDetails.college_name,
@@ -177,6 +187,85 @@ function ProfileComponent() {
     }
   };
 
+  const handleOpenSwitchAdminModal = () => {
+    setIsSwitchAdminModalOpen(true);
+    setSearchErrorMessage("");
+    setSearchedUser(null); // Clear previous search results
+  };
+
+  const handleCloseSwitchAdminModal = () => {
+    setIsSwitchAdminModalOpen(false);
+    setSearchErrorMessage("");
+    setSearchedUser(null); // Clear previous search results
+  };
+
+  const handleSearchUser = async () => {
+    if (searchQuery === "") {
+      setSearchedUser(null);
+      setSearchErrorMessage("");
+      return;
+    }
+  
+    try {
+      const response = await UserService.getUserByEmail(searchQuery);
+      if (response.data.success) {
+        const { _id, picture, name, email, roll_no, batch, role } = response.data.user;
+        setSearchedUser({ id: _id, picture, name, email, roll_no, batch, role });
+        setSearchErrorMessage("");
+      } else {
+        setSearchedUser(null);
+        setSearchErrorMessage("User not found");
+      }
+    } catch (error) {
+      setSearchedUser(null);
+      if (error.response && error.response.status === 404) {
+        setSearchErrorMessage("User not found");
+      } else {
+        setSearchErrorMessage("Error fetching user by email");
+      }
+      console.error("Error fetching user by email:", error);
+    }
+  };
+
+  const handleSwitchMainAdmin = async () => {
+    if (!searchedUser) {
+      return; // Prevent action if no user is selected
+    }
+
+    try {
+      const response = await UserService.switchMainAdmin({ currentAdminId: currentUser._id, newAdminId: searchedUser.id });
+      console.log(23,response);
+      toast.success("Main admin access switched successfully.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true, 
+
+        theme: "colored", 
+
+      });
+      // Update current user's role to 'admin'
+      setCurrentUser({ ...currentUser, role: 'admin' });
+      setIsSwitchAdminModalOpen(false);
+      setSearchErrorMessage("");
+      setSearchedUser(null);
+    } catch (error) {
+      console.error("Error switching main admin access:", error);
+      toast.error("Error switching main admin access.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored", 
+
+      });
+    }
+  };
+
   return (
     <div className="bg-[#F4F7FC] h-full flex-col flex justify-center items-center gap-7 p-6 w-full px-4 md:px-16 lg:px-28 py-16">
       <div className="flex justify-end w-full">
@@ -204,7 +293,7 @@ function ProfileComponent() {
         </div>
 
         <div>
-          {isEditCollegeDetails && userData.role === "admin" ? (
+          {isEditCollegeDetails && (userData.role === "admin" || userData.role === "mainadmin" ) ? (
             <button
               onClick={() => setIsEditCollegeDetails(false)}
               className="text-center border border-[#36518F] text-[#36518F]  font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
@@ -212,7 +301,7 @@ function ProfileComponent() {
               Edit College 
             </button>
           ) : (
-             userData.role === "admin" &&
+            (userData.role === "admin" || userData.role === "mainadmin" ) &&
             <button
               onClick={() => {
                 setIsEditCollegeDetails(true);
@@ -260,7 +349,7 @@ function ProfileComponent() {
           )}
           </div>
           <div className="">
-            {userData.role === 'admin' ?
+            {(userData.role === 'admin' || userData.role=='mainadmin')?
               <div
                 className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer"
               >
@@ -383,7 +472,7 @@ function ProfileComponent() {
           )}
         </div>
 
-        {userData.role === "admin" && (
+        {(userData.role === 'admin' || userData.role=='mainadmin') && (
           <div>
             <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
               <Input
@@ -439,8 +528,73 @@ function ProfileComponent() {
           </div>
         )}
       </div>
+
+      {(userData.role === 'mainadmin') && (
+        <button
+          onClick={handleOpenSwitchAdminModal}
+          className="text-center border border-[#36518F] text-[#36518F] font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
+        >
+          Switch Main Admin Access
+        </button>
+      )}
+     <Modal
+  open={isSwitchAdminModalOpen}
+  onClose={handleCloseSwitchAdminModal}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] bg-white shadow-lg p-[25px]">
+
+    <p className="font-bold text-md sm:text-xl lg:text-2xl pb-5"> 
+      Switch Main Admin Access
+    </p>
+    <div>
+      <p className="text-sm sm:text-lg lg:text-xl">Search by Email:</p>
+      <Input placeholder="Search by Email" value={searchQuery} handleChange={(e) => {
+        e.preventDefault();
+        setSearchQuery(e.target.value);
+        }} />
+        <div
+                className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer mt-2"
+                onClick={handleSearchUser}
+              >
+                  Search
+              </div>
+    </div>
+    {searchErrorMessage && <p className="text-md mt-3 flex justify-center items-center ">{searchErrorMessage}</p>}
+    {searchedUser!==null && (
+  <div>
+    <div className="w-full  bg-white rounded-2xl flex flex-col gap-y-7 drop-shadow my-3 p-2">
+  <div className="flex items-center  gap-4 ">
+      <div className="rounded-full overflow-hidden">
+        {searchedUser.picture ? (
+          <img
+            className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center"
+            src={searchedUser.picture}
+            alt={searchedUser.name}
+          />
+        ) : (
+          <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
+            <span className="font-medium text-white text-xl">
+              {searchedUser.name ? searchedUser.name[0] : "E"}
+            </span>
+          </div>
+        )}
+      </div>
+      <div>
+        <p className="font-semibold">{searchedUser.name}</p>
+        <p className="text-gray-500 text-sm">{searchedUser.email}</p>
+      </div>
+    </div>
+    <div   className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer mt-2"  onClick={handleSwitchMainAdmin}>Switch Main Admin Access</div>
+  </div>
+  </div>
+)}
+</div>
+</Modal>
     </div>
   );
 }
 
 export default ProfileComponent;
+
