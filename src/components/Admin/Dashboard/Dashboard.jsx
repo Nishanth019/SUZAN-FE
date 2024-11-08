@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import CardDataStats from "./CardDataStats";
 import { AiOutlineEye } from 'react-icons/ai';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import AppWidgetSummary from './app-widget-summary';
 import Image from 'next/image';
@@ -104,7 +104,7 @@ const Dashboard = () => {
         Hi, Welcome back 👋
       </Typography>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={0} gap={3}>
 
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
