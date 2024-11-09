@@ -38,3 +38,8 @@
     text-wrap: balance;
   }
 }
+
+/* Ensures the Google Drive Picker modal appears above other modals */
+.google-picker-dialog {
+  z-index: 1050 !important; /* Ensures it is above other modals */
+}
