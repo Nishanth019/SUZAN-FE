@@ -18,7 +18,8 @@ import ViewPdf from "../../Courses/ViewPdf";
 import "../../Courses/style.css";
 import toast from "react-hot-toast";
 import { CircularProgress } from "@mui/material";
-
+import useDrivePicker from 'react-google-drive-picker';
+import { FaGoogleDrive } from 'react-icons/fa';
 
 const style = {
   position: "absolute",
@@ -128,6 +129,10 @@ const AdminCourseNavbarCourseComponent = () =>
    const [editFormVideoLinkUrl, setEditFormVideoLinkUrl] = useState("");
    const [editFormPyqPdfName, setEditFormPyqPdfName] = useState("");
    const [editFormPyqPdfUrl, setEditFormPyqPdfUrl] = useState("");
+
+  // Load Google Drive Picker
+  const [openPicker, authResponse] = useDrivePicker();
+ 
 
    const style = {
      position: "absolute",
@@ -1022,6 +1027,199 @@ const handleAddCourse = async (e) => {
        console.log(23, newSelectedpyqpdf[index], " + ", e.target.value);
      };
 
+
+    //Google Drive Implementation
+    const handleResourcesGoogleDrivePicker = () => {
+      openPicker({
+        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+        viewId: 'DOCS',
+        multiselect: false,
+        setIncludeFolders: true,
+        setSelectFolderEnabled: true,
+        callbackFunction: (data) => {
+          if (data.action === 'picked') {
+            const file = data.docs[0];
+            console.log(123, file);
+    
+            const newLink = {
+              link_name: file.name, // Google Drive file name
+              link_url: file.url,   // Google Drive URL
+            };
+    
+            // Check if the first index is empty
+            if (!resource_links[0].link_name && !resource_links[0].link_url) {
+              // Update the first index if empty
+              const updatedLinks = [...resource_links];
+              updatedLinks[0] = newLink;
+              setResources_link(updatedLinks);
+            } else {
+              // Add the new link if the first index is not empty
+              setResources_link((prevLinks) => [...prevLinks, newLink]);
+            }
+          }
+        },
+      });
+    };
+
+    const handleEditAddResourceLinkGoogleDrive = () => {
+      openPicker({
+        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+        viewId: 'DOCS',
+        multiselect: false,
+        setIncludeFolders: true,
+        setSelectFolderEnabled: true,
+        callbackFunction: (data) => {
+          if (data.action === 'picked') {
+            const file = data.docs[0];
+            console.log(123, file);
+    
+            const newLink = {
+              link_name: file.name, // Google Drive file name
+              link_url: file.url,   // Google Drive URL
+            };
+    
+            setButtonLoading(true);
+            setUpdatedResource_links((prevLinks) => [
+              ...prevLinks,
+              newLink,
+            ]);
+            setButtonLoading(false);
+          }
+        },
+      });
+    };
+    
+
+    const handlePVQsGoogleDrivePicker = () => {
+      openPicker({
+        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+        viewId: 'DOCS',
+        multiselect: false,
+        setIncludeFolders: true,
+        setSelectFolderEnabled: true,
+        callbackFunction: (data) => {
+          if (data.action === 'picked') {
+            const file = data.docs[0];
+            console.log(123, file);
+    
+            const newLink = {
+              link_name: file.name, // Google Drive file name
+              link_url: file.url,   // Google Drive URL
+            };
+    
+            // Check if the first index in pyq_links is empty
+            if (!pyq_links[0].link_name && !pyq_links[0].link_url) {
+              // Update the first index if empty
+              const updatedLinks = [...pyq_links];
+              updatedLinks[0] = newLink;
+              setPyq_link(updatedLinks);
+            } else {
+              // Add the new link if the first index is not empty
+              setPyq_link((prevLinks) => [...prevLinks, newLink]);
+            }
+          }
+        },
+      });
+    };
+
+    const handleEditAddPyqLinkGoogleDrive = () => {
+      openPicker({
+        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+        viewId: 'DOCS',
+        multiselect: false,
+        setIncludeFolders: true,
+        setSelectFolderEnabled: true,
+        callbackFunction: (data) => {
+          if (data.action === 'picked') {
+            const file = data.docs[0];
+            console.log(123, file);
+    
+            const newLink = {
+              link_name: file.name, // Google Drive file name
+              link_url: file.url,   // Google Drive URL
+            };
+    
+            setButtonLoading(true);
+            setUpdatedPyq_links((prevLinks) => [
+              ...prevLinks,
+              newLink,
+            ]);
+            setButtonLoading(false);
+          }
+        },
+      });
+    };
+    
+                   
+    const handleVideosGoogleDrivePicker = () => {
+      openPicker({
+        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+        viewId: 'DOCS',
+        multiselect: false,
+        setIncludeFolders: true,
+        setSelectFolderEnabled: true,
+        callbackFunction: (data) => {
+          if (data.action === 'picked') {
+            const file = data.docs[0];
+            console.log(123, file);
+    
+            const newLink = {
+              link_name: file.name, // Google Drive file name
+              link_url: file.url,   // Google Drive URL
+            };
+    
+            // Check if the first index in video_links is empty
+            if (!video_links[0].link_name && !video_links[0].link_url) {
+              // Update the first index if empty
+              const updatedLinks = [...video_links];
+              updatedLinks[0] = newLink;
+              setVideo_link(updatedLinks);
+            } else {
+              // Add the new link if the first index is not empty
+              setVideo_link((prevLinks) => [...prevLinks, newLink]);
+            }
+          }
+        },
+      });
+    };
+    
+
+    const handleEditAddVideoLinkGoogleDrive = () => {
+      openPicker({
+        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+        viewId: 'DOCS',
+        multiselect: false,
+        setIncludeFolders: true,
+        setSelectFolderEnabled: true,
+        callbackFunction: (data) => {
+          if (data.action === 'picked') {
+            const file = data.docs[0];
+            console.log(123, file);
+    
+            const newLink = {
+              link_name: file.name, // Google Drive file name
+              link_url: file.url,   // Google Drive URL
+            };
+    
+            setButtonLoading(true);
+            setUpdatedVideo_links((prevLinks) => [
+              ...prevLinks,
+              newLink,
+            ]);
+            setButtonLoading(false);
+          }
+        },
+      });
+    };
+    
+    
+    
      return (
        <div>
          {/* dropdowns */}
@@ -1123,7 +1321,7 @@ const handleAddCourse = async (e) => {
 
          {/* //////////////////////// modal to Add the course //////////////////// */}
          <Modal
-           //  style={{ zIndex: 9999 }}
+            style={{ zIndex: 999 }}
            open={modalOpen}
            // onClose={closeModal}
            aria-labelledby="modal-modal-title"
@@ -1334,7 +1532,7 @@ const handleAddCourse = async (e) => {
                  </div>
                )} */}
 
-               <label
+               {/* <label
                  htmlFor="syllabusFileInput"
                  className="mb-2 text-sm text-start text-grey-900 "
                >
@@ -1360,7 +1558,8 @@ const handleAddCourse = async (e) => {
                      className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                    />
                  </div>
-               )}
+               )} */}
+
 
                <label
                  htmlFor="resource_links"
@@ -1433,9 +1632,18 @@ const handleAddCourse = async (e) => {
                  + Add More Resources
                </Button>
 
+                <Button 
+                  onClick={handleResourcesGoogleDrivePicker} 
+                  variant="outlined" 
+                  color="primary" 
+                  startIcon={<FaGoogleDrive/>}
+                  >
+                 Add from Google Drive
+                </Button>
+               
                <label
                  htmlFor="resources-pdf"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-5 text-sm text-start text-grey-900"
                >
                  Upload Resources (pdf)
                </label>
@@ -1600,9 +1808,22 @@ const handleAddCourse = async (e) => {
                >
                  + Add More PYQs
                </Button>
+
+               
+                {/* Google Drive Picker Button */}
+                <Button 
+                  onClick={handlePVQsGoogleDrivePicker} 
+                  variant="outlined" 
+                  color="primary" 
+                  startIcon={<FaGoogleDrive/>}
+                  >
+                 Add from Google Drive
+                </Button>
+
+
                <label
                  htmlFor="pyq-pdf"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-5 text-sm text-start text-grey-900"
                >
                  Upload pyq (pdf)
                </label>
@@ -1759,7 +1980,17 @@ const handleAddCourse = async (e) => {
                >
                  + Add More Videos
                </Button>
-               <div className="pb-2 pt-4">
+                {/* Google Drive Picker Button */}
+                <Button 
+                  onClick={handleVideosGoogleDrivePicker} 
+                  variant="outlined" 
+                  color="primary" 
+                  startIcon={<FaGoogleDrive/>}
+                  >
+                 Add from Google Drive
+                </Button>
+
+               <div className="pb-2 pt-4 mt-5">
                  {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
                  {buttonLoading ? (
                    <>
@@ -1768,7 +1999,7 @@ const handleAddCourse = async (e) => {
                    </>
                  ) : (
                    <>
-                     <Button type="submit" variant="outlined">
+                     <Button type="submit" variant="contained">
                        Add Course
                      </Button>
                    </>
@@ -1780,6 +2011,7 @@ const handleAddCourse = async (e) => {
 
          {/* Edit modal */}
          <Modal
+            style={{ zIndex: 999 }}
            open={editModalOpen}
            onClose={closeEditModal} // Assuming you have a function to close the edit modal
            aria-labelledby="modal-modal-title"
@@ -2149,10 +2381,19 @@ const handleAddCourse = async (e) => {
                    </Button>
                  </div>
                </div>
-
+               <Button 
+                  onClick={handleEditAddResourceLinkGoogleDrive} 
+                  variant="outlined" 
+                  color="primary" 
+                  startIcon={<FaGoogleDrive/>}
+                  >
+                 Add from Google Drive
+                </Button>
+                
+                
                <label
                  htmlFor="resource_pdfs"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-5 text-sm text-start text-grey-900"
                >
                  Resources (Pdf)
                </label>
@@ -2367,10 +2608,19 @@ const handleAddCourse = async (e) => {
                    </Button>
                  </div>
                </div>
+               <Button 
+                  onClick={handleEditAddPyqLinkGoogleDrive} 
+                  variant="outlined" 
+                  color="primary" 
+                  startIcon={<FaGoogleDrive/>}
+                  >
+                 Add from Google Drive
+                </Button>
+                
 
                <label
                  htmlFor="pyq_links"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-5 text-sm text-start text-grey-900"
                >
                  Previous Year Questions (Pdf)
                </label>
@@ -2569,10 +2819,19 @@ const handleAddCourse = async (e) => {
                    </Button>
                  </div>
                </div>
+               
+               <Button 
+                  onClick={handleEditAddVideoLinkGoogleDrive} 
+                  variant="outlined" 
+                  color="primary" 
+                  startIcon={<FaGoogleDrive/>}
+                  >
+                 Add from Google Drive
+                </Button>
 
-               <div className="pb-2 pt-4">
+               <div className="pb-2 pt-4 mt-5">
                  {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
-                 <Button type="submit" variant="outlined">
+                 <Button type="submit" variant="contained">
                    Update Course
                  </Button>
                </div>
@@ -2582,6 +2841,7 @@ const handleAddCourse = async (e) => {
 
          {/* ////////////////////////modal to view the course //////////////////// */}
          <Modal
+         style={{ zIndex: 999 }}
            open={viewModalOpen}
            aria-labelledby="modal-modal-title"
            aria-describedby="modal-modal-description"
@@ -3096,6 +3356,7 @@ const handleAddCourse = async (e) => {
 
          {/* Delete confirmation modal */}
          <Modal
+
            open={deleteModalOpen}
            onClose={closeDeleteModal}
            aria-labelledby="delete-modal-title"
