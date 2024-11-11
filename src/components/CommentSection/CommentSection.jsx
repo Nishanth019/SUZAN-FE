@@ -38,7 +38,7 @@ const CommentSection = ({ type }) => {
   return (
     <div className="w-full p-2 md:py-5 sm:px-5 lg:px-10 xl:px-16">
       <div className="text-black mb-6">
-        <p className="text-2xl sm:text-4xl font-bold">Discussion (20)</p>
+        <p className="text-2xl sm:text-4xl font-bold">Discussion</p>
       </div>
       <Container maxWidth="md">
         <Stack spacing={3}>

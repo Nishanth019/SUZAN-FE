@@ -22,6 +22,25 @@ const Comment = ({ onPass, onRepliesUpdated }) => {
   const { user: currentUser } = useGlobalContext(); // Current authenticated user
   const { _id, content, updatedAt, likes, replies, user: commentUser } = onPass; // User who posted the comment
 
+   // Update comment details when `onPass` changes
+   useEffect(() => {
+    setCommentText(content); // Update comment text when `onPass.content` changes
+
+    const fetchUser = async () => {
+      try {
+        const response = await UserService.getUserById(commentUser);
+        setUserName(response.data.user.name);
+        setAva(response.data.user.picture);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    if (commentUser) {
+      fetchUser();
+    }
+  }, [onPass]); // Add `onPass` as a dependency here
+
   const [userName, setUserName] = useState("");
   const [ava, setAva] = useState("");
   const [clicked, setClicked] = useState(false);
