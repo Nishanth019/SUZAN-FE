@@ -15,11 +15,10 @@ import { useRouter } from "next/navigation";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Courses", href: "/courses" },
-  { name: "Events", href: "/events" },
-  { name: "Clubs", href: "/clubs" },
-  { name: "NearBy Places", href: "/nearby-places" },
+  // { name: "Events", href: "/events" },
+  // { name: "Clubs", href: "/clubs" },
+  // { name: "NearBy Places", href: "/nearby-places" },
   
- 
 ];
 
 const Navbar = () => {
@@ -28,8 +27,16 @@ const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
 
-  const { isAuth, user, setIsAuth, setUser } = useGlobalContext();
-  //   console.log(1111, user);
+  const { isAuth, user, setIsAuth, setUser,college,setCollege } = useGlobalContext();
+    // console.log(1111, college.college_logo);
+   const [collegeLogo, setCollegeLogo] = useState(logo);
+
+   useEffect(() => {
+     if (college?.college_logo) {
+       setCollegeLogo(college.college_logo);
+     }
+   }, [college]);
+
 
   const profileRef = useRef(null);
 
@@ -125,7 +132,8 @@ const Navbar = () => {
             <div className="absolute inset-y-0 right-0 flex items-center justify-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0 ">
               <button
                 type="button"
-                className="rounded-full text-black p-2 bg-slate-200  hover:bg-black/5"
+                className="max-sm:hidden
+                rounded-full text-black p-2 bg-slate-200  hover:bg-black/5"
               >
                 <IoIosNotificationsOutline className="h-5 w-5 lg:h-7 lg:w-7" />
               </button>
@@ -164,21 +172,19 @@ const Navbar = () => {
                       {user?.name}
                     </p>
                     <Link
-                      href='/profile'
+                      href="/profile"
                       className="block px-4 py-2 text-md text-gray-700 hover:text-black hover:text-semibold hover:bg-black/5"
                     >
                       Your Profile
                     </Link>
-                    {
-                      user?.role === "admin" && (
-                        <Link
-                          href='/admin-dashboard'
-                          className="block px-4 py-2 text-md text-gray-700 hover:text-black hover:text-semibold hover:bg-black/5"
-                        >
-                          Admin Dashboard
-                        </Link>
-                      )
-                    }
+                    {(user?.role === "admin" || user?.role === "mainadmin") && (
+                      <Link
+                        href="/admin-dashboard"
+                        className="block px-4 py-2 text-md text-gray-700 hover:text-black hover:text-semibold hover:bg-black/5"
+                      >
+                        Admin Dashboard
+                      </Link>
+                    )}
 
                     <Link
                       href="#"
@@ -187,13 +193,22 @@ const Navbar = () => {
                       Settings
                     </Link>
                     <p
-                    onClick={handleSignOut}
+                      onClick={handleSignOut}
                       className="block px-4 py-2 text-md text-gray-700 hover:text-white hover:text-semibold hover:cursor-pointer hover:bg-red-500  transition-all duration-75"
                     >
                       Sign out
                     </p>
                   </div>
                 )}
+              </div>
+              <div className="ml-4">
+                <Image
+                  className="max-sm:hidden sm:w-[130px] h-auto"
+                  src={collegeLogo}
+                  alt="college logo"
+                  width={130}
+                  height={130}
+                />
               </div>
             </div>
           ) : (
@@ -235,6 +250,7 @@ const Navbar = () => {
       )}
     </nav>
   );
+
 };
 
 

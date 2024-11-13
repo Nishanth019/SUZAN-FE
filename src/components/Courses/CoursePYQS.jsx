@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Button } from "@mui/material";
 import { IoMdEye, IoMdDownload } from "react-icons/io";
 import { FaLink, FaFilePdf } from "react-icons/fa";
@@ -7,16 +7,20 @@ import ViewPdf from "./ViewPdf";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import "./style.css";
+import dynamic from 'next/dynamic';
 
-const workerSrc = require("pdfjs-dist/build/pdf.worker.min.js");
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
-
+// Import the pdfjs-dist dynamically with next/dynamic and disable SSR
+const viewPdf = dynamic(() => import("./ViewPdf"), { ssr: false });
+// pdfjs.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.min.js";
 const CoursePYQS = ({ pyqs }) => {
   const links = pyqs.filter((item) => item.type === "link");
   const pdfs = pyqs.filter((item) => item.type === "pdf");
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const [selectedPdf, setSelectedPdf] = useState(null); // State to track the selected PDF
-
+   useEffect(() => {
+     // Set the worker source on the client-side only
+     pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+   }, []);
   const handleViewPdf = (pdf) => {
     setSelectedPdf(pdf);
     setIsModalOpen(true);
@@ -144,12 +148,12 @@ const CoursePYQS = ({ pyqs }) => {
         <Box
           sx={{
             ...style,
-            width: "50%",
+            width: "97vw",
             "@media (max-width: 1024px)": {
-              width: "60%",
+              width: "97vw",
             },
             "@media (max-width: 768px)": {
-              width: "90%",
+              width: "97vw",
               maxHeight: "95vh",
             },
             maxHeight: "95vh",
@@ -159,11 +163,16 @@ const CoursePYQS = ({ pyqs }) => {
           <Button
             variant="outlined"
             onClick={closeModal}
-            sx={{ position: "absolute", top: 8, right: 8 }}
+            sx={{
+              position: "fixed", // Change to 'fixed' for sticky behavior
+              top: 8,
+              right: 8,
+              zIndex: 1000, // Ensure the button stays above other content
+            }}
           >
             X
           </Button>
-         
+
           <div className="modal-content">
             <ViewPdf pdf={selectedPdf} />
           </div>

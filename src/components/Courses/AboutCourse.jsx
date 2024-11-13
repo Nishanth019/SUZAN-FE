@@ -1,184 +1,171 @@
-  "use client";
-  import React, { useState, useEffect } from "react";
-  import Image from "next/image";
-  import nishanth from "../../assets/CoreTeam/nishanth.jpg";
-  import { FaCalendar, FaBookOpen, FaUserCircle } from 'react-icons/fa';
-  import AboutCourseMainSection from "./AboutCourseMainSection";
-  import CourseSyllabus from "./CourseSyllabus";
-  import CoursePYQS from "./CoursePYQS";
-  import CourseReference from "./CourseResources";
-  import { useRouter } from "next/navigation";
-  import { usePathname } from "next/navigation";
-  import "./style.css"
-  import CourseService from "@/services/course.service"; 
+"use client";
+import React, { useState, useEffect } from "react";
+import { CircularProgress } from "@mui/material";
+import CourseService from "@/services/course.service";
+import AboutCourseMainSection from "./AboutCourseMainSection";
+import CourseSyllabus from "./CourseSyllabus";
+import CoursePYQS from "./CoursePYQS";
+import CourseReference from "./CourseResources";
+import CourseVideos from "./CourseVideos";
 import CommentSection from "../CommentSection/CommentSection";
-import PencilLoading from "../Ui/PencilLoading.jsx"
-import { CircularProgress } from '@mui/material';
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import "./style.css";
 
-  const AboutCourse = () => {
+const AboutCourse = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const course_id = pathname.split("/").pop();
 
-    const [loading,setLoading]  = useState(false);
+  const [courseDetails, setCourseDetails] = useState({
+    courseName: "",
+    courseCode: "",
+    // instructorName: "",
+    courseType: "",
+    credits: "",
+    // instructorPhoto: "",
+    fieldOfStudy: "",
+    semester: "",
+  });
 
-      const router = useRouter();
-      const pathname = usePathname();
-      const course_id = pathname.split("/").pop();
+  const [resources, setResources] = useState([]);
+  const [pyqs, setPyqs] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [syllabus, setSyllabus] = useState([]); // Changed to empty array
 
-    const [courseDetails,setCourseDetails] = useState({
-      courseName: "",
-      courseCode: "",
-      instructorName: "",
-      courseType: "",
-      credits: "",
-      instructorPhoto:"",
-      fieldOfStudy: "",
-      semester:""
-    });
+  useEffect(() => {
+    const fetchCourseDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await CourseService.getCourseById({
+          courseId: course_id,
+        });
+        const { course } = response.data;
+        const response1 = await CourseService.getFieldOfStudyById({
+          fieldOfStudyId: course.field_of_study,
+        });
+        const field_of_study = response1.data.fieldOfStudy;
+        const response2 = await CourseService.getSemesterByCourseId({
+          courseId: course_id,
+        });
+        const semester = response2.data.semester;
 
-    const [resources, setResources] = useState([]);
-    const [pyqs, setPyqs] = useState([]);
-    const [syllabus, setSyllabus] = useState([
-      {
-        title: "",
-        type: "",
-        url: "",
-      },
-    ]);
-    
-    useEffect(() => {
-      const fetchCourseDetails = async () => {
-        try {
-          setLoading(true);
-          const response = await CourseService.getCourseById({
-            courseId: course_id,
-          });
-          // console.log(222,response);
-          const { course } = response.data;
-          const response1 = await CourseService.getFieldOfStudyById({
-            fieldOfStudyId: course.field_of_study,
-          });
-          const field_of_study = response1.data.fieldOfStudy;
-          const response2 = await CourseService.getSemesterByCourseId({
-            courseId: course_id,
-          });
-          const semester = response2.data.semester;
-          //  console.log(24, semester);
-          setCourseDetails({
-            courseName: course.course_name,
-            courseCode: course.course_code,
-            instructorName: course.instructor_name,
-            courseType: course.course_type,
-            credits: course.credits,
-            instructorPhoto: course.instructor_photo,
-            fieldOfStudy: field_of_study.field_of_studyfullname,
-            semester: semester.semester,
-          });
-          setLoading(false);
-        } catch (error) {
-          setLoading(false);
-          console.error(error);
-        }
-      };
+        setCourseDetails({
+          courseName: course.course_name,
+          courseCode: course.course_code,
+          // instructorName: course.instructor_name,
+          courseType: course.course_type,
+          credits: course.credits,
+          // instructorPhoto: course.instructor_photo,
+          fieldOfStudy: field_of_study.field_of_studyfullname,
+          semester: semester.semester,
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchCourseDetails();
-      const fetchMedia = async () => {
-        try {
-          setLoading(true);
-          const response = await CourseService.getMediaByCourceId({
-            courseId: course_id,
-          });
-          const course = response.data.course;
-          const syllabus = response.data.syllabus;
-          
-          const resourcesPdf = response.data.resourcesPdf.map((pdf) => ({
-            title: pdf.pdf_name,
-            type: "pdf",
-            url: pdf.pdf_url,
-          }));
-          // console.log(20, resourcesPdf);  
-          const resourcesLinks = response.data.resourcesLinks.map((link) => ({
-            title: link.link_name,
-            type: "link",
-            url: link.link_url,
-          }));
+    const fetchMedia = async () => {
+      try {
+        setLoading(true);
+        const response = await CourseService.getMediaByCourceId({
+          courseId: course_id,
+        });
+        const course = response.data.course;
+        const syllabusData = response.data.syllabus; // Changed to a variable
 
-          const pyqPdf = response.data.pyqPdf.map((pdf) => ({
-            title: pdf.pdf_name,
-            type: "pdf",
-            url: pdf.pdf_url,
-          }));
+        setSyllabus(
+          syllabusData
+            ? [
+                {
+                  // Only set if syllabusData exists
+                  title: syllabusData.pdf_name,
+                  type: "pdf",
+                  url: syllabusData.pdf_url,
+                },
+              ]
+            : []
+        ); // Use empty array if syllabusData is undefined
 
-          const pyqLinks = response.data.pyqLinks.map((link) => ({
-            title: link.link_name,
-            type: "link",
-            url: link.link_url,
-          }));
-          
-          
-          setSyllabus([
-            {
-              title: syllabus.pdf_name,
-              type: "pdf",
-              url: syllabus.pdf_url,
-            },    
-          ]);
+        const resourcesPdf = response.data.resourcesPdf.map((pdf) => ({
+          title: pdf.pdf_name,
+          type: "pdf",
+          url: pdf.pdf_url,
+        }));
 
-          setResources([...resourcesPdf, ...resourcesLinks]);
-          setPyqs([...pyqPdf, ...pyqLinks]);
-          setLoading(false);
-          // console.log(23, syllabus);
-          // console.log(25, pyqs);
-        } catch (error) {
-          setLoading(false);
-          console.error(error);
-        }
-      };
+        const resourcesLinks = response.data.resourcesLinks.map((link) => ({
+          title: link.link_name,
+          type: "link",
+          url: link.link_url,
+        }));
 
+        const pyqPdf = response.data.pyqPdf.map((pdf) => ({
+          title: pdf.pdf_name,
+          type: "pdf",
+          url: pdf.pdf_url,
+        }));
 
-      fetchMedia();
-      const incrementCourseViewsCount = async () => {
-        try {
-          setLoading(true);
-          const response = await CourseService.incrementCourseViews();
-          
-        } catch (error) {
-          setLoading(false);
-          console.error(error);
-        }
-      };
+        const pyqLinks = response.data.pyqLinks.map((link) => ({
+          title: link.link_name,
+          type: "link",
+          url: link.link_url,
+        }));
+        const videoLinks = response.data.videoLinks.map((link) => ({
+          title: link.link_name,
+          type: "link",
+          url: link.link_url,
+        }));
 
+        setResources([...resourcesPdf, ...resourcesLinks]);
+        setPyqs([...pyqPdf, ...pyqLinks]);
+        setVideos([...videoLinks]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      incrementCourseViewsCount();
+    const incrementCourseViewsCount = async () => {
+      try {
+        await CourseService.incrementCourseViews();
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    fetchCourseDetails();
+    fetchMedia();
+    incrementCourseViewsCount();
+  }, [course_id]); // Added course_id as a dependency
 
-      
-    }, []);
-
-
-    return (    
-      <>
-         {
-      loading?
-          <div className="flex justify-center items-center h-[80vh] md:h-[90vh]"> 
-          <CircularProgress/>
-          </div> 
-          :
-          <>
-    <div className="m-3 md:m-10 lg:mx-[120px] xl:mx-[200px]  boxShadow bg-white rounded-lg">
-      <AboutCourseMainSection courseDetails={courseDetails}/> 
-      <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
-      <CourseSyllabus syllabus={syllabus}/>
-      <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
-      <CoursePYQS pyqs={pyqs}/>
-      <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
-      <CourseReference resources={resources}/>
-      <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20"/>
-      <CommentSection type="course"  />
-
-    </div>
+  return (
+    <>
+      {loading ? (
+        <div className="flex justify-center items-center h-[80vh] md:h-[90vh]">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div className="m-3 md:m-10 lg:mx-[120px] xl:mx-[200px] boxShadow bg-white rounded-lg">
+          <AboutCourseMainSection courseDetails={courseDetails} />
+          <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20" />
+          <CourseSyllabus syllabus={syllabus} />
+          <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20" />
+          <CoursePYQS pyqs={pyqs} />
+          <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20" />
+          <CourseReference resources={resources} />
+          <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20" />
+          <CourseVideos videos={videos} />
+          <hr className="text-black text-lg mx-5 md:mx-10 lg:mx-20" />
+          <CommentSection type="course" />
+        </div>
+      )}
     </>
-  }
-    </>
-    );
-  };
+  );
+};
 
-  export default AboutCourse;
+export default AboutCourse;
+  

@@ -37,9 +37,9 @@ import { MdEdit, MdDelete } from "react-icons/md";
                     <TableCell>
                       <p className="text-black font-semibold">Credits</p>
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       <p className="text-black font-semibold">Professor</p>
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>
                       <p className="text-black font-semibold text-center">
                         View
@@ -61,17 +61,17 @@ import { MdEdit, MdDelete } from "react-icons/md";
                       <TableCell>{course.course_code}</TableCell>
                       <TableCell>{course.course_name}</TableCell>
                       <TableCell>{course.credits}</TableCell>
-                      <TableCell>{course.instructor_name}</TableCell>
+                      {/* <TableCell>{course.instructor_name}</TableCell> */}
                       <TableCell>
                         {/* Edit Button */}
                         <Button onClick={() => openViewModal(course)}>
-                          <FaEye size={20} className="lg:ml-6" />
+                          <FaEye size={20} className="lg:ml-16" />
                         </Button>
                       </TableCell>
                       <TableCell className="lg:ml-2">
                         {/* Edit Button */}
                         <Button onClick={() => handleEdit(course)}>
-                          <MdEdit size={20} className="lg:ml-6" />
+                          <MdEdit size={20} className="lg:ml-16" />
                         </Button>
                       </TableCell>
                       <TableCell className="items-center">

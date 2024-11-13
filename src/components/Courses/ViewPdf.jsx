@@ -1,6 +1,8 @@
-
 import React, { useState, useEffect } from "react";
-import { Document, Page } from "react-pdf";
+
+import { Document, Page,pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
 
 function ViewPdf({ pdf }) {
   const [numPages, setNumPages] = useState(null);
@@ -22,7 +24,6 @@ function ViewPdf({ pdf }) {
   //   };
   // }, []);
 
-
   return (
     <>
       <div className="flex flex-col w-full h-full text-center bg-white">
@@ -42,7 +43,7 @@ function ViewPdf({ pdf }) {
               pageNumber={index + 1}
               renderTextLayer={false}
               renderAnnotationLayer={false}
-              width={window.innerWidth*0.75} // Set width dynamically
+              width={window.innerWidth * 0.75} // Set width dynamically
             />
           ))}
         </Document>
