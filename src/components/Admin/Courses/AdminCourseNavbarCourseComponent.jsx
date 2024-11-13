@@ -1029,195 +1029,242 @@ const handleAddCourse = async (e) => {
 
 
     //Google Drive Implementation
+
     const handleResourcesGoogleDrivePicker = () => {
       openPicker({
         clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
         developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
         viewId: 'DOCS',
-        multiselect: false,
+        multiselect: true,  // Enable multiple file selection
         setIncludeFolders: true,
         setSelectFolderEnabled: true,
         callbackFunction: (data) => {
           if (data.action === 'picked') {
-            const file = data.docs[0];
-            console.log(123, file);
+            const selectedFiles = data.docs; // Get the array of selected files
+            console.log('Selected files:', selectedFiles);
     
-            const newLink = {
-              link_name: file.name, // Google Drive file name
-              link_url: file.url,   // Google Drive URL
-            };
+            // Loop through each selected file and add it to state
+            selectedFiles.forEach((file, index) => {
+              const newLink = {
+                link_name: file.name,  // Google Drive file name
+                link_url: file.url,    // Google Drive URL
+              };
     
-            // Check if the first index is empty
-            if (!resource_links[0].link_name && !resource_links[0].link_url) {
-              // Update the first index if empty
-              const updatedLinks = [...resource_links];
-              updatedLinks[0] = newLink;
-              setResources_link(updatedLinks);
+              // Check if the first index is empty
+              setResources_link((prevLinks) => {
+                const updatedLinks = [...prevLinks];
+    
+                // Add to the first index if empty, else append to remaining slots
+                if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+                  updatedLinks[0] = newLink;
+                } else {
+                  updatedLinks.push(newLink);
+                }
+    
+                return updatedLinks;
+              });
+            });
+          }
+        },
+      });
+    };
+    
+// Google Drive Picker Handler for Resources
+const handleEditAddResourceLinkGoogleDrive = () => {
+  openPicker({
+    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    viewId: 'DOCS',
+    multiselect: true,  // Enable multiple file selection
+    setIncludeFolders: true,
+    setSelectFolderEnabled: true,
+    callbackFunction: (data) => {
+      if (data.action === 'picked') {
+        const selectedFiles = data.docs; // Get the array of selected files
+        console.log('Selected files:', selectedFiles);
+
+        // Loop through each selected file and add it to state
+        selectedFiles.forEach((file, index) => {
+          const newLink = {
+            link_name: file.name,  // Google Drive file name
+            link_url: file.url,    // Google Drive URL
+          };
+
+          setButtonLoading(true);
+          setUpdatedResource_links((prevLinks) => {
+            const updatedLinks = [...prevLinks];
+            
+            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+              updatedLinks[0] = newLink;  // Add to the first index if empty
             } else {
-              // Add the new link if the first index is not empty
-              setResources_link((prevLinks) => [...prevLinks, newLink]);
+              updatedLinks.push(newLink);  // Add to the remaining slots
             }
-          }
-        },
-      });
-    };
 
-    const handleEditAddResourceLinkGoogleDrive = () => {
-      openPicker({
-        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
-        viewId: 'DOCS',
-        multiselect: false,
-        setIncludeFolders: true,
-        setSelectFolderEnabled: true,
-        callbackFunction: (data) => {
-          if (data.action === 'picked') {
-            const file = data.docs[0];
-            console.log(123, file);
-    
-            const newLink = {
-              link_name: file.name, // Google Drive file name
-              link_url: file.url,   // Google Drive URL
-            };
-    
-            setButtonLoading(true);
-            setUpdatedResource_links((prevLinks) => [
-              ...prevLinks,
-              newLink,
-            ]);
-            setButtonLoading(false);
-          }
-        },
-      });
-    };
-    
+            return updatedLinks;
+          });
+          setButtonLoading(false);
+        });
+      }
+    },
+  });
+};
 
-    const handlePVQsGoogleDrivePicker = () => {
-      openPicker({
-        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
-        viewId: 'DOCS',
-        multiselect: false,
-        setIncludeFolders: true,
-        setSelectFolderEnabled: true,
-        callbackFunction: (data) => {
-          if (data.action === 'picked') {
-            const file = data.docs[0];
-            console.log(123, file);
-    
-            const newLink = {
-              link_name: file.name, // Google Drive file name
-              link_url: file.url,   // Google Drive URL
-            };
-    
-            // Check if the first index in pyq_links is empty
-            if (!pyq_links[0].link_name && !pyq_links[0].link_url) {
-              // Update the first index if empty
-              const updatedLinks = [...pyq_links];
-              updatedLinks[0] = newLink;
-              setPyq_link(updatedLinks);
+// Google Drive Picker Handler for PVQs
+const handlePVQsGoogleDrivePicker = () => {
+  openPicker({
+    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    viewId: 'DOCS',
+    multiselect: true,  // Enable multiple file selection
+    setIncludeFolders: true,
+    setSelectFolderEnabled: true,
+    callbackFunction: (data) => {
+      if (data.action === 'picked') {
+        const selectedFiles = data.docs; // Get the array of selected files
+        console.log('Selected files:', selectedFiles);
+
+        // Loop through each selected file and add it to state
+        selectedFiles.forEach((file) => {
+          const newLink = {
+            link_name: file.name,  // Google Drive file name
+            link_url: file.url,    // Google Drive URL
+          };
+
+          setPyq_link((prevLinks) => {
+            const updatedLinks = [...prevLinks];
+            
+            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+              updatedLinks[0] = newLink;  // Add to the first index if empty
             } else {
-              // Add the new link if the first index is not empty
-              setPyq_link((prevLinks) => [...prevLinks, newLink]);
+              updatedLinks.push(newLink);  // Add to the remaining slots
             }
-          }
-        },
-      });
-    };
 
-    const handleEditAddPyqLinkGoogleDrive = () => {
-      openPicker({
-        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
-        viewId: 'DOCS',
-        multiselect: false,
-        setIncludeFolders: true,
-        setSelectFolderEnabled: true,
-        callbackFunction: (data) => {
-          if (data.action === 'picked') {
-            const file = data.docs[0];
-            console.log(123, file);
-    
-            const newLink = {
-              link_name: file.name, // Google Drive file name
-              link_url: file.url,   // Google Drive URL
-            };
-    
-            setButtonLoading(true);
-            setUpdatedPyq_links((prevLinks) => [
-              ...prevLinks,
-              newLink,
-            ]);
-            setButtonLoading(false);
-          }
-        },
-      });
-    };
-    
-                   
-    const handleVideosGoogleDrivePicker = () => {
-      openPicker({
-        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
-        viewId: 'DOCS',
-        multiselect: false,
-        setIncludeFolders: true,
-        setSelectFolderEnabled: true,
-        callbackFunction: (data) => {
-          if (data.action === 'picked') {
-            const file = data.docs[0];
-            console.log(123, file);
-    
-            const newLink = {
-              link_name: file.name, // Google Drive file name
-              link_url: file.url,   // Google Drive URL
-            };
-    
-            // Check if the first index in video_links is empty
-            if (!video_links[0].link_name && !video_links[0].link_url) {
-              // Update the first index if empty
-              const updatedLinks = [...video_links];
-              updatedLinks[0] = newLink;
-              setVideo_link(updatedLinks);
+            return updatedLinks;
+          });
+        });
+      }
+    },
+  });
+};
+
+// Google Drive Picker Handler for Editing PVQs
+const handleEditAddPyqLinkGoogleDrive = () => {
+  openPicker({
+    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    viewId: 'DOCS',
+    multiselect: true,  // Enable multiple file selection
+    setIncludeFolders: true,
+    setSelectFolderEnabled: true,
+    callbackFunction: (data) => {
+      if (data.action === 'picked') {
+        const selectedFiles = data.docs; // Get the array of selected files
+        console.log('Selected files:', selectedFiles);
+
+        // Loop through each selected file and add it to state
+        selectedFiles.forEach((file) => {
+          const newLink = {
+            link_name: file.name,  // Google Drive file name
+            link_url: file.url,    // Google Drive URL
+          };
+
+          setButtonLoading(true);
+          setUpdatedPyq_links((prevLinks) => {
+            const updatedLinks = [...prevLinks];
+            
+            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+              updatedLinks[0] = newLink;  // Add to the first index if empty
             } else {
-              // Add the new link if the first index is not empty
-              setVideo_link((prevLinks) => [...prevLinks, newLink]);
+              updatedLinks.push(newLink);  // Add to the remaining slots
             }
-          }
-        },
-      });
-    };
-    
 
-    const handleEditAddVideoLinkGoogleDrive = () => {
-      openPicker({
-        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
-        viewId: 'DOCS',
-        multiselect: false,
-        setIncludeFolders: true,
-        setSelectFolderEnabled: true,
-        callbackFunction: (data) => {
-          if (data.action === 'picked') {
-            const file = data.docs[0];
-            console.log(123, file);
-    
-            const newLink = {
-              link_name: file.name, // Google Drive file name
-              link_url: file.url,   // Google Drive URL
-            };
-    
-            setButtonLoading(true);
-            setUpdatedVideo_links((prevLinks) => [
-              ...prevLinks,
-              newLink,
-            ]);
-            setButtonLoading(false);
-          }
-        },
-      });
-    };
-    
+            return updatedLinks;
+          });
+          setButtonLoading(false);
+        });
+      }
+    },
+  });
+};
+
+// Google Drive Picker Handler for Videos
+const handleVideosGoogleDrivePicker = () => {
+  openPicker({
+    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    viewId: 'DOCS',
+    multiselect: true,  // Enable multiple file selection
+    setIncludeFolders: true,
+    setSelectFolderEnabled: true,
+    callbackFunction: (data) => {
+      if (data.action === 'picked') {
+        const selectedFiles = data.docs; // Get the array of selected files
+        console.log('Selected files:', selectedFiles);
+
+        // Loop through each selected file and add it to state
+        selectedFiles.forEach((file) => {
+          const newLink = {
+            link_name: file.name,  // Google Drive file name
+            link_url: file.url,    // Google Drive URL
+          };
+
+          setVideo_link((prevLinks) => {
+            const updatedLinks = [...prevLinks];
+            
+            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+              updatedLinks[0] = newLink;  // Add to the first index if empty
+            } else {
+              updatedLinks.push(newLink);  // Add to the remaining slots
+            }
+
+            return updatedLinks;
+          });
+        });
+      }
+    },
+  });
+};
+
+// Google Drive Picker Handler for Editing Videos
+const handleEditAddVideoLinkGoogleDrive = () => {
+  openPicker({
+    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
+    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    viewId: 'DOCS',
+    multiselect: true,  // Enable multiple file selection
+    setIncludeFolders: true,
+    setSelectFolderEnabled: true,
+    callbackFunction: (data) => {
+      if (data.action === 'picked') {
+        const selectedFiles = data.docs; // Get the array of selected files
+        console.log('Selected files:', selectedFiles);
+
+        // Loop through each selected file and add it to state
+        selectedFiles.forEach((file) => {
+          const newLink = {
+            link_name: file.name,  // Google Drive file name
+            link_url: file.url,    // Google Drive URL
+          };
+
+          setButtonLoading(true);
+          setUpdatedVideo_links((prevLinks) => {
+            const updatedLinks = [...prevLinks];
+            
+            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+              updatedLinks[0] = newLink;  // Add to the first index if empty
+            } else {
+              updatedLinks.push(newLink);  // Add to the remaining slots
+            }
+
+            return updatedLinks;
+          });
+          setButtonLoading(false);
+        });
+      }
+    },
+  });
+};
+
     
     
      return (

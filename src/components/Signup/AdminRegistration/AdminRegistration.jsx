@@ -96,6 +96,10 @@ const AdminRegistration = () => {
       errors.pincode = "Invalid pincode. Must be 6 digits.";
     }
 
+    if(!details.college_logo){
+      errors.college_logo="College Logo Required!"
+    }
+
     return errors;
   };
 

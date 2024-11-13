@@ -36,7 +36,16 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
         const response = await commentService.getReplyComment(replyId);
         const reply = response?.data?.comment;
         const { name, picture } = await fetchUserDetails(reply.user);
-        return { ...reply, name, picture };
+       console.log(1234,name,reply);
+        let repliedToName = "";
+        if (reply.repliedTo) {
+          console.log(59,reply.repliedTo)
+          const repliedToUser = await fetchUserDetails(reply.repliedTo);
+          console.log(69,repliedToUser);
+          repliedToName = repliedToUser.name;
+        }
+
+        return { ...reply, name, picture, repliedToName };
       }));
       setReplies(repliesData);
     } catch (error) {
@@ -47,6 +56,7 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
   const fetchUserDetails = async (userId) => {
     try {
       const response = await UserService.getUserById(userId);
+      console.log(78,response);
       return { name: response.data.user.name, picture: response.data.user.picture };
     } catch (error) {
       console.error("Error fetching user details:", error);
@@ -92,9 +102,8 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
 
   const handleDelete = async () => {
     try {
-      const res = await commentService.deleteReplyComment({replyId:deleteId});
-      onRepliesUpdated()
-      console.log(45,res)
+      const res = await commentService.deleteReplyComment({ replyId: deleteId });
+      onRepliesUpdated();
       setOpenModal(false);
       setDeleteId(null);
       fetchReplies(); // Refresh replies after deletion
@@ -111,7 +120,7 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
   const handleUpdate = async (id) => {
     try {
       await commentService.updateReplyComment(id, { content: replyText });
-      onRepliesUpdated()
+      onRepliesUpdated();
       setEditingReply(null);
       fetchReplies(); // Refresh replies after update
     } catch (error) {
@@ -126,9 +135,9 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
       {onClicked ? <AddReply onAdd={addReply} /> : null}
 
       {replies.map((rep) => {
-        const { _id, content, updatedAt, likes, user, repliedTo, name, picture } = rep;
+        const { _id, content, updatedAt, likes, user, repliedToName, name, picture } = rep;
         const isCurrentUser = currentUser && user === currentUser._id;
-
+        console.log(1234567,_id,user);
         return (
           <React.Fragment key={_id}>
             <Card>
@@ -148,10 +157,10 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
                       </div>
                       <div className="flex gap-2">
                         <ReplyButton functionality={() => {
-                          if (_id === replyingToId) {
+                          if (user === replyingToId) {
                             setReplyingToId(null);
                           } else {
-                            setReplyingToId(_id);
+                            setReplyingToId(user);
                           }
                         }} />
                         {isCurrentUser && (
@@ -191,7 +200,7 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
                             fontWeight: 500,
                           }}
                         >
-                          {repliedTo ? `@${repliedTo}` : ""}
+                          {repliedToName ? `@${repliedToName}` : ""}
                         </Typography>{" "}
                         {content}
                       </Typography>
@@ -203,7 +212,7 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
                 </div>
               </Box>
             </Card>
-            {replyingToId === _id ? <AddReply onAdd={addReplyToReply} /> : null}
+            {replyingToId === user ? <AddReply onAdd={addReplyToReply} /> : null}
           </React.Fragment>
         );
       })}

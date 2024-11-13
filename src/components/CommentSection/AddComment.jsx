@@ -6,9 +6,11 @@ import EditableCommentField from './Reusable/Comment/EditableCommentField';
 import SendButton from './Reusable/Buttons/BgButtons/SendButton';
 import avatar from '@/assets/Comment/avatar.png';
 import commentService from '../../services/comment.service';
+import { useGlobalContext } from '@/context/AuthContext';
 
 const AddComment = ({ targetType, target, onCommentAdded }) => {
   const [commentTxt, setCommentTxt] = useState("");
+  const { user: currentUser } = useGlobalContext(); // Fetch current user's details
 
   const handleSendComment = async () => {
     try {
@@ -30,7 +32,7 @@ const AddComment = ({ targetType, target, onCommentAdded }) => {
           <Stack direction="row" spacing={2} alignItems="flex-start">
             <Avatar
               className="max-md:!hidden"
-              src={avatar}
+              src={currentUser?.picture || avatar} // Use user's picture if available, otherwise fallback to default avatar
               variant="rounded"
               alt="user-avatar"
             />

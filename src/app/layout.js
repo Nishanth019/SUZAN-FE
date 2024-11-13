@@ -21,6 +21,8 @@ export default function RootLayout({ children }) {
         </ClientProvider>
       </AuthProvider>
       <Script src="https://apis.google.com/js/api.js" strategy="beforeInteractive" />
+       <Script src="https://apis.google.com/js/platform.js" strategy="beforeInteractive" />
+
       </body>
     </html>
   );
