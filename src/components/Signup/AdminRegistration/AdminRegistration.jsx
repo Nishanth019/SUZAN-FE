@@ -43,6 +43,7 @@ const AdminRegistration = () => {
     branch: "",
     batch: "",
     email_domain: "",
+    college_logo:"",
   });
 
   useEffect(() => {
