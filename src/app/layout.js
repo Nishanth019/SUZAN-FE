@@ -5,6 +5,7 @@ import { AuthProvider } from '@/context/AuthContext'; // Import the context prov
 const inter = Inter({ subsets: ["latin"] });
 import { Toaster } from "react-hot-toast";
 import Script from 'next/script'; 
+import { Analytics } from "@vercel/analytics/react"
 export const metadata = {
   title: "SUZAN",
   description: "Soochan For Gen-Z",
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
         <ClientProvider>
           {children}
           <Toaster/>
+          <Analytics/>
         </ClientProvider>
       </AuthProvider>
       <Script src="https://apis.google.com/js/api.js" strategy="beforeInteractive" />
