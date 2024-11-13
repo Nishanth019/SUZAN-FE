@@ -24,6 +24,7 @@ function ProfileComponent() {
   const [isEdit, setIsEdit] = useState(true);
   const [isEditCollegeDetails, setIsEditCollegeDetails] = useState(true);
   const [picture, setPicture] = useState(null);
+  const [logo, setLogo] = useState(null);
 
   // Define states for form values
   const [userData, setUserData] = useState({
@@ -49,6 +50,7 @@ function ProfileComponent() {
     pincode: "",
     country: "",
     email_domain: "",
+    college_logo:"",
   });
 
     // State management for "Switch Main Admin Access" functionality
@@ -84,6 +86,32 @@ function ProfileComponent() {
       // Handle error message
     }
   };
+  const handleChangeLogo= async (e) => {
+    const file = e.target.files[0];
+    console.log(2444,file);
+    try {
+      const formData = new FormData();
+      formData.append("picture", file);
+      // formData.append("userData", JSON.stringify(userData)); // Append other user data
+      console.log(23333,formData);
+      const response = await collegeService.updateLogo(collegeData.id,formData);
+      setLogo(response?.data?.college?.college_logo);
+      console.log(24,response.data);
+      toast.success(response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error) {
+      console.error("Error updating college logo:", error);
+      // Handle error message
+    }
+  };
 
   const handleChangeGender = (e) => {
     const { name, value } = e.target;
@@ -103,7 +131,7 @@ function ProfileComponent() {
       }
     };
     fetchData();
-  }, [picture]);
+  }, [picture,logo]);
 
   useEffect(() => {
     if (currentUser) {
@@ -132,6 +160,7 @@ function ProfileComponent() {
           pincode: collegeDetails.pincode,
           country: collegeDetails.country,
           email_domain: collegeDetails.email_domain,
+          college_logo: collegeDetails.college_logo,
         });
       } else if (role === "student" && collegeDetails) {
         setCollegeData({
@@ -293,26 +322,28 @@ function ProfileComponent() {
         </div>
 
         <div>
-          {isEditCollegeDetails && (userData.role === "admin" || userData.role === "mainadmin" ) ? (
+          {isEditCollegeDetails &&
+          (userData.role === "admin" || userData.role === "mainadmin") ? (
             <button
               onClick={() => setIsEditCollegeDetails(false)}
               className="text-center border border-[#36518F] text-[#36518F]  font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
             >
-              Edit College 
+              Edit College
             </button>
           ) : (
-            (userData.role === "admin" || userData.role === "mainadmin" ) &&
-            <button
-              onClick={() => {
-                setIsEditCollegeDetails(true);
-                updateCollege();
-              }}
-              className="text-center border border-[#36518F] 
+            (userData.role === "admin" || userData.role === "mainadmin") && (
+              <button
+                onClick={() => {
+                  setIsEditCollegeDetails(true);
+                  updateCollege();
+                }}
+                className="text-center border border-[#36518F] 
                bg-blue-400 hover:bg-blue-500 text-[#36518F] 
               font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
-            >
-              Save College 
-            </button>
+              >
+                Save College
+              </button>
+            )
           )}
         </div>
       </div>
@@ -336,39 +367,73 @@ function ProfileComponent() {
             </div>
             {isEdit && (
               <>
-              <label htmlFor="fileInput" className="text-blue-400 cursor-pointer text-sm">
-                Update Picture
-              </label>
-            <input
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              onChange={handleChangePicture}
-              className="hidden"
-            /> </>
-          )}
+                <label
+                  htmlFor="userPictureInput"
+                  className="text-blue-400 cursor-pointer text-sm"
+                >
+                  Update Picture
+                </label>
+                <input
+                  id="userPictureInput"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleChangePicture}
+                  className="hidden"
+                />{" "}
+              </>
+            )}
+          </div>
+          <div>
+            <div className="overflow-hidden">
+              {collegeData.college_logo ? (
+                <img
+                  className="h-12 w-20 lg:h-16 lg:w-28 object-cover object-center "
+                  src={collegeData.college_logo}
+                  alt={collegeData.college_name}
+                />
+              ) : (
+                <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
+                  <span className="font-medium text-white text-xl">
+                    {collegeData.college_name ? collegeData.college_name : "E"}
+                  </span>
+                </div>
+              )}
+            </div>
+            {isEdit && (
+              <>
+                <label
+                  htmlFor="collegeLogoInput"
+                  className="text-blue-400 cursor-pointer text-sm"
+                >
+                  Update College Logo
+                </label>
+                <input
+                  id="collegeLogoInput"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleChangeLogo}
+                  className="hidden"
+                />{" "}
+              </>
+            )}
           </div>
           <div className="">
-            {(userData.role === 'admin' || userData.role=='mainadmin')?
-              <div
-                className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer"
-              >
-                <Link
-                  href="/admin-dashboard"
-                >
-                  Admin
-                </Link>
-
+            {userData.role === "admin" || userData.role == "mainadmin" ? (
+              <div className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer">
+                <Link href="/admin-dashboard">Admin</Link>
               </div>
-              : <div></div>
-            }
+            ) : (
+              <div></div>
+            )}
           </div>
         </div>
 
         <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
           <Input
             name="name"
-            handleChange={(e) => setUserData({ ...userData, name: e.target.value })}
+            handleChange={(e) =>
+              setUserData({ ...userData, name: e.target.value })
+            }
             value={userData.name}
             label="Your name"
             disabled={isEdit}
@@ -384,7 +449,9 @@ function ProfileComponent() {
         <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
           <Input
             name="phone"
-            handleChange={(e) => setUserData({ ...userData, phone: e.target.value })}
+            handleChange={(e) =>
+              setUserData({ ...userData, phone: e.target.value })
+            }
             value={userData.phone}
             label="Phone Number"
             disabled={isEdit}
@@ -401,7 +468,9 @@ function ProfileComponent() {
         <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
           <Input
             name="roll_no"
-            handleChange={(e) => setUserData({ ...userData, roll_no: e.target.value })}
+            handleChange={(e) =>
+              setUserData({ ...userData, roll_no: e.target.value })
+            }
             value={userData.roll_no}
             label="Roll Number"
             disabled={isEdit}
@@ -409,7 +478,9 @@ function ProfileComponent() {
 
           <Input
             name="batch"
-            handleChange={(e) => setUserData({ ...userData, batch: e.target.value })}
+            handleChange={(e) =>
+              setUserData({ ...userData, batch: e.target.value })
+            }
             value={userData.batch}
             label="Batch"
             disabled={isEdit}
@@ -419,7 +490,9 @@ function ProfileComponent() {
         <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
           <Input
             name="program"
-            handleChange={(e) => setUserData({ ...userData, program: e.target.value })}
+            handleChange={(e) =>
+              setUserData({ ...userData, program: e.target.value })
+            }
             value={userData.program}
             label="Program"
             disabled={isEdit}
@@ -427,7 +500,9 @@ function ProfileComponent() {
 
           <Input
             name="branch"
-            handleChange={(e) => setUserData({ ...userData, branch: e.target.value })}
+            handleChange={(e) =>
+              setUserData({ ...userData, branch: e.target.value })
+            }
             value={userData.branch}
             label="Branch"
             disabled={isEdit}
@@ -444,7 +519,9 @@ function ProfileComponent() {
           {isEdit ? (
             <Input
               name="gender"
-              handleChange={(e) => setUserData({ ...userData, gender: e.target.value })}
+              handleChange={(e) =>
+                setUserData({ ...userData, gender: e.target.value })
+              }
               value={userData.gender}
               label="Gender"
               disabled={isEdit}
@@ -472,14 +549,19 @@ function ProfileComponent() {
           )}
         </div>
 
-        {(userData.role === 'admin' || userData.role=='mainadmin') && (
+        {(userData.role === "admin" || userData.role == "mainadmin") && (
           <div>
             <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
               <Input
                 name="street_name"
                 value={collegeData.street_name}
                 label="Street Name"
-                handleChange={(e) => setCollegeData({ ...collegeData, street_name: e.target.value })}
+                handleChange={(e) =>
+                  setCollegeData({
+                    ...collegeData,
+                    street_name: e.target.value,
+                  })
+                }
                 disabled={isEditCollegeDetails}
               />
 
@@ -487,7 +569,9 @@ function ProfileComponent() {
                 name="city"
                 value={collegeData.city}
                 label="City"
-                handleChange={(e) => setCollegeData({ ...collegeData, city: e.target.value })}
+                handleChange={(e) =>
+                  setCollegeData({ ...collegeData, city: e.target.value })
+                }
                 disabled={isEditCollegeDetails}
               />
             </div>
@@ -496,7 +580,9 @@ function ProfileComponent() {
                 name="state"
                 value={collegeData.state}
                 label="State"
-                handleChange={(e) => setCollegeData({ ...collegeData, state: e.target.value })}
+                handleChange={(e) =>
+                  setCollegeData({ ...collegeData, state: e.target.value })
+                }
                 disabled={isEditCollegeDetails}
               />
 
@@ -504,7 +590,9 @@ function ProfileComponent() {
                 name="pincode"
                 value={collegeData.pincode}
                 label="Pincode"
-                handleChange={(e) => setCollegeData({ ...collegeData, pincode: e.target.value })}
+                handleChange={(e) =>
+                  setCollegeData({ ...collegeData, pincode: e.target.value })
+                }
                 disabled={isEditCollegeDetails}
               />
             </div>
@@ -513,7 +601,9 @@ function ProfileComponent() {
                 name="country"
                 value={collegeData.country}
                 label="Country"
-                handleChange={(e) => setCollegeData({ ...collegeData, country: e.target.value })}
+                handleChange={(e) =>
+                  setCollegeData({ ...collegeData, country: e.target.value })
+                }
                 disabled={true}
               />
 
@@ -521,7 +611,12 @@ function ProfileComponent() {
                 name="email_domain"
                 value={collegeData.email_domain}
                 label="Email Domain"
-                handleChange={(e) => setCollegeData({ ...collegeData, email_domain: e.target.value })}
+                handleChange={(e) =>
+                  setCollegeData({
+                    ...collegeData,
+                    email_domain: e.target.value,
+                  })
+                }
                 disabled={true}
               />
             </div>
@@ -529,7 +624,7 @@ function ProfileComponent() {
         )}
       </div>
 
-      {(userData.role === 'mainadmin') && (
+      {userData.role === "mainadmin" && (
         <button
           onClick={handleOpenSwitchAdminModal}
           className="text-center border border-[#36518F] text-[#36518F] font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
@@ -537,61 +632,75 @@ function ProfileComponent() {
           Switch Main Admin Access
         </button>
       )}
-     <Modal
-  open={isSwitchAdminModalOpen}
-  onClose={handleCloseSwitchAdminModal}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description"
->
-<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] bg-white shadow-lg p-[25px]">
-
-    <p className="font-bold text-md sm:text-xl lg:text-2xl pb-5"> 
-      Switch Main Admin Access
-    </p>
-    <div>
-      <p className="text-sm sm:text-lg lg:text-xl">Search by Email:</p>
-      <Input placeholder="Search by Email" value={searchQuery} handleChange={(e) => {
-        e.preventDefault();
-        setSearchQuery(e.target.value);
-        }} />
-        <div
-                className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer mt-2"
-                onClick={handleSearchUser}
-              >
-                  Search
-              </div>
-    </div>
-    {searchErrorMessage && <p className="text-md mt-3 flex justify-center items-center ">{searchErrorMessage}</p>}
-    {searchedUser!==null && (
-  <div>
-    <div className="w-full  bg-white rounded-2xl flex flex-col gap-y-7 drop-shadow my-3 p-2">
-  <div className="flex items-center  gap-4 ">
-      <div className="rounded-full overflow-hidden">
-        {searchedUser.picture ? (
-          <img
-            className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center"
-            src={searchedUser.picture}
-            alt={searchedUser.name}
-          />
-        ) : (
-          <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
-            <span className="font-medium text-white text-xl">
-              {searchedUser.name ? searchedUser.name[0] : "E"}
-            </span>
+      <Modal
+        open={isSwitchAdminModalOpen}
+        onClose={handleCloseSwitchAdminModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] bg-white shadow-lg p-[25px]">
+          <p className="font-bold text-md sm:text-xl lg:text-2xl pb-5">
+            Switch Main Admin Access
+          </p>
+          <div>
+            <p className="text-sm sm:text-lg lg:text-xl">Search by Email:</p>
+            <Input
+              placeholder="Search by Email"
+              value={searchQuery}
+              handleChange={(e) => {
+                e.preventDefault();
+                setSearchQuery(e.target.value);
+              }}
+            />
+            <div
+              className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer mt-2"
+              onClick={handleSearchUser}
+            >
+              Search
+            </div>
           </div>
-        )}
-      </div>
-      <div>
-        <p className="font-semibold">{searchedUser.name}</p>
-        <p className="text-gray-500 text-sm">{searchedUser.email}</p>
-      </div>
-    </div>
-    <div   className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer mt-2"  onClick={handleSwitchMainAdmin}>Switch Main Admin Access</div>
-  </div>
-  </div>
-)}
-</div>
-</Modal>
+          {searchErrorMessage && (
+            <p className="text-md mt-3 flex justify-center items-center ">
+              {searchErrorMessage}
+            </p>
+          )}
+          {searchedUser !== null && (
+            <div>
+              <div className="w-full  bg-white rounded-2xl flex flex-col gap-y-7 drop-shadow my-3 p-2">
+                <div className="flex items-center  gap-4 ">
+                  <div className="rounded-full overflow-hidden">
+                    {searchedUser.picture ? (
+                      <img
+                        className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center"
+                        src={searchedUser.picture}
+                        alt={searchedUser.name}
+                      />
+                    ) : (
+                      <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
+                        <span className="font-medium text-white text-xl">
+                          {searchedUser.name ? searchedUser.name[0] : "E"}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-semibold">{searchedUser.name}</p>
+                    <p className="text-gray-500 text-sm">
+                      {searchedUser.email}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className="text-center text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 border  text-white bg-blue-400 hover:bg-blue-500  font-bold rounded-xl  cursor-pointer mt-2"
+                  onClick={handleSwitchMainAdmin}
+                >
+                  Switch Main Admin Access
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }

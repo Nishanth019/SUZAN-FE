@@ -2,12 +2,14 @@ import Link from "next/link";
 import { useGlobalContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import collegeService from "@/services/college.service";
+import { ToastContainer, toast } from "react-toastify";
 const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
   const router = useRouter();
   const { isAuth } = useGlobalContext();
   const [errors, setErrors] = useState({});
-
+  const [logo,setLogo]=useState(null);
+   const [isEdit, setIsEdit] = useState(true);
   if (isAuth) {
     router.push("/");
   }
@@ -36,6 +38,35 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
   const handleCheckboxChange = (e) => {
     onCheckboxChange(e.target.checked); // Notify parent component about checkbox change
   };
+
+    const handleUploadLogo = async (e) => {
+      const file = e.target.files[0];
+      console.log(23, file);
+      try {
+        const formData = new FormData();
+        formData.append("picture", file);
+        // formData.append("userData", JSON.stringify(userData)); // Append other user data
+        console.log(23333, formData);
+        const response = await collegeService.uploadLogo(formData);
+        // console.log(2444, response);
+        setLogo(response.data.picture)
+        setDetails({ ...details, college_logo: response.data.picture });
+        console.log(2444, response);
+        toast.success(response.data.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } catch (error) {
+        console.error("Error updating user:", error);
+        // Handle error message
+      }
+    };
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 ">
@@ -175,6 +206,44 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
             onChange={handleChange}
             className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
           />
+        </div>
+      </div>
+      <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
+        <div className="w-full md:flex-1">
+          <div>
+            <div className="rounded-full overflow-hidden">
+              {logo ? (
+                <img
+                  className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
+                  src={logo}
+                  alt={details.college_name || "College Logo"}
+                />
+              ) : (
+                <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
+                  <span className="font-medium text-white text-xl">
+                    {details.college_name ? details.college_name[0] : "E"}
+                  </span>
+                </div>
+              )}
+            </div>
+            {isEdit && (
+              <>
+                <label
+                  htmlFor="fileInput"
+                  className="text-blue-400 cursor-pointer text-sm"
+                >
+                  Upload College Logo
+                </label>
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleUploadLogo}
+                  className="hidden"
+                />{" "}
+              </>
+            )}
+          </div>
         </div>
       </div>
 
