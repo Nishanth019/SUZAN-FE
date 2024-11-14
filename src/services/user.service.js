@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const { BACKEND_URL } = process.env;
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 // Creating a global instance of Axios with default configuration
 const axiosInstance = axios.create({
@@ -9,12 +9,7 @@ const axiosInstance = axios.create({
 
 class UserService {
   constructor() {
-    // Use the BACKEND_URL from environment variables if available
-    // this.url = BACKEND_URL;
-    // this.url = "http://localhost:8000";
-    // this.url = "https://suzan-be-mmz3.onrender.com";
-    // this.url = "https://suzan-be-production.onrender.com";
-    this.url = "https://suzan-be.vercel.app";
+    this.url = BACKEND_URL;
   }
 
   getCurrentUser() {
