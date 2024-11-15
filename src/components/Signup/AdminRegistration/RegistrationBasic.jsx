@@ -4,9 +4,8 @@ import { useRouter } from "next/navigation";
 
 const genders = ["male", "female", "others"];
 
-const RegistrationBasic = ({ details, setDetails }) => {
+const RegistrationBasic = ({ details, setDetails, errors }) => {
   const router = useRouter();
-  const [errors, setErrors] = useState({});
   const { isAuth } = useGlobalContext();
 
   if (isAuth) {
@@ -15,22 +14,6 @@ const RegistrationBasic = ({ details, setDetails }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Validation logic for phone number
-    if (name === "phone") {
-      if (!/^\d{10}$/.test(value)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          phone: "Please enter a valid 10-digit phone number",
-        }));
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          phone: "",
-        }));
-      }
-    }
-
     setDetails({ ...details, [name]: value });
   };
 
