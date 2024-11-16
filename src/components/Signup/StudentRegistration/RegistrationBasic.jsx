@@ -5,14 +5,13 @@ import { useGlobalContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 const genders = ["male", "female", "others"];
 
-const RegistrationBasic = ({ details, setDetails }) => {
+const RegistrationBasic = ({ details, setDetails, errors}) => {
     const router = useRouter();
       const { isAuth } = useGlobalContext();
 
       if (isAuth) {
         router.push("/");
       }
-  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });

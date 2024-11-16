@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import authService from "@/services/auth.service";
 import collegeService from "@/services/college.service";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useGlobalContext } from "@/context/AuthContext";
 
 const StudentSignup = () => {
@@ -22,47 +22,27 @@ const StudentSignup = () => {
     setShow(!show);
   }
   const navigate = useRouter();
-
     const router = useRouter();
-
     const { isAuth } = useGlobalContext();
-
     if (isAuth) {
       router.push("/");
     }
-
-  const handleOtpForSignUp = (values) => {
-    ////TODO:remove this line and comment out next line
-    // const handleOtpForSignUp = async (values) => {
-    // const response = await authService.sendOtpForSignUpEmployer(values);
-
-    // if (response.status === 201) {
-    console.log(values);
-    setShowOtpField(true);
-    // setShowOtpLoginField(true);
-    setCanResend(false);
-    setTimer(30);
-    // }
-  };
+    const handleOtpForSignUp = (values) => {
+      console.log(values);
+      setShowOtpField(true);
+      setCanResend(false);
+      setTimer(30);
+    };
   const fetchColleges = async () => {
     try {
       const response = await collegeService.getAllVerifiedColleges();
-      // Check if the request was successful
-      // console.log(1,response);
       if (response.data.success) {
-        // Extract colleges array from the response
         const colleges = response.data.colleges;
-
-        // Now you can set the colleges state or use it as needed
         setColleges(colleges);
-        // console.log(2, colleges);
-        // console.log(3, colleges.college_name);
       } else {
-        // Handle the case where the request was not successful
         console.error("Error fetching colleges:", response.data.error);
       }
     } catch (error) {
-      // Handle any errors that occur during the fetch
       console.error("Error fetching colleges:", error);
     }
   };
@@ -70,7 +50,7 @@ const StudentSignup = () => {
     fetchColleges();
   }, []);
   const initialValues = {
-    college_name: "Select a college", // Initialize college_name to an empty string
+    college_name: "Select a college", 
     name: "",
     email: "",
     password: "",
@@ -101,7 +81,6 @@ const StudentSignup = () => {
         setErrors("Password must be at least 8 characters");
         return;
       }
-
       if (tab === 0) {
         if (!values.name) {
           setErrors("Full Name Required!");
@@ -155,6 +134,7 @@ const StudentSignup = () => {
           };
           payload.email = values.email;
           const data = await authService.verifyOtpForAdmin(payload);
+          toast.success(data.data.message)
           navigate.push(`/signup/student/registration/${data.data.id}`);
         } catch (error) {
           setErrors("");
@@ -172,6 +152,7 @@ const StudentSignup = () => {
       }
     },
   });
+
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -183,24 +164,29 @@ const StudentSignup = () => {
     }
   }, [timer]);
 
-  const resendOtp = async (e) => {
-    const stringVerify = new RegExp(/[A-Za-z]/);
+  const resendOtp = async () => {
+    try {
+      const payload = { email: loginForm.values.email };
+      const response = await authService.sendOtp(payload);
 
-    const isString = stringVerify.exec(e.target.value);
-    const payload = {};
-    // if (isString) {
-    payload.email = loginForm.values.email;
-    // } else {
-    //   payload.phone = loginForm.values.email;
-    // }
-    // const response = await authService.sendOtp(payload);
-
-    // if (response) {
-    setShowOtpField(true);
-    // setShowOtpLoginField(true);
-    setCanResend(false);
-    setTimer(30); // Reset the timer
-    // }
+      if (response) {
+        toast.success("OTP sent successfully");
+        setShowOtpField(true);
+        setCanResend(false);
+        setTimer(30); 
+      }
+    } catch (error) {
+      toast.error(error.response?.data.message || "Error occurred", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   };
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -357,11 +343,6 @@ const StudentSignup = () => {
                       value={loginForm.values.otp}
                       onChange={loginForm.handleChange}
                       name="otp"
-                      // value={loginForm.values.password}
-                      // onChange={loginForm.handleChange}
-                      // error={
-                      //     loginForm.touched.password && Boolean(loginForm.errors.password)
-                      // }
                       placeholder="Enter OTP"
                       className="rounded-full border border-[#E0E0E0] p-3 w-full  max-sm:text-sm"
                     />
@@ -385,6 +366,13 @@ const StudentSignup = () => {
                     }}
                   >
                     Sign Up
+                  </button>
+                  <button
+                    className="bg-gray-400 text-white p-4 w-full rounded-full"
+                    onClick={resendOtp}
+                    disabled={!canResend}
+                  >
+                    {canResend ? "Resend OTP" : `Resend OTP in ${timer}s`}
                   </button>
                 </div>
               </div>

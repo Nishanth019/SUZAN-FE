@@ -3,11 +3,12 @@ import { useGlobalContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import collegeService from "@/services/college.service";
-import { ToastContainer, toast } from "react-toastify";
-const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
+import toast from "react-hot-toast";
+
+
+const RegistrationAbout = ({ details, setDetails, onCheckboxChange, errors }) => {
   const router = useRouter();
   const { isAuth } = useGlobalContext();
-  const [errors, setErrors] = useState({});
   const [logo,setLogo]=useState(null);
    const [isEdit, setIsEdit] = useState(true);
   if (isAuth) {
@@ -17,26 +18,11 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Pincode validation logic
-    if (name === "pincode") {
-      if (!/^\d{6}$/.test(value)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          pincode: "Please enter a valid 6-digit pincode",
-        }));
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          pincode: "",
-        }));
-      }
-    }
-
     setDetails({ ...details, [name]: value });
   };
 
   const handleCheckboxChange = (e) => {
-    onCheckboxChange(e.target.checked); // Notify parent component about checkbox change
+    onCheckboxChange(e.target.checked); 
   };
 
     const handleUploadLogo = async (e) => {
@@ -79,20 +65,26 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
             name="college_name"
             value={details.college_name}
             onChange={handleChange}
-            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg "
+            className={`border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg ${
+              errors.college_name ? "border-red-500" : ""
+            }`}
           />
+          <p className="text-xs text-red-500 m-1">{errors.college_name}</p>
         </div>
         <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
           <div className="w-full md:flex-1">
             <h1 className="text-neutral-500">College Email domain</h1>
             <input
               type="text"
-              placeholder="Ex: iiitdmj.ac.in "
+              placeholder="Ex: iiitdmj.ac.in"
               name="email_domain"
               value={details.email_domain}
               onChange={handleChange}
-              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg "
+              className={`border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg ${
+                errors.email_domain ? "border-red-500" : ""
+              }`}
             />
+            <p className="text-xs text-red-500 m-1">{errors.email_domain}</p>
           </div>
 
           <div className="w-full md:flex-1">
@@ -103,8 +95,11 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
               name="street_name"
               value={details.street_name}
               onChange={handleChange}
-              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className={`border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg ${
+                errors.street_name ? "border-red-500" : ""
+              }`}
             />
+            <p className="text-xs text-red-500 m-1">{errors.street_name}</p>
           </div>
         </div>
         <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
@@ -116,8 +111,11 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
               name="city"
               value={details.city}
               onChange={handleChange}
-              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className={`border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg ${
+                errors.city ? "border-red-500" : ""
+              }`}
             />
+            <p className="text-xs text-red-500 m-1">{errors.city}</p>
           </div>
           <div className="w-full md:flex-1">
             <h1 className="text-neutral-500">State</h1>
@@ -127,21 +125,28 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
               name="state"
               value={details.state}
               onChange={handleChange}
-              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className={`border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg ${
+                errors.state ? "border-red-500" : ""
+              }`}
             />
+            <p className="text-xs text-red-500 m-1">{errors.state}</p>
           </div>
         </div>
         <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
           <div className="w-full md:flex-1">
             <h1 className="text-neutral-500">Country</h1>
             <input
+            disabled
               type="text"
               placeholder="Enter your College Country"
               name="country"
               value={details.country}
               onChange={handleChange}
-              className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+              className={`border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg ${
+                errors.country ? "border-red-500" : ""
+              }`}
             />
+            <p className="text-xs text-red-500 m-1">{errors.country}</p>
           </div>
           <div className="w-full md:flex-1">
             <h1 className="text-neutral-500">Pincode</h1>
@@ -161,91 +166,44 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange }) => {
       </div>
 
       <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Program</h1>
-          <input
-            type="text"
-            placeholder="Enter your Program"
-            name="program"
-            value={details.program}
-            onChange={handleChange}
-            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
+  <div className="w-full md:flex-1">
+    <div>
+      <div className="">
+        {details.college_logo ? (
+          <img
+            className="h-12  lg:h-16 w-auto object-cover object-center"
+            src={details.college_logo}
+            alt={details.college_name || "College Logo"}
           />
-        </div>
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Branch/Discipline</h1>
-          <input
-            type="text"
-            placeholder="Enter your Branch"
-            name="branch"
-            value={details.branch}
-            onChange={handleChange}
-            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
-          />
-        </div>
-      </div>
-      <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Roll No</h1>
-          <input
-            type="text"
-            name="roll_no"
-            placeholder="Enter Your college Roll Number"
-            value={details.roll_no}
-            onChange={handleChange}
-            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
-          />
-        </div>
-        <div className="w-full md:flex-1">
-          <h1 className="text-neutral-500">Batch</h1>
-          <input
-            type="text"
-            name="batch"
-            placeholder="Enter Your Batch"
-            value={details.batch}
-            onChange={handleChange}
-            className="border w-full px-4 py-3 sm:px-6 sm:py-3 max-sm:text-sm rounded-full mt-2 text-lg"
-          />
-        </div>
-      </div>
-      <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
-        <div className="w-full md:flex-1">
-          <div>
-            <div className="rounded-full overflow-hidden">
-              {logo ? (
-                <img
-                  className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
-                  src={logo}
-                  alt={details.college_name || "College Logo"}
-                />
-              ) : (
-                <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
-                  <span className="font-medium text-white text-xl">
-                    {details.college_name ? details.college_name[0] : "E"}
-                  </span>
-                </div>
-              )}
-            </div>
-            {isEdit && (
-              <>
-                <label
-                  htmlFor="fileInput"
-                  className="text-blue-400 cursor-pointer text-sm"
-                >
-                  Upload College Logo
-                </label>
-                <input
-                  id="fileInput"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleUploadLogo}
-                  className="hidden"
-                />{" "}
-              </>
-            )}
+        ) : (
+          <div className="inline-flex items-center justify-center w-[38px] h-[38px] lg:w-[45px] lg:h-[45px] bg-gray-400 rounded-full">
+            <span className="font-medium text-white text-xl">
+              {details.college_name ? details.college_name[0] : "E"}
+            </span>
           </div>
-        </div>
+        )}
       </div>
+        
+          <label
+            htmlFor="fileInput"
+            className="text-blue-400 cursor-pointer text-sm"
+          >
+            Upload College Logo
+          </label>
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            onChange={handleUploadLogo}
+            className="hidden"
+          />
+      {errors.college_logo && (
+        <p className="text-red-500 text-sm mt-1">{errors.college_logo}</p>
+      )}
+    </div>
+  </div>
+</div>
+
 
       <div className="flex justify-start items-center text-center gap-4">
         <input
