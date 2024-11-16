@@ -1579,7 +1579,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  </div>
                )} */}
 
-               {/* <label
+               <label
                  htmlFor="syllabusFileInput"
                  className="mb-2 text-sm text-start text-grey-900 "
                >
@@ -1605,7 +1605,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                    />
                  </div>
-               )} */}
+               )}
 
 
                <label

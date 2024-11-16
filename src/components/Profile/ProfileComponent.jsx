@@ -4,20 +4,27 @@ import Input from "../Generals/Input";
 import { useRouter } from "next/navigation";
 import UserService from "@/services/user.service";
 import collegeService from "@/services/college.service";
-import { Modal,Box, Typography, Button, Text } from "@mui/material"; 
-import { ToastContainer, toast } from "react-toastify";
+import { Modal, Box, Typography, Button, Text } from "@mui/material";
+import toast from "react-hot-toast";
 import Link from "next/link";
 import Image from "next/image";
+import CourseService from "@/services/course.service.js";
+import FormDropdown from "../TailwindComponents/FormDropdown";
+import { useGlobalContext } from "@/context/AuthContext";
 
 function ProfileComponent() {
   const router = useRouter();
+  // const { isAuth } = useGlobalContext();
+  // if (!isAuth) {
+  //   router.push("/signin");
+  // }
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       router.push("/profile");
     }
   }, []);
-  
+
 
   const [currentUser, setCurrentUser] = useState(null);
   const [collegeDetails, setCollegeDetails] = useState(null);
@@ -25,6 +32,14 @@ function ProfileComponent() {
   const [isEditCollegeDetails, setIsEditCollegeDetails] = useState(true);
   const [picture, setPicture] = useState(null);
   const [logo, setLogo] = useState(null);
+  const [programs, setPrograms] = useState([]);
+  const [fieldOfStudy, setFieldOfStudy] = useState([]);
+  const [selectedProgram, setSelectedProgram] = useState("");
+  const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
+  const [batchOptions, setBatchOptions] = useState([]);
+
+  const [userErrors,setUserErrors] = useState({});
+  const [collegeErrors,setCollegeErrors] = useState({});
 
   // Define states for form values
   const [userData, setUserData] = useState({
@@ -50,25 +65,24 @@ function ProfileComponent() {
     pincode: "",
     country: "",
     email_domain: "",
-    college_logo:"",
+    college_logo: "",
   });
 
-    // State management for "Switch Main Admin Access" functionality
-    const [isSwitchAdminModalOpen, setIsSwitchAdminModalOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchedUser, setSearchedUser] = useState(null);
-    const [searchErrorMessage, setSearchErrorMessage] = useState("");
-    const [adminList, setAdminList] = useState([]); // Store list of admins
-  
+  // State management for "Switch Main Admin Access" functionality
+  const [isSwitchAdminModalOpen, setIsSwitchAdminModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchedUser, setSearchedUser] = useState(null);
+  const [searchErrorMessage, setSearchErrorMessage] = useState("");
+  const [adminList, setAdminList] = useState([]); // Store list of admins
 
   const handleChangePicture = async (e) => {
     const file = e.target.files[0];
-    console.log(23,file);
+    console.log(23, file);
     try {
       const formData = new FormData();
       formData.append("picture", file);
       // formData.append("userData", JSON.stringify(userData)); // Append other user data
-      console.log(23333,formData);
+      console.log(23333, formData);
       const response = await UserService.uploadPicture(formData);
       setPicture(response?.data?.user?.picture);
       toast.success(response.data.message, {
@@ -86,17 +100,17 @@ function ProfileComponent() {
       // Handle error message
     }
   };
-  const handleChangeLogo= async (e) => {
+  const handleChangeLogo = async (e) => {
     const file = e.target.files[0];
-    console.log(2444,file);
+    console.log(2444, file);
     try {
       const formData = new FormData();
       formData.append("picture", file);
       // formData.append("userData", JSON.stringify(userData)); // Append other user data
-      console.log(23333,formData);
-      const response = await collegeService.updateLogo(collegeData.id,formData);
+      console.log(23333, formData);
+      const response = await collegeService.updateLogo(collegeData.id, formData);
       setLogo(response?.data?.college?.college_logo);
-      console.log(24,response.data);
+      console.log(24, response.data);
       toast.success(response.data.message, {
         position: "top-center",
         autoClose: 5000,
@@ -131,7 +145,7 @@ function ProfileComponent() {
       }
     };
     fetchData();
-  }, [picture,logo]);
+  }, [picture, logo]);
 
   useEffect(() => {
     if (currentUser) {
@@ -149,8 +163,7 @@ function ProfileComponent() {
         batch: currentUser.batch,
         role: currentUser.role,
       });
-
-      if ((role === "admin"|| role === "mainadmin")  && collegeDetails) {
+      if ((role === "admin" || role === "mainadmin") && collegeDetails) {
         setCollegeData({
           id: collegeDetails._id,
           college_name: collegeDetails.college_name,
@@ -172,10 +185,50 @@ function ProfileComponent() {
   }, [currentUser, collegeDetails]);
 
 
+  const validateUserFields = () => {
+    const newErrors = {};
+     // Validation for user fields
+  if (!userData.name.trim()) newErrors.name = "Name is required.";
+  if (!userData.email.trim() || !/^\S+@\S+\.\S+$/.test(userData.email))
+    newErrors.email = "A valid email is required.";
+  if (!userData.phone.trim() || !/^\d{10}$/.test(userData.phone))
+    newErrors.phone = "A valid 10-digit phone number is required.";
+  if (!userData.gender) newErrors.gender = "Gender is required.";
+  if (!userData.roll_no.trim()) newErrors.roll_no = "Roll number is required.";
+  if (!userData.program) newErrors.program = "Program selection is required.";
+  if (!userData.branch) newErrors.branch = "Branch selection is required.";
+  if (!userData.batch) newErrors.batch = "Batch selection is required.";
+  setUserErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateCollegeFields = () => {
+    const newErrors = {};
+    // Validation for college fields
+  if (!collegeData.college_name.trim())
+    newErrors.college_name = "College name is required.";
+  if (!collegeData.street_name.trim())
+    newErrors.street_name = "Street name is required.";
+  if (!collegeData.city.trim()) newErrors.city = "City is required.";
+  if (!collegeData.state.trim()) newErrors.state = "State is required.";
+  if (!collegeData.pincode.trim() || !/^\d{6}$/.test(collegeData.pincode))
+    newErrors.pincode = "A valid 6-digit pincode is required.";
+  if (!collegeData.country.trim()) newErrors.country = "Country is required.";
+  if (
+    !collegeData.email_domain.trim() ||
+    !/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(collegeData.email_domain)
+  )
+    newErrors.email_domain = "A valid email domain is required.";
+
+  setCollegeErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const updateUser = async () => {
     try {
+      if(validateUserFields()){
       const response = await UserService.updateUser(userData);
-      // Handle success message or redirect if needed
       console.log(33, response);
       toast.success(response.data.message, {
         position: "top-center",
@@ -186,16 +239,17 @@ function ProfileComponent() {
         draggable: true,
         progress: undefined,
         theme: "colored",
-        // transition: Bounce,
       });
+      setIsEdit(true);
+    }
     } catch (error) {
       console.error("Error updating user:", error);
-      // Handle error message
     }
   };
 
   const updateCollege = async () => {
     try {
+      if(validateCollegeFields()){
       const response = await collegeService.updateCollegeById(collegeData.id, collegeData);
       // Handle success message or redirect if needed
       console.log(35, response);
@@ -210,6 +264,8 @@ function ProfileComponent() {
         theme: "colored",
         // transition: Bounce,
       });
+      setIsEditCollegeDetails(true);
+    }
     } catch (error) {
       console.error("Error updating college details:", error);
       // Handle error message
@@ -234,7 +290,7 @@ function ProfileComponent() {
       setSearchErrorMessage("");
       return;
     }
-  
+
     try {
       const response = await UserService.getUserByEmail(searchQuery);
       if (response.data.success) {
@@ -263,17 +319,15 @@ function ProfileComponent() {
 
     try {
       const response = await UserService.switchMainAdmin({ currentAdminId: currentUser._id, newAdminId: searchedUser.id });
-      console.log(23,response);
+      console.log(23, response);
       toast.success("Main admin access switched successfully.", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: true, 
-
-        theme: "colored", 
-
+        draggable: true,
+        theme: "colored",
       });
       // Update current user's role to 'admin'
       setCurrentUser({ ...currentUser, role: 'admin' });
@@ -289,14 +343,54 @@ function ProfileComponent() {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        theme: "colored", 
+        theme: "colored",
 
       });
     }
   };
 
+  // Fetch programs on component mount
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const response = await CourseService.getAllPrograms();
+        setPrograms(response.data.programs);
+        setSelectedProgram("");
+        setSelectedFieldOfStudy("");
+        setFieldOfStudy([]);
+      } catch (error) {
+        console.error("Error fetching programs:", error);
+      }
+    };
+    fetchPrograms();
+  }, []);
+
+  // Fetch fields of study when a program is selected
+  useEffect(() => {
+    const fetchFieldsOfStudy = async (programId) => {
+      try {
+        const response = await CourseService.getAllFieldsOfStudy(programId);
+        setFieldOfStudy(response.data.fieldsOfStudy);
+        setSelectedFieldOfStudy("");
+      } catch (error) {
+        console.error("Error fetching fields of study:", error);
+      }
+    };
+
+    if (selectedProgram) {
+      fetchFieldsOfStudy(selectedProgram);
+    }
+  }, [selectedProgram]);
+
+  // Generate batch options for current year to last 5 years
+  useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 6 }, (_, i) => currentYear - i); // 6 years including the current year
+    setBatchOptions(years);
+  }, []);
+
   return (
-    <div className="bg-[#F4F7FC] h-full flex-col flex justify-center items-center gap-7 p-6 w-full px-4 md:px-16 lg:px-28 py-16">
+    <div className="bg-[#F4F7FC] h-full flex-col flex justify-center items-center gap-5 p-6 w-full px-4 md:px-16 lg:px-28 py-16">
       <div className="flex justify-end w-full">
         <div className="px-6 ">
           {isEdit ? (
@@ -309,7 +403,6 @@ function ProfileComponent() {
           ) : (
             <button
               onClick={() => {
-                setIsEdit(true);
                 updateUser();
               }}
               className="text-center border border-[#36518F] 
@@ -323,7 +416,7 @@ function ProfileComponent() {
 
         <div>
           {isEditCollegeDetails &&
-          (userData.role === "admin" || userData.role === "mainadmin") ? (
+            (userData.role === "mainadmin") ? (
             <button
               onClick={() => setIsEditCollegeDetails(false)}
               className="text-center border border-[#36518F] text-[#36518F]  font-bold rounded-full text-sm md:text-[16px] px-4 py-2 md:px-8 md:py-3 whitespace-nowrap"
@@ -331,10 +424,9 @@ function ProfileComponent() {
               Edit College
             </button>
           ) : (
-            (userData.role === "admin" || userData.role === "mainadmin") && (
+            (userData.role === "mainadmin") && (
               <button
                 onClick={() => {
-                  setIsEditCollegeDetails(true);
                   updateCollege();
                 }}
                 className="text-center border border-[#36518F] 
@@ -384,10 +476,10 @@ function ProfileComponent() {
             )}
           </div>
           <div>
-            <div className="overflow-hidden">
+            <div className="">
               {collegeData.college_logo ? (
                 <img
-                  className="h-12 w-20 lg:h-16 lg:w-28 object-cover object-center "
+                  className="h-12  lg:h-16 w-auto object-cover object-center "
                   src={collegeData.college_logo}
                   alt={collegeData.college_name}
                 />
@@ -428,7 +520,8 @@ function ProfileComponent() {
           </div>
         </div>
 
-        <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
+        <div className="flex md:flex-row flex-col items-center gap-4  md:gap-8 w-full">
+          <div className="w-full">
           <Input
             name="name"
             handleChange={(e) =>
@@ -438,15 +531,21 @@ function ProfileComponent() {
             label="Your name"
             disabled={isEdit}
           />
+  {userErrors.name && <p className="text-red-500 text-sm">{userErrors.name}</p>}
+  </div>
+  <div className="w-full">
           <Input
             name="email"
             value={userData.email}
             label="Email ID"
             disabled={true}
           />
+  {userErrors.email && <p className="text-red-500 text-sm">{userErrors.email}</p>}
+  </div>
         </div>
 
-        <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
+        <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
+        <div className="w-full">
           <Input
             name="phone"
             handleChange={(e) =>
@@ -456,16 +555,22 @@ function ProfileComponent() {
             label="Phone Number"
             disabled={isEdit}
           />
+            {userErrors.phone && <p className="text-red-500 text-sm">{userErrors.phone}</p>}
 
+          </div>
+          <div className="w-full">
           <Input
             name="college_name"
             value={collegeData.college_name}
             label="College Name"
             disabled={true}
           />
+            {collegeErrors.college_name && <p className="text-red-500 text-sm">{collegeErrors.college_name}</p>}
+          </div>
         </div>
 
-        <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
+        <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
+        <div className="w-full">
           <Input
             name="roll_no"
             handleChange={(e) =>
@@ -475,47 +580,130 @@ function ProfileComponent() {
             label="Roll Number"
             disabled={isEdit}
           />
-
-          <Input
-            name="batch"
-            handleChange={(e) =>
-              setUserData({ ...userData, batch: e.target.value })
-            }
-            value={userData.batch}
-            label="Batch"
-            disabled={isEdit}
-          />
+            {userErrors.roll_no && <p className="text-red-500 text-sm">{userErrors.roll_no}</p>}
+          </div>
+          <div className="w-full">
+          {/* Batch Field */}
+          {isEdit ? (
+            <Input
+              name="batch"
+              handleChange={(e) =>
+                setUserData({ ...userData, batch: e.target.value })
+              }
+              value={userData.batch}
+              label="Batch"
+              disabled={isEdit}
+            />
+          ) : (
+            <div className="w-full md:flex-1">
+              <label>Batch:</label>
+              <FormDropdown
+                name="Batch"
+                value={userData.batch} // Display batch name
+                options={batchOptions} // Dropdown options for batch
+                onSelect={(selectedBatch) => {
+                  setUserData({ ...userData, batch: selectedBatch }); // Update batch name in userData
+                }}
+              />
+            </div>
+          )}
+           {userErrors.batch && <p className="text-red-500 text-sm">{userErrors.batch}</p>}
+          </div>
         </div>
 
-        <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
-          <Input
-            name="program"
-            handleChange={(e) =>
-              setUserData({ ...userData, program: e.target.value })
-            }
-            value={userData.program}
-            label="Program"
-            disabled={isEdit}
-          />
+        <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
+        <div className="w-full">
+          {/* Program Field */}
+          {isEdit ? (
+            <Input
+              name="program"
+              handleChange={(e) =>
+                setUserData({ ...userData, program: e.target.value })
+              }
+              value={userData.program}
+              label="Program"
+              disabled={isEdit}
+            />
+          ) : (
+            <div className="w-full md:flex-1">
+              <label>Program:</label>
+              <FormDropdown
+                name="Program"
+                value={userData.program} // Display program name
+                options={programs?.map((program) => program?.program_name)} // Map options
+                onSelect={(selectedProgramName) => {
+                  const selectedProgram = programs?.find(
+                    (program) => program?.program_name === selectedProgramName
+                  );
+                  setSelectedProgram(selectedProgram?._id); // Save program ID
+                  setUserData({
+                    ...userData,
+                    program: selectedProgramName,
+                    branch: "", // Reset branch when program changes
+                  });
+                  setFieldOfStudy([]); // Clear branches
+                  if (selectedProgram) {
+                    // Fetch fields of study for the selected program
+                    CourseService.getAllFieldsOfStudy(selectedProgram._id).then(
+                      (response) => setFieldOfStudy(response.data.fieldsOfStudy)
+                    );
+                  }
+                }}
+              />
+            </div>
+          )}
+            {userErrors.program && <p className="text-red-500 text-sm">{userErrors.program}</p>}
+          </div>
+          
+          <div className="w-full">
+          {/* Branch Field */}
+          {isEdit ? (
+            <Input
+              name="branch"
+              handleChange={(e) =>
+                setUserData({ ...userData, branch: e.target.value })
+              }
+              value={userData.branch}
+              label="Branch"
+              disabled={isEdit}
+            />
+          ) : (
+            <div className="w-full md:flex-1">
+              <label>Branch:</label>
+              <FormDropdown
+                name="Field Of Study"
+                value={userData.branch} // Display branch name
+                options={fieldOfStudy?.map((field) => field?.field_of_studyname)} // Map options
+                onSelect={(selectedFieldOfStudyName) => {
+                  const selectedField = fieldOfStudy?.find(
+                    (field) => field?.field_of_studyname === selectedFieldOfStudyName
+                  );
+                  setSelectedFieldOfStudy(selectedField?._id); // Save field ID
+                  setUserData({
+                    ...userData,
+                    branch: selectedFieldOfStudyName, // Update branch name
+                  });
+                }}
+              />
+            </div>
+          )}
+            {userErrors.branch && <p className="text-red-500 text-sm">{userErrors.branch}</p>}
+          </div>
 
-          <Input
-            name="branch"
-            handleChange={(e) =>
-              setUserData({ ...userData, branch: e.target.value })
-            }
-            value={userData.branch}
-            label="Branch"
-            disabled={isEdit}
-          />
         </div>
-
-        <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
+        <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full ">
+        <div className="w-full">
           <Input
             name="role"
             value={userData.role}
             label="Role"
             disabled={true}
           />
+            {userErrors.role && <p className="text-red-500 text-sm">{userErrors.role}</p>}
+
+          </div>
+          <div className="w-full">
+          {/* Gender Field */}
           {isEdit ? (
             <Input
               name="gender"
@@ -529,29 +717,23 @@ function ProfileComponent() {
           ) : (
             <div className="w-full md:flex-1">
               <label>Gender:</label>
-              <select
-                name="gender"
-                className="border-2 border-gray-300 w-full py-2 px-4 rounded-lg"
-                value={userData.gender}
-                onChange={handleChangeGender}
-              >
-                <option key="male" value="male">
-                  Male
-                </option>
-                <option key="female" value="female">
-                  Female
-                </option>
-                <option key="others" value="others">
-                  Others
-                </option>
-              </select>
+              <FormDropdown
+                name="Gender"
+                value={userData.gender} // Display selected gender
+                options={["Male", "Female", "Others"]} // Dropdown options for gender
+                onSelect={(selectedGender) => {
+                  setUserData({ ...userData, gender: selectedGender }); // Update gender in userData
+                }}
+              />
             </div>
           )}
+            {userErrors.gender && <p className="text-red-500 text-sm">{userErrors.gender}</p>}
+          </div>
         </div>
 
         {(userData.role === "admin" || userData.role == "mainadmin") && (
-          <div>
-            <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
+            <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
+              <div className="w-full">
               <Input
                 name="street_name"
                 value={collegeData.street_name}
@@ -564,7 +746,9 @@ function ProfileComponent() {
                 }
                 disabled={isEditCollegeDetails}
               />
-
+              {collegeErrors.street_name && <p className="text-red-500 text-sm">{collegeErrors.street_name}</p>}
+              </div>
+              <div className="w-full">
               <Input
                 name="city"
                 value={collegeData.city}
@@ -574,8 +758,14 @@ function ProfileComponent() {
                 }
                 disabled={isEditCollegeDetails}
               />
+              {collegeErrors.city && <p className="text-red-500 text-sm">{collegeErrors.city}</p>}
+              </div>
             </div>
-            <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
+            )}
+            
+        {(userData.role === "admin" || userData.role == "mainadmin") && (
+            <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
+              <div className="w-full">
               <Input
                 name="state"
                 value={collegeData.state}
@@ -585,7 +775,9 @@ function ProfileComponent() {
                 }
                 disabled={isEditCollegeDetails}
               />
-
+              {collegeErrors.state && <p className="text-red-500 text-sm">{collegeErrors.state}</p>}
+              </div>
+              <div className="w-full">
               <Input
                 name="pincode"
                 value={collegeData.pincode}
@@ -595,8 +787,14 @@ function ProfileComponent() {
                 }
                 disabled={isEditCollegeDetails}
               />
+              {collegeErrors.pincode && <p className="text-red-500 text-sm">{collegeErrors.pincode}</p>}
+              </div>
             </div>
-            <div className="flex md:flex-row flex-col items-center gap-4 w-full mt-4">
+            )}
+            
+        {(userData.role === "admin" || userData.role == "mainadmin") && (
+            <div className="flex md:flex-row flex-col items-center gap-4 md:gap-8 w-full">
+              <div className="w-full">
               <Input
                 name="country"
                 value={collegeData.country}
@@ -606,7 +804,9 @@ function ProfileComponent() {
                 }
                 disabled={true}
               />
-
+              {collegeErrors.country && <p className="text-red-500 text-sm">{collegeErrors.country}</p>}
+              </div>
+              <div className="w-full">
               <Input
                 name="email_domain"
                 value={collegeData.email_domain}
@@ -619,8 +819,10 @@ function ProfileComponent() {
                 }
                 disabled={true}
               />
+              {collegeErrors.email_domain && <p className="text-red-500 text-sm">{collegeErrors.email_domain}</p>}
             </div>
-          </div>
+            </div>
+         
         )}
       </div>
 

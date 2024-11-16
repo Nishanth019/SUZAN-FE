@@ -30,8 +30,6 @@ const SignUp = () => {
                 <Image
                   src={studentImage}
                   alt="Student"
-                  // width={220}
-                  // height={220}
                   className="w-[150px] h-[150px] md:w-[250px] sm:h-[250px]"
                 />
                 <span className="text-center text-lg mt-2 font-semibold text-gray-700">
@@ -46,8 +44,6 @@ const SignUp = () => {
                 <Image
                   src={adminImage}
                   alt="Admin"
-                  // width={250}
-                  // height={250}
                   className="w-[150px] h-[150px] md:w-[250px] sm:h-[250px]"
                 />
                 <span className="text-center text-lg mt-2 font-semibold text-gray-700">

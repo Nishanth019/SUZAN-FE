@@ -14,17 +14,15 @@ const AdminRegistration = () => {
   const router = useRouter();
   const pathname = usePathname();
   const email_id = pathname.split("/").pop();
-  
+
   const { isAuth } = useGlobalContext();
 
-  // Redirect if the user is already authenticated
   useEffect(() => {
     if (isAuth) {
       router.push("/");
     }
   }, [isAuth, router]);
 
-  const [user, setUser] = useState(null);
   const [stage, setStage] = useState(1);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [details, setDetails] = useState({
@@ -38,13 +36,11 @@ const AdminRegistration = () => {
     state: "",
     pincode: "",
     country: "India",
-    roll_no: "",
-    program: "",
-    branch: "",
-    batch: "",
     email_domain: "",
-    college_logo:"",
+    college_logo: "",
   });
+
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -65,65 +61,73 @@ const AdminRegistration = () => {
     fetchUser();
   }, [email_id]);
 
-  const handleCheckboxChange = (isChecked) => {
-    setIsCheckboxChecked(isChecked);
+  const validateFields = () => {
+    const newErrors = {};
+    if (!details.name) newErrors.name = "Name is required";
+    if (!details.phone) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^\d{10}$/.test(details.phone)) {
+      newErrors.phone = "Enter valid phone number";
+    }
+    if (!details.gender) newErrors.gender = "Gender is required";
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleStageClick = () => {
-    setStage((prevStage) => (prevStage === 1 ? 2 : 1));
+  const handleNext = () => {
+    if (validateFields()) {
+      setStage(2);
+    }
   };
 
-  const validateDetails = (details) => {
-    const errors = {};
-
-    // Email validation
-    if (!details.email) {
-      errors.email = "Email Required!";
-    } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(details.email)) {
-        errors.email = "Invalid Email";
-      }
+  const validateAboutFields = () => {
+    const newErrors = {};
+  
+    // Check each required field and set error messages
+    if (!details.college_name) {
+      newErrors.college_name = "College Name is required";
     }
-
-    // Phone number validation
-    if (!details.phone || !/^\d{10}$/.test(details.phone)) {
-      errors.phone = "Invalid phone number. Must be 10 digits.";
+    if (!details.email_domain) {
+      newErrors.email_domain = "College Email domain is required";
+    } else if (!/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(details.email_domain)) {
+      newErrors.email_domain = "Please enter a valid email domain";
     }
-
-    // Pincode validation
-    if (!details.pincode || !/^\d{6}$/.test(details.pincode)) {
-      errors.pincode = "Invalid pincode. Must be 6 digits.";
+    if (!details.street_name) {
+      newErrors.street_name = "Street Name is required";
     }
-
-    if(!details.college_logo){
-      errors.college_logo="College Logo Required!"
+    if (!details.city) {
+      newErrors.city = "City is required";
     }
-
-    return errors;
+    if (!details.state) {
+      newErrors.state = "State is required";
+    }
+    if (!details.country) {
+      newErrors.country = "Country is required";
+    }
+    if (!details.pincode) {
+      newErrors.pincode = "Pincode is required";
+    } else if (!/^\d{6}$/.test(details.pincode)) {
+      newErrors.pincode = "Please enter a valid 6-digit pincode";
+    }
+    if (!details.college_logo) {
+      newErrors.college_logo = "College Logo is required";
+    }
+  
+    setErrors(newErrors);
+    console.log("Validation Errors:", newErrors); // Log errors to see the validation issues
+    return Object.keys(newErrors).length === 0;
   };
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const errors = validateDetails(details);
-    if (Object.keys(errors).length > 0) {
-      // Display validation errors using toast
-      for (const key in errors) {
-        toast.error(errors[key], {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "colored",
-        });
-      }
-      return;
-    }
-
+  
     try {
+      console.log(345)
+      console.log(validateAboutFields())
+      if (validateAboutFields()) {
+         console.log(1234)
       const response = await authService.completeAdminSignup(details);
       toast.success(response?.data?.message, {
         position: "top-center",
@@ -132,9 +136,11 @@ const AdminRegistration = () => {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+        progress: undefined,
         theme: "colored",
       });
       router.push("/");
+    }
     } catch (error) {
       toast.error(error?.response?.data?.message, {
         position: "top-center",
@@ -143,15 +149,14 @@ const AdminRegistration = () => {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+        progress: undefined,
         theme: "colored",
       });
-      console.error("Error completing sign-up:", error?.response?.data?.message);
     }
   };
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-2 md:gap-4 px-4 md:px-16 lg:px-28 py-5 sm:py-8">
-      {/* Title Section */}
       <h1 className="text-2xl font-semibold text-center text-[30px] md:text-[40px] lg:text-[48px] xl:text-[48px]">
         Greetings From <span className="primary-text-color">SUZAN</span>
       </h1>
@@ -159,23 +164,21 @@ const AdminRegistration = () => {
         You are just a few clicks away from making your college life easier!
       </h4>
 
-      {/* Registration Form Section */}
       <div className="rounded-xl drop-shadow border md:bg-white p-4 md:p-8 mt-2 md:mt-6 w-full">
         {stage === 1 ? (
-          <RegistrationBasic details={details} setDetails={setDetails} />
-        ) : (
-          <RegistrationAbout
+          <RegistrationBasic
             details={details}
             setDetails={setDetails}
-            onCheckboxChange={handleCheckboxChange}
+            errors={errors}
           />
+        ) : (
+          <RegistrationAbout details={details} setDetails={setDetails} onCheckboxChange={setIsCheckboxChecked} errors={errors}/>
         )}
 
-        {/* Navigation Buttons */}
         <div className="w-full flex items-center justify-center gap-4">
           {stage === 1 ? (
             <button
-              onClick={handleStageClick}
+              onClick={handleNext}
               type="submit"
               className="px-6 py-2 text-lg rounded-full text-white mt-6 font-medium bg-[#36518F]"
             >
@@ -184,10 +187,7 @@ const AdminRegistration = () => {
           ) : (
             <>
               <button
-                onClick={() => {
-                  handleStageClick();
-                  setIsCheckboxChecked(false);
-                }}
+                onClick={() => setStage(1)}
                 className="px-4 py-2 sm:px-6 sm:py-3 text-lg text-paleBlue rounded-full mt-6 border-paleBlue border-2 font-medium capitalize flex items-center justify-center gap-2 hover:bg-[#36518F] hover:text-white"
               >
                 <BsArrowLeft size={20} />
@@ -214,4 +214,3 @@ const AdminRegistration = () => {
 };
 
 export default AdminRegistration;
-  

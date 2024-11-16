@@ -28,7 +28,6 @@ const Navbar = () => {
   const [openProfile, setOpenProfile] = useState(false);
 
   const { isAuth, user, setIsAuth, setUser,college,setCollege } = useGlobalContext();
-    // console.log(1111, college.college_logo);
    const [collegeLogo, setCollegeLogo] = useState(logo);
 
    useEffect(() => {
@@ -48,7 +47,6 @@ const Navbar = () => {
         router.push("/signin");
       } catch (error) {
         console.error("Error occurred while signing out:", error);
-        // Handle sign-out error, if any
       }
     }
   
@@ -202,12 +200,10 @@ const Navbar = () => {
                 )}
               </div>
               <div className="ml-4">
-                <Image
-                  className="max-sm:hidden sm:w-[130px] h-auto"
-                  src={collegeLogo}
-                  alt="college logo"
-                  width={130}
-                  height={130}
+               <img
+                 className="h-[30px] w-auto sm:h-[50px] lg:h-[70px] object-cover object-center max-sm:hidden"
+                 src={collegeLogo}
+                 alt="college logo"
                 />
               </div>
             </div>
