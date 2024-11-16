@@ -168,10 +168,10 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange, errors }) =>
       <div className="flex items-center gap-4 md:flex-row flex-col w-full md:mt-4">
   <div className="w-full md:flex-1">
     <div>
-      <div className="rounded-full overflow-hidden">
+      <div className="">
         {details.college_logo ? (
           <img
-            className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
+            className="h-12  lg:h-16 w-auto object-cover object-center"
             src={details.college_logo}
             alt={details.college_name || "College Logo"}
           />
