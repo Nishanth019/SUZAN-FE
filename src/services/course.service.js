@@ -1,16 +1,14 @@
 import axios from "axios";
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+const  NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 // Creating a global instance of Axios with default configuration
 const axiosInstance = axios.create({
   withCredentials: true,
 });
 class CourseService {
   constructor() {
-    this.url = BACKEND_URL;
-    // this.url = "http://localhost:8000"; // Backend URL
-    // this.url = "https://suzan-be-mmz3.onrender.com"; // Backend URL if deployed
-    // this.url = "https://suzan-be-production.onrender.com";
-    // this.url = "https://suzan-be.vercel.app";
+    this.url = NEXT_PUBLIC_BACKEND_URL;
   } 
   // Programs
   // Create a program under a college
@@ -26,6 +24,10 @@ class CourseService {
   // Get all programs
   getAllPrograms() {
     return axiosInstance.get(`${this.url}/api/course/programs`);
+  }
+   // Get all programs by college ID
+   getAllProgramsByCollegeId(collegeId) {
+    return axiosInstance.get(`${this.url}/api/course/programs/college/${collegeId}`);
   }
   // Get program by ID
   getProgramById({programId}) {

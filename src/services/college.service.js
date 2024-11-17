@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BACKEND_URL  = process.env.NEXT_PUBLIC_BACKEND_URL;
+const  NEXT_PUBLIC_BACKEND_URL  = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 // Creating a global instance of Axios with default configuration
 const axiosInstance = axios.create({
@@ -9,11 +9,7 @@ const axiosInstance = axios.create({
 
 class collegeService {
   constructor() {
-    this.url=BACKEND_URL;
-    // this.url = "http://localhost:8000";
-    // this.url = "https://suzan-be-mmz3.onrender.com";
-    // this.url = "https://suzan-be-production.onrender.com";
-    // this.url = "https://suzan-be.vercel.app";
+    this.url=NEXT_PUBLIC_BACKEND_URL;
   }
 
   getCollegeById(collegeId) {
