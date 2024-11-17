@@ -83,16 +83,22 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     async function fetchFieldsOfStudy(programId) {
       try {
         // console.log("21bcs054")
-         setLoading(true);
+        setLoading(true);
         const response = await CourseService.getAllFieldsOfStudy(programId);
         // console.log(response.data)
         setFieldOfStudy(response.data.fieldsOfStudy);
         const fieldOfStudyWithCounts = await Promise.all(
           response?.data?.fieldsOfStudy.map(async (fieldofstudy) => {
             // Fetch the count of courses for each program
-            console.log("fieldofstudy:", fieldofstudy)
-            const coursesCount = await fetchCourseCountForFieldOfStudy(selectedProgram, fieldofstudy._id);
+            // console.log("fieldofstudy:", fieldofstudy)
+            // console.log("hiii")
+            // console.log(selectedProgram, fieldofstudy._id);
+            const coursesCount = await fetchCourseCountForFieldOfStudy(
+              selectedProgram,
+              fieldofstudy._id
+            );
             // Fetch the count of field of study for each program
+            console.log("course count:", coursesCount);
 
             // Merge the counts with the program object
             return { ...fieldofstudy, coursesCount };
@@ -100,7 +106,12 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         );
         // setSelectedFieldOfStudy(response.data.fieldsOfStudy[0]?._id);
         setFieldOfStudy(fieldOfStudyWithCounts);
-         setLoading(false);
+        // Selected object values
+        // Selected object values
+        // Selected object values
+        // console.log(33,fieldsOfStudy);
+
+        setLoading(false);
       } catch (error) {
          setLoading(false);
         console.error("Error fetching fields of studys:asd", error);
@@ -112,10 +123,10 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
     async function fetchProgramDetailsById(programId) {
       try {
          setLoading(true);
-        const response = await CourseService.getProgramById(programId);
-        // console.log(12345, response.data)
-        // console.log(12345, response.data)
+        //  console.log(1234, programId)
+        const response = await CourseService.getProgramById({programId});
         setSelectedProgramDetails(response.data.program);
+        console.log(12345, response.data.program)
          setLoading(false);
       } catch (error) {
          setLoading(false);
@@ -160,9 +171,13 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
 
   const fetchCourseCountForFieldOfStudy = async (programId, fieldOfStudyId) => {
     try {
-      // console.log(123456);
-      const response = await CourseService.getAllCourses(programId, fieldOfStudyId);
-      // console.log(123, response);
+      // console.log(123456,programId,fieldOfStudyId);
+     const response = await CourseService.getAllCoursesOfFieldOfStudy({
+       programId,
+       fieldOfStudyId,
+     });
+
+      console.log(123, response.data);
       return response.data.courses.length;
     } catch (error) {
       console.error("Error fetching course count for program:", error);
@@ -383,19 +398,20 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         <div>
           <div className="flex flex-wrap py-5 md:py-10 gap-5 md:gap-10">
             {fieldsOfStudy.length === 0 ? (
-              
-               <div className="flex justify-center items-center h-[60vh] md:h-[40vh] ">
-                <p className="text-gray-500">No field of study found</p>
+              <div className="flex justify-center items-center w-full h-[60vh] md:h-[40vh]">
+                <div className="text-center">
+                  <p className="text-gray-500">No programs found</p>
+                </div>
               </div>
             ) : (
-              fieldsOfStudy.map((fos, index) => (
+              fieldsOfStudy.map((fos, index) => ( 
                 <FieldOfStudyCard
                   key={index}
                   title={fos.field_of_studyfullname}
                   abbreviation={fos.field_of_studyname}
                   programName={selectedProgramDetails.program_name}
                   semestersCount={selectedProgramDetails.no_of_semester}
-                  coursesCount={courseCount}
+                  coursesCount={fos.coursesCount}
                   onEdit={() => openEditFieldOfStudyModal(fos)}
                   onDelete={() => {
                     setCurrentFieldOfStudy(fos);
@@ -408,7 +424,9 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
         </div>
       ) : (
         <div className="flex justify-center items-center h-[60vh] md:h-[40vh]">
-          <p className="text-gray-500">Select a Program from the dropdown</p>
+          <div className="text-center">
+            <p className="text-gray-500">Select a Program from the dropdown</p>
+          </div>
         </div>
       )}
 
@@ -493,9 +511,14 @@ const AdminCourseNavbarFieldOfStudyComponent = () => {
                 setfield_of_studyname(e.target.value.toUpperCase())
               }
               placeholder="CSE"
-              className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+              className={`flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 ${
+                  currentProgram
+                    ? "bg-gray-200 text-gray-600"
+                    : "bg-grey-300 text-dark-grey-900"
+                }`}
               required
+              disabled={currentFieldOfStudy ? true : false}
             />
 
             <label

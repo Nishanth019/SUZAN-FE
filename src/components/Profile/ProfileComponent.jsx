@@ -595,8 +595,8 @@ function ProfileComponent() {
               disabled={isEdit}
             />
           ) : (
-            <div className="w-full md:flex-1">
-              <label>Batch:</label>
+           <div className="w-full md:flex-1">
+              {/* <label>Batch:</label> */}
               <FormDropdown
                 name="Batch"
                 value={userData.batch} // Display batch name
@@ -605,7 +605,7 @@ function ProfileComponent() {
                   setUserData({ ...userData, batch: selectedBatch }); // Update batch name in userData
                 }}
               />
-            </div>
+            </div> 
           )}
            {userErrors.batch && <p className="text-red-500 text-sm">{userErrors.batch}</p>}
           </div>
@@ -626,7 +626,7 @@ function ProfileComponent() {
             />
           ) : (
             <div className="w-full md:flex-1">
-              <label>Program:</label>
+              {/* <label>Program:</label> */}
               <FormDropdown
                 name="Program"
                 value={userData.program} // Display program name
@@ -669,7 +669,7 @@ function ProfileComponent() {
             />
           ) : (
             <div className="w-full md:flex-1">
-              <label>Branch:</label>
+              {/* <label>Branch:</label> */}
               <FormDropdown
                 name="Field Of Study"
                 value={userData.branch} // Display branch name
@@ -716,7 +716,7 @@ function ProfileComponent() {
             />
           ) : (
             <div className="w-full md:flex-1">
-              <label>Gender:</label>
+              {/* <label>Gender:</label> */}
               <FormDropdown
                 name="Gender"
                 value={userData.gender} // Display selected gender

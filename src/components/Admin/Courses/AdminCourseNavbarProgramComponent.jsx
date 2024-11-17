@@ -259,23 +259,32 @@ const AdminCourseNavbarProgramComponent = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-wrap  py-5  md:py-10 gap-5 md:gap-10">
-            {/* Rendering programs dynamically */}
-            {programs.map((program, index) => (
-              <ProgramCard
-                key={index}
-                title={program.program_fullname}
-                abbreviation={program.program_name}
-                fieldOfStudyCount={program.fieldOfStudyCount}
-                semestersCount={program.no_of_semester}
-                coursesCount={program.coursesCount}
-                onEdit={() => openEditProgramModal(program)}
-                onDelete={() => {
-                  setCurrentProgram(program);
-                  openDeleteModal();
-                }}
-              />
-            ))}
+          <div className="flex flex-wrap py-5 md:py-10 gap-5 md:gap-10">
+            {programs.length > 0 ? (
+              // Rendering programs dynamically if programs exist
+              programs.map((program, index) => (
+                <ProgramCard
+                  key={index}
+                  title={program.program_fullname}
+                  abbreviation={program.program_name}
+                  fieldOfStudyCount={program.fieldOfStudyCount}
+                  semestersCount={program.no_of_semester}
+                  coursesCount={program.coursesCount}
+                  onEdit={() => openEditProgramModal(program)}
+                  onDelete={() => {
+                    setCurrentProgram(program);
+                    openDeleteModal();
+                  }}
+                />
+              ))
+            ) : (
+              // Displaying message when no programs are found
+              <div className="flex justify-center items-center w-full h-[60vh] md:h-[40vh]">
+                <div className="text-center">
+                  <p className="text-gray-500">No programs found</p>
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}

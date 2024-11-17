@@ -7,7 +7,7 @@ import { fShortenNumber } from '@/utils/format-number';
 
 // ----------------------------------------------------------------------
 
-function AppWidgetSummary({ title, total, icon, color = 'primary', sx, ...other }) {
+function AppWidgetSummary({ title, total=0, icon, color = 'primary', sx, ...other }) {
   return (
     <Card
       component={Stack}
@@ -24,7 +24,7 @@ function AppWidgetSummary({ title, total, icon, color = 'primary', sx, ...other 
       {icon && <Box sx={{ width: 64, height: 64 }}>{icon}</Box>}
 
       <Stack spacing={0.5}>
-        <Typography variant="h4">{fShortenNumber(total)}</Typography>
+        <Typography variant="h4">{total}</Typography>
 
         <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
           {title}
