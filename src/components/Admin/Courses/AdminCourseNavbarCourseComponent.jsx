@@ -37,6 +37,7 @@ const style = {
 const AdminCourseNavbarCourseComponent = () => 
 {
    const [loading, setLoading] = useState(false);
+   const [modalLoading, setModalLoading] = useState(false);
    const [buttonLoading, setButtonLoading] = useState(false);
    const [buttonLoading1, setButtonLoading1] = useState(false);
    const [buttonLoading2, setButtonLoading2] = useState(false);
@@ -290,12 +291,6 @@ const AdminCourseNavbarCourseComponent = () =>
        const response = await CourseService.getMediaByCourceId({
          courseId,
        });
-       // console.log(97, response.data);
-       // console.log(977, response?.data?.syllabus?.pdf_url);
-       // console.log(978, response?.data?.resourcesLinks);
-       // console.log(979, response?.data?.resourcesPdf);
-       // console.log(980, response?.data?.pyqLinks);
-       // console.log(981, response?.data?.pyqPdf)
 
        // Set updated syllabus
        setUpdatedSyllabus(response?.data?.syllabus?.pdf_url || "");
@@ -520,32 +515,7 @@ const AdminCourseNavbarCourseComponent = () =>
       //  console.log(12345, resource_pdfs);
      };
 
-     //upload edit picture
-    //  const handleUploadEditPicture = async (e) => {
-    //    const file = e.target.files[0];
-    //    console.log(23, file);
-    //    try {
-    //      setLoading(true);
-    //      const formData = new FormData();
-    //      formData.append("picture", file);
-    //      const response = await CourseService.uploadPicture(formData);
-    //      setUpdatedInstructor_photo(response?.data?.picture);
-    //      setLoading(false);
-    //      toast.success(response.data.message, {
-    //        position: "top-center",
-    //        autoClose: 5000,
-    //        hideProgressBar: false,
-    //        closeOnClick: true,
-    //        pauseOnHover: true,
-    //        draggable: true,
-    //        progress: undefined,
-    //        theme: "colored",
-    //      });
-    //    } catch (error) {
-    //      setLoading(false);
-    //      console.error("Error updating user:", error);
-    //    }
-    //  };
+
  const handleSearch = async () => {
    try {
     
@@ -565,6 +535,7 @@ const AdminCourseNavbarCourseComponent = () =>
      console.error("Error searching courses:", error);
    }
  };
+
  //if searchQuery is  empty then all courses will be fetcged using fetchCourses
 
   useEffect(() => {
@@ -577,22 +548,6 @@ const AdminCourseNavbarCourseComponent = () =>
   }
 }, [searchQuery]);
 
-
-    //  const handleSearch = async () => {
-    //    try {
-    //      // console.log("sully")
-       
-    //      setLoading(true);
-    //      const response = await CourseService.searchCourse(searchQuery);
-    //      // console.log("cheeku", response.data)
-    //      setCourses(response.data.courses);
-    //      console.log("cheeku",courses )
-    //      setLoading(false);
-    //    } catch (error) {
-    //      setLoading(false);
-    //      console.error("Error searching courses:", error);
-    //    }
-    //  };
 
 const handleAddCourse = async (e) => {
   e.preventDefault();
@@ -1111,7 +1066,7 @@ const handleAddCourse = async (e) => {
                 const updatedLinks = [...prevLinks];
     
                 // Add to the first index if empty, else append to remaining slots
-                if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+                if (!updatedLinks[0]?.link_name && !updatedLinks[0]?.link_url) {
                   updatedLinks[0] = newLink;
                 } else {
                   updatedLinks.push(newLink);
@@ -1150,7 +1105,7 @@ const handleEditAddResourceLinkGoogleDrive = () => {
           setUpdatedResource_links((prevLinks) => {
             const updatedLinks = [...prevLinks];
             
-            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+            if (!updatedLinks[0]?.link_name && !updatedLinks[0]?.link_url) {
               updatedLinks[0] = newLink;  // Add to the first index if empty
             } else {
               updatedLinks.push(newLink);  // Add to the remaining slots
@@ -1189,7 +1144,7 @@ const handlePVQsGoogleDrivePicker = () => {
           setPyq_link((prevLinks) => {
             const updatedLinks = [...prevLinks];
             
-            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+            if (!updatedLinks[0]?.link_name && !updatedLinks[0]?.link_url) {
               updatedLinks[0] = newLink;  // Add to the first index if empty
             } else {
               updatedLinks.push(newLink);  // Add to the remaining slots
@@ -1228,7 +1183,7 @@ const handleEditAddPyqLinkGoogleDrive = () => {
           setUpdatedPyq_links((prevLinks) => {
             const updatedLinks = [...prevLinks];
             
-            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+            if (!updatedLinks[0]?.link_name && !updatedLinks[0]?.link_url) {
               updatedLinks[0] = newLink;  // Add to the first index if empty
             } else {
               updatedLinks.push(newLink);  // Add to the remaining slots
@@ -1267,7 +1222,7 @@ const handleVideosGoogleDrivePicker = () => {
           setVideo_link((prevLinks) => {
             const updatedLinks = [...prevLinks];
             
-            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+            if (!updatedLinks[0]?.link_name && !updatedLinks[0]?.link_url) {
               updatedLinks[0] = newLink;  // Add to the first index if empty
             } else {
               updatedLinks.push(newLink);  // Add to the remaining slots
@@ -1306,7 +1261,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
           setUpdatedVideo_links((prevLinks) => {
             const updatedLinks = [...prevLinks];
             
-            if (!updatedLinks[0].link_name && !updatedLinks[0].link_url) {
+            if (!updatedLinks[0]?.link_name && !updatedLinks[0]?.link_url) {
               updatedLinks[0] = newLink;  // Add to the first index if empty
             } else {
               updatedLinks.push(newLink);  // Add to the remaining slots
@@ -1483,7 +1438,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    }}
                  />
                </div>
-               <div className="pb-2  flex flex-col">
+               <div className="pb-2 mt-1 flex flex-col">
                  <label
                    htmlFor="fieldofstudyName"
                    className="mb-2 text-sm text-start text-grey-900 "
@@ -1506,7 +1461,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    }}
                  />
                </div>
-               <div className="pb-2 md:pb-8 flex flex-col">
+               <div className="pb-2 mt-1 md:pb-5 flex flex-col">
                  <label
                    htmlFor="semesterName"
                    className="mb-2 text-sm text-start text-grey-900 "
@@ -1539,7 +1494,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  onChange={(e) => setCourse_name(e.target.value)}
                  placeholder="Data Structures and Algorithms"
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+                lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
                <label
@@ -1555,7 +1510,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  onChange={(e) => setCourse_code(e.target.value)}
                  placeholder="CS3010"
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+                lg:text-[16px] font-medium outline-none focus:border-black  mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
                <label
@@ -1564,12 +1519,8 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                >
                  Course Type*
                </label>
-              <div className="w-full md:flex-1  py-2 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900  ">
-              {/* <label>Batch:</label> */}
-              <div className="w-full md:flex-1  py-2 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900  ">
-
+              <div className="w-full md:flex-1 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900  ">
                 <FormDropdown
                 name="Course Type"
                 value={course_type} // Display batch name
@@ -1580,17 +1531,6 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                 required
                 />
               </div>
-            </div> 
-               {/* <input
-                 id="coursetype"
-                 type="text"
-                 value={course_type}
-                 onChange={(e) => setCourse_type(e.target.value)}
-                 placeholder="compulsory or elective"
-                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-                 required
-               /> */}
                <label
                  htmlFor="fieldofstudyName"
                  className="mb-2 text-sm text-start text-grey-900 "
@@ -1604,54 +1544,9 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  onChange={(e) => setCredits(e.target.value)}
                  placeholder="ex:4"
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+                lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
-               {/* <label
-                 htmlFor="fieldofstudyName"
-                 className="mb-2 text-sm text-start text-grey-900 "
-               >
-                 Instructor Name*
-               </label>
-               <input
-                 id="instructorname"
-                 type="text"
-                 value={instructor_name}
-                 onChange={(e) => setInstructor_name(e.target.value)}
-                 placeholder="Sraban Mohanty"
-                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-                 required
-               /> */}
-
-               {/* <label
-                 htmlFor="instructorFileInput"
-                 className="mb-2 text-sm text-start text-grey-900 "
-               >
-                 Upload Instructor Photo
-               </label>
-               {buttonLoading ? (
-                 <div className="flex items-center mb-8">
-                   <input
-                     type="file"
-                     id="instructorFileInput"
-                     accept="image/*"
-                     className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                   />{" "}
-                   <CircularProgress className="ml-2" size={15} />
-                 </div>
-               ) : (
-                 <div className="flex items-center mb-8">
-                   <input
-                     type="file"
-                     id="instructorFileInput"
-                     accept="image/*"
-                     onChange={handleUploadPicture}
-                     className="block w-full text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                   />
-                 </div>
-               )} */}
-
                <label
                  htmlFor="syllabusFileInput"
                  className="mb-2 text-sm text-start text-grey-900 "
@@ -1747,6 +1642,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                <Button
                  onClick={() => handleAddField("resource_links")}
                  cariant="outlined"
+                 className="!mb-2"
                >
                  + Add More Resources
                </Button>
@@ -1756,6 +1652,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  variant="outlined"
                  color="primary"
                  startIcon={<FaGoogleDrive />}
+                 className="!mb-2"
                >
                  Add from Google Drive
                </Button>
@@ -1848,7 +1745,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
 
                <Button
                  onClick={() => handleAddField("resource_pdfs")}
-                 className="mb-10"
+                 className="!mb-5"
                  cariant="outlined"
                >
                  + Add More Resources
@@ -1921,6 +1818,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                <Button
                  onClick={() => handleAddField("pyq_links")}
                  cariant="outlined"
+                 className="!mb-2"
                >
                  + Add More PYQs
                </Button>
@@ -1931,6 +1829,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  variant="outlined"
                  color="primary"
                  startIcon={<FaGoogleDrive />}
+                 className="!mb-2"
                >
                  Add from Google Drive
                </Button>
@@ -2028,8 +1927,9 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                <Button
                  onClick={() => handleAddField("pyq_pdfs")}
                  cariant="outlined"
+                 className="!mb-4"
                >
-                 + Add More Resources
+                 + Add More PYQS
                </Button>
                <label
                  htmlFor="video_links"
@@ -2098,6 +1998,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                <Button
                  onClick={() => handleAddField("video_links")}
                  cariant="outlined"
+                 className="!mb-2"
                >
                  + Add More Videos
                </Button>
@@ -2107,6 +2008,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  variant="outlined"
                  color="primary"
                  startIcon={<FaGoogleDrive />}
+                 className="!mb-2"
                >
                  Add from Google Drive
                </Button>
@@ -2138,6 +2040,11 @@ const handleEditAddVideoLinkGoogleDrive = () => {
            aria-labelledby="modal-modal-title"
            aria-describedby="modal-modal-description"
          >
+          {loading ? (
+         <div className="flex justify-center items-center h-[80vh] md:h-[90vh]">
+          <CircularProgress />
+        </div>
+         ): (
            <Box
              sx={{
                ...style,
@@ -2167,8 +2074,6 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                <h3 className="pb-5 text-[25px] md:text-[35px] font-extrabold text-dark-grey-900">
                  Edit Course Details
                </h3>
-               {/* Populate input fields with course details */}
-               {/* Program */}
                <div className="py-2 md:pt-3 flex flex-col">
                  <label
                    htmlFor="programName"
@@ -2180,7 +2085,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    type="text"
                    value={updatedProgram || ""}
                    disabled
-                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                  />
                </div>
                <div className="pb-2  flex flex-col">
@@ -2194,7 +2099,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    type="text"
                    value={updatedFieldOfStudy || ""}
                    disabled
-                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                  />
                </div>
                <div className="pb-2 md:pb-8 flex flex-col">
@@ -2208,10 +2113,10 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    type="text"
                    value={updatedSemester || ""}
                    disabled
-                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                  />
                </div>
-               {/* Update Course Name */}
+
                <label
                  htmlFor="coursename"
                  className="mb-2 text-sm text-start text-grey-900 "
@@ -2224,7 +2129,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  value={updatedCourse_name}
                  onChange={(e) => setUpdatedCourse_name(e.target.value)}
                  placeholder="Data Structures and Algorithms"
-                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
                <label
@@ -2245,7 +2150,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
            
                <label
                  htmlFor="fieldofstudyName"
-                 className="mb-2 text-sm text-start text-grey-900 "
+                 className="mb-2 mt-4 text-sm text-start text-grey-900 "
                >
                  Credits*
                </label>
@@ -2259,54 +2164,6 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
-               {/* <label
-                 htmlFor="fieldofstudyName"
-                 className="mb-2 text-sm text-start text-grey-900 "
-               >
-                 Instructor Name*
-               </label>
-               <input
-                 id="instructorname"
-                 type="text"
-                 value={updatedInstructor_name}
-                 onChange={(e) => setUpdatedInstructor_name(e.target.value)}
-                 placeholder="Sraban Mohanty"
-                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-                 required
-               />
-               <label
-                 htmlFor="fieldofstudyName"
-                 className="mb-2 text-sm text-start text-grey-900 "
-               >
-                 Instructor Photo
-               </label>
-               <div className="flex gap-5 items-center mb-5">
-                 <div className="rounded-full overflow-hidden">
-                   {updatedInstructor_photo.length > 0 && (
-                     <img
-                       className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
-                       src={updatedInstructor_photo}
-                       alt="Prof"
-                     />
-                   )}
-                 </div>
-                 <div>
-                   <label
-                     htmlFor="fileInput"
-                     className="text-blue-400 cursor-pointer text-sm"
-                   >
-                     Update Picture
-                   </label>
-                   <input
-                     id="fileInput"
-                     type="file"
-                     accept="image/*"
-                     onChange={handleUploadEditPicture}
-                     className="hidden"
-                   />
-                 </div>
-               </div> */}
 
                <label
                  htmlFor="syllabus_pdfs"
@@ -2314,7 +2171,6 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                >
                  Syllabus (Pdf)
                </label>
-               {/* displaying available links */}
 
                {updatedSyllabus.length > 0 ? (
                  <div className="space-y-4">
@@ -2418,7 +2274,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
 
                <label
                  htmlFor="resource_links"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-1 text-sm text-start text-grey-900"
                >
                  Resources (Link)
                </label>
@@ -2513,7 +2369,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
 
                <label
                  htmlFor="resource_pdfs"
-                 className="mb-2 mt-5 text-sm text-start text-grey-900"
+                 className="mb-2 mt-7 text-sm text-start text-grey-900"
                >
                  Resources (Pdf)
                </label>
@@ -2645,7 +2501,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
 
                <label
                  htmlFor="pyq_links"
-                 className="mb-2 mt-5 text-sm text-start text-grey-900"
+                 className="mb-2 mt-7 text-sm text-start text-grey-900"
                >
                  Previous Year Questions (Link)
                </label>
@@ -2739,7 +2595,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
 
                <label
                  htmlFor="pyq_links"
-                 className="mb-2 mt-5 text-sm text-start text-grey-900"
+                 className="mb-2 mt-7 text-sm text-start text-grey-900"
                >
                  Previous Year Questions (Pdf)
                </label>
@@ -2854,7 +2710,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                </div>
                <label
                  htmlFor="resource_links"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2  mt-7 text-sm text-start text-grey-900"
                >
                  Videos (Link)
                </label>
@@ -2956,6 +2812,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                </div>
              </form>
            </Box>
+           )}
          </Modal>
 
          {/* ////////////////////////modal to view the course //////////////////// */}
@@ -2965,6 +2822,11 @@ const handleEditAddVideoLinkGoogleDrive = () => {
            aria-labelledby="modal-modal-title"
            aria-describedby="modal-modal-description"
          >
+          {loading ? (
+         <div className="flex justify-center items-center h-[80vh] md:h-[90vh]">
+          <CircularProgress />
+        </div>
+         ): (
            <Box
              sx={{
                ...style,
@@ -3002,7 +2864,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    type="text"
                    value={updatedProgram || ""}
                    disabled
-                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                  />
                </div>
                <div className="pb-2  flex flex-col">
@@ -3016,7 +2878,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    type="text"
                    value={updatedFieldOfStudy || ""}
                    disabled
-                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                  />
                </div>
                <div className="mb-5 flex flex-col">
@@ -3030,7 +2892,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    type="text"
                    value={updatedSemester || ""}
                    disabled
-                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                  />
                </div>
                {/* Update Course Name */}
@@ -3075,38 +2937,6 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  disabled
                />
-               {/* <label
-                 htmlFor="fieldofstudyName"
-                 className="mb-2 text-sm text-start text-grey-900 "
-               >
-                 Instructor Name
-               </label>
-               <input
-                 disabled
-                 id="instructorname"
-                 type="text"
-                 value={updatedInstructor_name}
-                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-               />
-               <label
-                 htmlFor="fieldofstudyName"
-                 className="mb-2 text-sm text-start text-grey-900 "
-               >
-                 Instructor Photo
-               </label>
-               <div className="flex gap-5 items-center mb-5">
-                 <div className="rounded-full overflow-hidden">
-                   {updatedInstructor_photo.length > 0 && (
-                     <img
-                       className="h-12 w-12 lg:h-16 lg:w-16 object-cover object-center rounded-full"
-                       src={updatedInstructor_photo}
-                       alt="Prof"
-                     />
-                   )}
-                 </div>
-               </div> */}
-
                <label
                  htmlFor="syllabus_pdfs"
                  className="mb-2 text-sm text-start text-grey-900"
@@ -3115,7 +2945,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                </label>
                {/* displaying available links */}
                {updatedSyllabus.length > 0 ? (
-                 <div className="mb-5">
+                 <div className="mb-7">
                    <div className="space-y-4">
                      <div>
                        <div className="flex items-center space-x-4 border  p-2 rounded-md">
@@ -3171,7 +3001,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    </div>
                  </div>
                ) : (
-                 <p className="text-center text-gray-500 text-sm">
+                 <p className="text-center text-gray-700 text-sm mb-7">
                    No syllabus available
                  </p>
                )}
@@ -3188,13 +3018,13 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    <div className="space-y-4">
                      {updatedResource_links.map((item, index) => (
                        <div key={index}>
-                         <div className="flex items-center space-x-4 border p-2 rounded-md">
+                         <div className="flex items-center space-x-4 border p-2 rounded-md overflow-hidden ">
                            <FaLink
                              className="text-blue-500  max-md:hidden"
                              size={20}
                            />
                            <div className="flex-1">
-                             <p className="text-sm md:text-[16px]">
+                             <p className="text-sm md:text-[16px] ">
                                {item.link_name}
                              </p>
                            </div>
@@ -3220,14 +3050,14 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    </div>
                  </div>
                ) : (
-                 <p className="text-center text-gray-500 text-sm">
+                 <p className="text-center text-gray-500 text-sm mb-7">
                    No Resource links available
                  </p>
                )}
 
                <label
                  htmlFor="resource_pdfs"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-4 text-sm text-start text-grey-900"
                >
                  Resources (Pdf)
                </label>
@@ -3293,14 +3123,14 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    </div>
                  </div>
                ) : (
-                 <p className="text-center text-gray-500 text-sm">
+                 <p className="text-center text-gray-500 text-sm mb-7">
                    No Resource pdf available
                  </p>
                )}
 
                <label
                  htmlFor="pyq_links"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-4  text-sm text-start text-grey-900"
                >
                  Previous Year Questions (Link)
                </label>
@@ -3342,14 +3172,14 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    </div>
                  </div>
                ) : (
-                 <p className="text-center text-gray-500 text-sm">
+                 <p className="text-center text-gray-500 text-sm  mb-7">
                    No PYQ links available
                  </p>
                )}
 
                <label
                  htmlFor="pyq_links"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-4  text-sm text-start text-grey-900"
                >
                  Previous Year Questions (Pdf)
                </label>
@@ -3415,14 +3245,14 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    </div>
                  </div>
                ) : (
-                 <p className="text-center text-gray-500 text-sm">
+                 <p className="text-center text-gray-500 text-sm  mb-7">
                    No PYQ pdf available
                  </p>
                )}
 
                <label
                  htmlFor="resource_links"
-                 className="mb-2 text-sm text-start text-grey-900"
+                 className="mb-2 mt-7 text-sm text-start text-grey-900"
                >
                  Videos (Link)
                </label>
@@ -3465,14 +3295,16 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    </div>
                  </div>
                ) : (
-                 <p className="text-center text-gray-500 text-sm">
+                 <p className="text-center text-gray-500 text-sm  mb-7">
                    No Video links available
                  </p>
                )}
              </div>
            </Box>
+          )
+        }
          </Modal>
-
+        
          {/* Delete confirmation modal */}
          <Modal
            open={deleteModalOpen}

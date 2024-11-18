@@ -12,6 +12,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  console.log = () => {}; 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
@@ -19,7 +20,7 @@ export default function RootLayout({ children }) {
         <ClientProvider>
           {children}
           <Toaster/>
-          <Analytics/>
+          <Analytics debug={false}/>
         </ClientProvider>
       </AuthProvider>
       <Script src="https://apis.google.com/js/api.js" strategy="beforeInteractive" />
