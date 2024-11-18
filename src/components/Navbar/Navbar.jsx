@@ -44,6 +44,8 @@ const Navbar = () => {
         await authService.signout(); 
         setIsAuth(false); 
         setUser(null); 
+        // Clear localStorage
+        localStorage.removeItem("isAuth");
         router.push("/signin");
       } catch (error) {
         console.error("Error occurred while signing out:", error);

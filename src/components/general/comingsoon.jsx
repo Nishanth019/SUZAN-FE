@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export default function ComingSoon() {
   const [form, setForm] = useState({ email: "" });

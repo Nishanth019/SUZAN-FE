@@ -46,7 +46,7 @@ const CourseResources = ({ resources }) => {
       p: 4,
     };
   return (
-    <div className="w-full p-2 md:py-5 sm:px-5 lg:px-10 xl:px-16">
+    <div className="w-full px-2 pt-5 pb-8 sm:pt-8 sm:pb-12 sm:px-5 lg:px-10 xl:px-16">
       <div className="space-y-4">
         <p className="text-2xl sm:text-4xl font-bold">Course Resources</p>
         {links.length === 0 && pdfs.length === 0 && (
@@ -57,29 +57,29 @@ const CourseResources = ({ resources }) => {
         )}
         {links.length > 0 && (
           <div className="space-y-4">
-            <p className="font-semibold text-lg md:text-xl">Links:</p>
+            <p className="font-semibold text-lg sm:text-xl">Links:</p>
             <div className="space-y-4">
               {links.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center space-x-4 border p-2 rounded-md"
+                  className="flex flex-wrap items-center space-x-4 border p-2 rounded-md"
                 >
-                  <FaLink className="text-blue-500  max-md:!hidden" size={20} />
+                  <FaLink className="text-blue-500  max-sm:!hidden" size={20} />
                   <div className="flex-1">
-                    <p className="text-sm md:text-[16px]">{item.title}</p>
+                    <p className="text-xs  sm:text-[16px]">{item.title}</p>
                   </div>
                   <div className="flex space-x-2">
                     <Button
                       variant="outlined"
                       color="primary"
                       size="small"
-                      className="max-md:!hidden"
+                      className="max-sm:!hidden"
                       onClick={() => handleOpenLink(item.url)}
                     >
                       View
                     </Button>
                     <IoMdEye
-                      className="text-blue-500  md:!hidden"
+                      className="text-blue-500  sm:!hidden"
                       size={24}
                       onClick={() => handleOpenLink(item.url)}
                     />
@@ -91,26 +91,26 @@ const CourseResources = ({ resources }) => {
         )}
         {pdfs.length > 0 && (
           <div className="space-y-4">
-            <p className="font-semibold text-lg md:text-xl">Pdfs:</p>
+            <p className="font-semibold text-lg sm:text-xl">Pdfs:</p>
             <div className="space-y-4">
               {pdfs.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center space-x-4 border  p-2 rounded-md"
+                  className="flex flex-wrap items-center space-x-4 border  p-2 rounded-md"
                 >
                   <FaFilePdf
-                    className="text-red-500 max-md:!hidden"
+                    className="text-red-500 max-sm:!hidden"
                     size={24}
                   />
                   <div className="flex-1">
-                    <p className="text-sm md:text-[16px]">{item.title}</p>
+                    <p className="text-xs sm:text-[16px]">{item.title}</p>
                   </div>
                   <div className="flex space-x-2">
                     <Button
                       variant="outlined"
                       color="primary"
                       size="small"
-                      className="max-md:!hidden"
+                      className="max-sm:!hidden"
                       onClick={() => handleViewPdf(item)}
                     >
                       View
@@ -119,18 +119,18 @@ const CourseResources = ({ resources }) => {
                       variant="outlined"
                       color="secondary"
                       size="small"
-                      className="max-md:!hidden"
+                      className="max-sm:!hidden"
                       onClick={() => handleDownload(item.url)}
                     >
                       Download
                     </Button>
                     <IoMdEye
-                      className="text-blue-500 cursor-pointer md:!hidden"
+                      className="text-blue-500 cursor-pointer sm:!hidden"
                       size={24}
                       onClick={() => handleViewPdf(item)}
                     />
                     <IoMdDownload
-                      className="text-red-500 cursor-pointer md:!hidden"
+                      className="text-red-500 cursor-pointer sm:!hidden"
                       size={24}
                       onClick={() => handleDownload(item.url)}
                     />

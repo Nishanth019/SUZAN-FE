@@ -49,4 +49,16 @@ module.exports = {
     });
     return config;
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        canvas: false, // Ignore 'canvas' module on the client side
+      };
+    }
+    return config;
+  },
+  compiler: {
+    removeConsole: process.env.NEXT_PUBLIC_NODE_ENV === "production", // Remove console logs in production
+  },
 };

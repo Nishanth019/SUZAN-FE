@@ -127,7 +127,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 </Link>
               </li>
               {/* Clubs */}
-              <li>
+              {/* <li>
                 <Link
                   href="/admin-dashboard/clubs"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${
@@ -137,9 +137,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   <MdGroup size={18} />
                   Clubs
                 </Link>
-              </li>
+              </li> */}
               {/* Events */}
-              <li>
+              {/* <li>
                 <Link
                   href="/admin-dashboard/events"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${
@@ -149,9 +149,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   <MdEvent size={18} />
                   Events
                 </Link>
-              </li>
+              </li> */}
               {/* Nearby Places */}
-              <li>
+              {/* <li>
                 <Link
                   href="/admin-dashboard/nearby-places"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#DEE4EE] duration-300 ease-in-out hover:bg-[#333A48] ${
@@ -161,7 +161,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   <MdPlace size={18} />
                   Nearby Places
                 </Link>
-              </li>
+              </li> */}
               {/* Feedbacks */}
               <li>
                 <Link

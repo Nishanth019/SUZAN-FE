@@ -21,7 +21,7 @@ const SITEMAP = [
     },
     {
         title: "Contact Us",
-        links: ["+91 9177620708", "suzanorganisation@gmail.com"],
+        links: ["+91 9121418845", "suzanorganisation@gmail.com"],
     },
 ];
 

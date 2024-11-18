@@ -13,6 +13,7 @@ import { FaSearch } from "react-icons/fa";
 import CourseService from "@/services/course.service.js";
 import { CircularProgress } from "@mui/material";
 import { FcEmptyBattery } from "react-icons/fc";
+import Pagination from "./Pagination";
 
 const CoursesSection = () => {
   const router = useRouter();
@@ -191,10 +192,10 @@ const CoursesSection = () => {
         <div className="py-5 mx-4 sm:mx-2">
           <div className="md:py-5 md:px-10 md:mx-5 lg:mx-10 xl:mx-[100px] flex justify-center items-center rounded-full md:bg-white flex-wrap gap-2 md:gap-5">
             {/* Render dropdowns here */}
-            <div className="flex flex-wrap gap-2 sm:gap-5 ">
+            <div className="flex flex-wrap gap-2 sm:gap-5">
               <Dropdown
                 name="Program"
-                value={selectedProgram}
+                value={selectedProgram} // This binds the value of the dropdown to the state
                 options={programs?.map((program) => program?.program_name)}
                 onSelect={(selectedProgramName) => {
                   const selectedProgram = programs?.find(
@@ -207,7 +208,7 @@ const CoursesSection = () => {
               />
               <Dropdown
                 name="Field Of Study"
-                value={selectedFieldOfStudy}
+                value={selectedFieldOfStudy} // This binds the value of the dropdown to the state
                 options={fieldOfStudy?.map(
                   (field) => field?.field_of_studyname
                 )}
@@ -222,7 +223,7 @@ const CoursesSection = () => {
               />
               <Dropdown
                 name="Semester"
-                value={selectedSemester}
+                value={selectedSemester} // This binds the value of the dropdown to the state
                 options={semesters?.map((semester) => semester?.semester)}
                 onSelect={(selectedSemesterName) => {
                   const selectedSemester = semesters?.find(
@@ -266,10 +267,17 @@ const CoursesSection = () => {
                   </div>
                 </form>
               </div>
+              <button
+                onClick={() => {
+                  window.location.reload();
+                }}
+                className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              >
+                Clear Filter
+              </button>
             </div>
           </div>
         </div>
-
         {/* Render courses using map */}
         <div className="flex justify-center">
           <div className="grid gap-4 w-full sm:w-4/5 lg:w-3/5 mx-3 my-5">
@@ -288,24 +296,11 @@ const CoursesSection = () => {
                     <CoursesCard key={index} course={course} />
                   ))
                 )}
-                <div className="flex justify-center mt-4">
-                  {Array.from(
-                    { length: totalPages },
-                    (_, index) => index + 1
-                  ).map((pageNumber) => (
-                    <button
-                      key={pageNumber}
-                      className={`px-3 py-1 mx-1 ${
-                        currentPage === pageNumber
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-200 text-gray-700"
-                      } rounded`}
-                      onClick={() => handlePagination(pageNumber)}
-                    >
-                      {pageNumber}
-                    </button>
-                  ))}
-                </div>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePagination}
+                />
               </>
             )}
           </div>

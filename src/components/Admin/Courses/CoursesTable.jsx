@@ -7,17 +7,18 @@ function CoursesTable({ courses, openViewModal, handleEdit, handleDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 5;
 
-  // Calculate the start and end index of courses to display based on the current page
-  const startIndex = (currentPage - 1) * coursesPerPage;
-  //Object.values(courses) returns an array of all courses or it converts the object to an array
-  //in order to access by index or to calculate the length
-  const endIndex = Math.min(startIndex + coursesPerPage, Object.values(courses).length);
+  const totalCourses = Object.values(courses).length;
+  const totalPages = Math.ceil(totalCourses / coursesPerPage);
 
-  // Get the courses to display for the current page
+  const startIndex = (currentPage - 1) * coursesPerPage;
+  const endIndex = Math.min(startIndex + coursesPerPage, totalCourses);
+
   const currentCourses = Object.values(courses).slice(startIndex, endIndex);
 
-  // Handle pagination
   const handlePagination = (pageNumber) => {
+    // Ensure the currentPage stays within the valid range
+    if (pageNumber < 1) pageNumber = 1;
+    if (pageNumber > totalPages) pageNumber = totalPages;
     setCurrentPage(pageNumber);
   };
 
@@ -25,15 +26,16 @@ function CoursesTable({ courses, openViewModal, handleEdit, handleDelete }) {
     <Tables
       currentCourses={currentCourses}
       currentPage={currentPage}
-      totalCourses={Object.values(courses).length}
+      totalPages={totalPages} // Pass totalPages to Tables for any additional handling
       handlePagination={handlePagination}
-      openViewModal={openViewModal} // Pass openViewModal function
-      handleEdit={handleEdit} // Pass handleEdit function
-      handleDelete={handleDelete} // Pass handleDelete function
+      openViewModal={openViewModal}
+      handleEdit={handleEdit}
+      handleDelete={handleDelete}
       courses={courses}
       coursesPerPage={coursesPerPage}
     />
   );
 }
+
 
 export default CoursesTable;

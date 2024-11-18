@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Container, Stack } from '@mui/material';
+import { Container, Stack,useMediaQuery } from '@mui/material';
 import Comment from './Comment';
 import AddComment from './AddComment';
 import { usePathname } from 'next/navigation';
@@ -12,6 +12,8 @@ const CommentSection = ({ type }) => {
   const [commentSection, setCommentSection] = useState([]);
   const [commentsUpdated, setCommentsUpdated] = useState(false);
 
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+  
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -35,13 +37,14 @@ const CommentSection = ({ type }) => {
     setCommentsUpdated(prev => !prev); // Toggle the state
   };
 
+
   return (
     <div className="w-full p-2 md:py-5 sm:px-5 lg:px-10 xl:px-16">
       <div className="text-black mb-6">
         <p className="text-2xl sm:text-4xl font-bold">Discussion</p>
       </div>
       <Container maxWidth="md">
-        <Stack spacing={3}>
+        <Stack spacing={isSmallScreen ? 1 : 2}>
           <AddComment target={course_id} targetType="course" onCommentAdded={handleCommentAdded} />
           {commentSection.map((comment) => {
             return <Comment key={comment.id} onPass={comment} onRepliesUpdated={handleRepliesUpdated} />;

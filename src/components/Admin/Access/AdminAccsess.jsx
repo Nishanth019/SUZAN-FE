@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import Input from "../../Generals/Input";
 import UserService from "@/services/user.service";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 import Typography from "@mui/material/Typography";
 import toast, { Toaster } from "react-hot-toast";
 

@@ -11,7 +11,7 @@ const EditButton = ({ functionality, editingComm }) => {
       }}
       className="flex items-center gap-1 text-blue-700"
     >
-      <Edit className="text-[18px]"/><p className="max-md:!hidden text-sm">Edit</p>
+      <Edit className="!text-[17px] sm:!text-[18px]"/><p className="max-md:!hidden !text-sm">Edit</p>
     </button>
   );
 };

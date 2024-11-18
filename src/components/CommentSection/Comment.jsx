@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { Avatar, Card, Stack, ThemeProvider } from "@mui/material";
+import { Avatar, Card, Stack, ThemeProvider, useMediaQuery } from "@mui/material";
 import { Box } from "@mui/system";
 import ScoreChanger from "./ScoreChanger";
 import theme from "./styles";
@@ -42,17 +42,21 @@ const Comment = ({ onPass, onRepliesUpdated }) => {
   }, [onPass]); // Add `onPass` as a dependency here
 
   const [userName, setUserName] = useState("");
+  const [userId, setUserId] = useState("");
   const [ava, setAva] = useState("");
   const [clicked, setClicked] = useState(false);
   const [editingComm, setEditingComm] = useState(false);
   const [commentText, setCommentText] = useState(content);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);  
+  const isSmallScreen = useMediaQuery("(max-width:600px)"); // Detect small screens
+
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await UserService.getUserById(commentUser);
         setUserName(response.data.user.name);
+        setUserId(response.data.user._id);
         setAva(response.data.user.picture);
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -94,9 +98,9 @@ const Comment = ({ onPass, onRepliesUpdated }) => {
   return (
     <ThemeProvider theme={theme}>
       <ConfirmDelete onOpen={openModal} onClose={handleClose} onDelete={handleDelete} />
-      <Card>
-        <Box className="!p-[15px]">
-          <div className="flex flex-col gap-2 items-start">
+      <Card sx={{fontSize: isSmallScreen ? "0.5rem" : "1rem" }}>
+        <Box className="!p-[5px] sm:!p-[15px]">
+          <div className="flex flex-col  items-start">
             <Box sx={{ width: "100%" }}>
               <Stack
                 direction="row"
@@ -104,8 +108,8 @@ const Comment = ({ onPass, onRepliesUpdated }) => {
                 alignItems="center"
               >
                 <div className="flex items-center gap-2 ">
-                  <Avatar src={ava}></Avatar>
-                  <Username userName={userName} />
+                  <Avatar src={ava} sx={{ width: isSmallScreen ? 30 : 40, height: isSmallScreen ? 30 : 40 }}></Avatar>
+                  <Username userName={userName} userId={userId} />
                   <CreatedAt createdAt={updatedAt} className="max-md:!hidden" />
                 </div>
                 {currentUser && commentUser === currentUser._id ? ( 
@@ -134,6 +138,7 @@ const Comment = ({ onPass, onRepliesUpdated }) => {
                 </>
               ) : (
                 <CommentText commentText={commentText} />
+                
               )}
             </Box>
             <Box>

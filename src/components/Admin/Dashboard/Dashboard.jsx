@@ -11,7 +11,6 @@ import userService from '@/services/user.service';
 import courseService from '@/services/course.service'; 
 import feedbackService from '@/services/feedback.service';
 
-
 // Import images
 import bagIcon from '@/assets/dashboard/glasss/ic_glass_bag.png';
 import usersIcon from '@/assets/dashboard/glasss/ic_glass_users.png';
@@ -24,7 +23,6 @@ const Dashboard = () => {
   const [AdminCount,setAdminCount]=useState(0);
   const [CourseCount,setCourseCount]=useState(0);
   const [FeedbackCount,setFeedbackCount]=useState(0);
-
   
   useEffect(() => {
     const fetchUserCount = async () => {
@@ -49,6 +47,7 @@ const Dashboard = () => {
         console.log(response);
         const {adminCount}=response.data;
         setAdminCount(adminCount);
+        // console.log(35,adminCount);
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
@@ -109,7 +108,7 @@ const Dashboard = () => {
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Total Students"
-            total={userCount}
+            total={userCount || 0}
             color="info"
             icon={
               <Image
@@ -125,7 +124,7 @@ const Dashboard = () => {
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Admins"
-            total={AdminCount}
+            total={AdminCount || 0}
             color="info"
             icon={
               <Image
@@ -141,7 +140,7 @@ const Dashboard = () => {
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Courses Explored"
-            total={CourseCount}
+            total={CourseCount || 0}
             color="success"
             icon={
               <Image
@@ -159,7 +158,7 @@ const Dashboard = () => {
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Feedbacks"
-            total={FeedbackCount}
+            total={FeedbackCount || 0}
             color="error"
             icon={
               <Image
