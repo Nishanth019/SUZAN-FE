@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { createContext, useContext, useState, useEffect } from 'react';
 import userService from "@/services/user.service";
 import collegeService from '@/services/college.service';
@@ -8,15 +8,19 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const router = useRouter();
-    const [isAuth, setIsAuth] = useState(() => {
-        // Initialize from localStorage
-        return localStorage.getItem('isAuth') === 'true';
-    });
+    const [isAuth, setIsAuth] = useState(false);
     const [user, setUser] = useState(null);
     const [college, setCollege] = useState(null);
-    const [loading, setLoading] = useState(true); // Add a loading state
+    const [loading, setLoading] = useState(true);
+    const [isClient, setIsClient] = useState(false); // Track if we're on the client-side
 
     useEffect(() => {
+        setIsClient(true); // Set to true once the component mounts in the client
+    }, []);
+
+    useEffect(() => {
+        if (!isClient) return; // Only run this effect on the client-side
+
         const getCurrentUser = async () => {
             try {
                 const currentUser = await userService.getCurrentUser();
@@ -34,16 +38,17 @@ export const AuthProvider = ({ children }) => {
                 setIsAuth(false);
                 localStorage.removeItem('isAuth');
             } finally {
-                setLoading(false); // Mark loading as false once the call finishes
+                setLoading(false);
             }
         };
 
         getCurrentUser();
-    }, []);
+    }, [isClient]); // Dependency on `isClient` ensures this only runs on the client
 
     useEffect(() => {
+        if (!user) return;
+
         const getCurrentUserCollege = async () => {
-            if (!user) return;
             try {
                 const currentCollege = await collegeService.getCollegeById(user.college);
                 setCollege(currentCollege?.data?.college || null);
@@ -58,7 +63,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (!loading && !isAuth) {
-            router.replace('/signin'); // Redirect only after checking `isAuth`
+            router.replace('/signin');
         }
     }, [isAuth, loading, router]);
 
@@ -73,7 +78,7 @@ export const AuthProvider = ({ children }) => {
                 setCollege,
             }}
         >
-            {!loading && children} {/* Render children only after loading is false */}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };
