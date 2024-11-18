@@ -12,6 +12,7 @@ import authService from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 
 const Header = (props) => {
+
   
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -84,12 +85,12 @@ const Header = (props) => {
         </div>
 
         <div className="absolute inset-y-0 right-0 flex items-center justify-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0 ">
-              <button
+              {/* <button
                 type="button"
                 className="rounded-full text-black p-2 bg-slate-200  hover:bg-black/5"
               >
                 <IoIosNotificationsOutline className="h-5 w-5 lg:h-7 lg:w-7" />
-              </button>
+              </button> */}
               <div className="ml-3 lg:ml-6 relative" ref={profileRef}>
                 <div
                   onClick={handleProfileDropdown}
