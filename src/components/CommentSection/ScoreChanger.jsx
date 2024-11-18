@@ -57,9 +57,9 @@ const Likes = ({ commentId, ReplyComment }) => {
     >
       <IconButton disableRipple aria-label="like" onClick={handleLike}>
         {liked ? (
-          <ThumbUpIcon className="text-[18px]" sx={{ color: "#3f51b5" }} />
+          <ThumbUpIcon className="!text-[18px] sm:!text-[22px]" sx={{ color: "#3f51b5" }} />
         ) : (
-          <ThumbUpOutlinedIcon className="text-[18px]" />
+          <ThumbUpOutlinedIcon className="!text-[18px] sm:!text-[22px]" />
         )}
       </IconButton>
       <Typography sx={{ color: liked ? "#3f51b5" : "inherit", fontWeight: 500 }}>

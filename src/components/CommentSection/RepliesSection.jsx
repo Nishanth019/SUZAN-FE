@@ -1,5 +1,5 @@
 'use client';
-import { Box, Card, Stack, Typography, Avatar } from "@mui/material";
+import { Box, Card, Stack, Typography, Avatar, useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ScoreChanger from "./ScoreChanger";
 import AddReply from "./AddReply";
@@ -18,6 +18,7 @@ import { useGlobalContext } from "@/context/AuthContext";
 
 const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated }) => {
   const { user: currentUser } = useGlobalContext(); // Current authenticated user
+  const isSmallScreen = useMediaQuery("(max-width:600px)"); // Detect small screens
 
   const [replies, setReplies] = useState([]);
   const [replyingToId, setReplyingToId] = useState(null);
@@ -141,19 +142,19 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
         return (
           <React.Fragment key={_id}>
             <Card>
-              <Box sx={{ p: "15px" }}>
-                <div className="flex flex-col gap-2 items-start">
+              <Box className="!p-[5px] sm:!p-[15px]">
+                <div className="flex flex-col gap-0 items-start">
                   <Box sx={{ width: "100%" }}>
                     <Stack
-                      spacing={2}
+                      // spacing={2}
                       direction="row"
                       justifyContent="space-between"
                       alignItems="center"
                     >
                       <div className="flex items-center gap-2 ">
-                        <Avatar src={picture}></Avatar>
+                        <Avatar src={picture} sx={{ width: isSmallScreen ? 30 : 40, height: isSmallScreen ? 30 : 40 }}></Avatar>
                         <Username userName={name} />
-                        <CreatedAt createdAt={updatedAt} className="max-md:hidden" />
+                        <CreatedAt createdAt={updatedAt} className="max-md:!hidden" />
                       </div>
                       <div className="flex gap-2">
                         <ReplyButton functionality={() => {
@@ -189,20 +190,27 @@ const RepliesSection = ({ onReplies, onClicked, onTar, userId, onRepliesUpdated 
                     ) : (
                       <Typography
                         component="div"
-                        className="!text-[17px] md:!text-lg"
-                        sx={{ color: "neutral.grayishBlue", p: "10px 0" }}
+                        className="!text-[17px] md:!text-lg px-[10px] md:px-[20px] !text-wrap"
+                        sx={{ color: "neutral.grayishBlue", p: "10px 0" ,
+                          wordWrap: "break-word", 
+                          overflowWrap: "break-word", 
+                          whiteSpace: "normal", }}
                       >
                         <Typography
+                        className="!text-[17px] md:!text-lg "
                           sx={{
                             color: "custom.moderateBlue",
                             width: "fit-content",
                             display: "inline-block",
                             fontWeight: 500,
+                            wordWrap: "break-word", 
+                            overflowWrap: "break-word", 
+                            whiteSpace: "normal", 
                           }}
-                        >
+                        >   
                           {repliedToName ? `@${repliedToName}` : ""}
                         </Typography>{" "}
-                        {content}
+                        {content} 
                       </Typography>
                     )}
                   </Box>
