@@ -14,10 +14,7 @@ import { useGlobalContext } from "@/context/AuthContext";
 
 function ProfileComponent() {
   const router = useRouter();
-  // const { isAuth } = useGlobalContext();
-  // if (!isAuth) {
-  //   router.push("/signin");
-  // }
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {

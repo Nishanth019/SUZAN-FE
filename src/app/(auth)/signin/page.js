@@ -46,8 +46,6 @@ const SignIn = () => {
       // Validation passed, you can proceed with form submission
       const { data } = await authService.signIn({ email, password });
 
-      // console.log(1, data);
-
       // Set authentication state to true and set user information after successful login
       toast.success("Login successful")
       setIsAuth(true);
@@ -136,8 +134,6 @@ const SignIn = () => {
                   </span>
                 </div>
               </div>
-
-             
 
               <div className="flex flex-row justify-end mb-8">
                 <Link

@@ -18,12 +18,12 @@ const Services = () => {
             buttonText="View Courses"
           />
           <ServiceItem
-            icon={<BsPeople className="mx-auto w-8 h-8 md:w-12 md:h-12 text-[#f58f29]" />}
-            title="Clubs"
-            description="Connect with others. Join clubs to meet people and share your interests."
-            link="/clubs"
-            buttonText="View Clubs"
-          />
+           icon={<BsPeople className="mx-auto w-8 h-8 md:w-12 md:h-12 text-[#f58f29]" />}
+           title="Blogs"
+           description="Explore insightful articles and share your thoughts through engaging blog posts."
+           link="/blogs"
+           buttonText="Read Blogs"
+         /> 
           <ServiceItem
             icon={<BsCalendar className="mx-auto w-8 h-8 md:w-12 md:h-12 text-[#f58f29]" />}
             title="Events"

@@ -1,6 +1,6 @@
 'use client'
 import React, {useState} from 'react';
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import Image from 'next/image';
 import WhatsappQr from '../../../assets/Contact/WhatsappQr.jpeg'
 import feedbackService from '@/services/feedback.service';
