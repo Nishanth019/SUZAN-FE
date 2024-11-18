@@ -9,7 +9,7 @@ const DeleteButton = ({ functionality }) => {
       }}
       className="flex items-center gap-1 text-red-700"
     >
-      <Delete className="text-[18px]"/><p className="max-md:!hidden text-sm">Delete</p>
+      <Delete className="!text-[17px] sm:!text-[18px]"/><p className="max-md:!hidden !text-sm">Delete</p>
     </button>
   );
 };

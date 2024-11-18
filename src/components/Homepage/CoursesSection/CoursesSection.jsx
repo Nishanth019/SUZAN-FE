@@ -51,9 +51,11 @@ const CoursesSection = ({ user }) => {
           <div className="flex flex-col items-center justify-center"></div>
           <div className="flex flex-col text-[15px]  md:text-[18px]">
             <ul className=" text-left lg:text-left list-outside sm:list-inside lg:list-outside list-disc gap-2  flex flex-col px-8 max-lg:pl-[50px]">
-              <li >Detailed Course Information</li>
-              <li>Access to Previour Years Question paper</li>
-              <li>Reference notes and links provided</li>
+            <li>Detailed Course Information</li>
+            <li>Access to Previous Years' Question Papers</li>
+            <li>Reference Notes and Links Provided</li>
+             <li>Video Lectures Available</li>
+             <li>Discussion Section to Add Queries and Provide Feedback</li>
             </ul>
           </div>
           </div>
