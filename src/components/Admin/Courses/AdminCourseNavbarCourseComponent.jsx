@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import { CircularProgress } from "@mui/material";
 import useDrivePicker from 'react-google-drive-picker';
 import { FaGoogleDrive } from 'react-icons/fa';
-
+import FormDropdown from "../../TailwindComponents/FormDropdown";
 const style = {
   position: "absolute",
   top: "50%",
@@ -132,7 +132,9 @@ const AdminCourseNavbarCourseComponent = () =>
 
   // Load Google Drive Picker
   const [openPicker, authResponse] = useDrivePicker();
- 
+   // array use state of course type
+   const [courseType,setCourseType]=useState([
+      "compulsory","elective"])
 
    const style = {
      position: "absolute",
@@ -1368,7 +1370,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
 
          {/* //////////////////////// modal to Add the course //////////////////// */}
          <Modal
-            style={{ zIndex: 999 }}
+           style={{ zIndex: 999 }}
            open={modalOpen}
            // onClose={closeModal}
            aria-labelledby="modal-modal-title"
@@ -1507,8 +1509,24 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                >
                  Course Type*
                </label>
+              <div className="w-full md:flex-1  py-2 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900  ">
+              {/* <label>Batch:</label> */}
+              <div className="w-full md:flex-1  py-2 md:py-3 mr-2 text-sm
+                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900  ">
 
-               <input
+                <FormDropdown
+                name="Course Type"
+                value={course_type} // Display batch name
+                options={courseType} // Dropdown options for batch
+                onSelect={(selectedCourseType) => {
+                  setCourse_type(selectedCourseType); // Update batch name in userData
+                }}
+                required
+                />
+              </div>
+            </div> 
+               {/* <input
                  id="coursetype"
                  type="text"
                  value={course_type}
@@ -1517,7 +1535,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
                 lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
-               />
+               /> */}
                <label
                  htmlFor="fieldofstudyName"
                  className="mb-2 text-sm text-start text-grey-900 "
@@ -1607,7 +1625,6 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  </div>
                )}
 
-
                <label
                  htmlFor="resource_links"
                  className="mb-2 text-sm text-start text-grey-900"
@@ -1679,15 +1696,15 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  + Add More Resources
                </Button>
 
-                <Button 
-                  onClick={handleResourcesGoogleDrivePicker} 
-                  variant="outlined" 
-                  color="primary" 
-                  startIcon={<FaGoogleDrive/>}
-                  >
+               <Button
+                 onClick={handleResourcesGoogleDrivePicker}
+                 variant="outlined"
+                 color="primary"
+                 startIcon={<FaGoogleDrive />}
+               >
                  Add from Google Drive
-                </Button>
-               
+               </Button>
+
                <label
                  htmlFor="resources-pdf"
                  className="mb-2 mt-5 text-sm text-start text-grey-900"
@@ -1856,17 +1873,15 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  + Add More PYQs
                </Button>
 
-               
-                {/* Google Drive Picker Button */}
-                <Button 
-                  onClick={handlePVQsGoogleDrivePicker} 
-                  variant="outlined" 
-                  color="primary" 
-                  startIcon={<FaGoogleDrive/>}
-                  >
+               {/* Google Drive Picker Button */}
+               <Button
+                 onClick={handlePVQsGoogleDrivePicker}
+                 variant="outlined"
+                 color="primary"
+                 startIcon={<FaGoogleDrive />}
+               >
                  Add from Google Drive
-                </Button>
-
+               </Button>
 
                <label
                  htmlFor="pyq-pdf"
@@ -2027,15 +2042,15 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                >
                  + Add More Videos
                </Button>
-                {/* Google Drive Picker Button */}
-                <Button 
-                  onClick={handleVideosGoogleDrivePicker} 
-                  variant="outlined" 
-                  color="primary" 
-                  startIcon={<FaGoogleDrive/>}
-                  >
+               {/* Google Drive Picker Button */}
+               <Button
+                 onClick={handleVideosGoogleDrivePicker}
+                 variant="outlined"
+                 color="primary"
+                 startIcon={<FaGoogleDrive />}
+               >
                  Add from Google Drive
-                </Button>
+               </Button>
 
                <div className="pb-2 pt-4 mt-5">
                  {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
@@ -2056,9 +2071,9 @@ const handleEditAddVideoLinkGoogleDrive = () => {
            </Box>
          </Modal>
 
-         {/* Edit modal */}
+         {/*  modal to edit courses */}
          <Modal
-            style={{ zIndex: 999 }}
+           style={{ zIndex: 999 }}
            open={editModalOpen}
            onClose={closeEditModal} // Assuming you have a function to close the edit modal
            aria-labelledby="modal-modal-title"
@@ -2159,16 +2174,16 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                >
                  Course Type*
                </label>
-               <input
-                 id="coursetype"
-                 type="text"
-                 value={updatedCourse_type}
-                 onChange={(e) => setUpdatedCourse_type(e.target.value)}
-                 placeholder="Compulsory "
-                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm
-                lg:text-[16px] font-medium outline-none focus:border-black mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
-                 required
-               />
+               <FormDropdown
+                name="Course Type"
+                value={updatedCourse_type} // Display batch name
+                options={courseType} // Dropdown options for batch
+                onSelect={(selectedCourseType) => {
+                  setUpdatedCourse_type(selectedCourseType); // Update batch name in userData
+                }}
+                required
+              />
+           
                <label
                  htmlFor="fieldofstudyName"
                  className="mb-2 text-sm text-start text-grey-900 "
@@ -2424,20 +2439,19 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      size="small"
                      // startIcon={<DeleteIcon />}
                    >
-                     ADD
+                     Save & add more
                    </Button>
                  </div>
                </div>
-               <Button 
-                  onClick={handleEditAddResourceLinkGoogleDrive} 
-                  variant="outlined" 
-                  color="primary" 
-                  startIcon={<FaGoogleDrive/>}
-                  >
+               <Button
+                 onClick={handleEditAddResourceLinkGoogleDrive}
+                 variant="outlined"
+                 color="primary"
+                 startIcon={<FaGoogleDrive />}
+               >
                  Add from Google Drive
-                </Button>
-                
-                
+               </Button>
+
                <label
                  htmlFor="resource_pdfs"
                  className="mb-2 mt-5 text-sm text-start text-grey-900"
@@ -2565,7 +2579,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      size="small"
                      // startIcon={<DeleteIcon />}
                    >
-                     ADD
+                     Save & add more
                    </Button>
                  </div>
                </div>
@@ -2651,19 +2665,18 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      variant="outlined"
                      size="small"
                    >
-                     ADD
+                     Save & add more
                    </Button>
                  </div>
                </div>
-               <Button 
-                  onClick={handleEditAddPyqLinkGoogleDrive} 
-                  variant="outlined" 
-                  color="primary" 
-                  startIcon={<FaGoogleDrive/>}
-                  >
+               <Button
+                 onClick={handleEditAddPyqLinkGoogleDrive}
+                 variant="outlined"
+                 color="primary"
+                 startIcon={<FaGoogleDrive />}
+               >
                  Add from Google Drive
-                </Button>
-                
+               </Button>
 
                <label
                  htmlFor="pyq_links"
@@ -2776,7 +2789,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      variant="outlined"
                      size="small"
                    >
-                     ADD
+                     Save & add more
                    </Button>
                  </div>
                </div>
@@ -2862,19 +2875,19 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      size="small"
                      // startIcon={<DeleteIcon />}
                    >
-                     ADD
+                     Save & add more
                    </Button>
                  </div>
                </div>
-               
-               <Button 
-                  onClick={handleEditAddVideoLinkGoogleDrive} 
-                  variant="outlined" 
-                  color="primary" 
-                  startIcon={<FaGoogleDrive/>}
-                  >
+
+               <Button
+                 onClick={handleEditAddVideoLinkGoogleDrive}
+                 variant="outlined"
+                 color="primary"
+                 startIcon={<FaGoogleDrive />}
+               >
                  Add from Google Drive
-                </Button>
+               </Button>
 
                <div className="pb-2 pt-4 mt-5">
                  {/* <p className="text-red-500 text-sm  text-center">{error}</p> */}
@@ -2888,7 +2901,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
 
          {/* ////////////////////////modal to view the course //////////////////// */}
          <Modal
-         style={{ zIndex: 999 }}
+           style={{ zIndex: 999 }}
            open={viewModalOpen}
            aria-labelledby="modal-modal-title"
            aria-describedby="modal-modal-description"
@@ -3403,7 +3416,6 @@ const handleEditAddVideoLinkGoogleDrive = () => {
 
          {/* Delete confirmation modal */}
          <Modal
-
            open={deleteModalOpen}
            onClose={closeDeleteModal}
            aria-labelledby="delete-modal-title"
