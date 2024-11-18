@@ -52,7 +52,7 @@ const AdminCourseNavbarCourseComponent = () =>
    const [selectedProgram, setSelectedProgram] = useState("");
    const [selectedFieldOfStudy, setSelectedFieldOfStudy] = useState("");
    const [selectedSemester, setSelectedSemester] = useState("");
-   const [searchQuery, setSearchQuery] = useState("");
+   let [searchQuery, setSearchQuery] = useState("");
 
    // Selected object values
    const [programs, setPrograms] = useState([]);
@@ -91,6 +91,10 @@ const AdminCourseNavbarCourseComponent = () =>
    const [video_links, setVideo_link] = useState([{ link_name: "", link_url: "" }]);
    const [pyq_pdfs, setPyq_pdf] = useState([{ pdf_name: "", pdf_url: "" }]);
 
+   //file names of resource pdfs
+     const [resourceFileNames, setResourceFileNames] = useState(resource_pdfs.map(() => "")); 
+   //file names of pyq pdfs
+     const [pyqFileNames, setPyqFileNames] = useState(pyq_pdfs.map(() => "")); 
    // Updated course input useStates
    const [editCourseCode, setEditCourseCode] = useState("");
    const [updatedProgram, setUpdatedProgram] = useState("");
@@ -226,14 +230,14 @@ const AdminCourseNavbarCourseComponent = () =>
 
    async function fetchCourses() {
      try {
-       // console.log(1223456)
+      //  console.log(1223456)
        setLoading(true);
        const response = await CourseService.getAllCourses({
          programId: selectedProgram,
          fieldOfStudyId: selectedFieldOfStudy,
          semesterId: selectedSemester,
        });
-       // console.log(5, response.data);
+      //  console.log(5, response.data.courses);
        // console.log(1223455)
        setCourses(response.data.courses);
        setLoading(false);
@@ -508,12 +512,13 @@ const AdminCourseNavbarCourseComponent = () =>
          setButtonLoading1(false);
          console.error("Error updating user:", error);
        }
-       console.log(12345, resource_pdfs);
+      //  console.log(12345, resource_pdfs);
      };
 
 
  const handleSearch = async () => {
    try {
+    
      setLoading(true);
      const payload = {
        searchTerm: searchQuery,
@@ -530,6 +535,18 @@ const AdminCourseNavbarCourseComponent = () =>
      console.error("Error searching courses:", error);
    }
  };
+
+ //if searchQuery is  empty then all courses will be fetcged using fetchCourses
+
+  useEffect(() => {
+  const trimmedQuery = searchQuery.trim(); // Trim spaces for more accurate results
+  searchQuery=trimmedQuery;
+  if (trimmedQuery === "") {
+    fetchCourses(); // Fetch all courses when query is empty
+  } else {
+    handleSearch(); // Optional: Handle filtering logic
+  }
+}, [searchQuery]);
 
 
 const handleAddCourse = async (e) => {
@@ -751,22 +768,43 @@ const handleAddCourse = async (e) => {
      const handleDelete = async (course) => {
        setDeletingCourseId(course._id);
        openDeleteModal();
+
      };
 
      // Function to handle deleting a program
      const handleDeleteCourse = async () => {
        try {
          setButtonLoading(true);
-         console.log("deleting", deletingCourseId);
+        //  console.log("deleting", deletingCourseId);
          const res = await CourseService.deleteCourse({ deletingCourseId });
          setButtonLoading(false);
-         console.log(455, res.data.message);
-         console.log("deleting", 2);
+        //  console.log(455, res.data.message);
+        //  console.log("deleting", 2);
          fetchCourses();
          closeDeleteModal();
+          toast.success(res.data.message, {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+             theme: "colored",
+           });
        } catch (error) {
          setButtonLoading(false);
          console.error("Error deleting program:", error);
+           toast.error(res.data.error, {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+             theme: "colored",
+           });
        }
      };
 
@@ -783,7 +821,22 @@ const handleAddCourse = async (e) => {
        setResources_link(updatedLinks);
        console.log(12345, resource_links);
      };
+       const handleResourceFileChange = (index, file) => {
+        const updatedFileNames = [...resourceFileNames];
+        updatedFileNames[index] = file ? file.name : ""; // Update file name for specific index
+        setResourceFileNames(updatedFileNames);
 
+        // Call the parent function to handle file change
+        handleInputChangeresourcepdf(index, 1, file);
+      };
+       const handlePyqFileChange = (index, file) => {
+        const updatedFileNames = [...pyqFileNames];
+        updatedFileNames[index] = file ? file.name : ""; // Update file name for specific index
+        setPyqFileNames(updatedFileNames);
+
+        // Call the parent function to handle file change
+        handleInputChangepyqpdf(index, 1, file);
+      };
      const handleInputChangeresourcepdf = async (index, fieldIndex, value) => {
        const updatedResources = [...resource_pdfs];
        if (fieldIndex === 0) {
@@ -794,7 +847,7 @@ const handleAddCourse = async (e) => {
            const formData = new FormData();
            formData.append("file", value);
            const response = await CourseService.uploadFile(formData);
-           console.log(response.data.file);
+          //  console.log(response.data.file);
            updatedResources[index]["pdf_url"] = response.data.file;
            setButtonLoading2(false);
            toast.success(response.data.message, {
@@ -809,7 +862,7 @@ const handleAddCourse = async (e) => {
            });
          } catch (error) {
            setButtonLoading2(false);
-           console.error("Error updating user:", error);
+           console.error("Error updating course:", error);
          }
        }
        setResources_pdf(updatedResources);
@@ -968,7 +1021,7 @@ const handleAddCourse = async (e) => {
          });
        } catch (error) {
          setButtonLoading1(false);
-         console.error("Error updating user:", error);
+         console.error("Error updating course:", error);
        }
      };
 
@@ -1298,13 +1351,13 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      type="search"
                      id="default-search"
                      value={searchQuery}
-                     onChange={(e) => setSearchQuery(e.target.value)}
-                     onKeyDown={(e) => {
-                       if (e.key === "Enter") {
-                         e.preventDefault(); // Prevent default form submission
-                         handleSearch();
-                       }
-                     }}
+                     onChange={(e) =>{ setSearchQuery(e.target.value);}}
+                    //  onKeyDown={(e) => {
+                    //    if (e.key === "Enter") {
+                    //      e.preventDefault(); // Prevent default form submission
+                    //      handleSearch();
+                    //    }
+                    //  }}
                      className="block w-full py-3 px-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
                      placeholder="Search Course"
                    />
@@ -1312,6 +1365,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                </form>
              </div>
            </div>
+        
          </div>
 
          {/*Course Table */}
@@ -1638,20 +1692,17 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      </>
                    ) : (
                      <>
+                      <div>
+                         
                        <input
-                         onChange={
-                           (e) =>
-                             handleInputChangeresourcepdf(
-                               index,
-                               1,
-                               e.target.files[0]
-                             ) // Pass index and 1 to identify the URL
-                         }
+                         onChange={(e) => handleResourceFileChange(index, e.target.files[0])} 
                          accept="application/pdf"
                          type="file"
                          id={`resourcePdfInput-${index}`}
                          className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
-                       />
+                         />
+                         
+                         </div>
                      </>
                    )}
                    <div className="flex justify-end">
@@ -1815,15 +1866,22 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                          <CircularProgress className="ml-2" size={15} />
                        </div>
                      ) : (
+                      <div>
+
                        <input
-                         id={`pyqPdfInput-${index}`}
-                         type="file"
-                         accept="application/pdf"
-                         onChange={(e) =>
-                           handleInputChangepyqpdf(index, 1, e.target.files[0])
-                         }
-                         className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
+                       onChange={(e) => handlePyqFileChange(index, e.target.files[0])} 
+                       id={`pyqPdfInput-${index}`}
+                       type="file"
+                       accept="application/pdf"
+                       className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                        />
+                       
+                        {/* {pyqFileNames[index] && (
+                          <p className="text-sm text-gray-600">
+                          Selected File: <strong>{pyqFileNames[index]}</strong>
+                        </p>
+                         )} */}
+              </div>
                      )}
                    </>
 
