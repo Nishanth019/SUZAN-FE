@@ -1,10 +1,8 @@
 "use client";
 import React from "react";
 import nishanth from "@/assets/CoreTeam/nishanth.jpg";
-const lybaPic =
-  "https://careplus-bucket.s3.ap-south-1.amazonaws.com/1cca4aab09331644e4397364b92deee5a3a8888a6a7d630a4ac4e330e30f0dcd-lyba.jpg";
-const animeshPic =
-  "https://careplus-bucket.s3.ap-south-1.amazonaws.com/8cb08ccc5a14d14cb5e3932bcf4c610d6137ad1d08207c3897cb339d9d865b11-animesh.jpeg";
+import manish from "@/assets/CoreTeam/manish.jpeg";
+import satwik from "@/assets/CoreTeam/satwik.jpg";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -16,26 +14,27 @@ import { RiDoubleQuotesR } from "react-icons/ri";
 const team = [
   {
     name: "Manish Chandolu",
-    position: "IT Consultant (Tech Partner)",
-    image: nishanth,
+    position: "Backend Developer",
+    image: manish,
     description:
-      "Behind every breakthrough at EDZER is Animesh, blending vision with cutting-edge innovation. Steering our technological pursuits, he ensures we remain at the forefront, crafting solutions that resonate with today's learners.",
+      "Manish is the backbone of our tech stack, building and maintaining the systems that power SUZAN. With a deep understanding of server-side technologies, he ensures our platform is scalable, secure, and capable of handling the growing demands of our users.",
   },
   {
     name: "Nishanth Bhukya",
     position: "Tech Lead",
     image: nishanth,
     description:
-      "Shivam is the code maestro, the architect behind our seamless and efficient platform. With years of expertise, he dives deep into the intricacies, ensuring every solution is top-notch and evolves with the tech landscape.",
+      "As the Tech Lead, Nishanth is the visionary guiding the team through technical challenges. His expertise in both front-end and back-end development allows him to architect solutions that are robust, innovative, and future-proof, driving SUZANs technical excellence.",
   },
   {
     name: "Satwik Banda",
-    position: "Business Analyst",
-    image: nishanth,
+    position: "Frontend Developer",
+    image: satwik,
     description:
-      "The lynchpin of our project, Lyba Khan seamlessly bridges the gap between vision and execution. With meticulous precision, she ensures every task runs smoothly, is on-time, and exceeds expectations.",
+      "Satwik is the creative force behind SUZAN user interface. With his keen eye for design and proficiency in frontend technologies, he ensures a smooth, intuitive, and visually appealing user experience that delights every visitor to our platform.",
   },
 ];
+
 
 const CoreTeamSection = () => {
   const settings = {

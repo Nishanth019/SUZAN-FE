@@ -13,11 +13,11 @@ const SITEMAP = [
     },
     {
         title: "Services",
-        links: ["Courses", "Clubs", "Events", "Nearby Places"],
+        links: ["Courses", "Blogs", "Events", "Nearby Places"],
     },
     {
         title: "Terms",
-        links: ["Terms & Conditions ", "Privacy Policy", "Refunds & Cancellations"],
+        links: ["Terms and Conditions", "Privacy Policy", "Refunds & Cancellations"],
     },
     {
         title: "Contact Us",
@@ -29,9 +29,9 @@ const currentYear = new Date().getFullYear();
 
 const Footer = () => {
     return (
-        <footer className="relative  w-full bg-teal-200 ">
+        <footer className="relative  w-full bg-teal-200 my-10">
             <div className="mx-auto w-full max-w-7xl px-8  ">
-                <div className="md:hidden ">
+                <div className="md:hidden">
                     <div>
                         <Image
                             className=" w-[120px] h-auto "
