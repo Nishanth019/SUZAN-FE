@@ -200,7 +200,7 @@ const RegistrationAbout = ({ details, setDetails, onCheckboxChange, errors }) =>
           />
           <p className="text-[14px]">
             I agree to{" "}
-            <Link href="/terms" className="text-bold text-green-600 cursor-pointer">
+            <Link href="/terms-and-conditions" className="text-bold text-green-600 cursor-pointer">
               Terms & Conditions
             </Link>{" "}
           </p>
