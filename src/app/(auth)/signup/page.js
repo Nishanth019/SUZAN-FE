@@ -63,10 +63,11 @@ const SignUp = () => {
           </h1>
         </div>
 
+
         {/* Cards Container */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 lg:gap-32 mt-8">
           {/* Student Card */}
-          <div className="group relative overflow-hidden bg-white max-w-md w-full p-6 sm:p-8 md:p-10 rounded-xl transition-all duration-300 shadow-md border hover:shadow-lg hover:border-blue-200">
+          <div className="group relative overflow-hidden bg-white max-w-md w-full p-6 sm:p-8 md:p-10 rounded-3xl transition-all duration-300 shadow-md border hover:shadow-lg hover:border-blue-200">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100 opacity-0 group-hover:opacity-100 transition-all duration-300" />
             <div className="relative">
               <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 sm:mb-6 lg:mb-8">
@@ -89,7 +90,7 @@ const SignUp = () => {
           </div>
 
           {/* College Registration Card */}
-          <div className="group relative overflow-hidden bg-white max-w-md w-full p-6 sm:p-8 md:p-10 rounded-xl transition-all duration-300 shadow-md border hover:shadow-lg hover:border-emerald-200">
+          <div className="group relative overflow-hidden bg-white max-w-md w-full p-6 sm:p-8 md:p-10 rounded-3xl transition-all duration-300 shadow-md border hover:shadow-lg hover:border-emerald-200">
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-emerald-100 opacity-0 group-hover:opacity-100 transition-all duration-300" />
             <div className="relative">
               <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 mb-4 sm:mb-6 lg:mb-8">
