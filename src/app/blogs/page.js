@@ -5,7 +5,13 @@ import { useGlobalContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 const Clubs = () => {
+  const router = useRouter();
 
+  const { isAuth, user, setIsAuth, setUser } = useGlobalContext();
+  
+  if(!isAuth){
+    router.push('/signin');
+  }
   return (
     <ComingSoon/>
   )

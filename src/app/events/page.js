@@ -6,7 +6,13 @@ import { useRouter } from "next/navigation";
 
 
 const Events = () => {
+  const router = useRouter();
 
+  const { isAuth, user, setIsAuth, setUser } = useGlobalContext();
+  
+  if(!isAuth){
+    router.push('/signin');
+  }
   return (
     <ComingSoon/>
   )
