@@ -61,11 +61,6 @@ export const AuthProvider = ({ children }) => {
         getCurrentUserCollege();
     }, [user]);
 
-    useEffect(() => {
-        if (!loading && !isAuth) {
-            router.replace('/signin');
-        }
-    }, [isAuth, loading, router]);
 
     return (
         <AuthContext.Provider
