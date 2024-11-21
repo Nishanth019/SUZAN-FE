@@ -474,7 +474,7 @@ function ProfileComponent() {
           </div>
           <div>
             <div className="">
-              {collegeData.college_logo ? (
+              {( userData.role === "mainadmin") && (collegeData.college_logo ? (
                 <img
                   className="h-12  lg:h-16 w-auto object-cover object-center "
                   src={collegeData.college_logo}
@@ -486,7 +486,7 @@ function ProfileComponent() {
                     {collegeData.college_name ? collegeData.college_name : "E"}
                   </span>
                 </div>
-              )}
+              ))}
             </div>
             {(isEdit && userData.role === "mainadmin") && (
               <>
