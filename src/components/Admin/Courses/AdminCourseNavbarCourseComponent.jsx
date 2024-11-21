@@ -2132,6 +2132,22 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
+            
+               <label
+                 htmlFor="coursecode"
+                 className="mb-2 text-sm text-start text-grey-900 "
+               >
+                 Course Code*
+               </label>
+               <input
+                 id="coursecode"
+                 type="text"
+                 value={updatedCourse_code}
+                 onChange={(e) => setUpdatedCourse_code(e.target.value)}
+                 placeholder="CS2011"
+                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+                 required
+               />
                <label
                  htmlFor="fieldofstudyName"
                  className="mb-2 text-sm text-start text-grey-900 "
