@@ -1043,15 +1043,15 @@ const handleAddCourse = async (e) => {
 
     const handleResourcesGoogleDrivePicker = () => {
       openPicker({
-        clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-        developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+        clientId: process.env.NEXT_PUBLIC_CLIENTID,
+        developerKey: process.env.NEXT_PUBLIC_DEVELOPERKEY,
         viewId: 'DOCS',
-        multiselect: true,  // Enable multiple file selection
+        multiselect: true,  
         setIncludeFolders: true,
         setSelectFolderEnabled: true,
         callbackFunction: (data) => {
           if (data.action === 'picked') {
-            const selectedFiles = data.docs; // Get the array of selected files
+            const selectedFiles = data.docs; 
             console.log('Selected files:', selectedFiles);
     
             // Loop through each selected file and add it to state
@@ -1083,8 +1083,8 @@ const handleAddCourse = async (e) => {
 // Google Drive Picker Handler for Resources
 const handleEditAddResourceLinkGoogleDrive = () => {
   openPicker({
-    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    clientId: process.env.NEXT_PUBLIC_CLIENTID,
+    developerKey: process.env.NEXT_PUBLIC_DEVELOPERKEY,
     viewId: 'DOCS',
     multiselect: true,  // Enable multiple file selection
     setIncludeFolders: true,
@@ -1120,11 +1120,12 @@ const handleEditAddResourceLinkGoogleDrive = () => {
   });
 };
 
+
 // Google Drive Picker Handler for PVQs
 const handlePVQsGoogleDrivePicker = () => {
   openPicker({
-    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    clientId: process.env.NEXT_PUBLIC_CLIENTID,
+    developerKey: process.env.NEXT_PUBLIC_DEVELOPERKEY,
     viewId: 'DOCS',
     multiselect: true,  // Enable multiple file selection
     setIncludeFolders: true,
@@ -1161,8 +1162,8 @@ const handlePVQsGoogleDrivePicker = () => {
 // Google Drive Picker Handler for Editing PVQs
 const handleEditAddPyqLinkGoogleDrive = () => {
   openPicker({
-    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    clientId: process.env.NEXT_PUBLIC_CLIENTID,
+    developerKey: process.env.NEXT_PUBLIC_DEVELOPERKEY,
     viewId: 'DOCS',
     multiselect: true,  // Enable multiple file selection
     setIncludeFolders: true,
@@ -1188,7 +1189,6 @@ const handleEditAddPyqLinkGoogleDrive = () => {
             } else {
               updatedLinks.push(newLink);  // Add to the remaining slots
             }
-
             return updatedLinks;
           });
           setButtonLoading(false);
@@ -1201,8 +1201,8 @@ const handleEditAddPyqLinkGoogleDrive = () => {
 // Google Drive Picker Handler for Videos
 const handleVideosGoogleDrivePicker = () => {
   openPicker({
-    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    clientId: process.env.NEXT_PUBLIC_CLIENTID,
+    developerKey: process.env.NEXT_PUBLIC_DEVELOPERKEY,
     viewId: 'DOCS',
     multiselect: true,  // Enable multiple file selection
     setIncludeFolders: true,
@@ -1239,8 +1239,8 @@ const handleVideosGoogleDrivePicker = () => {
 // Google Drive Picker Handler for Editing Videos
 const handleEditAddVideoLinkGoogleDrive = () => {
   openPicker({
-    clientId: '537757956625-l973lp6fhqhod21hggn97e11dfvai07j.apps.googleusercontent.com',
-    developerKey: 'AIzaSyAN2pBo6vlH-hgqr7IMKNV7n7A7Bcd5eQA',
+    clientId: process.env.NEXT_PUBLIC_CLIENTID,
+    developerKey: process.env.NEXT_PUBLIC_DEVELOPERKEY,
     viewId: 'DOCS',
     multiselect: true,  // Enable multiple file selection
     setIncludeFolders: true,
