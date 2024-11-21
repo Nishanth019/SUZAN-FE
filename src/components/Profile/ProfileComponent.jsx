@@ -488,7 +488,7 @@ function ProfileComponent() {
                 </div>
               )}
             </div>
-            {isEdit && (
+            {(isEdit && userData.role === "mainadmin") && (
               <>
                 <label
                   htmlFor="collegeLogoInput"
