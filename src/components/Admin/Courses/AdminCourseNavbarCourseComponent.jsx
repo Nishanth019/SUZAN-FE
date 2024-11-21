@@ -1276,8 +1276,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
   });
 };
 
-    
-    
+  
      return (
        <div>
          {/* dropdowns */}
@@ -1343,7 +1342,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  <div className="relative">
                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                      <FaSearch
-                       className="w-4 h-4 text-gray-500"
+                       className="!w-4 !h-4 !text-gray-500"
                        aria-hidden="true"
                      />
                    </div>
@@ -1608,7 +1607,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                variant="outlined"
                                size="small"
                                startIcon={<DeleteIcon />}
@@ -1621,7 +1620,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                onClick={() =>
                                  handleDeleteField("resource_links", index)
                                }
@@ -1687,7 +1686,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                            id={`resourcePdfInput-${index}`}
                            className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                          />{" "}
-                         <CircularProgress className="ml-2" size={15} />
+                         <CircularProgress className="!ml-2" size={15} />
                        </div>
                      </>
                    ) : (
@@ -1712,20 +1711,20 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                variant="outlined"
                                size="small"
                                startIcon={<DeleteIcon />}
                              >
                                Delete
                              </Button>{" "}
-                             <CircularProgress className="ml-2" size={15} />
+                             <CircularProgress className="!ml-2" size={15} />
                            </>
                          ) : (
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                onClick={() =>
                                  handleDeleteField("resource_pdfs", index)
                                }
@@ -1784,20 +1783,20 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                variant="outlined"
                                size="small"
                                startIcon={<DeleteIcon />}
                              >
                                Delete
                              </Button>{" "}
-                             <CircularProgress className="ml-2" size={15} />
+                             <CircularProgress className="!ml-2" size={15} />
                            </>
                          ) : (
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                onClick={() =>
                                  handleDeleteField("pyq_links", index)
                                }
@@ -1863,7 +1862,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                            accept="application/pdf"
                            className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                          />{" "}
-                         <CircularProgress className="ml-2" size={15} />
+                         <CircularProgress className="!ml-2" size={15} />
                        </div>
                      ) : (
                       <div>
@@ -1893,20 +1892,20 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                variant="outlined"
                                size="small"
                                startIcon={<DeleteIcon />}
                              >
                                Delete
                              </Button>{" "}
-                             <CircularProgress className="ml-2" size={15} />
+                             <CircularProgress className="!ml-2" size={15} />
                            </>
                          ) : (
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                onClick={() =>
                                  handleDeleteField("pyq_pdfs", index)
                                }
@@ -1964,20 +1963,20 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                variant="outlined"
                                size="small"
                                startIcon={<DeleteIcon />}
                              >
                                Delete
                              </Button>{" "}
-                             <CircularProgress className="ml-2" size={15} />
+                             <CircularProgress className="!ml-2" size={15} />
                            </>
                          ) : (
                            <>
                              <Button
                                style={{ textTransform: "none" }}
-                               className="max-md:hidden mb-5 "
+                               className="max-md:!hidden !mb-5 "
                                onClick={() =>
                                  handleDeleteField("video_links", index)
                                }
@@ -2018,7 +2017,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  {buttonLoading ? (
                    <>
                      <Button variant="outlined">Add Course</Button>{" "}
-                     <CircularProgress className="ml-2" size={15} />
+                     <CircularProgress className="!ml-2" size={15} />
                    </>
                  ) : (
                    <>
@@ -2132,6 +2131,22 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                  className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
                  required
                />
+            
+               <label
+                 htmlFor="coursecode"
+                 className="mb-2 text-sm text-start text-grey-900 "
+               >
+                 Course Code*
+               </label>
+               <input
+                 id="coursecode"
+                 type="text"
+                 value={updatedCourse_code}
+                 onChange={(e) => setUpdatedCourse_code(e.target.value)}
+                 placeholder="CS2011"
+                 className="flex items-center w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black mb-4 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300 "
+                 required
+               />
                <label
                  htmlFor="fieldofstudyName"
                  className="mb-2 text-sm text-start text-grey-900 "
@@ -2178,7 +2193,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      <div>
                        <div className="flex items-center space-x-4 border  p-2 rounded-md">
                          <FaFilePdf
-                           className="text-red-500 max-md:hidden"
+                           className="!text-red-500 max-md:!hidden"
                            size={24}
                          />
                          <div className="flex-1">
@@ -2209,7 +2224,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                              Download
                            </Button>
                            <IoMdEye
-                             className="text-blue-500 cursor-pointer md:hidden"
+                             className="!text-blue-500 !cursor-pointer md:!hidden"
                              size={24}
                              onClick={() =>
                                handleViewPdf({
@@ -2219,7 +2234,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                              }
                            />
                            <IoMdDownload
-                             className="text-red-500 cursor-pointer md:hidden"
+                             className="!text-red-500 !cursor-pointer md:!hidden"
                              size={24}
                              onClick={() => handleDownload(updatedSyllabus)}
                            />
@@ -2286,7 +2301,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border p-2 rounded-md">
                            <FaLink
-                             className="text-blue-500  max-md:hidden"
+                             className="!text-blue-500  max-md:!hidden"
                              size={20}
                            />
                            <div className="flex-1">
@@ -2381,7 +2396,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border  p-2 rounded-md">
                            <FaFilePdf
-                             className="text-red-500 max-md:hidden"
+                             className="!text-red-500 max-md:!hidden"
                              size={24}
                            />
                            <div className="flex-1">
@@ -2414,7 +2429,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                Download
                              </Button>
                              <IoMdEye
-                               className="text-blue-500 cursor-pointer md:hidden"
+                               className="!text-blue-500 !cursor-pointer md:!hidden"
                                size={24}
                                onClick={() =>
                                  handleViewPdf({
@@ -2424,7 +2439,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                }
                              />
                              <IoMdDownload
-                               className="text-red-500 cursor-pointer md:hidden"
+                               className="!text-red-500 !cursor-pointer md:!hidden"
                                size={24}
                                onClick={() => handleDownload(item.pdf_url)}
                              />
@@ -2456,7 +2471,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    value={editFormResourcePdfName}
                    onChange={(e) => setEditFormResourcePdfName(e.target.value)}
                    placeholder="Resources Pdf Name"
-                   className="flex items-center mb-2 w-full px-2 py-2 md:px-5 md:py-3 mr-2 text-sm lg:text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
+                   className="!flex items-center mb-2 w-full px-2 py-2 md:!px-5 md:!py-3 mr-2 text-sm lg:!text-[16px] font-medium outline-none focus:border-black  placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-md border border-gray-300"
                  />
                  {buttonLoading1 ? (
                    <>
@@ -2466,7 +2481,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                          type="file"
                          className="w-full mb-2 flex justify-content items-center text-sm  md:text-md lg:text-lg text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 "
                        />{" "}
-                       <CircularProgress className="ml-2" size={15} />
+                       <CircularProgress className="!ml-2" size={15} />
                      </div>
                    </>
                  ) : (
@@ -2513,7 +2528,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border p-2 rounded-md">
                            <FaLink
-                             className="text-blue-500 max-md:hidden"
+                             className="!text-blue-500 max-md:!hidden"
                              size={20}
                            />
                            <div className="flex-1">
@@ -2532,7 +2547,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                View
                              </Button>
                              <IoMdEye
-                               className="text-blue-500  md:hidden"
+                               className="!text-blue-500  md:!hidden"
                                size={24}
                                onClick={() => handleOpenLink(item.link_url)}
                              />
@@ -2607,7 +2622,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border  p-2 rounded-md">
                            <FaFilePdf
-                             className="text-red-500 max-md:hidden"
+                             className="!text-red-500 max-md:!hidden"
                              size={24}
                            />
                            <div className="flex-1">
@@ -2640,7 +2655,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                Download
                              </Button>
                              <IoMdEye
-                               className="text-blue-500 cursor-pointer md:hidden"
+                               className="!text-blue-500 !cursor-pointer md:!hidden"
                                size={24}
                                onClick={() =>
                                  handleViewPdf({
@@ -2650,7 +2665,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                }
                              />
                              <IoMdDownload
-                               className="text-red-500 cursor-pointer md:hidden"
+                               className="!text-red-500 !cursor-pointer md:!hidden"
                                size={24}
                                onClick={() => handleDownload(item.pdf_url)}
                              />
@@ -2700,7 +2715,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                    <Button
                      onClick={handleEditAddPyqPdf}
                      style={{ textTransform: "none" }}
-                     className=" mb-5 "
+                     className=" !mb-5 "
                      variant="outlined"
                      size="small"
                    >
@@ -2722,7 +2737,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border p-2 rounded-md">
                            <FaLink
-                             className="text-blue-500  max-md:hidden"
+                             className="!text-blue-500  max-md:!hidden"
                              size={20}
                            />
                            <div className="flex-1">
@@ -2741,7 +2756,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                View
                              </Button>
                              <IoMdEye
-                               className="text-blue-500  md:hidden"
+                               className="!text-blue-500  md:!hidden"
                                size={24}
                                onClick={() => handleOpenLink(item.link_url)}
                              />
@@ -2950,7 +2965,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                      <div>
                        <div className="flex items-center space-x-4 border  p-2 rounded-md">
                          <FaFilePdf
-                           className="text-red-500 max-md:hidden"
+                           className="!text-red-500 max-md:!hidden"
                            size={24}
                          />
                          <div className="flex-1">
@@ -2981,7 +2996,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                              Download
                            </Button>
                            <IoMdEye
-                             className="text-blue-500 cursor-pointer md:hidden"
+                             className="!text-blue-500 !cursor-pointer md:!hidden"
                              size={24}
                              onClick={() =>
                                handleViewPdf({
@@ -2991,7 +3006,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                              }
                            />
                            <IoMdDownload
-                             className="text-red-500 cursor-pointer md:hidden"
+                             className="!text-red-500 !cursor-pointer md:!hidden"
                              size={24}
                              onClick={() => handleDownload(updatedSyllabus)}
                            />
@@ -3020,7 +3035,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border p-2 rounded-md overflow-hidden ">
                            <FaLink
-                             className="text-blue-500  max-md:hidden"
+                             className="!text-blue-500  max-md:!hidden"
                              size={20}
                            />
                            <div className="flex-1">
@@ -3039,7 +3054,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                View
                              </Button>
                              <IoMdEye
-                               className="text-blue-500  md:hidden"
+                               className="!text-blue-500  md:!hidden"
                                size={24}
                                onClick={() => handleOpenLink(item.link_url)}
                              />
@@ -3069,7 +3084,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border  p-2 rounded-md">
                            <FaFilePdf
-                             className="text-red-500 max-md:hidden"
+                             className="!text-red-500 max-md:!hidden"
                              size={24}
                            />
                            <div className="flex-1">
@@ -3102,7 +3117,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                Download
                              </Button>
                              <IoMdEye
-                               className="text-blue-500 cursor-pointer md:hidden"
+                               className="!text-blue-500 !cursor-pointer md:!hidden"
                                size={24}
                                onClick={() =>
                                  handleViewPdf({
@@ -3112,7 +3127,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                }
                              />
                              <IoMdDownload
-                               className="text-red-500 cursor-pointer md:hidden"
+                               className="!text-red-500 !cursor-pointer md:!hidden"
                                size={24}
                                onClick={() => handleDownload(item.pdf_url)}
                              />
@@ -3142,7 +3157,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border p-2 rounded-md">
                            <FaLink
-                             className="text-blue-500 max-md:hidden"
+                             className="!text-blue-500 max-md:!hidden"
                              size={20}
                            />
                            <div className="flex-1">
@@ -3161,7 +3176,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                View
                              </Button>
                              <IoMdEye
-                               className="text-blue-500  md:hidden"
+                               className="!text-blue-500  md:!hidden"
                                size={24}
                                onClick={() => handleOpenLink(item.link_url)}
                              />
@@ -3191,7 +3206,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border  p-2 rounded-md">
                            <FaFilePdf
-                             className="text-red-500 max-md:hidden"
+                             className="!text-red-500 max-md:!hidden"
                              size={24}
                            />
                            <div className="flex-1">
@@ -3224,7 +3239,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                Download
                              </Button>
                              <IoMdEye
-                               className="text-blue-500 cursor-pointer md:hidden"
+                               className="!text-blue-500 !cursor-pointer md:!hidden"
                                size={24}
                                onClick={() =>
                                  handleViewPdf({
@@ -3234,7 +3249,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                }
                              />
                              <IoMdDownload
-                               className="text-red-500 cursor-pointer md:hidden"
+                               className="!text-red-500 !cursor-pointer md:!hidden"
                                size={24}
                                onClick={() => handleDownload(item.pdf_url)}
                              />
@@ -3265,7 +3280,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                        <div key={index}>
                          <div className="flex items-center space-x-4 border p-2 rounded-md">
                            <FaLink
-                             className="text-blue-500  max-md:hidden"
+                             className="!text-blue-500  max-md:!hidden"
                              size={20}
                            />
                            <div className="flex-1">
@@ -3284,7 +3299,7 @@ const handleEditAddVideoLinkGoogleDrive = () => {
                                View
                              </Button>
                              <IoMdEye
-                               className="text-blue-500  md:hidden"
+                               className="!text-blue-500  md:!hidden"
                                size={24}
                                onClick={() => handleOpenLink(item.link_url)}
                              />
@@ -3322,14 +3337,14 @@ const handleEditAddVideoLinkGoogleDrive = () => {
              <div className="flex justify-center mt-5 ">
                <Button
                  onClick={handleDeleteCourse}
-                 className="text-white bg-red-500"
+                 className="!text-white !bg-red-500"
                  variant="outlined"
                >
                  Delete
                </Button>
                <Button
                  onClick={closeDeleteModal}
-                 className="text-black "
+                 className="!text-black "
                  variant="outlined"
                  style={{ marginLeft: "1rem" }}
                >

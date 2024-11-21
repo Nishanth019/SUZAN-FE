@@ -457,7 +457,7 @@ const ProgramCard = ({
   onDelete,
 }) => {
   return (
-    <Card className="w-full max-w-xs rounded-2xl border">
+    <Card className="!w-full !max-w-xs !rounded-2xl !border">
       <div className="flex flex-col h-full">
         <div className="flex-1 flex flex-col p-6 items-start space-y-4">
           <h3 className="text-lg font-semibold">{title}</h3>
@@ -494,7 +494,7 @@ const ProgramCard = ({
         <div className="border-t p-4 flex justify-end gap-2">
           <Button
             style={{ textTransform: "none" }}
-            className="text-white bg-blue-800 "
+            className="!text-white !bg-blue-800 "
             size="sm"
             variant="contained"
             onClick={onEdit}

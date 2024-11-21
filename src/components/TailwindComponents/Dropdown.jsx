@@ -11,7 +11,7 @@ const Dropdown = ({ options, onSelect, name , disabled, value}) => {
   };
 
   return (
-    <FormControl className="max-md:w-full w-[250px]" size="small">
+    <FormControl className="max-md:!w-full !w-[250px]" size="small">
       <InputLabel id="demo-simple-select-label">{name}</InputLabel>
       <Select
       disabled = {disabled}
