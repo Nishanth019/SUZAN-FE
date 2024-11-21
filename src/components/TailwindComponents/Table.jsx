@@ -27,7 +27,7 @@ import { MdEdit, MdDelete } from "react-icons/md";
             <TableContainer>
               <Table>
                 <TableHead>
-                  <TableRow className="bg-[#f5f5f5]">
+                  <TableRow className="!bg-[#f5f5f5]">
                     <TableCell>
                       <p className="text-black font-semibold">Course Code</p>
                     </TableCell>
@@ -65,13 +65,13 @@ import { MdEdit, MdDelete } from "react-icons/md";
                       <TableCell>
                         {/* Edit Button */}
                         <Button onClick={() => openViewModal(course)}>
-                          <FaEye size={20} className="lg:ml-16" />
+                          <FaEye size={20} className="lg:!ml-16" />
                         </Button>
                       </TableCell>
                       <TableCell className="lg:ml-2">
                         {/* Edit Button */}
                         <Button onClick={() => handleEdit(course)}>
-                          <MdEdit size={20} className="lg:ml-16" />
+                          <MdEdit size={20} className="lg:!ml-16" />
                         </Button>
                       </TableCell>
                       <TableCell className="items-center">
